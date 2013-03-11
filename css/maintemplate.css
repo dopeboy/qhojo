@@ -1,0 +1,125 @@
+html,
+body 
+{
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#container 
+{
+    min-height:100%;
+    position:relative;
+}
+
+#header 
+{
+    background: rgba(207,207,207, .5);
+    padding:5px;    
+}
+
+#banner
+{
+    width:1024px;
+    margin: 0 auto; 
+    text-align:center;
+}
+
+#body 
+{
+    padding:10px;
+    padding-bottom:35px;   /* Height of the footer */
+}
+
+#footer 
+{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:35px;   /* Height of the footer */
+    background: rgba(207,207,207, .5);
+}
+
+#footercontent
+{
+    text-align:center;
+    padding-top:7px;
+}
+
+.threecol 
+{
+    width:100%;
+    overflow:hidden;
+}
+
+.threecol div 
+{
+    float:left;
+    width:33%;
+}
+
+.twocol div
+{
+    float:left;
+    width:50%;    
+}
+
+#masterdiv
+{
+    width:1024px; 
+    margin: 0 auto; 
+}
+
+.mainheading
+{
+    font-size: 350%;
+    font-weight: normal;   
+    padding: 0;
+    margin: 0
+}
+
+.subheading
+{
+    font-size: 250%;
+    font-weight: normal;   
+    padding: 0;
+    margin: 0
+}
+
+.subcontent
+{
+/*    margin-left: 10px;*/
+    padding-top: 10px;
+}
+
+.error
+{
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:5px;
+    background: rgba(255,0,0, .5);
+    
+}
+
+/* unvisited link 
+a:link 
+{
+    color: black;
+    text-decoration:none; 
+}    
+
+a:hover
+{ 
+    background:transparent; 
+    text-decoration:underline; 
+}
+
+ visited link 
+a:visited 
+{
+    color: black;
+} */
+
+

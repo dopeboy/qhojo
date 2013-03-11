@@ -1,0 +1,36 @@
+ONE TIME
+
+	mysql -u root -p
+	root
+
+        create user 'manish'@'localhost' identified by 'admin';
+
+	create database qhojo
+	grant all privleges on *.* to 'manish'@'localhost' IDENTIFIED BY 'admin' with GRANT OPTION;
+        grant all privileges on *.* to 'manish'@'localhost' with grant option;
+
+
+
+        94  sudo cp default mysite
+          95  sudo vim mysite
+                change the directory root here
+                change allowoverride to all
+          99  a2enmod rewrite
+          97  sudo a2dissite default && sudo a2ensite mysite
+          98  sudo /etc/init.d/apache2 restart
+
+
+LOGIN 
+	mysql -umanish -h localhost -padmin -D qhojo
+
+RUN
+	mysql -umanish -h localhost -padmin < create.sql > out
+
+
+
+GET: curl -g -HAccept:text/plain http://localhost?action=GET_USER_ID\&email=joe
+
+POST: curl -d "param1=value1&param2=value2" http://example.com/base/
+
+tail -f /var/log/apache2/error.log
+

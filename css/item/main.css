@@ -1,0 +1,65 @@
+/* 
+    Document   : main
+    Created on : Feb 21, 2013, 11:44:10 AM
+    Author     : manish
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.card
+{
+    width:227px; 
+    height:220px;
+    float:left;
+    border:1px solid;
+    margin-left:25px;
+    margin-top: 10px;
+    display:inline-block;
+}
+
+.card .top
+{
+    height: 70%; 
+    padding-top: 2px;
+    padding-bottom: 2px; 
+    background-color: rgba(183,200,124, 0.0); 
+    text-align: center
+}
+
+.card .ruler
+{
+    border-top: 1px solid black;
+    margin-top: 0px;    
+}
+
+.card .bottom
+{
+    font-size:0.8em; 
+    font-family: arial; 
+    height: 30%; 
+    background-color: rgba(193,107,107, 0.0)
+}
+
+.title
+{
+    font-weight: bold
+}
+
+.location
+{
+    color:#A62A2A; 
+    font-weight: bold
+}
+
+.rate
+{
+    color:green; 
+    font-weight: bold    
+}
+
+.lender
+{
+    color:blue;
+    font-weight: bold 
+       
+}
