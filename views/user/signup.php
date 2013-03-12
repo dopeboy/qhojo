@@ -2,12 +2,15 @@
     <script type="text/javascript" src="/js/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script> 
     <script type="text/javascript" src="/js/user/signup.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/user/login.css">
+
 </head>
 
-<?php if ($this->stateid == 0) { ?>
+<?php if ($this->state == 0) { ?>
     
 <div id="masterdiv">
-    <div class="mainheading">Sign Up</div>
+    <div id="mainheading">Sign Up</div>
+    <hr/>
     <div class="subcontent">
         <form id="myForm" action="/user/signup/null/1" method="post">
             <table>                  
@@ -16,7 +19,7 @@
                             Firstname:
                     </td>
                     <td>
-                            <input type="text" name="firstname" />
+                            <input class="textbox" type="text" name="firstname" />
                     </td>   
                 </tr>
                 <tr>
@@ -24,7 +27,7 @@
                             Email:
                     </td>
                     <td>
-                            <input type="text" name="emailaddress" />
+                            <input class="textbox" type="text" name="emailaddress" />
                     </td>
                 </tr>
                 <tr>
@@ -32,7 +35,7 @@
                             Password:
                     </td>
                     <td>
-                            <input type="text" name="password" />
+                            <input class="textbox" type="text" name="password" />
                     </td>
                 </tr>                        
                 <tr  style="">

@@ -13,11 +13,13 @@
                 Rental Details
             </div> 
             <br/>
-            <div id="pricelender" style="display:table;width: 50%;background-color: rgba(207,207,207, .5); ">
-                <div id="price" style="width:55%;display:table-cell;">
-                    <div>
+            <div style="display:inline-block">
+            
+                
+                <div id="price" style="background-color: rgba(207,207,207, .5);height:230px;padding: 15px; float: left; width: 284px">
+                  <div>
                         rental rate
-                        <div style="font-size: 250%">$<span id="rate"><?php echo $viewmodel[0]['RATE']?></span> / day</div>
+                        <div style="font-size: 250%">$<?php echo $viewmodel[0]['RATE']?> / day</div>
                     </div>
                     <br/>
                     <div>
@@ -28,19 +30,11 @@
                     <div>   
                         reservation fee
                         <div style="font-size: 250%">$1</div>
-                    </div>            
-                </div>
-                <div id="lender" style="width:45%;display:table-cell; vertical-align:middle">
-                    lender<br/>
-                    <img src="/uploads/user/<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME']; ?>"><br/>
-                    <div style="font-size:250%">
-                        <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
-                    </div>
-                    <div id="lender_feedback" style="">
-                        <?php echo $viewmodel[2][0] == null ? "<i>No feedback</i>" : $viewmodel[2][0];  ?>
-                    </div>    
-                </div>        
-            </div>
+                    </div>          
+                </div>     
+           </div>
+            
+            <br/>
             <br/>
             <div class="subheading" style="">
                 Duration
@@ -78,7 +72,7 @@
                 Agreement
             </div>       
             <br/>
-            <div style=" width:50%; display:table;background-color: rgba(207,207,207, .5);">
+            <div style=" padding: 15px; background-color: rgba(207,207,207, .5);">
                 due now
                 <div style="font-size:150%">
                     $1

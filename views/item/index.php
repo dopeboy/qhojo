@@ -22,26 +22,26 @@
     </div>
    <hr style=""/>
 
-   
-   <div id="mid" style="display:table; width: 100%">
-        <div id="itempictures" style="display:table-cell; width:60%; background-color: rgba(207,207,207, .5); height:400px; text-align:center">
-                        <?php $file = $viewmodel[1][0];?>
-            <img id ="largeimage" src="<?php echo $file['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $file['FILENAME']; ?>" style="height:400px">
-        
-            <div id="thumbs" style="display: block; height:50px; width:100%; background-color: rgba(207,207,207, .7);">
-                <?php foreach ($viewmodel[1] as $pic) {  ?>
-                
-                <img class src="<?php echo $pic['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $pic['FILENAME']; ?>" style="height:50px"></a>
-                
-                <?php } ?>
+   <div id="mid" style="display:table; width:984px; height:580px">
+        <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px">
+      
+            <?php $file = $viewmodel[1][0];?>
+            <img id ="largeimage" src="<?php echo $file['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $file['FILENAME'];?>" style="max-height: 500px; max-width: 640px" >
+
+            <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
+            <?php foreach ($viewmodel[1] as $pic) {  ?>
+
+            <img class src="<?php echo $pic['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $pic['FILENAME']; ?>" style="height:50px"></a>
+
+            <?php } ?>
             </div>
+       
         </div>
 
-        <div id="pricelender" style="display:table-cell; vertical-align: top;  width: 35%; padding-left:5%">
-            <div style="background-color: rgba(207,207,207, .5);display:table; width: 100%">
-                
-                <div id="price" style="width:55%;display:table-cell;">
-                    <div>
+        <div id="pricelender" style="display:table-cell; vertical-align: top;  width: 304px;padding-left: 40px; height: 100%">
+
+                <div id="price" style="background-color: rgba(207,207,207, .5);height:230px;padding: 15px">
+                  <div>
                         rental rate
                         <div style="font-size: 250%">$<?php echo $viewmodel[0]['RATE']?> / day</div>
                     </div>
@@ -54,25 +54,27 @@
                     <div>   
                         reservation fee
                         <div style="font-size: 250%">$1</div>
-                    </div>            
+                    </div>          
+                </div>       
+          
+            
+            <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
+                
+              lender<br/>
+                <img src="/uploads/user/<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME']; ?>"><br/>
+                <div style="font-size:250%">
+                    <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
                 </div>
-                <div id="lender" style="width:45%;display:table-cell; vertical-align:middle">
-                    lender<br/>
-                    <img src="/uploads/user/<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME']; ?>"><br/>
-                    <div style="font-size:250%">
-                        <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
-                    </div>
-                    <div id="lender_feedback" style="">
-                        <?php if ($viewmodel[2][0] == null) { ?> <i>No feedback</i> <?php } else { ?>
-                            <input name="rating2" type="radio" class="star" value="1" <?php if ($viewmodel[2][0] == 1) { ?> checked="checked" <?php } ?>/>
-                            <input name="rating2" type="radio" class="star" value="2" <?php if ($viewmodel[2][0] == 2) { ?> checked="checked" <?php } ?>/>
-                            <input name="rating2" type="radio" class="star" value="3" <?php if ($viewmodel[2][0] == 3) { ?> checked="checked" <?php } ?>/>
-                            <input name="rating2" type="radio" class="star" value="4" <?php if ($viewmodel[2][0] == 4) { ?> checked="checked" <?php } ?>/>
-                            <input name="rating2" type="radio" class="star" value="5" <?php if ($viewmodel[2][0] == 5) { ?> checked="checked" <?php } ?>/>   
-                            <?php } ?>
-                    </div>    
-                </div>        
-            </div>
+                <div id="lender_feedback" style="">
+                    <?php if ($viewmodel[2][0] == null) { ?> <i>No feedback</i> <?php } else { ?>
+                        <input name="rating2" type="radio" class="star" value="1" <?php if ($viewmodel[2][0] == 1) { ?> checked="checked" <?php } ?>/>
+                        <input name="rating2" type="radio" class="star" value="2" <?php if ($viewmodel[2][0] == 2) { ?> checked="checked" <?php } ?>/>
+                        <input name="rating2" type="radio" class="star" value="3" <?php if ($viewmodel[2][0] == 3) { ?> checked="checked" <?php } ?>/>
+                        <input name="rating2" type="radio" class="star" value="4" <?php if ($viewmodel[2][0] == 4) { ?> checked="checked" <?php } ?>/>
+                        <input name="rating2" type="radio" class="star" value="5" <?php if ($viewmodel[2][0] == 5) { ?> checked="checked" <?php } ?>/>   
+                        <?php } ?>
+                </div>    
+            </div> 
         </div>
     </div>
 <br/>    
