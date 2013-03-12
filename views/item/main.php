@@ -8,7 +8,8 @@
 </head>
 
 <div id="masterdiv">
-    <div class="mainheading">Main</div>
+    <div id="mainheading">Main</div>
+    <hr/>
     <div class="subcontent" style="padding-top: 0px;   overflow: hidden;white-space: nowrap;">
             
     <?php require('card_embed.php'); ?>

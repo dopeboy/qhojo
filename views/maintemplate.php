@@ -13,11 +13,11 @@
         <div id="header">
             <div id="banner">
                 <div class="threecol">
-                    <div style="text-align:left;margin-top: 13px">
+                    <div style="text-align:left;margin-top: 10px">
                         
                         <form id="searchform" action="/item/search/" method="get" style="padding:0px; margin: 0px">
-                            <input id="search" type="text" name="" value="" style="width:200px;"/> 
-                            <input type="submit" value="search" />
+                            <input id="search" type="text" name="" value="" style=""/> 
+           
                         </form>
                     </div>
 

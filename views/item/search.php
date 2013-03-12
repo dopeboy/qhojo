@@ -7,7 +7,8 @@
 
 
 <div id="masterdiv">
-    <div class="mainheading">Search Results</div>
+    <div id="mainheading">Search results for "<?php echo $this->id ?>"</div>
+    <hr/>
     <div class="subcontent" style="padding-top: 0px;   overflow: hidden;white-space: nowrap;">
             
     <?php require('card_embed.php'); ?>

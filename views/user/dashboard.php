@@ -7,10 +7,10 @@
 
 
 <div id="masterdiv">
-    <div class="mainheading">
+    <div id="mainheading">
         dashboard
     </div>
-    <br/>
+    <hr/>
     <div class="subheading">
         borrows
     </div>
@@ -27,6 +27,7 @@
             <?php require('dashboard_embed.php'); ?>
         </div>        
     </div>        
+    <br/>
     <br/>
     <div class="subheading">
         loans

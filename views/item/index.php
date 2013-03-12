@@ -12,10 +12,7 @@
 
 <div id="masterdiv">
     <div id="topbar" style="width:100%;display:table;">
-        
-            <div style="display:table-cell;width:50%;font-size:350%;">
-                <?php echo $viewmodel[0]['TITLE'] ?>
-            </div>
+        <div id="mainheading" style="display:table-cell;"><?php echo $viewmodel[0]['TITLE'] ?></div>
             <div style="display:table-cell;width:50%;text-align:right">
                 <form id="f" action="/item/reserve/<?php echo $viewmodel[0]['ITEM_ID'] ?>/0" method="get" style="padding:0px; margin: 0px">
                     <input type="submit" value="Reserve" <?php if($viewmodel[0]['LENDER_ID'] == $this->userid || $viewmodel[0]['ITEM_STATE_ID'] != 0) { ?> disabled <?php } ?>>
@@ -23,8 +20,8 @@
                 </form>
             </div>
     </div>
-   <hr style="margin:0"/>
-   <br/>
+   <hr style=""/>
+
    
    <div id="mid" style="display:table; width: 100%">
         <div id="itempictures" style="display:table-cell; width:60%; background-color: rgba(207,207,207, .5); height:400px; text-align:center">
@@ -80,9 +77,10 @@
     </div>
 <br/>    
    <div id="description">
-       <div class="header" style="font-size:250%">
+       <div class="subheading">
            Description
        </div>
+       <br/>
        <div id="content">
             <?php echo $viewmodel[0]['DESCRIPTION'] ?>
        </div>
@@ -91,9 +89,10 @@
    <br/>
    
    <div id="location">
-       <div class="header" style="font-size:250%">
+       <div class="subheading" >
            Location
        </div>
+       <br/>
        <div id="address" style="">
                <?php echo $viewmodel[0]['NEIGHBORHOOD'] . ',' . $viewmodel[0]['BOROUGH']; ?>
                 <div id="map_canvas" style="width:100%; height:300px"></div>

@@ -1,5 +1,9 @@
 <?php
 
+require "Services/Twilio.php";
+
+
+
 class ItemModel extends Model 
 {
 	public function index($itemid) 
@@ -49,16 +53,16 @@ class ItemModel extends Model
 		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-
 		return $row;
 	}
 
-        public function submitReservation($itemid, $userid, $duration, $message)
+        public function submitReservation($itemid, $userid, $duration, $message, $user_model)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$sqlParameters[":userid"] =  $userid;
 		$sqlParameters[":duration"] =  $duration;
-		$preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,BORROWER_ID = :userid , BORROW_DURATION=:duration where ID=:itemid');
+                $sqlParameters[":confirmation_code"] = $code = getConfirmationID();
+		$preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,BORROWER_ID = :userid , BORROW_DURATION=:duration, CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 
                 if ($preparedStatement->rowCount() > 0)
@@ -69,8 +73,21 @@ class ItemModel extends Model
                         'Reply-To: webmaster@example.com' . "\r\n" . // This should be lender's email
                         'X-Mailer: PHP/' . phpversion();     
                     
+                    $user = $user_model->getUserDetails($userid);
+                    $message = "Hey " . $user["FIRST_NAME"] . "! It's qhojo here. Text this confirmation ID back to us when you've confirmed the item: " . $code;
                     $status = mail($to, $subject, $message, $headers);
-                    return $status == true ? 0 : 2;
+                    
+                    if ($status == true)
+                    {
+                        global $TwilioAccountSid;   
+                        global $TwilioAuthToken;
+                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+                        $sms = $client->account->sms_messages->create("9493287319", $user['PHONE_NUMBER'],$message);
+                        
+                        return 0;
+                    }
+                    
+                    return 2;
                 }
                 
 		return 1;

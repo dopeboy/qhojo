@@ -6,7 +6,8 @@
 </head>
 
 <div id="masterdiv">
-    <div class="mainheading">Login</div>
+    <div id="mainheading">Login</div>
+    <hr/>
     <?php if ($this->state == 1) { ?>
     <div class="error">
         <li>Invalid username / password</li>
@@ -20,7 +21,7 @@
                             Email:
                     </td>
                     <td>
-                            <input type="text" name="emailaddress" />
+                            <input class="textbox" type="text" name="emailaddress" />
                     </td>   
                 </tr>
                 <tr>
@@ -28,7 +29,7 @@
                             Password:
                     </td>
                     <td>
-                            <input type="text" name="password" />
+                            <input class="textbox" type="text" name="password" />
                     </td>
                 </tr>
                 <tr style="">

@@ -47,7 +47,7 @@ class Item extends Controller
                 // submit the reservation
                 else if ($this->state==1)
                 {
-                    $this->returnView($viewmodel->submitReservation($this->id,$this->userid,$this->postvalues['duration'], $this->postvalues['message']), false,true);        
+                    $this->returnView($viewmodel->submitReservation($this->id,$this->userid,$this->postvalues['duration'], $this->postvalues['message'], new UserModel()), false,true);        
                 }
 
                 // reservation submitted sucessfully

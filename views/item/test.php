@@ -16,8 +16,8 @@
     require "Services/Twilio.php";
  
     // Step 2: set our AccountSid and AuthToken from www.twilio.com/user/account
-    $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
-    $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
+   global $TwilioAccountSid;   
+    global $TwilioAuthToken;
  
     // Step 3: instantiate a new Twilio Rest Client
     $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
@@ -36,7 +36,7 @@
  
         // Step 6: Change the 'From' number below to be a valid Twilio number 
         // that you've purchased, or the (deprecated) Sandbox number
-            "949-328-7319", 
+            "9493287319", 
  
             // the number we are sending to - Any phone number
             $number,
