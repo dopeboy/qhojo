@@ -34,7 +34,7 @@ class ItemModel extends Model
         
 	public function test() 
 	{
-		return 0;
+		return null;
 	}           
         
 	public function search($query) 
