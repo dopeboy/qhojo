@@ -69,7 +69,7 @@ class Item extends Controller
             }
             
             else if ($this->state==1)
-                $this->returnView($viewmodel->lenderConfirm(), false,false);
+                $this->returnView($viewmodel->lenderConfirm($this->postvalues['Body'],$this->postvalues['From']), false,false);
         }
 
 //	protected function returnItem() 
