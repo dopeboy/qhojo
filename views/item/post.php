@@ -28,15 +28,11 @@
  
    
    <div id="mid" style="display:table; width:984px; height:580px">
-        <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px">
+        <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px; ">
       
-		<br/><br/>
-				<input id ="uploadedfile1" name="file1" type="file" />
-				<br/><br/>
-				<input id ="uploadedfile2" name="file2" type="file" />
-				<br/><br/>
-				<input id ="uploadedfile3" name="file3" type="file" />
-				<br/><br/>   
+            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center">
+                <input id ="uploadedfile1" name="file1" type="file" />
+            </div>
                                 
             <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
 
@@ -50,8 +46,8 @@
                   <div>
                         rental rate
                         <div style="font-size: 250%">
-                            <input id="rate" name="rate" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
-                            <span class="noneditable" style="display:none"></span>
+                            $<input id="rate" name="rate" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
+                            <span class="noneditable" style="display:none; margin: 0; "></span>
                             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>                            
                         </div>
                     </div>
@@ -59,7 +55,7 @@
                     <div>
                         deposit
                         <div style="font-size: 250%">
-                            <input id="deposit" name="deposit" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
+                            $<input id="deposit" name="deposit" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
                             <span class="noneditable" style="display:none"></span>
                             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>     
                         </div>
@@ -92,65 +88,7 @@
         </div>
     </div>
    
-<!--   <div id="mid" style="display:table; width: 100%">
-        <div id="itempictures" style="display:table-cell; width:60%; background-color: rgba(207,207,207, .5); height:400px; text-align:center">
-            <div style="height:80%;width:100%;">
-				<br/><br/>
-				<input id ="uploadedfile1" name="file1" type="file" />
-				<br/><br/>
-				<input id ="uploadedfile2" name="file2" type="file" />
-				<br/><br/>
-				<input id ="uploadedfile3" name="file3" type="file" />
-				<br/><br/>    
-            </div>
-            <div id="thumbs" style=" height:20%; width:100%; background-color: rgba(207,207,207, .7);">
 
-            </div>
-        </div>
-       
-        <input id="fileupload" type="file" name="files[]" data-url="/item/index/" multiple style="display:none">
-        
-
-        <div id="pricelender" style="display:table-cell; vertical-align: top;  width: 35%; padding-left:5%">
-            <div style="background-color: rgba(207,207,207, .5);display:table; width: 100%">
-                
-                <div id="price" style="width:55%;display:table-cell;">
-                    <div>
-                        rental rate
-                        <div style="font-size: 250%">
-                          
-                            <input id="rate" name="rate" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
-                            <span class="noneditable" style="display:none"></span>
-                            <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>                            
-                        </div>
-                    </div>
-                    <br/>
-                    <div>
-                        deposit
-                        <div style="font-size: 250%">
-                            <input id="deposit" name="deposit" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
-                            <span class="noneditable" style="display:none"></span>
-                            <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>     
-                        </div>
-                    </div>
-                    <br/>
-                    <div>   
-                        reservation fee
-                        <div style="font-size: 250%">$1</div>
-                    </div>            
-                </div>
-                <div id="lender" style="width:45%;display:table-cell; vertical-align:middle">
-                    lender<br/>
-                    <img src="/uploads/user/<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME']; ?>"><br/>
-                    <div style="font-size:250%">
-                        <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
-                    </div>
-                    <div id="lender_feedback" style="">
-                    </div>    
-                </div>        
-            </div>
-        </div>
-    </div>   -->
    
 <br/>    
    <div id="description">

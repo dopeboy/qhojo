@@ -8,15 +8,14 @@
 <div id="masterdiv">
     
     <?php if ($this->state == 0) { ?>
-    <div class="mainheading">
-        Feedback
+    <div id="mainheading">
+        Feedback - <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>
     </div>
-    Item: <?php echo $viewmodel['TITLE'] ?>
-    <br/>
-    <br/>
+    <hr/>
     <div class="subheading" style="">
         Overall Experience
     </div>
+    <br/>
     <form id="myForm" action="/item/feedback/<?php echo $viewmodel['ITEM_ID']; ?>/1" method="POST">
         <?php if ($viewmodel['ITEM_STATE_ID'] == 3) { ?>
             <input id="zerostub" name="rating" type="hidden" value="0" selected style="display:none"/>

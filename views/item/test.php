@@ -1,51 +1,113 @@
 <?php
-    /* Send an SMS using Twilio. You can run this file 3 different ways:
-     *
-     * - Save it as sendnotifications.php and at the command line, run 
-     *        php sendnotifications.php
-     *
-     * - Upload it to a web host and load mywebhost.com/sendnotifications.php 
-     *   in a web browser.
-     * - Download a local server like WAMP, MAMP or XAMPP. Point the web root 
-     *   directory to the folder containing this file, and load 
-     *   localhost:8888/sendnotifications.php in a web browser.
-     */
  
-    // Step 1: Download the Twilio-PHP library from twilio.com/docs/libraries, 
-    // and move it into the folder containing this file.
-    require "Services/Twilio.php";
+/*THIS IS STRICTLY EXAMPLE SOURCE CODE. IT IS ONLY MEANT TO
+QUICKLY DEMONSTRATE THE CONCEPT AND THE USAGE OF THE ACCOUNT AUTHENTICATION SERVICE APIS. PLEASE NOTE THAT THIS IS *NOT* # PRODUCTION-QUALITY CODE AND SHOULD NOT BE USED AS SUCH.
  
-    // Step 2: set our AccountSid and AuthToken from www.twilio.com/user/account
-   global $TwilioAccountSid;   
-    global $TwilioAuthToken;
+ THIS EXAMPLE CODE IS PROVIDED TO YOU ONLY ON AN "AS IS"
+ BASIS WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER
+ EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY WARRANTIES
+ OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR
+ FITNESS FOR A PARTICULAR PURPOSE. PAYPAL MAKES NO WARRANTY THAT
+ THE SOFTWARE OR DOCUMENTATION WILL BE ERROR-FREE. IN NO EVENT
+ SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL,  EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+OF SUCH DAMAGE.
  
-    // Step 3: instantiate a new Twilio Rest Client
-    $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+INSTRUCTIONS
+1) Ensure that SSL and fopen() are enabled in the php.ini file
+2) Written and Tested with PHP 5.3.0
  
-    // Step 4: make an array of people we know, to send them a message. 
-    // Feel free to change/add your own phone number and name here.
-    $people = array(
-        "+19495214954" => "Curious George"
-    );
  
-    // Step 5: Loop over all our friends. $number is a phone number above, and 
-    // $name is the name next to it
-    foreach ($people as $number => $name) {
+IMPORTANT:
+When you integrate this code look for TODO as an indication that 
+you may need to provide a value or take action before executing this code.
+*/
  
-        $sms = $client->account->sms_messages->create(
+//turn php errors on
+ini_set('track_errors', true);
  
-        // Step 6: Change the 'From' number below to be a valid Twilio number 
-        // that you've purchased, or the (deprecated) Sandbox number
-            "9493287319", 
+//set APAPI URL
+$url = trim('https://api-3t.sandbox.paypal.com/nvp');
  
-            // the number we are sending to - Any phone number
-            $number,
  
-            // the sms body
-            "Hey $name, Monkey Party at 6PM. Bring Bananas!"
-        );
+//Create request body content
  
-        // Display a confirmation message on the screen
-        echo "Sent message to $name";
-    }
-    ?>
+$body_data = array(	 'USER' => "arithmetic_api1.gmail.com", //TODO
+                 		 'PWD' => "PR3C5H65FRZ4XFL5",
+                 		 'SIGNATURE' => "AFcWxV21C7fd0v3bYYYRCpSSRl31As2SHZyURzO7SCHrSKjOz3FV4NzS", //TODO
+            'RETURNURL' => "http://www.dailykos.com", //TODO
+                  	 'CANCELURL' => "http://www.yahoo.com", //TODO
+                  	 'LOGOUTURL' => "http://www.google.com", //TODO
+                  	 'VERSION' => "3.300000",
+            				 'METHOD' => "SetAuthFlowParam"
+										);
+ 
+//URL encode the request body content array
+$body_data = http_build_query($body_data, '', chr(38));
+ 
+try
+{
+ 
+    //create request and add headers
+    $params = array('http' => array(
+                  'method' => "POST",
+                  'content' => $body_data,
+                 ));
+ 
+ 
+    //create stream context
+     $ctx = stream_context_create($params);
+ 
+    //open the stream and send request
+     $fp = @fopen($url, 'r', false, $ctx);
+ 
+   //get response
+  $response = stream_get_contents($fp);
+ 
+  //check to see if stream is open
+         if ($response === false) {
+        throw new Exception("php error message = " . "$php_errormsg");
+     }
+      //echo $response . "<br/>";
+ 
+ 
+       //close the stream
+       fclose($fp);
+ 
+ 
+//parse key from the response
+        $key = explode("&",$response);
+  //print_r ($key);
+         //set url to approve the transaction
+ 
+ 
+        $payPalURL = "https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_account-authenticate-login&" . str_replace("TOKEN", "token", htmlspecialchars(urldecode($key[0])));
+ 
+        //print the url to screen for testing purposes
+         If ( $key[3] == 'ACK=Success')
+            {
+ 
+            echo $response . "<br/>";
+ 
+            echo '<a href="' . $payPalURL . '" target="_blank">' . $payPalURL . '</a> <p/>' . htmlspecialchars(urldecode($key[0])) ;
+ 
+ 
+            }
+         else
+         {
+             echo 'ERROR Code: "' . str_replace("L_ERRORCODE0=", "", htmlspecialchars(urldecode($key[5]))) . '"<br/> Error Long Message: "' .  str_replace("L_LONGMESSAGE0=", "", htmlspecialchars(urldecode($key[7]))) . '"';
+         }
+}
+ 
+catch(Exception $e)
+  {
+  echo 'Message: ||' .$e->getMessage().'||';
+  }
+ 
+?>

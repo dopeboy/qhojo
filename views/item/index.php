@@ -23,11 +23,13 @@
    <hr style=""/>
 
    <div id="mid" style="display:table; width:984px; height:580px">
-        <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px">
+        <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px;">
       
-            <?php $file = $viewmodel[1][0];?>
-            <img id ="largeimage" src="<?php echo $file['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $file['FILENAME'];?>" style="max-height: 500px; max-width: 640px" >
-
+            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center">
+                <?php $file = $viewmodel[1][0];?>
+                <img id ="largeimage" src="<?php echo $file['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $file['FILENAME'];?>" style="max-height: 500px; max-width: 640px" >
+            </div>
+            
             <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
             <?php foreach ($viewmodel[1] as $pic) {  ?>
 

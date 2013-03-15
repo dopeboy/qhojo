@@ -6,7 +6,7 @@ ONE TIME
         create user 'manish'@'localhost' identified by 'admin';
 
 	create database qhojo
-	grant all privleges on *.* to 'manish'@'localhost' IDENTIFIED BY 'admin' with GRANT OPTION;
+
         grant all privileges on *.* to 'manish'@'localhost' with grant option;
 
 
@@ -34,3 +34,5 @@ POST: curl -d "param1=value1&param2=value2" http://example.com/base/
 
 tail -f /var/log/apache2/error.log
 
+
+2116595

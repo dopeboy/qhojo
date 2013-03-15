@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 // global configuration file
 require("common.inc");
 
@@ -12,14 +14,13 @@ require("model.php");
 require("models/user.php");
 require("models/item.php");
 require("models/location.php");
+require("models/document.php");
 
 //require the controller classes
 require("controllers/user.php");
 require("controllers/item.php");
 require("controllers/location.php");
-
-//create the controller and execute the action
-session_start();
+require("controllers/document.php");
 
 error_log("------------------------------------------");
 error_log("post: " . print_r($_POST,true));
