@@ -157,12 +157,14 @@ class ItemModel extends Model
             //    error_log("2");    
                     if ($preparedStatement->rowCount() == 1)
                     {//error_log("3");    
-                        $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. When you meet " . $row["BORROWER_FIRST_NAME"] . "again, text the following confirmation code to this number: " . $confirmation_code;
+                        $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over.";
+                        $message2 = "When you meet " . $row["BORROWER_FIRST_NAME"] . "again, text the following confirmation code to this number: " . $confirmation_code;
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
                         $sms = $client->account->sms_messages->create("9494852584", $row["LENDER_PHONE_NUMBER"],$message);                        
+                        $sms = $client->account->sms_messages->create("9494852584", $row["LENDER_PHONE_NUMBER"],$message2);     
                         error_log("4");    
                         return 0;
                     }
