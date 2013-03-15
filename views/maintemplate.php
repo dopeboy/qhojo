@@ -21,7 +21,7 @@
                         </form>
                     </div>
 
-                    <div><a href="/item/main"><img src="/img/logo2.png"></a></div>
+                    <div><a href="/item/main"><img src="/img/logo2.png"/></a></div>
 
                     <div style="text-align: right; margin-top: 15px">
                         

@@ -17,7 +17,7 @@ class Item extends Controller
         protected function test()
         {
 		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->test(), true,false);            
+		$this->returnView($viewmodel->test(), false,true);            
         }
         
 	protected function search() 
