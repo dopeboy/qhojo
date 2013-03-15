@@ -135,17 +135,45 @@ class ItemModel extends Model
 		return $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 	}        
 
-	public function returnItem($itemid) 
+	public function borrowerConfirm($confirmation_code, $phone_number) 
 	{
-		$sqlParameters[":itemid"] =  $itemid;
-		$sqlParameters[":statusid"] =  3;
-		$preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:statusid WHERE ITEM_ID=:itemid');
+            error_log("cc:" . $confirmation_code);
+            error_log("ph:" . $phone_number);
+		$sqlParameters[":confirmation_code"] =  $confirmation_code;
+                $sqlParameters[":phone_number"] =  $phone_number;
+                $sqlParameters[":status_id"] =  1;
+                $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and BORROWER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
 		$preparedStatement->execute($sqlParameters);
+                $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+                
+              //  error_log("1");
+                if ($preparedStatement->rowCount() == 1)
+                {
+                    $sqlParameters = null;
+                    $sqlParameters[":status_id"] =  2;
+                    $sqlParameters[":item_id"] =  $row['ITEM_ID'];
+                    $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
+                    $preparedStatement->execute($sqlParameters);    
+            //    error_log("2");    
+                    if ($preparedStatement->rowCount() == 1)
+                    {//error_log("3");    
+                        $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. When you meet " . $row["BORROWER_FIRST_NAME"] . "again, text the following confirmation code to this number: " . $confirmation_code;
 
-		return 0;
+                        global $TwilioAccountSid;   
+                        global $TwilioAuthToken;
+                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+                        $sms = $client->account->sms_messages->create("9494852584", $row["LENDER_PHONE_NUMBER"],$message);                        
+                        error_log("4");    
+                        return 0;
+                    }
+                    
+                    return 2;
+                }
+
+		return 1;
 	}
 
-	public function receive($itemid) 
+	public function lenderConfirm() 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$sqlParameters[":statusid"] =  2;

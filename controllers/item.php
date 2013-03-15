@@ -57,6 +57,20 @@ class Item extends Controller
                 }                 
             }                     
 	}
+        
+        protected function confirm()
+        {
+            $viewmodel = new ItemModel();
+            
+            if ($this->state==0)
+            {
+                $this->returnView($viewmodel->borrowerConfirm($this->postvalues['Body'],$this->postvalues['From']), false,false);
+                //$viewmodel->borrowerConfirm($this->postvalues['Body'],$this->postvalues['From']);
+            }
+            
+            else if ($this->state==1)
+                $this->returnView($viewmodel->lenderConfirm(), false,false);
+        }
 
 //	protected function returnItem() 
 //	{
