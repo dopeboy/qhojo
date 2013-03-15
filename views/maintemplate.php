@@ -25,7 +25,7 @@
 
                     <div style="text-align: right; margin-top: 15px">
                         
-                        <a href="/item/main">home</a> | <a href="/user/dashboard">dashboard</a> | <a href="/item/post/null/0">post</a> | <a href="/document/faq">faq</a> | <?php if ($this->userid == null ) { ?> <a href="/user/login/null/0">login</a> <?php } else { ?> <a href="/user/logout">logout</a> <?php } ?>
+                        <a href="/">home</a> | <a href="/user/dashboard">dashboard</a> | <a href="/item/post/null/0">post</a> | <a href="/document/faq">faq</a> | <?php if ($this->userid == null ) { ?> <a href="/user/login/null/0">login</a> <?php } else { ?> <a href="/user/logout">logout</a> <?php } ?>
                     </div>
                 </div>
             </div>
