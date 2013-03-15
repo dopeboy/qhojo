@@ -1,7 +1,11 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+class Document extends Controller 
+{
+    protected function faq()
+    {
+        $this->returnView(null, true,false);
+    }
+}
+
 ?>
