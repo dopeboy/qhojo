@@ -198,7 +198,7 @@ class ItemModel extends Model
                     if ($preparedStatement->rowCount() == 1)
                     {
                         error_log("3");    
-                        $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over.";
+                        $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item.";
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;

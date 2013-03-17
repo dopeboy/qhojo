@@ -6,6 +6,11 @@ class Document extends Controller
     {
         $this->returnView(null, true,false);
     }
+    
+    protected function howitworks()
+    {
+        $this->returnView(null, true,false);
+    }    
 }
 
 ?>
