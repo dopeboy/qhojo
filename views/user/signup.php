@@ -37,8 +37,16 @@
                     <td>
                             <input class="textbox" type="text" name="password" />
                     </td>
-                </tr>                        
-                <tr  style="">
+                </tr>
+                <tr>
+                    <td>
+                            Phone number:
+                    </td>
+                    <td>
+                            <input class="textbox" type="text" name="phonenumber" />
+                    </td>
+                </tr>                   
+                <tr style="">
                     <td colspan="2">
                            <input type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" />
                     </td>

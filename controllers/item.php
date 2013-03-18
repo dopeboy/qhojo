@@ -72,18 +72,6 @@ class Item extends Controller
                 $this->returnView($viewmodel->lenderConfirm($this->postvalues['Body'],$this->postvalues['From']), false,false);
         }
 
-//	protected function returnItem() 
-//	{
-//		$item_model = new ItemModel();
-//		$this->returnView($item_model->returnItem($this->postvalues['itemid']), false,true);
-//	}
-//
-//	protected function receive() 
-//	{
-//		$item_model = new ItemModel();
-//		$this->returnView($item_model->receive($this->postvalues['itemid']), false,true);
-//	}
-
 	protected function post() 
 	{
             if ($this->userid == null)

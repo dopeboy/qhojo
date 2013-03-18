@@ -12,6 +12,10 @@
     <div class="error">
         <li>Invalid username / password</li>
     </div>
+    <?php } else if ($this->state >= 2) { ?>
+    <div class="error">
+        <li>You're gonna need to login for this page.</li>
+    </div>    
     <?php } ?>
     <div class="subcontent">
         <form id="myForm" action="/user/verify" method="post">

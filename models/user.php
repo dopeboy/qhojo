@@ -79,12 +79,13 @@ class UserModel extends Model
             return 0;
         }
         
-        public function signupAction($firstname, $emailaddress, $password)
+        public function signupAction($firstname, $emailaddress, $password, $phonenumber)
         {
             $sqlParameters[":first_name"] =  $firstname;
             $sqlParameters[":email_address"] =  $emailaddress;
             $sqlParameters[":password"] =  $password;
-            $preparedStatement = $this->dbh->prepare('insert into USER (FIRST_NAME,EMAIL_ADDRESS,PASSWORD) VALUES (:first_name, :email_address, :password)');
+            $sqlParameters[":phonenumber"] =  $phonenumber;
+            $preparedStatement = $this->dbh->prepare('insert into USER (FIRST_NAME,EMAIL_ADDRESS,PASSWORD, PHONE_NUMBER) VALUES (:first_name, :email_address, :password, :phonenumber)');
             $preparedStatement->execute($sqlParameters);
 
             return $this->dbh->lastInsertId();                 

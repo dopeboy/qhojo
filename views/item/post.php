@@ -10,7 +10,7 @@
 <div id="masterdiv">
     <?php if ($this->state == 0) { ?>
     
-    <form id="myForm" method="post" action="/item/post/null/1">
+    <form id="myForm" method="post" action="/item/post/null/1" style="margin: 0">
         
     <div id="topbar" style="width:100%;display:table;">
         <div id="mainheading" style="display:table-cell;">
@@ -71,7 +71,7 @@
             <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
                 
               lender<br/>
-                <img src="/uploads/user/<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME']; ?>"><br/>
+                <img src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
                 </div>
@@ -123,7 +123,7 @@
         </div>
    </div>   
    <br/>
-   <br/>
+   
    <div style="text-align:center">
     <input type="submit" value="submit">
    </div>
@@ -131,11 +131,12 @@
    
     <?php } ?>
     <?php if ($this->state == 2) { ?>
-    <div class="mainheading">
-        Your post has been submitted!
+    <div id="mainheading">
+        Thanks!
     </div>
+    <hr/>
     <div class="subcontent">
-        Click <a href="/item/index/<?php echo $viewmodel['ID'];?>">here</a> to see your post.
+        Your post has been submitted! Click <a href="/item/index/<?php echo $viewmodel['ID'];?>">here</a> to see your post.
     </div>
     <?php } ?>
 </div>

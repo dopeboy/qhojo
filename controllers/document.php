@@ -11,6 +11,11 @@ class Document extends Controller
     {
         $this->returnView(null, true,false);
     }    
+    
+    protected function legal()
+    {
+        $this->returnView(null, true,false);
+    }        
 }
 
 ?>

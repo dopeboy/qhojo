@@ -25,7 +25,7 @@
 
                     <div style="text-align: right; margin-top: 15px">
                         
-                        <a href="/">home</a> | <a href="/user/dashboard">dashboard</a> | <a href="/item/post/null/0">post</a> | <a href="/document/faq">faq</a> | <?php if ($this->userid == null ) { ?> <a href="/user/login/null/0">login</a> <?php } else { ?> <a href="/user/logout">logout</a> <?php } ?>
+                        <a href="/">home</a> | <a href="/user/dashboard">dashboard</a> | <a href="/item/post/null/0">post</a> | <a href="/document/faq">faq</a> | <?php if ($this->userid == null ) { ?> <a href="/user/login/null/0">login</a> / <a href="/user/signup/null/0">signup</a> <?php } else { ?> <a href="/user/logout">logout</a> <?php } ?>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
         <div id="footer">
             <div id="footercontent">
-                blog | legal | about | v<?php global $version; echo $version; ?>
+                blog | <a href="/document/legal/">legal</a> | about | v<?php global $version; echo $version; ?>
             </div>
         </div>
     </div>

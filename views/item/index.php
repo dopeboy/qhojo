@@ -16,7 +16,7 @@
             <div style="display:table-cell;width:50%;text-align:right">
                 <form id="f" action="/item/reserve/<?php echo $viewmodel[0]['ITEM_ID'] ?>/0" method="get" style="padding:0px; margin: 0px">
                     <input type="submit" value="Reserve" <?php if($viewmodel[0]['LENDER_ID'] == $this->userid || $viewmodel[0]['ITEM_STATE_ID'] != 0) { ?> disabled <?php } ?>>
-                    <input type="submit" value="Contact Lender" style="">
+                     <input type="submit" value="Contact Lender" onclick="location.href='mailto:<?php echo $viewmodel[0]['LENDER_EMAIL_ADDRESS'] ?>?Subject=Hi';return false"  <?php if($viewmodel[0]['LENDER_ID'] == $this->userid) { ?> disabled <?php } ?>>
                 </form>
             </div>
     </div>
@@ -63,7 +63,7 @@
             <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
                 
               lender<br/>
-                <img src="/uploads/user/<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME']; ?>"><br/>
+               <img src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
                 </div>

@@ -107,13 +107,25 @@ $(document).ready(function()
     
    
        var options = { 
-        success:       showResponse  // post-submit callback 
+        success:       showResponse,  // post-submit callback 
+        beforeSubmit:  check
     }; 
     // bind form using 'ajaxForm' 
     $('#myForm').ajaxForm(options); 
     
  
- 
+ function check(formData, jqForm, options) 
+ { 
+    if ($('#uploadedfile1').val() == '' || $('#address').val() == '')
+    {
+        alert("Missing some fields!");
+        return false;
+    }
+
+     return true;
+ }
+
+
      // post-submit callback 
 function showResponse(responseText, statusText, xhr, $form)  
 { 

@@ -1,26 +1,26 @@
 <div id="masterdiv">
     <div id="mainheading">
-        How it works
+        Legal
     </div>
     <hr/>
     <div class="subheading">
         Terms & Conditions
     </div>
     <div class="subcontent">
-        blah blah blah
+        Play nice with others.
     </div>
     <br/>
     <div class="subheading">
         Privacy Policy
     </div>
     <div class="subcontent">
-        blah blah blah
+        We'll be nice.
     </div>
     <br/>
     <div class="subheading">
         Usage Policy
     </div>
     <div class="subcontent">
-        blah blah blah
+        You be nice.
     </div>    
 </div>

@@ -16,17 +16,8 @@
     <div class="subheading">
         How does qhojo work?
     </div>
-    <div class="subcontent" style="display:inline-block">
-        <div style="height: 300px; width: 300px; background-color: red; float: left">
-            sdfsdf
-        </div>
-        <div style="height: 300px; width: 300px; background-color: red; float: left; margin-left: 21px">
-            sdfsdf
-        </div>      
-        
-        <div style="height: 300px; width: 300px; background-color: red; float: left; margin-left: 21px">
-            sdfsdf
-        </div>             
+    <div class="subcontent">
+    Check out our <a href="/document/howitworks/">how-it-works guide.</a>
     </div>
     <br/>
     <div class="subheading">
