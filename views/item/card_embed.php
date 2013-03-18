@@ -1,9 +1,9 @@
         <?php $i=0; ?>
         <?php foreach($viewmodel as $item) { ?>
 
-            <div class="card" style="<?php if ($i%4==0) { ?> margin-left:0px; <?php } ?><?php if ($i<4) { ?> margin-top:0px; <?php } ?>">
+            <div class="card" style="<?php if ($i%4==0) { ?> margin-left:4px; <?php } ?><?php if ($i<4) { ?> margin-top:6px; <?php } ?>">
                 <div class="top">
-                    <a href="/item/index/<?php echo $item['ITEM_ID']; ?>">
+                    <a href="/item/index/<?php echo $item['ITEM_ID']; ?>" class="fill-div">
                         <img src="<?php echo $item['ITEM_PICTURE_FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $item['ITEM_PICTURE_FILENAME']; ?>" style="max-width:100%; max-height:100%;">
                     </a>
                 </div>

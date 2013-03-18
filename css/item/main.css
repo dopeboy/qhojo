@@ -12,10 +12,13 @@
     height:220px;
     float:left;
     border:1px solid;
-    margin-left:25px;
+    margin-left:23px;
     margin-top: 10px;
+    margin-bottom: 10px;
     display:inline-block;
-
+-webkit-box-shadow:  0px 0px 6px 1px rgba(0, 0, 0, 0.5);
+        
+        box-shadow:  0px 0px 6px 1px rgba(0, 0, 0, 0.5);
 
 }
 
@@ -40,7 +43,7 @@
     font-family: arial; 
     height: 30%; 
     background-color: rgba(207,207,207, .5);
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .title
@@ -65,4 +68,11 @@
     color:blue;
     font-weight: bold 
        
+}
+
+a.fill-div {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
 }

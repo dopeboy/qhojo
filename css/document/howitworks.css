@@ -1,0 +1,35 @@
+/* 
+    Document   : howitworks
+    Created on : Mar 18, 2013, 4:37:00 PM
+    Author     : manish
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.frame 
+{ 
+    width: 100%; 
+    display: inline-block;
+}
+
+.frame .desc
+{
+    width: 462px; 
+    float: left; 
+    font-size: 150%;
+    padding: 15px
+}
+
+.frame .desc .text
+{
+    font-size: 0.7em !important;
+}
+
+.frame .picture
+{
+    width: 462px; 
+    float: left;
+    padding: 15px; 
+    height: 231px; 
+    background-color: gold    
+}
