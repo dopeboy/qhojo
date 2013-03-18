@@ -3,7 +3,11 @@
 $dbhost = "localhost";
 $dbuser = "manish";
 $dbpass = 'admin';
-$dbname = "qhojo";
+
+if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "demo.qhojo.com")
+    $dbname = "qhojo";
+else if ($_SERVER['SERVER_NAME'] == "yc.qhojo.com")
+    $dbname = "qhojo2";
 
 $version = "0.1.7";
 

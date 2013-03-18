@@ -1,6 +1,4 @@
 rm -r ../uploads/*;
 cp -r img/* ../uploads/;
 chmod -R 777 ../uploads/;
-mysql -umanish -h localhost -padmin < sql/create.sql;
-mysql -umanish -h localhost -padmin < sql/base_data.sql;
-mysql -umanish -h localhost -padmin < sql/test_data.sql;
+cat sql/create.sql sql/base_data.sql sql/test_data.sql | mysql -umanish -h localhost -p $1

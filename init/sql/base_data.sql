@@ -1,4 +1,4 @@
-use qhojo;
+
 
 insert into ITEM_STATE VALUES (0,'OPEN');
 insert into ITEM_STATE VALUES (1,'RESERVED');

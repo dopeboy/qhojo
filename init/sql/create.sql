@@ -1,5 +1,3 @@
-use qhojo;
-
 drop table if exists USER;
 CREATE TABLE USER
 (
