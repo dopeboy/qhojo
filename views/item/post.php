@@ -124,8 +124,9 @@
    </div>   
    <br/>
    
-   <div style="text-align:center">
-    <input type="submit" value="submit">
+   <div style="text-align:center; position: relative">
+        <input id="submit" type="submit" value="submit">
+        <img id="loading" src="/img/ajax-loader.gif" style="height: 21px; margin-left: 2px; bottom: 2px; position: absolute; display:none">
    </div>
    </form>
    

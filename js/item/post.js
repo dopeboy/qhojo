@@ -122,6 +122,9 @@ $(document).ready(function()
         return false;
     }
 
+    $('#loading').show();
+    $('#submit').prop("disabled", true);
+     
      return true;
  }
 
