@@ -151,6 +151,7 @@ display: block; height: 1px;
 
 a:link 
 {
+    
     text-decoration:none; 
 }    
 
@@ -167,7 +168,7 @@ a:hover
 
 a:visited 
 {
-/*    color: black;*/
+    
 } 
 
 

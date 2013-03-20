@@ -46,7 +46,7 @@
     padding-left: 10px;
 }
 
-.title
+.title a
 {
     font-weight: bold
 }
@@ -63,9 +63,9 @@
     font-weight: bold    
 }
 
-.lender
+.lender a
 {
-    color:blue;
+    color:teal;
     font-weight: bold 
        
 }
