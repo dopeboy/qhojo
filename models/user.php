@@ -84,7 +84,7 @@ class UserModel extends Model
             $sqlParameters[":first_name"] =  $firstname;
             $sqlParameters[":email_address"] =  $emailaddress;
             $sqlParameters[":password"] =  $password;
-            $sqlParameters[":phonenumber"] =  $phonenumber;
+            $sqlParameters[":phonenumber"] =  '+1' . $phonenumber;
             $preparedStatement = $this->dbh->prepare('insert into USER (FIRST_NAME,EMAIL_ADDRESS,PASSWORD, PHONE_NUMBER) VALUES (:first_name, :email_address, :password, :phonenumber)');
             $preparedStatement->execute($sqlParameters);
 

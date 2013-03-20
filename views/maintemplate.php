@@ -23,7 +23,7 @@
 
                     <div><a href="/item/main"><img src="/img/logo2.png"/></a></div>
 
-                    <div style="text-align: right; margin-top: 15px">
+                    <div class="headerlinks "style="text-align: right; margin-top: 15px">
                         
                         <a href="/">home</a> | <a href="/user/dashboard">dashboard</a> | <a href="/item/post/null/0">post</a> | <a href="/document/faq">faq</a> | <?php if ($this->userid == null ) { ?> <a href="/user/login/null/0">login</a> / <a href="/user/signup/null/0">signup</a> <?php } else { ?> <a href="/user/logout">logout</a> <?php } ?>
                     </div>

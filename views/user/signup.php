@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td>
-                            Phone number:
+                            Phone number <br/>(no dashes, include area code):
                     </td>
                     <td>
                             <input class="textbox" type="text" name="phonenumber" />

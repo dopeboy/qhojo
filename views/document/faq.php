@@ -3,7 +3,7 @@
 
 <div id="masterdiv">
     <div id="mainheading">
-        FAQ
+        FAQ (under construction)
     </div>
     <hr/>
     <div class="subheading">
@@ -24,14 +24,14 @@
         What happens if the item I rent out never gets returned?
     </div>
     <div class="subcontent">
-        sdfdsf
+        If the item is not returned after the rental duration, the borrower will be charged the full value of the item. This amount will be transferred to the lender.
     </div>
     <br/>
     <div class="subheading">
         What happens if the item I rent out gets damaged?
     </div>
     <div class="subcontent">
-        sdfdsf
+        TODO
     </div>    
     <br/>
 </div>

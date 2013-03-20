@@ -15,7 +15,7 @@ CREATE TABLE ITEM
 (
 	ID                              INTEGER AUTO_INCREMENT PRIMARY KEY,
 	TITLE 				VARCHAR(80),
-	DESCRIPTION			VARCHAR(250),
+	DESCRIPTION			TEXT,
 	RATE				FLOAT,
         DEPOSIT				FLOAT,                  
         LOCATION_ID                     INTEGER,                        

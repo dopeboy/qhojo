@@ -30,7 +30,7 @@ class Item extends Controller
 	{
             if ($this->userid == null)
             {
-                header('Location: /user/login/null/1');
+                header('Location: /user/login/null/2');
                 exit;
             }
             

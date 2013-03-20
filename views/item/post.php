@@ -31,7 +31,7 @@
         <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px; ">
       
             <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center">
-                <input id ="uploadedfile1" name="file1" type="file" />
+                Upload one picture: <input id ="uploadedfile1" name="file1" type="file"/>
             </div>
                                 
             <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
@@ -71,7 +71,7 @@
             <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
                 
               lender<br/>
-                <img src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
+                <img src="<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['PROFILE_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
                 </div>
