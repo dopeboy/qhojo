@@ -28,10 +28,19 @@ class Item extends Controller
 
 	protected function reserve() 
 	{
+            $usermodel = new UserModel();
+            
             if ($this->userid == null)
             {
                 header('Location: /user/login/null/2');
                 exit;
+            }
+            
+            else if ($usermodel->checkExtra($this->userid))
+            {
+                header('Location: /user/signup/null/2');
+                $_SESSION['itemid'] = $this->id;
+                exit;                
             }
             
             else
@@ -84,16 +93,18 @@ class Item extends Controller
             
             if ($this->state == 0)
             {    
+                $_SESSION['itemid'] = getItemID();
 		$this->returnView($item_model->post($this->userid,new UserModel(),new LocationModel()), true,false);
             }
             
             else if ($this->state == 1)
             {
-                $this->returnView($item_model->submitPost($this->userid,$this->postvalues['title'],$this->postvalues['rate'],$this->postvalues['deposit'],$this->postvalues['description'],$this->postvalues['locationid'],$this->filevalues), false,true);
+                $this->returnView($item_model->submitPost($_SESSION['itemid'],$this->userid,$this->postvalues['title'],$this->postvalues['rate'],$this->postvalues['deposit'],$this->postvalues['description'],$this->postvalues['locationid'],$this->postvalues['file']), false,true);
             }
             
             else if ($this->state == 2)
             {
+                $_SESSION['itemid'] = null;
                 $this->returnView($item_model->postComplete($this->userid, $this->id), true, false);
             }
 	}
@@ -116,7 +127,12 @@ class Item extends Controller
             
             else if ($this->state == 2)
                 $this->returnView($item_model->feedbackComplete($this->id),true,false);
-        }        
+        }   
+        
+        protected function uploadpicture()
+        {
+            $this->returnView(null, FALSE,false);
+        }
 }
 
 ?>

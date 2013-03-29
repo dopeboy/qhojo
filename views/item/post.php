@@ -1,11 +1,14 @@
 <head>
 	<script type="text/javascript" src="/js/item/post.js"> </script>
+        <script type="text/javascript" src="/js/jquery-ui.js"> </script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
     </script>      
     
 
 </head>
+
 
 <div id="masterdiv">
     <?php if ($this->state == 0) { ?>
@@ -30,8 +33,21 @@
    <div id="mid" style="display:table; width:984px; height:580px">
         <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px; ">
       
-            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center">
-                Upload one picture: <input id ="uploadedfile1" name="file1" type="file"/>
+            
+            <div id="addpictures" style="position: absolute;z-index: 1 ; width:100%; margin-top: 193px;">
+                <a id="add-pictures" href="#" class="fill-div" >
+                    <div style="font-size: 400%; margin: 0" >
+                        +
+                    </div>
+                    <div style="font-size: 200%; margin: 0">
+                        Add Pictures
+                    </div>
+                </a>
+            </div>                    
+            
+            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center; ">
+
+
             </div>
                                 
             <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
@@ -130,6 +146,11 @@
    </div>
    </form>
    
+
+<div id="dialog-form" title="Upload Item Pictures" style="overflow: hidden">
+  <iframe id="uploaderframe" src="/picture/upload" style="width: 100%; height: 100%;" frameborder="0"/>
+</div>
+    
     <?php } ?>
     <?php if ($this->state == 2) { ?>
     <div id="mainheading">

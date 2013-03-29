@@ -16,6 +16,11 @@ $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
 function getConfirmationID()
 {
-    return rand(100000,900000);
+    return rand(100000,999999);
+}
+
+function getItemID()
+{
+    return rand(100000,999999);
 }
 ?>

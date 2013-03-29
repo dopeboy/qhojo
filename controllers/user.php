@@ -89,11 +89,30 @@ class User extends Controller
             
             else if ($this->state == 1)
             {
-                $userid = $viewmodel->signupAction($this->postvalues['firstname'], $this->postvalues['emailaddress'],$this->postvalues['password'], $this->postvalues['phonenumber']);
-                $_SESSION['userid']  = $userid;
-                $_SESSION['firstname']  = $this->postvalues['firstname'];
-                $_SESSION['lastname']  = $this->postvalues['password'];                
+                $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password']);
+                $_SESSION['userid']  = $userid;               
                 $this->returnView($userid, false,true);
+            }
+            
+            else if ($this->state == 2)
+            {
+                $this->returnView(null, true,false);
+            }
+            
+            else if ($this->state == 3)
+            {
+                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['firstname'],$this->postvalues['phonenumber'],null);
+                
+                if ($status == 0)
+                {
+                    $_SESSION['firstname'] = $this->postvalues['firstname'];
+                    $itemid = $_SESSION['itemid'];
+                    $_SESSION['itemid'] = null;
+                    $this->returnView($itemid, false,true);
+                }
+                
+                else
+                    $this->returnView(-1, false,true);
             }
         }
 }

@@ -3,10 +3,11 @@
     <script type="text/javascript" src="/js/jquery.form.js"></script> 
     <script type="text/javascript" src="/js/user/signup.js"></script>
     <link type="text/css" rel="stylesheet" href="/css/user/login.css">
+<script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>
 
 </head>
 
-<?php if ($this->state == 0) { ?>
+<?php if ($this->state == 0):  ?>
     
 <div id="masterdiv">
     <div id="mainheading">Sign Up</div>
@@ -14,14 +15,6 @@
     <div class="subcontent">
         <form id="myForm" action="/user/signup/null/1" method="post">
             <table>                  
-                <tr>
-                    <td>
-                            Firstname:
-                    </td>
-                    <td>
-                            <input class="textbox" type="text" name="firstname" />
-                    </td>   
-                </tr>
                 <tr>
                     <td>
                             Email:
@@ -35,15 +28,7 @@
                             Password:
                     </td>
                     <td>
-                            <input class="textbox" type="text" name="password" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                            Phone number <br/>(no dashes, include area code):
-                    </td>
-                    <td>
-                            <input class="textbox" type="text" name="phonenumber" />
+                            <input class="textbox" type="password" name="password" />                          
                     </td>
                 </tr>                   
                 <tr style="">
@@ -62,4 +47,52 @@
     </div>
 </div>
 
-<?php } ?>
+<?php elseif ($this->state == 2 && isset($_SESSION['itemid'])): ?>
+    
+<div id="masterdiv">
+    <div id="mainheading">Additional Fields</div>
+    <hr/>
+    <div class="subcontent">
+        Before you post or reserve an item, we'll need to know a couple more things about you. Fill out the fields below to continue:
+        <br/><br/>
+        <form id="additionalform" action="/user/signup/null/3" method="post">
+            <table>                  
+                <tr>
+                    <td>
+                            First Name:
+                    </td>
+                    <td>
+                            <input class="textbox" type="text" name="firstname" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                            Phone Number:
+                    </td>
+                    <td>
+                            <input class="textbox" type="text" id="phonenumber" name="phonenumber" />                          
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                            Profile Picture:
+                    </td>
+                    <td>
+                            <input type="file" name="profilepicture" />                          
+                    </td>
+                </tr>                
+                <tr style="">
+                    <td colspan="2">
+                           <input type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" />
+                    </td>
+                </tr>                       
+            </table>                    
+        </form>       
+    </div>
+</div>
+
+<?php else: ?>
+
+Error
+
+<?php endif; ?>

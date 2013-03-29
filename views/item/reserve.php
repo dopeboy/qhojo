@@ -3,7 +3,11 @@
 </head>
 
 <div id="masterdiv">
-    <?php if ($this->state == 0) { ?>    
+    <?php if ($this->state == 0) { ?>  
+    
+
+
+
         <form id="myForm" action="/item/reserve/<?php echo $viewmodel[0]['ITEM_ID'] ?>/1" method="post" style="padding:0px; margin: 0px">
             <div id="mainheading">
                 Reserve - <a href="/item/index/<?php echo $viewmodel[0]['ITEM_ID'];?>"><?php echo $viewmodel[0]['TITLE'];?></a>

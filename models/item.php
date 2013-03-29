@@ -232,50 +232,58 @@ class ItemModel extends Model
             return $row;
 	}
         
-	public function submitPost($userid, $title, $rate,$deposit,$description, $locationid, $files)
+	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files)
 	{ 
             $filelist = array();
             
             foreach ($files as $file)
             {
-                // TODO: revisit this 'if' check
-                if (isset($file["name"]) && !empty($file["name"]))
-                {
-                    $filename = null;
-                    $status = $this->processFile($file, $filename);
+                $prefix = '/uploads/item/';
 
-                    if ($status != 0)
-                    {
-                        error_log($file["name"] . ": " . $status);   
-                        return $status;
-                    }
-
-                    array_push($filelist, $filename);
-                }
+                if (substr($file, 0, strlen($prefix)) == $prefix) {
+                    $file = substr($file, strlen($prefix), strlen($file));
+                    array_push($filelist, $file);
+                }                 
+                
+//                // TODO: revisit this 'if' check
+//                if ($file != null)
+//                {
+//                    $filename = null;
+//                    $status = $this->processFile($file, $filename);
+//
+//                    if ($status != 0)
+//                    {
+//                        error_log($file["name"] . ": " . $status);   
+//                        return $status;
+//                    }
+//
+//                    array_push($filelist, $filename);
+//                }
             }
             
+            $sqlParameters[":id"] =  $itemid;
             $sqlParameters[":userid"] =  $userid;
             $sqlParameters[":title"] =  $title;
             $sqlParameters[":description"] =  $description;
             $sqlParameters[":rate"] =  $rate;
             $sqlParameters[":deposit"] =  $deposit;
             $sqlParameters[":locationid"] =  $locationid;
-            $preparedStatement = $this->dbh->prepare('insert into ITEM (TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID) VALUES (:title,:description,:rate,:deposit,0,:locationid,:userid)');
+            $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid)');
             
             $preparedStatement->execute($sqlParameters);
             
-            $newitem_id =  $this->dbh->lastInsertId(); 
+            //$newitem_id =  $itemid; 
 
             // -------------------------------------------------------------------------
             
             $sqlParameters[] = array();
-            $itemid =  $this->dbh->lastInsertId();
+          //  $itemid =  $this->dbh->lastInsertId();
 
             $datafields = array('ITEM_ID' => '', 'FILENAME' => '', 'PRIMARY_FLAG' => '');
             
-            foreach ($filelist as $file)
+            foreach ($filelist as $key=>$file)
             {
-                $data[] = array('ITEM_ID' => $itemid, 'FILENAME' => $file, 'PRIMARY_FLAG' => 1);
+                $data[] = array('ITEM_ID' => $itemid, 'FILENAME' => $file, 'PRIMARY_FLAG' => $key == 0 ? 1 : 0);
             }
             
             $insert_values = array();
@@ -304,7 +312,7 @@ class ItemModel extends Model
             
             $this->dbh->commit();
 
-            return $newitem_id;	
+            return $itemid;	
 	}   
         
         public function postComplete($userid, $itemid)

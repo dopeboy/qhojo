@@ -37,23 +37,60 @@ $(document).ready(function()
     });
     
     
-    
-    
-    
-        $(".editPencildropdown").click(function() 
+    $(document).on(
     {
-        var g = $(this).parent().find('.noneditable');
-        var h = $(this).parent().find('.editabledropdown');
+        mouseenter: function() 
+        {
+                $('#largeimage').attr('src',$(this).attr('src'));
+        }
+    }
+    , '#thumbs img'); //pass the element as an argument to .on
+
+
+    $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 600,
+      width: 984,
+      modal: true,
+      buttons: {
+        "Done": function() {
+
+    $('#thumbs').empty();
+   $('#picture').find('img').remove();
+   
+$("#uploaderframe").contents().find('.files').children('tr.template-download').children('td.name').children('a').each(function(i) { 
+    
+        if (i==0)
+            {
+                $('#picture').append('<img id=\'largeimage\' src=\'' + $(this).attr('href') + '\' style=\'max-height: 500px; max-width: 640px\'>');
+                
+            }
+    
+            $('#thumbs').append('<img src=\'' + $(this).attr('href') + '\' style=\'height: 50px\'>');
+            $('#thumbs').append('<input type="hidden" name=\'file' + '[]' + '\' value=\'' + $(this).attr('href') + '\' style=\'display:none\'>');
+    
+        });
         
-        // hide the div
-        $(this).hide();
-        g.hide();
+            $( this ).dialog( "close" );
+         
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      },
+      close: function() {
         
-        // unhide the input box
-         h.show();
-         h.focus();
-          
+        
+      }
     });
+ 
+
+ 
+    $("#add-pictures").click(function() 
+      {
+        $( "#dialog-form" ).dialog( "open" );
+      });
+
     
         // lose focus
     $('.editabledropdown').change(function() 
@@ -113,10 +150,28 @@ $(document).ready(function()
     // bind form using 'ajaxForm' 
     $('#myForm').ajaxForm(options); 
     
+  
+  
+
  
  function check(formData, jqForm, options) 
  { 
-    if ($('#uploadedfile1').val() == '' || $('#address').val() == '')
+//           function getImages()
+// {
+//     result = [];
+//     $('#thumbs').children('img').each(function(i) { result.push({file:$(this).attr('src')}); });
+//     return JSON.stringify(result);
+// }
+
+         var queryString = $.param(formData); 
+ 
+    // jqForm is a jQuery object encapsulating the form element.  To access the 
+    // DOM element for the form do this: 
+    // var formElement = jqForm[0]; 
+
+
+    
+    if ($('#address').val() == '' || $('#thumbs').children().length == 0)
     {
         alert("Missing some fields!");
         return false;
@@ -150,6 +205,8 @@ function showResponse(responseText, statusText, xhr, $form)
         alert("Error making reservation!");
  }  
 
+
+ 
     
 });
                     

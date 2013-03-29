@@ -79,16 +79,35 @@ class UserModel extends Model
             return 0;
         }
         
-        public function signupAction($firstname, $emailaddress, $password, $phonenumber)
+        public function signupAction($emailaddress, $password)
         {
-            $sqlParameters[":first_name"] =  $firstname;
             $sqlParameters[":email_address"] =  $emailaddress;
             $sqlParameters[":password"] =  $password;
-            $sqlParameters[":phonenumber"] =  '+1' . $phonenumber;
-            $preparedStatement = $this->dbh->prepare('insert into USER (FIRST_NAME,EMAIL_ADDRESS,PASSWORD, PHONE_NUMBER) VALUES (:first_name, :email_address, :password, :phonenumber)');
+            $preparedStatement = $this->dbh->prepare('insert into USER (EMAIL_ADDRESS,PASSWORD) VALUES (:email_address, :password)');
             $preparedStatement->execute($sqlParameters);
 
             return $this->dbh->lastInsertId();                 
+        }
+        
+        public function checkExtra($userid)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (FIRST_NAME is null /*or PROFILE_PICTURE_FILENAME is null*/ or PHONE_NUMBER is null)');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            return $row == null ? 0 : 1;
+        }
+        
+        public function signupExtra($userid,$firstname,$phonenumber, $profilepicture)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $sqlParameters[":firstname"] =  $firstname;
+            $sqlParameters[":phonenumber"] =  $phonenumber;
+            $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber where ID=:userid');
+            $preparedStatement->execute($sqlParameters);       
+            
+             return $preparedStatement->rowCount() > 0 ? 0 : -1;
         }
 }
 

@@ -10,14 +10,23 @@
 { 
     width: 100%; 
     display: inline-block;
+    height: 422px; 
+
+    
+    
 }
 
 .frame .desc
 {
     width: 462px; 
-    float: left; 
+    
     font-size: 150%;
-    padding: 15px
+    padding: 15px;
+display: table-cell;
+vertical-align: middle;
+height: 100%;
+   
+
 }
 
 .frame .desc .text
@@ -28,8 +37,25 @@
 .frame .picture
 {
     width: 462px; 
-    float: left;
+    
     padding: 15px; 
-    height: 231px; 
-    background-color: gold    
+    display: table-cell;
+    
+    
+}
+
+hr.style-two {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+}
+
+img.comic
+{
+   -webkit-box-shadow:  0px 0px 6px 1px rgba(0, 0, 0, 0.5);
+        
+        box-shadow:  0px 0px 6px 1px rgba(0, 0, 0, 0.5);
 }

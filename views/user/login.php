@@ -33,7 +33,7 @@
                             Password:
                     </td>
                     <td>
-                            <input class="textbox" type="text" name="password" />
+                            <input class="textbox" type="password" name="password" />
                     </td>
                 </tr>
                 <tr style="">

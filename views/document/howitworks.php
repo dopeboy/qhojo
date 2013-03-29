@@ -11,8 +11,7 @@
     <div style="font-size: 150%">
         <a id="borrowlink" href="#">I want to borrow something</a> | <a id="loanlink" href="#">I want to loan something out</a>
     </div>
-    <br/>
-    <div id="borrow">
+    <div id="borrow" style="">
         <div id="frame1" class="frame">
             <div class="desc">
                 1. Search
@@ -24,12 +23,13 @@
 
             </div>
             <div class="picture">
-                frame 1
+                <img class="comic" src="/img/hiw-borrower-1.png" style="">
             </div>            
         </div>
+        <hr class="style-two"/>
         <div id="frame2" class="frame">
             <div class="picture">
-                frame 2
+                <img class="comic" src="/img/hiw-borrower-2.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 2. Reserve
@@ -41,6 +41,7 @@
 
             </div>
         </div>
+        <hr class="style-two"/>
         <div id="frame3" class="frame">
             <div class="desc">
                 3. Exchange
@@ -52,12 +53,13 @@
 
             </div>
             <div class="picture">
-                frame 3
+                <img class="comic" src="/img/hiw-borrower-3.png" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>
+        <hr class="style-two"/>
         <div id="frame4" class="frame">
             <div class="picture">
-                frame 4
+                <img class="comic" src="/img/hiw-borrower-4.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 4. Enjoy
@@ -69,6 +71,7 @@
 
             </div>
         </div>
+        <hr class="style-two"/>
         <div id="frame5" class="frame">
             <div class="desc">
                 5. Return
@@ -80,7 +83,7 @@
 
             </div>
             <div class="picture">
-                frame 5
+                <img class="comic" src="/img/hiw-borrower-5.png" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>        
     </div>
