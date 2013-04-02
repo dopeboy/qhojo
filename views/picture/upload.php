@@ -40,6 +40,7 @@
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="" method="POST" enctype="multipart/form-data" style="margin: 0">
         <h3>File Uploader</h3>
+        Note: upload small (< 1MB) files for now.
         <hr style="margin: 10px"/>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <input type="hidden" id="timestamp" name="timestamp" value="<?php echo $this->id ?>">
