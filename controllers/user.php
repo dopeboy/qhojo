@@ -101,14 +101,12 @@ class User extends Controller
             
             else if ($this->state == 3)
             {
-                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['firstname'],$this->postvalues['phonenumber'],null);
+                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['firstname'],$this->postvalues['phonenumber'],$this->postvalues['file']);
                 
                 if ($status == 0)
                 {
                     $_SESSION['firstname'] = $this->postvalues['firstname'];
-                    $itemid = $_SESSION['itemid'];
-                    $_SESSION['itemid'] = null;
-                    $this->returnView($itemid, false,true);
+                    $this->returnView($_SESSION['referrer'], false,true);
                 }
                 
                 else

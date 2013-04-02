@@ -2,9 +2,14 @@
 
 class PictureModel extends Model 
 {    
-    public function handler($itemSessionID, $id)
+    public function handler($itemSessionID, $id, $stateid, $userid)
     {
-        $upload_handler = new UploadHandler($itemSessionID, $id);
+        if ($stateid == 0)
+            $path = "uploads/item/" . $itemSessionID . '/';
+        else if ($stateid == 1)
+            $path = "uploads/user/" . $userid . '/';
+        
+        $upload_handler = new UploadHandler($path, $stateid, $id);
     }
 }
 
@@ -32,12 +37,12 @@ class UploadHandler
         'min_height' => 'Image requires a minimum height'
     );
 
-    function __construct($itemSessionID, $id = null, $options = null, $initialize = true, $error_messages = null) {
+    function __construct($path, $state, $id = null,$options = null, $initialize = true, $error_messages = null) {
         $this->options = array(
-            'timestamp' => $itemSessionID,
+            'state' => $state,
             'script_url' => $this->get_full_url().'/',
-            'upload_dir' => "uploads/item/" . $itemSessionID . '/',
-            'upload_url' => "/uploads/item/" . $itemSessionID . '/',
+            'upload_dir' => $path,
+            'upload_url' => "/" . $path,
             'user_dirs' => false,
             'mkdir_mode' => 0755,
             'param_name' => 'files',
@@ -188,8 +193,8 @@ class UploadHandler
     }
 
     protected function set_file_delete_properties($file) {
-        $file->delete_url = $this->options['script_url'] . 'picture/handler/' 
-            .rawurlencode($file->name);
+        $file->delete_url = $this->options['script_url'] . 'picture/handler/'  
+            .rawurlencode($file->name). '/' . $this->options['state'];
         $file->delete_type = $this->options['delete_type'];
         if ($file->delete_type !== 'DELETE') {
             $file->delete_url .= '&_method=DELETE';

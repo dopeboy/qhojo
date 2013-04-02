@@ -6,7 +6,7 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
     </script>      
     
-
+ <link rel="stylesheet" type="text/css" href="/css/item/post.css" media="screen" />      
 </head>
 
 
@@ -87,7 +87,7 @@
             <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
                 
               lender<br/>
-                <img src="<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['PROFILE_PICTURE_FILENAME']?>"><br/>
+                <img id="profilepicture" src="<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['PROFILE_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
                 </div>
@@ -148,7 +148,7 @@
    
 
 <div id="dialog-form" title="Upload Item Pictures" style="overflow: hidden">
-  <iframe id="uploaderframe" src="/picture/upload" style="width: 100%; height: 100%;" frameborder="0"/>
+  <iframe id="uploaderframe" src="" style="width: 100%; height: 100%;" frameborder="0"/>
 </div>
     
     <?php } ?>

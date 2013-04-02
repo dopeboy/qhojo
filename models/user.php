@@ -92,11 +92,11 @@ class UserModel extends Model
         public function checkExtra($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (FIRST_NAME is null /*or PROFILE_PICTURE_FILENAME is null*/ or PHONE_NUMBER is null)');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (FIRST_NAME is null or PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null)');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-            return $row == null ? 0 : 1;
+            return $row == null ? 0 : -1;
         }
         
         public function signupExtra($userid,$firstname,$phonenumber, $profilepicture)
@@ -104,10 +104,11 @@ class UserModel extends Model
             $sqlParameters[":userid"] =  $userid;
             $sqlParameters[":firstname"] =  $firstname;
             $sqlParameters[":phonenumber"] =  $phonenumber;
-            $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber where ID=:userid');
+            $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
+            $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
             
-             return $preparedStatement->rowCount() > 0 ? 0 : -1;
+            return $preparedStatement->rowCount() > 0 ? 0 : -1;                
         }
 }
 

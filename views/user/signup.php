@@ -1,10 +1,10 @@
 <head>
-    <script type="text/javascript" src="/js/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script> 
     <script type="text/javascript" src="/js/user/signup.js"></script>
     <link type="text/css" rel="stylesheet" href="/css/user/login.css">
-<script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>
-
+    <script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/jquery-ui.js"> </script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 </head>
 
 <?php if ($this->state == 0):  ?>
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<?php elseif ($this->state == 2 && isset($_SESSION['itemid'])): ?>
+<?php elseif ($this->state == 2): ?>
     
 <div id="masterdiv">
     <div id="mainheading">Additional Fields</div>
@@ -78,7 +78,10 @@
                             Profile Picture:
                     </td>
                     <td>
-                            <input type="file" name="profilepicture" />                          
+                        <div id="picture" style="">
+                            
+                        </div>
+                        <button id="add-pictures" value="">Upload Picture</button>                          
                     </td>
                 </tr>                
                 <tr style="">
@@ -89,6 +92,10 @@
             </table>                    
         </form>       
     </div>
+</div>
+
+<div id="dialog-form" title="Upload User Pictures" style="overflow: hidden">
+  <iframe id="uploaderframe" src="" style="width: 100%; height: 100%;" frameborder="0"/>
 </div>
 
 <?php else: ?>

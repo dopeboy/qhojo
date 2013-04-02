@@ -39,7 +39,7 @@ class Item extends Controller
             else if ($usermodel->checkExtra($this->userid))
             {
                 header('Location: /user/signup/null/2');
-                $_SESSION['itemid'] = $this->id;
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 exit;                
             }
             
@@ -83,15 +83,23 @@ class Item extends Controller
 
 	protected function post() 
 	{
+            $usermodel = new UserModel();
+            $item_model = new ItemModel();
+            
             if ($this->userid == null)
             {
                 header('Location: /user/login/null/3');
                 exit;
             }
             
-            $item_model = new ItemModel();
+            else if ($usermodel->checkExtra($this->userid))
+            {
+                header('Location: /user/signup/null/2');
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
+                exit;                
+            }            
             
-            if ($this->state == 0)
+            else  if ($this->state == 0)
             {    
                 $_SESSION['itemid'] = getItemID();
 		$this->returnView($item_model->post($this->userid,new UserModel(),new LocationModel()), true,false);
@@ -128,11 +136,6 @@ class Item extends Controller
             else if ($this->state == 2)
                 $this->returnView($item_model->feedbackComplete($this->id),true,false);
         }   
-        
-        protected function uploadpicture()
-        {
-            $this->returnView(null, FALSE,false);
-        }
 }
 
 ?>

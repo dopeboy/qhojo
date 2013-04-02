@@ -63,7 +63,7 @@
             <div id="lender" style="margin-top: 20px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;">
                 
               lender<br/>
-               <img src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
+               <img id="profilepicture" src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
                 </div>

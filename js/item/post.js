@@ -1,5 +1,5 @@
 $(document).ready(function()
-{
+{ $('#uploaderframe').attr('src', '/picture/upload/null/0');  
     // lose focus
     $('.editable').blur(function() 
     {
@@ -52,6 +52,7 @@ $(document).ready(function()
       height: 600,
       width: 984,
       modal: true,
+       open: function(event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },
       buttons: {
         "Done": function() {
 
@@ -73,14 +74,7 @@ $("#uploaderframe").contents().find('.files').children('tr.template-download').c
         
             $( this ).dialog( "close" );
          
-        },
-        Cancel: function() {
-          $( this ).dialog( "close" );
         }
-      },
-      close: function() {
-        
-        
       }
     });
  
@@ -141,6 +135,7 @@ $("#uploaderframe").contents().find('.files').children('tr.template-download').c
     });
     
     
+
     
    
        var options = { 

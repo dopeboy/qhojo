@@ -1,6 +1,8 @@
 $(document).ready(function()
 {
 
+$('#uploaderframe').attr('src', '/picture/upload/null/1'); 
+
     $('#myForm')
         .ajaxForm({
             success : function (response) 
@@ -19,17 +21,45 @@ $(document).ready(function()
                 if (response == -1)
                     alert ("Error");
                 else
-                    window.location = "/item/reserve/" + response + "/0";
+                    window.location = response;
             }
         });
-        
+
+    $("#add-pictures").click(function() 
+      {
+        $( "#dialog-form" ).dialog( "open" );
+        return false;
+      });
+      
     
    $("#phonenumber").mask("(999) 999-9999",{placeholder:"_"});
 
-//function IsEmail(email) {
-//  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-//  return regex.test(email);
-//}
+    $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 600,
+      width: 984,
+      modal: true,
+       open: function(event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); },      
+      buttons: {
+        "Done": function() {
+
+       $('#picture').empty();
+  
+   
+$("#uploaderframe").contents().find('.files').children('tr.template-download').children('td.name').children('a').each(function(i) { 
+    
+                $('#picture').append('<img id=\'largeimage\' src=\'' + $(this).attr('href') + '\' style=\'max-height: 100px; max-width: 124px\'>');
+                
+
+            $('#picture').append('<input type="hidden" name=\'file' + '[]' + '\' value=\'' + $(this).attr('href') + '\' style=\'display:none\'>');
+    
+ });
+        
+            $( this ).dialog( "close" );
+         
+        }
+      }
+    });
 
 });
 

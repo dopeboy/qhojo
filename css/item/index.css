@@ -16,3 +16,9 @@
 /* Container */
 #simplemodal-container {height:600px; width:600px; background-color:#FFFFFF; padding:12px;}
 #simplemodal-container a.modal-close { font-weight:bold; position:absolute; text-decoration:none; right:8px; top:0px;}
+
+img#profilepicture
+{
+    height: 180px;
+    width: 150px;
+}
