@@ -8,12 +8,20 @@ $(document).ready(function()
     });
  
     var options = { 
+         beforeSubmit:  check,
         success:       showResponse  // post-submit callback 
     }; 
  
     // bind form using 'ajaxForm' 
     $('#myForm').ajaxForm(options); 
     
+     function check(formData, jqForm, options) 
+ { 
+    $('#loading').show();
+    $('#submitbutton').prop("disabled", true);
+    return true;
+ }
+ 
 // post-submit callback 
 function showResponse(responseText, statusText, xhr, $form)  
 { 

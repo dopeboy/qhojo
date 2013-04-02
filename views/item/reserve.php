@@ -1,13 +1,11 @@
 <head>
 	<script type="text/javascript" src="/js/item/reserve.js"></script>
+           <link rel="stylesheet" href="/css/item/reserve.css" />
 </head>
 
 <div id="masterdiv">
     <?php if ($this->state == 0) { ?>  
     
-
-
-
         <form id="myForm" action="/item/reserve/<?php echo $viewmodel[0]['ITEM_ID'] ?>/1" method="post" style="padding:0px; margin: 0px">
             <div id="mainheading">
                 Reserve - <a href="/item/index/<?php echo $viewmodel[0]['ITEM_ID'];?>"><?php echo $viewmodel[0]['TITLE'];?></a>
@@ -40,7 +38,7 @@
                     <div id="lender" style="width: 304px; margin-left: 60px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;float:left">
 
                       lender<br/>
-                        <img src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
+                        <img id="profilepicture" src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                         <div style="font-size:250%">
                             <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
                         </div>
@@ -132,7 +130,8 @@
             <br/>
        
             <div style="margin:0px auto; max-width:100%; display:table;">
-                <input type="submit" >
+                <input id="submitbutton" type="submit" >
+                <img id="loading" style="display:none" src="/img/ajax-loader.gif">
             </div>
            
         </form>
