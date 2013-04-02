@@ -103,7 +103,8 @@ class UserModel extends Model
         {
             $sqlParameters[":userid"] =  $userid;
             $sqlParameters[":firstname"] =  $firstname;
-            $sqlParameters[":phonenumber"] =  $phonenumber;
+            $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
+            $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
             $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
