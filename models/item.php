@@ -439,7 +439,7 @@ class ItemModel extends Model
 
             $itemreq = $this->getRequest($request_id);
             
-            $sqlParameters = [];
+            $sqlParameters = array();
             $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
             $sqlParameters[":confirmation_code"] = $confirmation_code = getConfirmationID();
             $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
