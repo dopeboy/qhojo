@@ -445,7 +445,7 @@ class ItemModel extends Model
             $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
             $preparedStatement->execute($sqlParameters);
             
-            $sqlParameters = [];
+            $sqlParameters = array();
             $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
             $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
             $preparedStatement->execute($sqlParameters);
