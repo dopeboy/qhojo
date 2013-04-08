@@ -3,9 +3,6 @@
         <td class="title" style="color: black">
             Item
         </td>  
-        <td class="location" style="color: black">
-            Location
-        </td>   
         <td class="rate" style="color: black">
             Rate <br/> (per day)
         </td>     
@@ -41,8 +38,6 @@
     <tr class="cardrow" itemid="<?php echo $item['ITEM_ID']; ?> ">
         <td class="title">
              <a href="/item/index/<?php echo $item['ITEM_ID'];?>"><?php echo $item['TITLE'];?></a>
-        <td class="location">
-            <?php echo $item['NEIGHBORHOOD'] . ',' . $item['BOROUGH']; ?>
         </td>
         <td class="rate">
             $<?php echo $item['RATE']; ?>
@@ -57,7 +52,7 @@
             <?php echo $item['ITEM_STATE_DESC']; ?>
         </td> 
         <td class="duration">
-            <span class="duration"><?php echo $item['BORROW_DURATION']; ?></span>
+            <span class="duration"><?php echo $item['DURATION']; ?></span>
         </td>
         <td class="start_date">
             <?php echo $item['START_DATE'] != null ? date('m/d/Y',strtotime($item['START_DATE']))  : ""; ?>
@@ -77,7 +72,7 @@
                   }              
                   ?>
                   "><a href="/item/feedback/<?php echo $item['ITEM_ID'];?>/0">Give Feedback</a></li>
-              <li class="ui-state-disabled"><a href="#">Edit Listing</a></li>
+              <li class="ui-state-disabled"><a href="#">Delete Listing</a></li>
             </ul>                
         </td>
     </tr>

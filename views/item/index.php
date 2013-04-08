@@ -13,12 +13,12 @@
 <div id="masterdiv">
     <div id="topbar" style="width:100%;display:table;">
         <div id="mainheading" style="display:table-cell;"><?php echo $viewmodel[0]['TITLE'] ?></div>
-            <div style="display:table-cell;width:50%;text-align:right">
-                <form id="f" action="/item/reserve/<?php echo $viewmodel[0]['ITEM_ID'] ?>/0" method="get" style="padding:0px; margin: 0px">
-                    <input type="submit" value="Reserve" <?php if($viewmodel[0]['LENDER_ID'] == $this->userid || $viewmodel[0]['ITEM_STATE_ID'] != 0) { ?> disabled <?php } ?>>
-                     <input type="submit" value="Contact Lender" onclick="location.href='mailto:<?php echo $viewmodel[0]['LENDER_EMAIL_ADDRESS'] ?>?Subject=Hi';return false"  <?php if($viewmodel[0]['LENDER_ID'] == $this->userid) { ?> disabled <?php } ?>>
-                </form>
-            </div>
+        <div style="display:table-cell;width:50%;text-align:right">
+            <form id="f" action="/item/request/<?php echo $viewmodel[0]['ITEM_ID'] ?>/0" method="get" style="padding:0px; margin: 0px">
+                 <input type="submit" style="width: 90px" value="Rent" <?php if($viewmodel[0]['LENDER_ID'] == $this->userid || $viewmodel[0]['ITEM_STATE_ID'] != 0) { ?> disabled <?php } ?>>
+                 <input type="submit" value="Contact Lender" onclick="location.href='mailto:<?php echo $viewmodel[0]['LENDER_EMAIL_ADDRESS'] ?>?Subject=Hi';return false"  <?php if($viewmodel[0]['LENDER_ID'] == $this->userid) { ?> disabled <?php } ?>>
+            </form>
+        </div>
     </div>
    <hr style=""/>
 

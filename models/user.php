@@ -30,26 +30,31 @@ class UserModel extends Model
             $row["USER"] = $this->getUserDetails($userid);
             $row["LENDER_FEEDBACK"] = $this->getFeedbackAsLender($userid);
             $row["BORROWER_FEEDBACK"] = $this->getFeedbackAsBorrower($userid);
+            $row["COMMENTS_AS_LENDER"] = $this->getCommentsAsLender($userid);
+            $row["COMMENTS_AS_BORROWER"] = $this->getCommentsAsBorrower($userid);
             
             return $row;
         }
         
         public function getUserDetails($userid)
         {
-		$sqlParameters[":userid"] =  $userid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM USER WHERE ID=:userid');
-		$preparedStatement->execute($sqlParameters);
-		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM USER WHERE ID=:userid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-		return $row;	            
+            return $row;	            
         }
         
         public function getDashboardData($userid, $item_model)
         {
             $row["loans"]["current"] = $item_model->getCurrentLoans($userid);
             $row["loans"]["past"] = $item_model->getPastLoans($userid);
+            
             $row["borrows"]["current"] = $item_model->getCurrentBorrows($userid);
             $row["borrows"]["past"] = $item_model->getPastBorrows($userid);
+            
+            $row["requests"] = $item_model->getRequests($userid);
 
             return $row;
         }
@@ -73,6 +78,26 @@ class UserModel extends Model
 
 		return $row['BORROWER_FEEDBACK'];	            
         }  
+        
+        public function getCommentsAsBorrower($userid)
+        {
+		$sqlParameters[":userid"] =  $userid;
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE BORROWER_ID=:userid and ITEM_STATE_ID=3 and LENDER_TO_BORROWER_COMMENTS is not null');
+		$preparedStatement->execute($sqlParameters);
+		$row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+		return $row;	            
+        }  
+        
+        public function getCommentsAsLender($userid)
+        {
+		$sqlParameters[":userid"] =  $userid;
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE LENDER_ID=:userid and ITEM_STATE_ID=3 and BORROWER_TO_LENDER_STARS is not null');
+		$preparedStatement->execute($sqlParameters);
+		$row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+		return $row;	                
+        }          
         
         public function signup()
         {            

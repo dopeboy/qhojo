@@ -26,7 +26,7 @@ class Item extends Controller
 		$this->returnView($viewmodel->search($this->id), true,false);
 	}
 
-	protected function reserve() 
+	protected function request() 
 	{
             $usermodel = new UserModel();
             
@@ -47,22 +47,22 @@ class Item extends Controller
             {
                 $viewmodel = new ItemModel();
 
-                // view the reservation
+                // view the request
                 if ($this->state==0)
                 {
-                    $this->returnView($viewmodel->reserve($this->id), true,false);
+                    $this->returnView($viewmodel->request($this->id), true,false);
                 }
 
-                // submit the reservation
+                // submit the request
                 else if ($this->state==1)
                 {
-                    $this->returnView($viewmodel->submitReservation($this->id,$this->userid,$this->postvalues['duration'], $this->postvalues['message'], new UserModel()), false,true);        
+                    $this->returnView($viewmodel->submitRequest($this->id,$this->userid,$this->postvalues['duration'], $this->postvalues['message']), false,true);        
                 }
 
-                // reservation submitted sucessfully
+                // request submitted sucessfully
                 else if ($this->state==2)
                 {
-                    $this->returnView($viewmodel->reservationComplete($this->id), true,false);
+                    $this->returnView($viewmodel->requestComplete($this->id), true,false);
                 }                 
             }                     
 	}
@@ -131,11 +131,35 @@ class Item extends Controller
 		$this->returnView($item_model->feedback($this->id), true,false);
             
             else if ($this->state == 1)
-                $this->returnView($item_model->submitFeedback($this->userid,$this->postvalues['itemid'], $this->postvalues['rating']),false,true);
+                $this->returnView($item_model->submitFeedback($this->userid,$this->postvalues['itemid'], $this->postvalues['rating'], $this->postvalues['comments']),false,true);
             
             else if ($this->state == 2)
                 $this->returnView($item_model->feedbackComplete($this->id),true,false);
-        }   
+        }
+        
+        protected function accept()
+        {
+            if ($this->userid == null)
+            {
+                header('Location: /user/login/null/2');
+                exit;
+            }
+            
+            $item_model = new ItemModel();
+            $this->returnView($item_model->accept($this->id), true, false);
+        }
+        
+        protected function ignore()
+        {
+            if ($this->userid == null)
+            {
+                header('Location: /user/login/null/2');
+                exit;
+            }
+            
+            $item_model = new ItemModel();
+            $this->returnView($item_model->ignore($this->id),false,true);
+        }        
 }
 
 ?>

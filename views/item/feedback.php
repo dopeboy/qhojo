@@ -13,10 +13,18 @@
     </div>
     <hr/>
     <div class="subheading" style="">
+        Lender
+    </div><br/>
+    <img id="profilepicture" src="<?php echo $viewmodel['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel['LENDER_PICTURE_FILENAME']?>">
+    <div style="font-size:250%">
+        <a href="/user/index/<?php echo $viewmodel['LENDER_ID']; ?>"><?php echo $viewmodel['LENDER_FIRST_NAME']; ?></a>
+    </div>    
+    <br/>
+    <div class="subheading" style="">
         Overall Experience
     </div>
     <br/>
-    <form id="myForm" action="/item/feedback/<?php echo $viewmodel['ITEM_ID']; ?>/1" method="POST">
+    <form id="myForm" action="/item/feedback/<?php echo $viewmodel['ITEM_ID']; ?>/1" method="POST" style="margin: 0">
         <?php if ($viewmodel['ITEM_STATE_ID'] == 3) { ?>
             <input id="zerostub" name="rating" type="hidden" value="0" selected style="display:none"/>
             <input name="rating" type="radio" class="star" value="1"/>
@@ -26,22 +34,21 @@
             <input name="rating" type="radio" class="star" value="5"/>
             <input name="itemid" type="hidden" value="<?php echo $viewmodel['ITEM_ID']; ?>"/>
         <?php } ?>
-        <br/>
-        <br/>
+        <br/><br/>
+        <div class="subheading" style="">
+            Additional Comments
+        </div><br/>
+        <textarea name="comments" cols="65" rows="5"></textarea><br/><br/>
         <input type="submit" value="Submit">
     </form>
     <?php } ?>
     
     <?php if ($this->state == 2) { ?>
-    <div class="mainheading">
+    <div id="mainheading">
         Thanks!
     </div>
-    Item: <?php echo $viewmodel['TITLE'] ?>
-    <br/>
-    <br/>
-    <div class="subheading" style="">
-        Your feedback has been submitted.
-    </div>  
+    <hr/>
+    Your feedback for item, <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>, has been submitted.
     <?php } ?>
     
 </div>

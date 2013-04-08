@@ -18,25 +18,25 @@
 
                 <div class="text">
                     <br/>
-                   Search for the item you are after.
+                   Search for the item you want.
                 </div>
 
             </div>
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-1.png" style="">
+                <img class="comic" src="/img/hiw-borrower-1a.png" style="">
             </div>            
         </div>
         <hr class="style-two"/>
         <div id="frame2" class="frame">
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-2.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-2a.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 2. Reserve
 
                 <div class="text">
                     <br/>
-                    Reserve the item you want to borrow for a specific duration. We'll then give you a confirmation code.
+                    Reserve the item you want to borrow for a specific duration. You'll then receive a confirmation code from us.
                 </div>
 
             </div>
@@ -48,18 +48,18 @@
 
                 <div class="text">
                     <br/>
-                   Meet the lender and check out the item. Once you're OK with it, text the confirmation code to us. We'll notify the lender, via text, of your confirmation and they'll hand over the item to you.
+                   Meet the lender and check out the item. Once you're satisfied, text the confirmation code to us. We'll notify the lender, via text, of your confirmation and they'll hand over the item to you.
                 </div>
 
             </div>
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-3.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-3a.png" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>
         <hr class="style-two"/>
         <div id="frame4" class="frame">
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-4.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-4a.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 4. Enjoy
@@ -78,7 +78,7 @@
 
                 <div class="text">
                     <br/>
-                   Once the rental duration is over, meet the lender and have them confirm to qhojo the item is OK. When we get their confirmation, we'll let you know via text message. At that point, you can hand the item back over. Ta da! All done.
+                   Once the rental period is over, meet the lender and have them confirm with us that the item is OK. When we get their confirmation, we'll let you know via text message. At that point, you'll hand the item back over and be billed the rental amount.<br/><br/>Ta da! All done.
                 </div>
 
             </div>
@@ -94,7 +94,7 @@
 
                 <div class="text">
                     <br/>
-                   Specify a rental rate, a deposit value, take a picture, and toss in some words. Then post it on qhojo (for free!).
+                   Specify a rental rate, a deposit value, and toss in some descriptive details. Then post it on qhojo (for free!).
                 </div>
 
             </div>
@@ -111,7 +111,7 @@
 
                 <div class="text">
                     <br/>
-                    Sunbathe, take a jog, do what you need to while borrowers check out your item. Once a borrower has reserved your item, we'll notify you with a confirmation code.
+                    Sunbathe, take a jog, do what you need to while potential borrowers check out your item. Once a borrower has reserved your item, you'll be notified with a confirmation code.
                 </div>
 
             </div>
@@ -122,7 +122,7 @@
 
                 <div class="text">
                     <br/>
-                   Meet the borrower and have them to confirm with us that the item is OK. Once they have, we'll send you a text message saying so. Then you can hand over the item.
+                   Meet the borrower and have them confirm with us that they are satisfied with item. Once they have, we'll send you a text message saying so. Then you can hand over the item.
                 </div>
 
             </div>
@@ -139,7 +139,7 @@
 
                 <div class="text">
                     <br/>
-                    Meet the borrower and check out the item. Once it is OK, text the confirmation code from step (2) to us and get the item back from the borrower. 
+                    Meet the borrower and check out the item. Once you're satisfied, text the confirmation code from step (2) to us. We'll pass on that confirmation to the borrower and they'll then give the item back to you. 
                 </div>
 
             </div>

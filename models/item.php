@@ -47,7 +47,7 @@ class ItemModel extends Model
 		return $rows;
 	}
 
-	public function reserve($itemid) 
+	public function request($itemid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
@@ -55,45 +55,30 @@ class ItemModel extends Model
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 		return $row;
 	}
+        
+        public function getItemDetails($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            return $row;            
+        }
 
-        public function submitReservation($itemid, $userid, $duration, $message, $user_model)
+        // Passed in parameters are all of the borrower
+        public function submitRequest($itemid, $userid, $duration, $message)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$sqlParameters[":userid"] =  $userid;
 		$sqlParameters[":duration"] =  $duration;
-                $sqlParameters[":confirmation_code"] = $code = getConfirmationID();
-		$preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,BORROWER_ID = :userid , BORROW_DURATION=:duration, CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
+                $sqlParameters[":message"] =  $message;
+		$preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:itemid, :userid, :duration, :message)');
 		$preparedStatement->execute($sqlParameters);
-
-                if ($preparedStatement->rowCount() > 0)
-                {
-                    $to      = 'arithmetic@gmail.com'; // Should be borrower email
-                    $subject = 'Qhojo - Your item has been reserved';
-                    $headers = 'From: webmaster@qhojo.com' . "\r\n" .
-                        'Reply-To: webmaster@example.com' . "\r\n" . // This should be lender's email
-                        'X-Mailer: PHP/' . phpversion();     
-                    
-                    $user = $user_model->getUserDetails($userid);
-                    $message = "Hey " . $user["FIRST_NAME"] . "! It's qhojo here. Text this confirmation ID back to us when you've confirmed the item: " . $code;
-                    $status = mail($to, $subject, $message, $headers);
-                    
-                    if ($status == true)
-                    {
-                        global $TwilioAccountSid;   
-                        global $TwilioAuthToken;
-                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create("9493287319", $user['PHONE_NUMBER'],$message);
-                        
-                        return 0;
-                    }
-                    
-                    return 2;
-                }
-                
-		return 1;
+            
+                return $preparedStatement->rowCount() == 1 ? 0 : 1;
 	}
         
-	public function reservationComplete($itemid) 
+	public function requestComplete($itemid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
@@ -118,6 +103,14 @@ class ItemModel extends Model
 		$preparedStatement->execute($sqlParameters);
 		return $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 	}        
+        
+        public function getRequests($userid)
+        {
+		$sqlParameters[":userid"] =  $userid;
+		$preparedStatement = $this->dbh->prepare('select * from ITEM_REQUESTS_VW where LENDER_ID=:userid');                
+		$preparedStatement->execute($sqlParameters);
+		return $preparedStatement->fetchAll(PDO::FETCH_ASSOC);            
+        }       
 
         public function getCurrentBorrows($userid)
 	{
@@ -162,9 +155,10 @@ class ItemModel extends Model
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
+                        global $borrower_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create("9494852584", $row["LENDER_PHONE_NUMBER"],$message);                        
-                        $sms = $client->account->sms_messages->create("9494852584", $row["LENDER_PHONE_NUMBER"],$message2);     
+                        $sms = $client->account->sms_messages->create($borrower_number, $row["LENDER_PHONE_NUMBER"],$message);                        
+                        $sms = $client->account->sms_messages->create($borrower_number, $row["LENDER_PHONE_NUMBER"],$message2);     
                         error_log("4");    
                         return 0;
                     }
@@ -194,17 +188,35 @@ class ItemModel extends Model
                     $sqlParameters[":item_id"] =  $row['ITEM_ID'];
                     $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
                     $preparedStatement->execute($sqlParameters);    
-                error_log("2");    
+                    error_log("2");    
                     if ($preparedStatement->rowCount() == 1)
                     {
                         error_log("3");    
-                        $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item.";
+                        $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item and carry on with the rest of your day";
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
+                        global $lender_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create("9493287319", $row["BORROWER_PHONE_NUMBER"],$message);                        
+                        $sms = $client->account->sms_messages->create($lender_number, $row["BORROWER_PHONE_NUMBER"],$message);   
                         error_log("4");    
+                        
+                        // TODO: MONEY STUFF HAPPENS HERE
+                        
+                        // send an email to lender and borrower and ask for feedback
+                        $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
+                        $message_to_lender .= "Now that the transaction is complete, we owe you some green. Check your paypal account: we have deposited \$999 minus a 3% transaction fee. <br/><br/>";
+                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
+                        $message_to_lender .= "<br/><br/>-team qhojo";
+                        
+                        $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
+                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your green. Check your paypal account: we have dedeucted \$999. <br/><br/>";
+                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
+                        $message_to_borrower .= "<br/><br/>-team qhojo";                        
+                        
+                        $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
+                        $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
+                        
                         return 0;
                     }
                     
@@ -217,11 +229,11 @@ class ItemModel extends Model
 	public function getDuration($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT BORROW_DURATION FROM ITEM WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT DURATION FROM ITEM WHERE ITEM_ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-		return $row == null ? -1 : $row['BORROW_DURATION'];		
+		return $row == null ? -1 : $row['DURATION'];		
 	}
 
         public function post($userid, $usermodel, $locationmodel)
@@ -244,21 +256,6 @@ class ItemModel extends Model
                     $file = substr($file, strlen($prefix), strlen($file));
                     array_push($filelist, $file);
                 }                 
-                
-//                // TODO: revisit this 'if' check
-//                if ($file != null)
-//                {
-//                    $filename = null;
-//                    $status = $this->processFile($file, $filename);
-//
-//                    if ($status != 0)
-//                    {
-//                        error_log($file["name"] . ": " . $status);   
-//                        return $status;
-//                    }
-//
-//                    array_push($filelist, $filename);
-//                }
             }
             
             $sqlParameters[":id"] =  $itemid;
@@ -269,16 +266,9 @@ class ItemModel extends Model
             $sqlParameters[":deposit"] =  $deposit;
             $sqlParameters[":locationid"] =  $locationid;
             $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid)');
-            
             $preparedStatement->execute($sqlParameters);
-            
-            //$newitem_id =  $itemid; 
 
-            // -------------------------------------------------------------------------
-            
             $sqlParameters[] = array();
-          //  $itemid =  $this->dbh->lastInsertId();
-
             $datafields = array('ITEM_ID' => '', 'FILENAME' => '', 'PRIMARY_FLAG' => '');
             
             foreach ($filelist as $key=>$file)
@@ -383,7 +373,7 @@ class ItemModel extends Model
 		return $row;	
 	}        
         
-        public function submitFeedback($userid, $itemid, $value)
+        public function submitFeedback($userid, $itemid, $rating, $comments)
 	{
                 // Find out whether we are the borrower or the lender
 		$sqlParameters[":itemid"] =  $itemid;
@@ -395,23 +385,27 @@ class ItemModel extends Model
                 
                 $rating_query = null;
 		$stars_query = null;
+                $comments_query = null;
                 
                 if ($flag == 0)
                 {
 			$rating_query = "LENDER_TO_BORROWER_STARS";
-			$stars_query = "LENDER_ID";                    
+			$stars_query = "LENDER_ID";  
+                        $comments_query = "LENDER_TO_BORROWER_COMMENTS";
                 }
                 
                 else
                 {
 			$rating_query = "BORROWER_TO_LENDER_STARS";
 			$stars_query = "BORROWER_ID";                    
+                        $comments_query = "BORROWER_TO_LENDER_COMMENTS";
                 }
                 
-		$sqlParameters[":rating"] =  $value;
+		$sqlParameters[":rating"] =  $rating;
 		$sqlParameters[":userid"] =  $userid;		
+		$sqlParameters[":comments"] =  $comments;		                
 
-		$preparedStatement = $this->dbh->prepare('update ITEM set ' . $rating_query . '=:rating WHERE ID=:itemid and ' . $stars_query . '=:userid');
+		$preparedStatement = $this->dbh->prepare('update ITEM set ' . $rating_query . '=:rating, ' . $comments_query . '=:comments' . ' WHERE ID=:itemid and ' . $stars_query . '=:userid');
 		$preparedStatement->execute($sqlParameters);
 
 		return $preparedStatement->rowCount() > 0 ? 0 : 1;               
@@ -425,7 +419,83 @@ class ItemModel extends Model
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
 		return $row;	
-	}            
+	}       
+        
+        public function getRequest($request_id)
+        {
+		$sqlParameters[":requestid"] =  $request_id;
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_REQUESTS WHERE REQUEST_ID=:requestid');
+		$preparedStatement->execute($sqlParameters);
+		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+		return $row;	            
+        }
+        
+        public function accept($request_id)
+        {
+            $sqlParameters[":requestid"] =  $request_id;
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 1 where REQUEST_ID=:requestid');
+            $preparedStatement->execute($sqlParameters);
+
+            $itemreq = $this->getRequest($request_id);
+            
+            $sqlParameters = [];
+            $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
+            $sqlParameters[":confirmation_code"] = $confirmation_code = getConfirmationID();
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            
+            $sqlParameters = [];
+            $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            // email to lender
+            $message = "Hey " . $row['LENDER_FIRST_NAME'] . "!<br/><br/>";
+            $message .= "You have accepted " . $row['BORROWER_FIRST_NAME'] . "'s rental request. Your item, " . $row['TITLE'] . ", is now reserved for " . $row['DURATION'] . " days.<br/><br/>";
+            $message .= "Your confirmation code is: <b><u>" . $row['CONFIRMATION_CODE'] . "</b></u><br/><br/>";
+            $message .= "Here's what you need to do next:<br/><br/>";
+            $message .= "1) Over email, arrange to meet with " .  $row['BORROWER_FIRST_NAME'] . ". Here's " . $row['BORROWER_FIRST_NAME'] . "'s email address for reference: " .  $row['BORROWER_EMAIL_ADDRESS'] . "<br/>";
+            $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
+            $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER[HTTP_HOST] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "<br/><br/>-team qhojo";
+            
+            $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reservation Details', $message);
+            
+            global $borrower_number;
+            
+            // email to borrower
+            $message = "Hey " . $row['BORROWER_FIRST_NAME'] . "!<br/><br/>";
+            $message .= "Your rental request for item " . $row['TITLE'] . " for a duration of " . $row['DURATION'] . " days has been approved! <br/><br/>";
+            $message .= "Your confirmation code is: <b><u>" . $row['CONFIRMATION_CODE'] . "</b></u>. We just texted it to you. Hang on to it because you'll need it later.<br/><br/>";
+            $message .= "Here's what you need to do next:<br/><br/>";
+            $message .= "1) Over email, arrange to meet with " .  $row['LENDER_FIRST_NAME'] . ". Here's " . $row['LENDER_FIRST_NAME'] . "'s email address for reference: " .  $row['LENDER_EMAIL_ADDRESS'] . "<br/>";
+            $message .= "2) Once you guys meet, verify the quality of the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
+            $message .= "3) We'll pass on this confirmation to " .  $row['LENDER_FIRST_NAME'] . " via text message. Once " .  $row['LENDER_FIRST_NAME'] . " has received it, he/she will hand the item over to you. At this point, the rental period has started and you are responsible to bring your item back after the agreed upon duration.<br/><br/>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER[HTTP_HOST] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "<br/><br/>-team qhojo";
+            
+            $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reserved!', $message);
+          
+            $sms_message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. Text this confirmation ID back to us after you have met " . $row["LENDER_FIRST_NAME"] . " and have verified the item: " . $confirmation_code;
+            global $TwilioAccountSid;   
+            global $TwilioAuthToken;
+            $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+            $sms = $client->account->sms_messages->create($borrower_number, $row['BORROWER_PHONE_NUMBER'],$sms_message);
+                    
+            return $row;	                
+        }
+        
+        public function ignore($request_id)
+        {
+            $sqlParameters[":requestid"] =  $request_id;
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 0 where REQUEST_ID=:requestid');
+            $preparedStatement->execute($sqlParameters);
+            
+            return $preparedStatement->rowCount() == 1 ? 0 : 1;
+        }        
 }
 
 ?>

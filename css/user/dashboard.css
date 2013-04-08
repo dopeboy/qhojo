@@ -8,13 +8,7 @@
 
 .title
 {   
-    width:15%; 
-}
-
-.location
-{
-    width: 19%;
-    color:#A62A2A; 
+    width:34%; 
 }
 
 .rate
@@ -90,7 +84,38 @@
 .state.RETURNED
 {
     background-color:rgba(203,203,52, 0.5);
+}* {padding:0; margin:0;}
+
+#requestable td.title
+{
+    width: 30%
 }
+
+#requestable td.rate
+{
+    width: 8%
+}
+
+#requestable td.requester
+{
+    width: 9%
+}
+
+#requestable td.duration
+{
+    width: 8%
+}
+
+#requestable td.message
+{
+    width: 38%
+}
+
+#requestable td.actions
+{
+    width: 7%
+}
+
 
 
 

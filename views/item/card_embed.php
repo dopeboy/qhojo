@@ -13,7 +13,7 @@
                 <div class="bottom">
                     <span class="title">
                         <a href="/item/index/<?php echo $item['ITEM_ID']; ?>">
-                            <?php echo substr($item['TITLE'],0,15); if (strlen($item['TITLE']) > 15) { echo "..."; } ?>
+                            <?php echo substr($item['TITLE'],0,21); if (strlen($item['TITLE']) > 21) { echo "..."; } ?>
                         </a>
                     </span>
                     <br/>

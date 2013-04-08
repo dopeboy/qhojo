@@ -1,40 +1,46 @@
 $(document).ready(function()
 {	    
-    $("#loanscurrentlink").click(function()
+    $("#loanslink").click(function()
     {
-        $("#pastloans").hide();
-         $("#loanspastlink").css("font-weight",'normal');
+        $("#borrows").hide();
+        $("#borrowslink").css("font-weight",'normal');
+        $("#borrowslink").css("text-decoration",'none');
+        $("#requests").hide();
+        $("#requestslink").css("font-weight",'normal');         
+        $("#requestslink").css("text-decoration",'none');
         
-        $("#currentloans").show();
-        $("#loanscurrentlink").css("font-weight","bold");
+        $("#loans").show();
+        $("#loanslink").css("font-weight","bold");
+        $("#loanslink").css("text-decoration","underline");
     });
     
-    $("#loanspastlink").click(function()
+    $("#borrowslink").click(function()
     {
-        $("#currentloans").hide();
-        $("#loanscurrentlink").css("font-weight",'normal')
+        $("#loans").hide();
+        $("#loanslink").css("font-weight",'normal');
+        $("#loanslink").css("text-decoration",'none');        
+        $("#requests").hide();
+        $("#requestslink").css("font-weight",'normal');          
+        $("#requestslink").css("text-decoration",'none');        
         
-        $("#pastloans").show();
-        $("#loanspastlink").css("font-weight","bold");
+        $("#borrows").show();
+        $("#borrowslink").css("font-weight","bold");
+        $("#borrowslink").css("text-decoration","underline");
     });    
     
-    $("#borrowscurrentlink").click(function()
+    $("#requestslink").click(function()
     {
-        $("#pastborrows").hide();
-         $("#borrowspastlink").css("font-weight",'normal');
+        $("#loans").hide();
+        $("#loanslink").css("font-weight",'normal');
+        $("#loanslink").css("text-decoration",'none');                
+        $("#borrows").hide();
+        $("#borrowslink").css("font-weight",'normal');
+        $("#borrowslink").css("text-decoration",'none');        
         
-        $("#currentborrows").show();
-        $("#borrowscurrentlink").css("font-weight","bold");
+        $("#requests").show();
+        $("#requestslink").css("font-weight","bold");
+        $("#requestslink").css("text-decoration","underline");        
     });
-    
-    $("#borrowspastlink").click(function()
-    {
-        $("#currentborrows").hide();
-        $("#borrowscurrentlink").css("font-weight",'normal')
-        
-        $("#pastborrows").show();
-        $("#borrowspastlink").css("font-weight","bold");
-    });  
     
      $(function() {
     $( ".menu" ).menu();
@@ -49,5 +55,27 @@ $(document).ready(function()
     $('.menu').blur(function()
   {
      $(this).hide();
-  });
+  }); 
+    
+    $(".ignore").click(function()
+    {
+        $.ajax({
+          url: $(this).attr('href'),
+          context: this,
+          success: function(data)
+          {
+              if (data != 0)
+                  alert("Error");                
+              else
+                  {
+                      $(this).closest('tr').fadeOut('slow', function() {
+                            // Animation complete.
+                          });
+                  }
+          }
+        });
+        
+        return false;
+    });  
+    
 });
