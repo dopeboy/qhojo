@@ -3,11 +3,11 @@ ONE TIME
 	mysql -u root -p
 	root
 
-        create user 'manish'@'localhost' identified by 'admin';
+        create user 'qho'@'localhost' identified by 'admin';
 
 	create database qhojo
 
-        grant all privileges on *.* to 'manish'@'localhost' with grant option;
+        grant all privileges on *.* to 'qho'@'localhost' with grant option;
 
 
 
@@ -36,3 +36,9 @@ tail -f /var/log/apache2/error.log
 
 
 2116595
+
+
+------------------------------------
+
+ron@qhojo.com / ronrules
+brick@qhojo.com / 89>3mU=&
