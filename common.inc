@@ -1,7 +1,7 @@
 <?php
 
 $dbhost = "localhost";
-$dbuser = "manish";
+$dbuser = "qho";
 $dbpass = 'admin';
 
 if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "demo.qhojo.com")
