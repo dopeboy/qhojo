@@ -11,7 +11,7 @@
         dashboard
     </div>
     <hr/>
-    <a href="#" id="requestslink" style="font-weight: bold; text-decoration: underline">requests</a> | <a href="javascript:void(0);" id="borrowslink">borrows</a> | <a href="javascript:void(0);" id="loanslink">loans</a>
+    <a href="#" id="requestslink" style="font-weight: bold; text-decoration: underline">requests</a> | <a href="javascript:void(0);" id="borrowslink">borrows</a> | <a href="javascript:void(0);" id="loanslink">loans</a> | <a href="/user/index/<?php echo $this->userid ?>">me</a>
     <br/><br/>
     <div id="requests" class="subcontent"  style="">
         <div class="subheading">sent to me</div><br/>
@@ -44,7 +44,7 @@
 
                 <?php foreach($items as $item) { ?>
 
-                <tr class="cardrow" itemid="<?php echo $item['ITEM_ID']; ?> ">
+                <tr class="cardrow" itemid="<?php echo $item['ITEM_ID']; ?>">
                     <td class="title">
                          <a href="/item/index/<?php echo $item['ITEM_ID'];?>"><?php echo $item['TITLE'];?></a>
                     </td>
@@ -63,10 +63,11 @@
                     <td class="actions" style="">
                         <a href="#" class="menubutton">Menu&#x25BC;</a>
                         <ul class="menu" style="width:80px; text-align: left; display:none; position:fixed;font-size:100%;">
-                          <li class=""><a class="accept" href="/item/accept/<?php echo $item['REQUEST_ID'];?>/">Accept</a></li>
+                          <li class=""><a class="accept" href="/item/accept/<?php echo $item['REQUEST_ID'];?>/0">Accept</a></li>
                           <li class=""><a class="ignore" href="/item/ignore/<?php echo $item['REQUEST_ID'];?>/">Ignore</a></li>
                           <li class=""><a class="contact" href="mailto: <?php echo $item['REQUESTER_EMAIL_ADDRESS'];?>/">Contact</a></li>
                         </ul>                
+                        <img class="loader" src="/img/ajax-loader.gif" style="display: none">
                     </td>
                 </tr>
             <?php $i++; ?>

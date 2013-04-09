@@ -55,7 +55,33 @@ $(document).ready(function()
     $('.menu').blur(function()
   {
      $(this).hide();
-  }); 
+  });
+  
+    $(".accept").click(function()
+    {
+        // Show ajax
+        $('.accept').parent().parent().siblings('.loader').show();
+        
+        // Disable button
+        $(this).attr("class","ui-state-disabled");
+        
+        $.ajax({
+          url: $(this).attr('href'),
+          context: this,
+          success: function(data)
+          {
+              if (data == 0)
+                  window.location = "/item/accept/" + $(this).closest('tr').attr('itemid') + "/1";
+              else
+                  {
+                      alert("Error");                
+                      
+                  }
+          }
+        });
+        
+        return false;
+    });    
     
     $(".ignore").click(function()
     {

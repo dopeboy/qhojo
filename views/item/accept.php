@@ -11,7 +11,7 @@
         Rental Request Accepted
     </div>
     <hr/>
-    Congratulations <?php echo $viewmodel['LENDER_FIRST_NAME'] ?>! You have accepted <?php echo $viewmodel['BORROWER_FIRST_NAME'] ?>'s rental request. Your item, <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>, is now reserved for <u><?php echo $viewmodel['DURATION'];?> days</u>. 
+    Congratulations <?php echo $viewmodel['LENDER_FIRST_NAME'] ?>! You have accepted <?php echo $viewmodel['BORROWER_FIRST_NAME'] ?>'s rental request. Your item, <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>, is now reserved for <u><?php echo $viewmodel['DURATION'];?> day(s)</u>. 
     <br/><br/>
     Your confirmation code is: <b><?php echo $viewmodel['CONFIRMATION_CODE'] ?></b>. You'll need this later on (we've emailed this whole page to you so don't worry about writing it down).
     <br/><br/>

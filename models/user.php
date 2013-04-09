@@ -62,7 +62,7 @@ class UserModel extends Model
         public function getFeedbackAsLender($userid)
         {
 		$sqlParameters[":userid"] =  $userid;
-		$preparedStatement = $this->dbh->prepare('SELECT AVG(BORROWER_TO_LENDER_STARS) as LENDER_FEEDBACK FROM ITEM WHERE LENDER_ID=:userid');
+		$preparedStatement = $this->dbh->prepare('SELECT AVG(BORROWER_TO_LENDER_STARS) as LENDER_FEEDBACK FROM ITEM_VW WHERE LENDER_ID=:userid');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -72,7 +72,7 @@ class UserModel extends Model
         public function getFeedbackAsBorrower($userid)
         {
 		$sqlParameters[":userid"] =  $userid;
-		$preparedStatement = $this->dbh->prepare('SELECT AVG(LENDER_TO_BORROWER_STARS) as BORROWER_FEEDBACK FROM ITEM WHERE BORROWER_ID=:userid');
+		$preparedStatement = $this->dbh->prepare('SELECT AVG(LENDER_TO_BORROWER_STARS) as BORROWER_FEEDBACK FROM ITEM_VW WHERE BORROWER_ID=:userid');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 

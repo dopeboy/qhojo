@@ -6,7 +6,7 @@ $(document).ready(function()
     $('#myForm').ajaxForm(function(output) 
     {
         if (output == 0)
-            window.location=2;
+            window.location=3;
         
         else
             alert ("Error submitting feedback");

@@ -125,16 +125,25 @@ class Item extends Controller
                 exit;
             }
             
+            // If the current user is the borrowoer && borrower_to_l fb is empty
+            // else if the current user is the lender && lend_to_b fb is empty
             $item_model = new ItemModel();
+            $item = $item_model->getItemDetails($this->id);
             
-            if ($this->state == 0)
-		$this->returnView($item_model->feedback($this->id), true,false);
-            
-            else if ($this->state == 1)
-                $this->returnView($item_model->submitFeedback($this->userid,$this->postvalues['itemid'], $this->postvalues['rating'], $this->postvalues['comments']),false,true);
-            
+            if ($this->state == 0 && ($item["LENDER_ID"] == $this->userid && $item["LENDER_TO_BORROWER_STARS"] == null))
+                $this->returnView($item_model->feedback($this->id), true,false);
+
+            else if ($this->state == 1 && ($item["BORROWER_ID"] == $this->userid && $item["BORROWER_TO_LENDER_STARS"] == null))
+                $this->returnView($item_model->feedback($this->id), true,false);
+
             else if ($this->state == 2)
-                $this->returnView($item_model->feedbackComplete($this->id),true,false);
+                $this->returnView($item_model->submitFeedback($this->userid,$this->postvalues['itemid'], $this->postvalues['rating'], $this->postvalues['comments']),false,true);
+
+            else if ($this->state == 3)
+                $this->returnView($item_model->feedbackComplete($this->id),true,false);                
+            
+            else
+                $this->returnView("Error", true,false);
         }
         
         protected function accept()
@@ -146,7 +155,17 @@ class Item extends Controller
             }
             
             $item_model = new ItemModel();
-            $this->returnView($item_model->accept($this->id), true, false);
+            
+            if ($this->state == 0)
+            {
+                $this->returnView($item_model->submitAcceptance($this->id), false, true);
+            }
+            
+            else if ($this->state == 1)
+            {
+                $this->returnView($item_model->acceptSuccess($this->id), true, false);
+            }
+            
         }
         
         protected function ignore()

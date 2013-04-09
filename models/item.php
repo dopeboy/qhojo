@@ -61,8 +61,7 @@ class ItemModel extends Model
             $sqlParameters[":itemid"] =  $itemid;
             $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
             $preparedStatement->execute($sqlParameters);
-            $row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-            return $row;            
+            return $preparedStatement->fetch(PDO::FETCH_ASSOC);            
         }
 
         // Passed in parameters are all of the borrower
@@ -212,13 +211,13 @@ class ItemModel extends Model
                         $total = $row["RATE"] * $row["DURATION"];
                         
                         $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_lender .= "Now that the transaction is complete, we owe you some green. Check your paypal account: we have deposited \$" . $total . " minus a 3% transaction fee. <br/><br/>";
-                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
+                        $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . $total . " minus a 3% transaction fee. <br/><br/>";
+                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
                         $message_to_lender .= "<br/><br/>-team qhojo";
                         
                         $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your green. Check your paypal account: we have dedeucted \$" . $total . ". <br/><br/>";
-                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
+                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . $total . ". <br/><br/>";
+                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
                         $message_to_borrower .= "<br/><br/>-team qhojo";                        
                         
                         $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
@@ -384,38 +383,34 @@ class ItemModel extends Model
 	{
                 // Find out whether we are the borrower or the lender
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('select LENDER_ID, BORROWER_ID from ITEM where ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('select LENDER_ID, BORROWER_ID from ITEM_VW where ITEM_ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
 		$flag = ($row["LENDER_ID"] == $userid ? 0 : 1);
                 
                 $rating_query = null;
-		$stars_query = null;
                 $comments_query = null;
                 
                 if ($flag == 0)
                 {
 			$rating_query = "LENDER_TO_BORROWER_STARS";
-			$stars_query = "LENDER_ID";  
                         $comments_query = "LENDER_TO_BORROWER_COMMENTS";
                 }
                 
                 else
                 {
-			$rating_query = "BORROWER_TO_LENDER_STARS";
-			$stars_query = "BORROWER_ID";                    
+			$rating_query = "BORROWER_TO_LENDER_STARS";                   
                         $comments_query = "BORROWER_TO_LENDER_COMMENTS";
                 }
                 
-		$sqlParameters[":rating"] =  $rating;
-		$sqlParameters[":userid"] =  $userid;		
+		$sqlParameters[":rating"] =  $rating;	
 		$sqlParameters[":comments"] =  $comments;		                
 
-		$preparedStatement = $this->dbh->prepare('update ITEM set ' . $rating_query . '=:rating, ' . $comments_query . '=:comments' . ' WHERE ID=:itemid and ' . $stars_query . '=:userid');
+		$preparedStatement = $this->dbh->prepare('update ITEM set ' . $rating_query . '=:rating, ' . $comments_query . '=:comments' . ' WHERE ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 
-		return $preparedStatement->rowCount() > 0 ? 0 : 1;               
+		return $preparedStatement->rowCount() == 1 ? 0 : 1;               
 	}
         
         public function feedbackComplete($itemid)
@@ -438,7 +433,7 @@ class ItemModel extends Model
 		return $row;	            
         }
         
-        public function accept($request_id)
+        public function submitAcceptance($request_id)
         {
             $sqlParameters[":requestid"] =  $request_id;
             $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 1 where REQUEST_ID=:requestid');
@@ -466,7 +461,7 @@ class ItemModel extends Model
             $message .= "1) Over email, arrange to meet with " .  $row['BORROWER_FIRST_NAME'] . ". Here's " . $row['BORROWER_FIRST_NAME'] . "'s email address for reference: " .  $row['BORROWER_EMAIL_ADDRESS'] . "<br/>";
             $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
             $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
-            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER[HTTP_HOST] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks\">how-it-works guide</a>";
             $message .= "<br/><br/>-team qhojo";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reservation Details', $message);
@@ -481,7 +476,7 @@ class ItemModel extends Model
             $message .= "1) Over email, arrange to meet with " .  $row['LENDER_FIRST_NAME'] . ". Here's " . $row['LENDER_FIRST_NAME'] . "'s email address for reference: " .  $row['LENDER_EMAIL_ADDRESS'] . "<br/>";
             $message .= "2) Once you guys meet, verify the quality of the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
             $message .= "3) We'll pass on this confirmation to " .  $row['LENDER_FIRST_NAME'] . " via text message. Once " .  $row['LENDER_FIRST_NAME'] . " has received it, he/she will hand the item over to you. At this point, the rental period has started and you are responsible to bring your item back after the agreed upon duration.<br/><br/>";
-            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER[HTTP_HOST] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks\">how-it-works guide</a>";
             $message .= "<br/><br/>-team qhojo";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reserved!', $message);
@@ -491,7 +486,17 @@ class ItemModel extends Model
             global $TwilioAuthToken;
             $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
             $sms = $client->account->sms_messages->create($borrower_number, $row['BORROWER_PHONE_NUMBER'],$sms_message);
-                    
+            
+            return 0;
+        }
+        
+        public function acceptSuccess($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
             return $row;	                
         }
         
