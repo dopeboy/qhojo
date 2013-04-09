@@ -132,41 +132,46 @@ class ItemModel extends Model
 	{
             error_log("cc:" . $confirmation_code);
             error_log("ph:" . $phone_number);
-		$sqlParameters[":confirmation_code"] =  $confirmation_code;
-                $sqlParameters[":phone_number"] =  $phone_number;
-                $sqlParameters[":status_id"] =  1;
-                $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and BORROWER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
-		$preparedStatement->execute($sqlParameters);
-                $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            $sqlParameters[":confirmation_code"] =  $confirmation_code;
+            $sqlParameters[":phone_number"] =  $phone_number;
+            $sqlParameters[":status_id"] =  1;
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and BORROWER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            error_log("1");
+            if ($preparedStatement->rowCount() == 1)
+            {
+                $sqlParameters = null;
+                $sqlParameters[":status_id"] =  2;
+                $sqlParameters[":item_id"] =  $row['ITEM_ID'];
+                $sqlParameters[":startdate"] =  date("Y-m-d H:i:s");
+                $sqlParameters[":enddate"] =  date("Y-m-d H:i:s",strtotime("+" . $row['DURATION'] . " days"));
+                $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id, START_DATE=:startdate, END_DATE=:enddate WHERE ID=:item_id');
+                $preparedStatement->execute($sqlParameters);    
+                error_log("2");    
                 
-              //  error_log("1");
                 if ($preparedStatement->rowCount() == 1)
                 {
-                    $sqlParameters = null;
-                    $sqlParameters[":status_id"] =  2;
-                    $sqlParameters[":item_id"] =  $row['ITEM_ID'];
-                    $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
-                    $preparedStatement->execute($sqlParameters);    
-            //    error_log("2");    
-                    if ($preparedStatement->rowCount() == 1)
-                    {//error_log("3");    
-                        $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over.";
-                        $message2 = "When you meet " . $row["BORROWER_FIRST_NAME"] . " again, text the following confirmation code to this number: " . $confirmation_code;
+                    error_log("3");    
+                    $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over.";
+                    $message2 = "When " . $row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify the item and then text this confirmation code back to us: " . $confirmation_code;
 
-                        global $TwilioAccountSid;   
-                        global $TwilioAuthToken;
-                        global $lender_number;
-                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
-                        $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);     
-                        error_log("4");    
-                        return 0;
-                    }
-                    
-                    return 2;
+                    global $TwilioAccountSid;   
+                    global $TwilioAuthToken;
+                    global $lender_number;
+                    $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
+                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);     
+                    error_log("4");    
+                    return 0;
                 }
 
-		return 1;
+                return 2;
+            }
+
+            return 1;
 	}
 
 	public function lenderConfirm($confirmation_code, $phone_number) 
@@ -204,13 +209,15 @@ class ItemModel extends Model
                         // TODO: MONEY STUFF HAPPENS HERE
                         
                         // send an email to lender and borrower and ask for feedback
+                        $total = $row["RATE"] * $row["DURATION"];
+                        
                         $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_lender .= "Now that the transaction is complete, we owe you some green. Check your paypal account: we have deposited \$999 minus a 3% transaction fee. <br/><br/>";
+                        $message_to_lender .= "Now that the transaction is complete, we owe you some green. Check your paypal account: we have deposited \$" . $total . " minus a 3% transaction fee. <br/><br/>";
                         $message_to_lender .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
                         $message_to_lender .= "<br/><br/>-team qhojo";
                         
                         $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your green. Check your paypal account: we have dedeucted \$999. <br/><br/>";
+                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your green. Check your paypal account: we have dedeucted \$" . $total . ". <br/><br/>";
                         $message_to_borrower .= "Also, when you get a second, help our community be a better one. Submit some feedback on this transaction by clicking here.<br/><br/>";
                         $message_to_borrower .= "<br/><br/>-team qhojo";                        
                         
