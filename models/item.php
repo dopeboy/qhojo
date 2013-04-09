@@ -155,7 +155,7 @@ class ItemModel extends Model
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
-                        global $borrower_number;
+                        global $lender_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
                         $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
                         $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);     
@@ -196,7 +196,7 @@ class ItemModel extends Model
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
-                        global $lender_number;
+                        global $borrower_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
                         $sms = $client->account->sms_messages->create($borrower_number, $row["BORROWER_PHONE_NUMBER"],$message);   
                         error_log("4");    
