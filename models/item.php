@@ -157,8 +157,8 @@ class ItemModel extends Model
                         global $TwilioAuthToken;
                         global $borrower_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create($borrower_number, $row["LENDER_PHONE_NUMBER"],$message);                        
-                        $sms = $client->account->sms_messages->create($borrower_number, $row["LENDER_PHONE_NUMBER"],$message2);     
+                        $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
+                        $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);     
                         error_log("4");    
                         return 0;
                     }
@@ -198,7 +198,7 @@ class ItemModel extends Model
                         global $TwilioAuthToken;
                         global $lender_number;
                         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create($lender_number, $row["BORROWER_PHONE_NUMBER"],$message);   
+                        $sms = $client->account->sms_messages->create($borrower_number, $row["BORROWER_PHONE_NUMBER"],$message);   
                         error_log("4");    
                         
                         // TODO: MONEY STUFF HAPPENS HERE
