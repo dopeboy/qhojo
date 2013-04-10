@@ -90,7 +90,8 @@ class User extends Controller
             else if ($this->state == 1)
             {
                 $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password']);
-                $_SESSION['userid']  = $userid;               
+                if ($userid != -1)
+                    $_SESSION['userid']  = $userid;               
                 $this->returnView($userid, false,true);
             }
             

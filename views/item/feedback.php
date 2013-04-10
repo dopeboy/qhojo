@@ -1,7 +1,7 @@
 <head>
 	<script type="text/javascript" src="/js/item/feedback.js"></script>
         <script type="text/javascript" src="/js/jquery.rating.pack.js"></script>
-<!--         <link rel="stylesheet" type="text/css" href="/css/item/feedback.css" media="screen" />  -->
+         <link rel="stylesheet" type="text/css" href="/css/item/feedback.css" media="screen" />  
          <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />  
 </head>
 
