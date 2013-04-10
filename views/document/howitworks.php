@@ -23,13 +23,13 @@
 
             </div>
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-1a.png" style="">
+                <img class="comic" src="/img/hiw-borrower-1.png" style="">
             </div>            
         </div>
         <hr class="style-two"/>
         <div id="frame2" class="frame">
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-2a.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-2.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 2. Reserve
@@ -53,13 +53,13 @@
 
             </div>
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-3a.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-3.png" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>
         <hr class="style-two"/>
         <div id="frame4" class="frame">
             <div class="picture">
-                <img class="comic" src="/img/hiw-borrower-4a.png" style="max-height: 100%; max-width: 100%">
+                <img class="comic" src="/img/hiw-borrower-4.png" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 4. Enjoy
