@@ -61,9 +61,9 @@ $(document).ready(function()
     {
         // Show ajax
         $('.accept').parent().parent().siblings('.loader').show();
-        
-        // Disable button
-        $(this).attr("class","ui-state-disabled");
+
+        // Hide the menu
+        $(this).closest('.menu').hide();
         
         $.ajax({
           url: $(this).attr('href'),

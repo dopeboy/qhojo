@@ -1,5 +1,21 @@
 $(document).ready(function() 
 { 
+    
+
+            $('#myForm').validate( {
+    rules: {
+        "agreement": {
+            required: true,
+            minlength: 1
+        },
+        errorPlacement: function(error, element) { }       
+  }
+    });
+    
+    jQuery.extend(jQuery.validator.messages, {
+    required: ""
+});
+
     $('#total').text($('#rate').text()*$('#duration option:selected').text()); 
    
     $("#duration").change(function()
@@ -15,10 +31,14 @@ $(document).ready(function()
     // bind form using 'ajaxForm' 
     $('#myForm').ajaxForm(options); 
     
+
+    
      function check(formData, jqForm, options) 
  { 
     $('#loading').show();
     $('#submitbutton').prop("disabled", true);
+    
+    
     return true;
  }
  

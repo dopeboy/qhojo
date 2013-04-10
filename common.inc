@@ -17,13 +17,9 @@ $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 $borrower_number = '9493287319';
 $lender_number = '9494852584';
 
-function getConfirmationID()
+function getRandomID()
 {
     return rand(100000,999999);
 }
 
-function getItemID()
-{
-    return rand(100000,999999);
-}
 ?>

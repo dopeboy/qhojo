@@ -5,7 +5,7 @@ class Item extends Controller
 	protected function index() 
 	{
 		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->index($this->id), true,false);
+		$this->returnView($viewmodel->index($this->id, $this->userid), true,false);
 	}
 
 	protected function main() 
@@ -101,7 +101,7 @@ class Item extends Controller
             
             else  if ($this->state == 0)
             {    
-                $_SESSION['itemid'] = getItemID();
+                $_SESSION['itemid'] = getRandomID();
 		$this->returnView($item_model->post($this->userid,new UserModel(),new LocationModel()), true,false);
             }
             
@@ -113,7 +113,7 @@ class Item extends Controller
             else if ($this->state == 2)
             {
                 $_SESSION['itemid'] = null;
-                $this->returnView($item_model->postComplete($this->userid, $this->id), true, false);
+                $this->returnView($item_model->postComplete( $this->id), true, false);
             }
 	}
         
@@ -179,6 +179,33 @@ class Item extends Controller
             $item_model = new ItemModel();
             $this->returnView($item_model->ignore($this->id),false,true);
         }        
+        
+        protected function delete()
+        {
+            if ($this->userid == null)
+            {
+                header('Location: /user/login/null/2');
+                exit;
+            }
+            
+            $item_model = new ItemModel();
+            
+            $item = $item_model->getItemDetails($this->id);
+            if ($item['ITEM_STATE_ID'] != 0 || $this->userid != $item["LENDER_ID"])
+            {
+                header('Location: /document/error/');
+                exit;                
+            }
+            
+            if ($this->state == 0)
+                $this->returnView($item_model->delete($this->id), true, false);
+
+            else if ($this->state == 1)
+                $this->returnView($item_model->deleteAction($this->id),false,true);
+            
+            else if ($this->state == 2)
+                $this->returnView(null,true,false);
+        }
 }
 
 ?>

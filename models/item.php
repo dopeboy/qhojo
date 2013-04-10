@@ -6,7 +6,7 @@ require "Services/Twilio.php";
 
 class ItemModel extends Model 
 {
-	public function index($itemid) 
+	public function index($itemid, $userid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid');
@@ -19,6 +19,8 @@ class ItemModel extends Model
 
                 $usermodel = new UserModel();                
                 $row[] = $usermodel->getFeedbackAsLender($row[0]['LENDER_ID']);
+                
+                $row[] = $usermodel->checkIfUserAlreadyRequested($userid, $itemid);
                 
 		return $row;
 	}
@@ -71,7 +73,8 @@ class ItemModel extends Model
 		$sqlParameters[":userid"] =  $userid;
 		$sqlParameters[":duration"] =  $duration;
                 $sqlParameters[":message"] =  $message;
-		$preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:itemid, :userid, :duration, :message)');
+                $sqlParameters[":requestid"] =  getRandomID();
+		$preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:requestid, :itemid, :userid, :duration, :message)');
 		$preparedStatement->execute($sqlParameters);
             
                 return $preparedStatement->rowCount() == 1 ? 0 : 1;
@@ -212,12 +215,12 @@ class ItemModel extends Model
                         
                         $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
                         $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . $total . " minus a 3% transaction fee. <br/><br/>";
-                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
+                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
                         $message_to_lender .= "<br/><br/>-team qhojo";
                         
                         $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
                         $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . $total . ". <br/><br/>";
-                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
+                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
                         $message_to_borrower .= "<br/><br/>-team qhojo";                        
                         
                         $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
@@ -235,7 +238,7 @@ class ItemModel extends Model
 	public function getDuration($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT DURATION FROM ITEM WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT DURATION FROM ITEM_VW WHERE ITEM_ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -271,7 +274,7 @@ class ItemModel extends Model
             $sqlParameters[":rate"] =  $rate;
             $sqlParameters[":deposit"] =  $deposit;
             $sqlParameters[":locationid"] =  $locationid;
-            $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid)');
+            $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID, ACTIVE_FLAG) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid, 1)');
             $preparedStatement->execute($sqlParameters);
 
             $sqlParameters[] = array();
@@ -311,10 +314,10 @@ class ItemModel extends Model
             return $itemid;	
 	}   
         
-        public function postComplete($userid, $itemid)
+        public function postComplete($itemid)
         {
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM WHERE ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
 		$preparedStatement->execute($sqlParameters);
 		return $preparedStatement->fetch(PDO::FETCH_ASSOC);                
         }
@@ -443,7 +446,7 @@ class ItemModel extends Model
             
             $sqlParameters = array();
             $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
-            $sqlParameters[":confirmation_code"] = $confirmation_code = getConfirmationID();
+            $sqlParameters[":confirmation_code"] = $confirmation_code = getRandomID();
             $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
             $preparedStatement->execute($sqlParameters);
             
@@ -507,7 +510,26 @@ class ItemModel extends Model
             $preparedStatement->execute($sqlParameters);
             
             return $preparedStatement->rowCount() == 1 ? 0 : 1;
-        }        
+        }      
+        
+        public function delete($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            return $row;	            
+        }
+        
+        public function deleteAction($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM set ACTIVE_FLAG = 0 where ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            
+            return $preparedStatement->rowCount() == 1 ? 0 : 1;            
+        }
 }
 
 ?>

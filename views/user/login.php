@@ -9,16 +9,16 @@
     <div id="mainheading">Login</div>
     <hr/>
     <?php if ($this->state == 1) { ?>
-    <div class="error">
+    <div class="errormsg">
         <li>Invalid username / password</li>
     </div>
     <?php } else if ($this->state >= 2) { ?>
-    <div class="error">
+    <div class="errormsg">
         <li>You're gonna need to login for this page.</li>
     </div>    
     <?php } ?>
     <div class="subcontent">
-        <form id="myForm" action="/user/verify" method="post">
+        <form id="myForm" action="/user/verify" method="post" style="margin: 0px">
             <table>                  
                 <tr>
                     <td>

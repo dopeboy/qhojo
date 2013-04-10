@@ -4,7 +4,8 @@
     <link type="text/css" rel="stylesheet" href="/css/user/login.css">
     <script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/jquery-ui.js"> </script>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 </head>
 
 <?php if ($this->state == 0):  ?>
@@ -13,14 +14,14 @@
     <div id="mainheading">Sign Up</div>
     <hr/>
     <div class="subcontent">
-        <form id="myForm" action="/user/signup/null/1" method="post">
+        <form class="cmxform" id="myForm" action="/user/signup/null/1" method="post" style="margin: 0">
             <table>                  
                 <tr>
                     <td>
                             Email:
                     </td>
                     <td>
-                            <input class="textbox" type="text" name="emailaddress" />
+                            <input id="cemail" type="text" name="emailaddress" class="required email textbox" autocomplete="off" />
                     </td>
                 </tr>
                 <tr>
@@ -28,22 +29,27 @@
                             Password:
                     </td>
                     <td>
-                            <input class="textbox" type="password" name="password" />                          
+                            <input class="textbox" type="password" name="password" minlength="8" />                          
                     </td>
                 </tr>                   
                 <tr style="">
                     <td colspan="2">
-                           <input type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" />
+                        <input type="checkbox" name="terms" style="margin-top: 0.8em; margin-left: 0px"><label id="text">I agree to the <a href="/document/legal">terms and conditions</a> of qhojo inc.</label>
+                    </td>
+                </tr>                    
+                <tr style="">
+                    <td colspan="2">
+                           <input type="submit" value="Submit" style="margin-right:0.5em; margin-left: 0px; margin-top: 0.8em" />
                     </td>
                 </tr>    
                 <tr style="">
                     <td colspan="2">
                         <br/>
-                        Already have an account? Sign in <a href="/user/login/">here</a>
+                        Already have an account? Sign in <a href="/user/login/">here</a>.
                     </td>
                 </tr>                           
             </table>                    
-        </form>       
+        </form>           
     </div>
 </div>
 

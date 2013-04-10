@@ -1,6 +1,7 @@
 <head>
 	<script type="text/javascript" src="/js/item/request.js"></script>
            <link rel="stylesheet" href="/css/item/request.css" />
+           <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
 </head>
 
 <div id="masterdiv">
@@ -27,12 +28,7 @@
                         <div>
                             deposit
                             <div style="font-size: 250%">$<?php echo $viewmodel[0]['DEPOSIT']?></div>
-                        </div>
-                        <br/>
-                        <div>   
-                            reservation fee
-                            <div style="font-size: 250%">$1</div>
-                        </div>          
+                        </div>       
                     </div> 
 
                     <div id="lender" style="width: 304px; margin-left: 60px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;float:left">

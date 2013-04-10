@@ -1,7 +1,20 @@
 $(document).ready(function()
 {
-
-$('#uploaderframe').attr('src', '/picture/upload/null/1'); 
+    $('#myForm').validate( {
+    rules: {
+        "terms": {
+            required: true,
+            minlength: 1
+        },
+  errorPlacement: function ($error, $element) {
+       
+          
+        
+    }        
+  }
+    });
+ 
+    $('#uploaderframe').attr('src', '/picture/upload/null/1'); 
 
     $('#myForm')
         .ajaxForm({

@@ -1,7 +1,7 @@
 drop table if exists USER;
 CREATE TABLE USER
 (
-	ID                              INTEGER AUTO_INCREMENT PRIMARY KEY,
+	ID                              INTEGER PRIMARY KEY,
 	FIRST_NAME			VARCHAR(80),
 	LAST_NAME			VARCHAR(80),
 	EMAIL_ADDRESS			VARCHAR(80),
@@ -13,7 +13,7 @@ CREATE TABLE USER
 drop table if exists ITEM;
 CREATE TABLE ITEM
 (
-	ID                              INTEGER AUTO_INCREMENT PRIMARY KEY,
+	ID                              INTEGER PRIMARY KEY,
 	TITLE 				VARCHAR(80),
 	DESCRIPTION			TEXT,
 	RATE				FLOAT,
@@ -27,7 +27,8 @@ CREATE TABLE ITEM
 	BORROWER_TO_LENDER_STARS	INTEGER,
         LENDER_TO_BORROWER_COMMENTS     TEXT,
         BORROWER_TO_LENDER_COMMENTS     TEXT,
-        CONFIRMATION_CODE               INTEGER
+        CONFIRMATION_CODE               INTEGER,
+        ACTIVE_FLAG                     INTEGER
 );
 
 drop table if exists ITEM_STATE;
@@ -48,7 +49,7 @@ CREATE TABLE ITEM_PICTURES
 drop table if exists ITEM_REQUESTS;
 CREATE TABLE ITEM_REQUESTS
 (
-        REQUEST_ID                      INTEGER AUTO_INCREMENT PRIMARY KEY,
+        REQUEST_ID                      INTEGER PRIMARY KEY,
 	ITEM_ID                         INTEGER,
 	REQUESTER_ID                    INTEGER,
         DURATION                        INTEGER,
@@ -59,7 +60,7 @@ CREATE TABLE ITEM_REQUESTS
 drop table if exists LOCATION;
 CREATE TABLE LOCATION
 (
-        ID                              INTEGER AUTO_INCREMENT PRIMARY KEY,
+        ID                              INTEGER PRIMARY KEY,
         BOROUGH                         VARCHAR(80), 
 	NEIGHBORHOOD                    VARCHAR(80)
 );
@@ -103,7 +104,8 @@ INNER JOIN USER u1 on u1.ID=it.LENDER_ID
 INNER JOIN ITEM_PICTURES ip on it.ID=ip.ITEM_ID and ip.PRIMARY_FLAG=true
 LEFT JOIN ITEM_REQUESTS ir on it.ID=ir.ITEM_ID and ir.ACCEPTED_FLAG=true
 LEFT JOIN USER u2 on u2.ID=ir.REQUESTER_ID
-INNER JOIN LOCATION n1 on it.LOCATION_ID=n1.ID;
+INNER JOIN LOCATION n1 on it.LOCATION_ID=n1.ID
+WHERE it.ACTIVE_FLAG=1;
 
 CREATE OR REPLACE VIEW ITEM_REQUESTS_VW AS
 SELECT 
@@ -118,6 +120,6 @@ ir.DURATION,
 ir.MESSAGE,
 it.LENDER_ID
 FROM ITEM_REQUESTS ir
-INNER JOIN ITEM it on ir.ITEM_ID=it.ID
+INNER JOIN ITEM_VW it on ir.ITEM_ID=it.ITEM_ID
 INNER JOIN USER u1 on ir.REQUESTER_ID=u1.ID
-where it.STATE_ID=0 and ir.ACCEPTED_FLAG is null;
+where it.ITEM_STATE_ID=0 and ir.ACCEPTED_FLAG is null;

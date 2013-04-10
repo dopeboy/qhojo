@@ -106,12 +106,22 @@ class UserModel extends Model
         
         public function signupAction($emailaddress, $password)
         {
+            // Does this email address exist?
+            $sqlParameters[":email_address"] =  $emailaddress;
+            $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER WHERE EMAIL_ADDRESS=:email_address');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($row != null)
+                return -1;
+            
             $sqlParameters[":email_address"] =  $emailaddress;
             $sqlParameters[":password"] =  $password;
-            $preparedStatement = $this->dbh->prepare('insert into USER (EMAIL_ADDRESS,PASSWORD) VALUES (:email_address, :password)');
+            $sqlParameters[":userid"] =  $userid = getRandomID();
+            $preparedStatement = $this->dbh->prepare('insert into USER (ID,EMAIL_ADDRESS,PASSWORD) VALUES (:userid,:email_address, :password)');
             $preparedStatement->execute($sqlParameters);
 
-            return $this->dbh->lastInsertId();                 
+            return $preparedStatement->rowCount() == 1 ? $userid : -1;
         }
         
         public function checkExtra($userid)
@@ -134,7 +144,18 @@ class UserModel extends Model
             $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
             
-            return $preparedStatement->rowCount() > 0 ? 0 : -1;                
+            return $preparedStatement->rowCount() == 1 ? 0 : -1;                
+        }
+        
+        public function checkIfUserAlreadyRequested($userid, $itemid)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('select 1 from ITEM_REQUESTS_VW where REQUESTER_ID=:userid and ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            return $row != null ? 1 : 0;            
         }
 }
 

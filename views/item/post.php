@@ -75,12 +75,7 @@
                             <span class="noneditable" style="display:none"></span>
                             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>     
                         </div>
-                    </div>
-                    <br/>
-                    <div>   
-                        reservation fee
-                        <div style="font-size: 250%">$1</div>
-                    </div>          
+                    </div>        
                 </div>       
           
             
@@ -158,7 +153,7 @@
     </div>
     <hr/>
     <div class="subcontent">
-        Your post has been submitted! Click <a href="/item/index/<?php echo $viewmodel['ID'];?>">here</a> to see your post.
+        Your post has been submitted! Click <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>">here</a> to see your post.
     </div>
     <?php } ?>
 </div>

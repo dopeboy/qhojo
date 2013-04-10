@@ -72,7 +72,14 @@
                   }              
                   ?>
                   "><a href="/item/feedback/<?php echo $item['ITEM_ID'];?>/<?php echo $item['LENDER_ID'] == $this->userid ? "0" : "1" ?>">Give Feedback</a></li>
-              <li class="ui-state-disabled"><a href="#">Delete Listing</a></li>
+              <li class="
+                  <?php 
+                  if ($item['ITEM_STATE_ID']!=0 || $item['LENDER_ID'] != $this->userid)
+                  {
+                        echo "ui-state-disabled";
+                  }              
+                  ?>                  
+                  "><a href="/item/delete/<?php echo $item['ITEM_ID'];?>/0">Delete Listing</a></li>
             </ul>                
         </td>
     </tr>
