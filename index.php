@@ -34,5 +34,6 @@ $loader = new Loader($_GET, $_POST, $_FILES, $_SESSION);
 
 $controller = $loader->createController();
 $controller->executeAction();
+
 ?>
 

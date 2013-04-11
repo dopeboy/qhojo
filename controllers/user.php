@@ -89,7 +89,7 @@ class User extends Controller
             
             else if ($this->state == 1)
             {
-                $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password']);
+                $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password'], $this->postvalues['name']);
                 if ($userid != -1)
                     $_SESSION['userid']  = $userid;               
                 $this->returnView($userid, false,true);
@@ -102,7 +102,7 @@ class User extends Controller
             
             else if ($this->state == 3)
             {
-                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['firstname'],$this->postvalues['phonenumber'],$this->postvalues['file']);
+                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file']);
                 
                 if ($status == 0)
                 {

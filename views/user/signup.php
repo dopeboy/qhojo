@@ -15,7 +15,15 @@
     <hr/>
     <div class="subcontent">
         <form class="cmxform" id="myForm" action="/user/signup/null/1" method="post" style="margin: 0">
-            <table>                  
+            <table>      
+                <tr>
+                    <td>
+                            First name:
+                    </td>
+                    <td>
+                            <input class="textbox"  id="cname" type="text" name="name" autocomplete="off" minlength="1" />
+                    </td>
+                </tr>                
                 <tr>
                     <td>
                             Email:
@@ -29,7 +37,7 @@
                             Password:
                     </td>
                     <td>
-                            <input class="textbox" type="password" name="password" minlength="8" />                          
+                            <input class="textbox" type="password" name="password" minlength="5" />                          
                     </td>
                 </tr>                   
                 <tr style="">
@@ -63,14 +71,6 @@
         <br/><br/>
         <form id="additionalform" action="/user/signup/null/3" method="post">
             <table>                  
-                <tr>
-                    <td>
-                            First Name:
-                    </td>
-                    <td>
-                            <input class="textbox" type="text" name="firstname" />
-                    </td>
-                </tr>
                 <tr>
                     <td>
                             Phone Number:

@@ -329,8 +329,9 @@
                         $(this).data('fileupload');
                 if (data.url) {
                     $.ajax(data);
-                    that._adjustMaxNumberOfFiles(1);
+//                    that._adjustMaxNumberOfFiles(1);
                 }
+that._adjustMaxNumberOfFiles(1);
                 that._transition(data.context).done(
                     function () {
                         $(this).remove();

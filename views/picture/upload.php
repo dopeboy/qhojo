@@ -117,7 +117,7 @@
     <tr class="template-upload fade">
         <td class="preview"><span class="fade"></span></td>
         <td class="name"><span>{%=file.name%}</span></td>
-        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span> <input type="hidden" name="del" value="no"></td>
         {% if (file.error) { %}
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
@@ -162,10 +162,12 @@
             <td colspan="2"></td>
         {% } %}
         <td>
-            <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+            <button class="btn btn-danger delete" onclick="myFunction('{%=file.delete_url%}')">
                 <i class="icon-trash icon-white"></i>
                 <span>Delete</span>
+                
             </button>
+           
             <input type="checkbox" name="delete" value="1" class="toggle">
         </td>
     </tr>

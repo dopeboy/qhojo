@@ -10,12 +10,11 @@ class UserModel extends Model
 	public function verify($emailaddress, $password, &$userid, &$firstname, &$lastname) 
 	{
             $sqlParameters[":email"] =  $emailaddress;
-            $sqlParameters[":password"] =  $password;
-            $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, LAST_NAME, ID FROM USER WHERE EMAIL_ADDRESS=:email and PASSWORD=:password');
+            $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, LAST_NAME, ID, PASSWORD FROM USER WHERE EMAIL_ADDRESS=:email LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-            if ($row == null)
+            if ($row == null || !$this->comparePasswords($password, $row['PASSWORD']) )
                 return -1;
 
             $userid = $row['ID'];
@@ -104,21 +103,23 @@ class UserModel extends Model
             return 0;
         }
         
-        public function signupAction($emailaddress, $password)
+        public function signupAction($emailaddress, $password, $first_name)
         {
             // Does this email address exist?
             $sqlParameters[":email_address"] =  $emailaddress;
-            $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER WHERE EMAIL_ADDRESS=:email_address');
+            $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER WHERE EMAIL_ADDRESS=:email_address LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
             
             if ($row != null)
                 return -1;
-            
+                        
             $sqlParameters[":email_address"] =  $emailaddress;
-            $sqlParameters[":password"] =  $password;
+            $sqlParameters[":password"] =  $this->hashPassword($emailaddress, $password);
             $sqlParameters[":userid"] =  $userid = getRandomID();
-            $preparedStatement = $this->dbh->prepare('insert into USER (ID,EMAIL_ADDRESS,PASSWORD) VALUES (:userid,:email_address, :password)');
+            $sqlParameters[":first_name"] =  $first_name;
+            $sqlParameters[":join_date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('insert into USER (ID,FIRST_NAME,EMAIL_ADDRESS,PASSWORD, JOIN_DATE) VALUES (:userid,:first_name, :email_address, :password, :join_date)');
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? $userid : -1;
@@ -127,21 +128,20 @@ class UserModel extends Model
         public function checkExtra($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (FIRST_NAME is null or PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null)');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null) LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
             return $row == null ? 0 : -1;
         }
         
-        public function signupExtra($userid,$firstname,$phonenumber, $profilepicture)
+        public function signupExtra($userid,$phonenumber, $profilepicture)
         {
             $sqlParameters[":userid"] =  $userid;
-            $sqlParameters[":firstname"] =  $firstname;
             $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
             $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
-            $preparedStatement = $this->dbh->prepare('update USER SET FIRST_NAME=:firstname, PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
+            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
             
             return $preparedStatement->rowCount() == 1 ? 0 : -1;                
@@ -156,6 +156,45 @@ class UserModel extends Model
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
             return $row != null ? 1 : 0;            
+        }
+        
+        public function hashPassword($username, $password)
+        {
+            $salt = hash('sha256', uniqid(mt_rand(), true) . 'qhojo' . strtolower($username));
+            $hash = $salt . $password;
+            
+            for ( $i = 0; $i < 100000; $i ++ ) 
+            {
+              $hash = hash('sha256', $hash);
+            }            
+            
+            return $salt . $hash;
+        }
+        
+        public function comparePasswords($password_from_login, $password_from_db)
+        {
+            $salt = substr($password_from_db, 0, 64);
+            $hash = $salt . $password_from_login;
+            
+            for ( $i = 0; $i < 100000; $i ++ ) 
+            {
+              $hash = hash('sha256', $hash);
+            }
+            
+            $hash = $salt . $hash;
+            error_log($hash);
+            error_log($password_from_db);
+            return $hash == $password_from_db;
+        }
+        
+        public function getRequestCount($userid)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select count(*) from ITEM_REQUESTS_VW where LENDER_ID=:userid');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_NUM);
+
+            return $row[0];
         }
 }
 

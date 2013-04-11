@@ -1,5 +1,15 @@
 $(document).ready(function()
 { $('#uploaderframe').attr('src', '/picture/upload/null/0');  
+    
+            $('.star').rating(
+    {
+   
+        required: 'hide',
+        readOnly: true
+        
+    });      
+    
+    
     // lose focus
     $('.editable').blur(function() 
     {

@@ -55,9 +55,36 @@ $(function () {
                 .call(this, null, {result: result});
         });
     
+    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+    var inputs = data.context.find(':input');
+    
+    data.formData = inputs.serializeArray();
+    });
+
+    $('#fileupload').bind('fileuploaddestroy', function (e, data) {
+            
+    
+//that._adjustMaxNumberOfFiles(1);
+    });
+
 
 });
 
+    function myFunction(file)
+    {
+//        alert("sdfsdf");
+        
+ $.ajax({
+            url: '/picture/handler/null/' + + window.location.pathname.slice(-1),
+            dataType: 'json',
+            context: this,
+            data: {del: 'yes', file: file},
+            type: 'POST'
+        });
+        
+        return false;
+    }
+    
 //$(document).ready(function()
 //{	
 //    $(window).unload(function() {

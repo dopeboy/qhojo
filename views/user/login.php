@@ -1,5 +1,4 @@
 <head>
-    <script type="text/javascript" src="/js/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script> 
     <script type="text/javascript" src="/js/user/login.js"></script>
     <link type="text/css" rel="stylesheet" href="/css/user/login.css">

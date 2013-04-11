@@ -249,7 +249,7 @@ class ItemModel extends Model
 	{
             $row[] = $usermodel->getUserDetails($userid);
             $row[] = $locationmodel->getAllLocations();
-            
+            $row[] = $usermodel->getFeedbackAsLender($userid);
             return $row;
 	}
         
@@ -274,7 +274,8 @@ class ItemModel extends Model
             $sqlParameters[":rate"] =  $rate;
             $sqlParameters[":deposit"] =  $deposit;
             $sqlParameters[":locationid"] =  $locationid;
-            $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID, ACTIVE_FLAG) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid, 1)');
+            $sqlParameters[":create_date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,STATE_ID,LOCATION_ID,LENDER_ID, ACTIVE_FLAG, CREATE_DATE) VALUES (:id,:title,:description,:rate,:deposit,0,:locationid,:userid, 1, :create_date)');
             $preparedStatement->execute($sqlParameters);
 
             $sqlParameters[] = array();
@@ -333,44 +334,44 @@ class ItemModel extends Model
             return implode($separator, $result);
         }        
         
-        public function processFile($file, &$filename)
-        {
-            $arr = explode(".", $file["name"]);
-            $name = current($arr);
-            $extension = end($arr);   
-            $allowedExts = array("jpg", "jpeg", "gif", "png", "JPG");
-        
-            if ((($file["type"] == "image/gif") || ($file["type"] == "image/jpeg") || ($file["type"] == "image/png") || ($file["type"] == "image/pjpeg"))
-                && ($file["size"] < 10000000) && in_array($extension, $allowedExts))
-            {     
-                if ($file["error"] > 0)
-                {    
-                    return 2;
-                }
-              
-                else
-                {
-                    $directory = "uploads/item/";
-                    $filename = $name. "_" . date("Ymd_His") . "." . $extension;
-                    
-                    if (file_exists($directory.$filename))
-                    {
-                        return 3;
-                    }
-                    
-                    else
-                    {
-                        move_uploaded_file($file["tmp_name"],$directory.$filename);
-                        return 0;
-                    }
-                }
-            }
-            
-            else
-            {
-                return 1;
-            }            
-        }
+//        public function processFile($file, &$filename)
+//        {
+//            $arr = explode(".", $file["name"]);
+//            $name = current($arr);
+//            $extension = end($arr);   
+//            $allowedExts = array("jpg", "jpeg", "gif", "png", "JPG");
+//        
+//            if ((($file["type"] == "image/gif") || ($file["type"] == "image/jpeg") || ($file["type"] == "image/png") || ($file["type"] == "image/pjpeg"))
+//                && ($file["size"] < 10000000) && in_array($extension, $allowedExts))
+//            {     
+//                if ($file["error"] > 0)
+//                {    
+//                    return 2;
+//                }
+//              
+//                else
+//                {
+//                    $directory = "uploads/item/";
+//                    $filename = $name. "_" . date("Ymd_His") . "." . $extension;
+//                    
+//                    if (file_exists($directory.$filename))
+//                    {
+//                        return 3;
+//                    }
+//                    
+//                    else
+//                    {
+//                        move_uploaded_file($file["tmp_name"],$directory.$filename);
+//                        return 0;
+//                    }
+//                }
+//            }
+//            
+//            else
+//            {
+//                return 1;
+//            }            
+//        }
         
         public function feedback($itemid)
 	{

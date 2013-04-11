@@ -16,7 +16,7 @@
     
     <?php } ?>
     
-    <?php if ($this->state == 0) { ?>
+    <?php if ($this->state == 1) { ?>
     
     <div class="subheading" style="">
         Lender
@@ -25,7 +25,7 @@
     <div style="font-size:250%">
         <a href="/user/index/<?php echo $viewmodel['LENDER_ID']; ?>"><?php echo $viewmodel['LENDER_FIRST_NAME']; ?></a>
     </div>
-    <?php } else if ($this->state == 1) { ?>
+    <?php } else if ($this->state == 0) { ?>
     <div class="subheading" style="">
         Borrower
     </div><br/>

@@ -38,7 +38,14 @@ abstract class Controller
 
 			if ($fullview) 
 			{
-				require('views/maintemplate.php');
+                            // If user is logged in 
+                            if ($this->userid != null)
+                            {
+                                $user = new UserModel();
+                                $cc = $user->getRequestCount($this->userid);
+                            }
+				
+                            require('views/maintemplate.php');
 			} 
 
 			else 

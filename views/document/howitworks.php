@@ -36,7 +36,7 @@
 
                 <div class="text">
                     <br/>
-                    Reserve the item you want to borrow for a specific duration. You'll then receive a confirmation code from us.
+                    Submit a request to borrow an item for a specific duration. Once the lender approves your request, you'll receive a confirmation code from us.
                 </div>
 
             </div>
@@ -111,7 +111,7 @@
 
                 <div class="text">
                     <br/>
-                    Sunbathe, take a jog, do what you need to while potential borrowers check out your item. Once a borrower has reserved your item, you'll be notified with a confirmation code.
+                    Sunbathe, take a jog, do what you need to while potential borrowers check out your item. If they're interested, they'll submit a rental request to you.
                 </div>
 
             </div>
@@ -122,7 +122,7 @@
 
                 <div class="text">
                     <br/>
-                   Meet the borrower and have them confirm with us that they are satisfied with item. Once they have, we'll send you a text message saying so. Then you can hand over the item.
+                   Sort through the rental requests and approve one. Meet the borrower and have them confirm with us that they are satisfied with item. Once they have, we'll send you a text message saying so. Then you can hand over the item.
                 </div>
 
             </div>
@@ -150,7 +150,7 @@
 
                 <div class="text">
                     <br/>
-                   We'll then send you the cash you are owed minus a small transaction fee.
+                    We'll then send you the cash you are owed minus a <a href="/document/fees">small transaction fee</a>.
                 </div>
 
             </div>

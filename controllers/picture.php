@@ -31,7 +31,7 @@ class Picture extends Controller
         
         $viewmodel = new PictureModel();
         
-        $this->returnView($viewmodel->handler($_SESSION['itemid'], $this->id, $this->state, $this->userid), false,true);
+        $this->returnView($viewmodel->handler($_SESSION['itemid'], $this->id, $this->state, $this->userid, $this->postvalues['del'], $this->postvalues['file']), false,true);
     }
 }
 

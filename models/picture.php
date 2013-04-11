@@ -2,14 +2,14 @@
 
 class PictureModel extends Model 
 {    
-    public function handler($itemSessionID, $id, $stateid, $userid)
+    public function handler($itemSessionID, $id, $stateid, $userid, $delflag, $delfile)
     {
         if ($stateid == 0)
             $path = "uploads/item/" . $itemSessionID . '/';
         else if ($stateid == 1)
             $path = "uploads/user/" . $userid . '/';
         
-        $upload_handler = new UploadHandler($path, $stateid, $id);
+        $upload_handler = new UploadHandler($path, $stateid, $id, $delflag, $delfile);
     }
 }
 
@@ -37,7 +37,7 @@ class UploadHandler
         'min_height' => 'Image requires a minimum height'
     );
 
-    function __construct($path, $state, $id = null,$options = null, $initialize = true, $error_messages = null) {
+    function __construct($path, $state, $id = null,$delflag = null, $delfile = null, $options = null, $initialize = true, $error_messages = null) {
         $this->options = array(
             'state' => $state,
             'script_url' => $this->get_full_url().'/',
@@ -48,7 +48,7 @@ class UploadHandler
             'param_name' => 'files',
             // Set the following option to 'POST', if your server does not support
             // DELETE requests. This is a parameter sent to the client:
-            'delete_type' => 'DELETE',
+            'delete_type' => 'POST',
             'access_control_allow_origin' => '*',
             'access_control_allow_credentials' => false,
             'access_control_allow_methods' => array(
@@ -85,7 +85,7 @@ class UploadHandler
             // Set the following option to false to enable resumable uploads:
             'discard_aborted_uploads' => true,
             // Set to true to rotate images based on EXIF meta data, if available:
-            'orient_image' => false,
+            'orient_image' => true,
             'image_versions' => array(
                 // Uncomment the following version to restrict the size of
                 // uploaded images:
@@ -117,11 +117,11 @@ class UploadHandler
             $this->error_messages = array_merge($this->error_messages, $error_messages);
         }
         if ($initialize) {
-            $this->initialize($id);
+            $this->initialize($id, $delflag, $delfile);
         }
     }
 
-    protected function initialize($id) {
+    protected function initialize($id, $delflag, $delfile) {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'OPTIONS':
             case 'HEAD':
@@ -133,7 +133,7 @@ class UploadHandler
             case 'PATCH':
             case 'PUT':
             case 'POST':
-                $this->post();
+                $delflag == "no" ? $this->post() : $this->delete(true, $delfile);
                 break;
             case 'DELETE':
                 $this->delete(true, $id);
@@ -193,11 +193,12 @@ class UploadHandler
     }
 
     protected function set_file_delete_properties($file) {
-        $file->delete_url = $this->options['script_url'] . 'picture/handler/'  
-            .rawurlencode($file->name). '/' . $this->options['state'];
+//        $file->delete_url = $this->options['script_url'] . 'picture/handler/'  
+//            .rawurlencode($file->name). '/' . $this->options['state'];
+        $file->delete_url = rawurlencode($file->name);
         $file->delete_type = $this->options['delete_type'];
         if ($file->delete_type !== 'DELETE') {
-            $file->delete_url .= '&_method=DELETE';
+            //$file->delete_url .= '&_method=DELETE';
         }
         if ($this->options['access_control_allow_credentials']) {
             $file->delete_with_credentials = true;
@@ -758,22 +759,25 @@ class UploadHandler
         );
     }
 
-    public function delete($print_response = true, $id) {
+    public function delete($print_response = true, $file_name) {
         
         
         //$file_name = $this->get_file_name_param();
-        $file_name = $id;
+        //$file_name = $id;
         $file_path = $this->get_upload_path($file_name);
         error_log("!!!!!!!!" . $file_path);
-        $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
+        //$success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
+        $success = is_file($file_path) && $file_name[0] !== '.' && rename($file_path, $file_path . '.deleted');
         
-        if ($success) {
+        
+        if (!$success) {
             foreach($this->options['image_versions'] as $version => $options) {
                 if (!empty($version)) {
                     $file = $this->get_upload_path($file_name, $version);
                     
                     if (is_file($file)) {
-                        unlink($file);
+                        // unlink($file_path);
+                        rename($file_path, $file_path . '.deleted');
                     }
                 }
             }

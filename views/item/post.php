@@ -7,6 +7,8 @@
     </script>      
     
  <link rel="stylesheet" type="text/css" href="/css/item/post.css" media="screen" />      
+   <script type="text/javascript" src="/js/jquery.rating.pack.js"></script>
+   <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />   
 </head>
 
 
@@ -34,23 +36,23 @@
         <div id="itempictures" style="display:table-cell; text-align:center;height:100%;overflow: hidden;position:relative; width: 640px; ">
       
             
-            <div id="addpictures" style="position: absolute;z-index: 1 ; width:100%; margin-top: 193px;">
+            <div id="addpictures" style="position: absolute;z-index: 1 ; width: 640px; margin-top: 193px;">
                 <a id="add-pictures" href="#" class="fill-div" >
-                    <div style="font-size: 400%; margin: 0" >
+                    <div style="font-size: 400%; margin: 0; color: #FF00FF " >
                         +
                     </div>
-                    <div style="font-size: 200%; margin: 0">
+                    <div style="font-size: 200%; margin: 0; color: #FF00FF">
                         Add Pictures
                     </div>
                 </a>
             </div>                    
             
-            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; display: table-cell; text-align: center; ">
+            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; text-align: center; ">
 
 
             </div>
                                 
-            <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
+            <div id="thumbs" style=" bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
 
             </div>
        

@@ -5,9 +5,10 @@ CREATE TABLE USER
 	FIRST_NAME			VARCHAR(80),
 	LAST_NAME			VARCHAR(80),
 	EMAIL_ADDRESS			VARCHAR(80),
-	PASSWORD			VARCHAR(80),
+	PASSWORD			CHAR(128),
         PHONE_NUMBER                    VARCHAR(80),
-        PROFILE_PICTURE_FILENAME        VARCHAR(80)
+        PROFILE_PICTURE_FILENAME        VARCHAR(80),
+        JOIN_DATE                       DATETIME
 );
 
 drop table if exists ITEM;
@@ -28,7 +29,8 @@ CREATE TABLE ITEM
         LENDER_TO_BORROWER_COMMENTS     TEXT,
         BORROWER_TO_LENDER_COMMENTS     TEXT,
         CONFIRMATION_CODE               INTEGER,
-        ACTIVE_FLAG                     INTEGER
+        ACTIVE_FLAG                     INTEGER,
+        CREATE_DATE                     DATETIME
 );
 
 drop table if exists ITEM_STATE;
