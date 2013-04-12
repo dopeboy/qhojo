@@ -176,7 +176,7 @@ $("#uploaderframe").contents().find('.files').children('tr.template-download').c
 
 
     
-    if ($('#address').val() == '' || $('#thumbs').children().length == 0)
+    if ($('#address').val() == '' || $('#thumbs').children().length == 0 || $('#rate').val() == '' || $('#deposit').val() == ''  || $('#desc').text() == '')
     {
         alert("Missing some fields!");
         return false;

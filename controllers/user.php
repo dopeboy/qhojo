@@ -92,7 +92,11 @@ class User extends Controller
             {
                 $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password'], $this->postvalues['name']);
                 if ($userid != -1)
+                {
                     $_SESSION['userid']  = $userid;               
+                    $_SESSION['firstname'] = $this->postvalues['name'];                    
+                }
+                
                 $this->returnView($userid, false,true);
             }
             
@@ -107,7 +111,6 @@ class User extends Controller
                 
                 if ($status == 0)
                 {
-                    $_SESSION['firstname'] = $this->postvalues['firstname'];
                     $this->returnView($_SESSION['referrer'], false,true);
                 }
                 

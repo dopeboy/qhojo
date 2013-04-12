@@ -111,7 +111,7 @@
        <br/>
        <div id="content">
             <textarea id="description" name="description"  class="editable" type="text" rows="5" value="$" style="width:100%;font-size:100%;margin: 0; padding: 0;"></textarea>
-            <span class="noneditable" style="display:none"></span>
+            <span id="desc" class="noneditable" style="display:none"></span>
             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>   
        </div>
    </div>

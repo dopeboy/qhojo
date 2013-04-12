@@ -9,7 +9,7 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "demo.q
 else if ($_SERVER['SERVER_NAME'] == "yc.qhojo.com")
     $dbname = "qhojo2";
 
-$version =  shell_exec('git describe');
+$version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
 
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
