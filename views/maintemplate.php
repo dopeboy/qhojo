@@ -41,7 +41,7 @@
 
         <div id="footer">
             <div id="footercontent">
-                blog | <a href="/document/legal/">legal</a> | about | v<?php global $version; echo $version; ?>
+                blog | <a href="/document/legal/">legal</a> | about | <?php global $version; echo $version; ?>
             </div>
         </div>
     </div>

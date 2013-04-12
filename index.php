@@ -2,6 +2,14 @@
 
 session_start();
 
+// Kill the session if the last request was over 30 minutes ago
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) 
+{
+    session_unset();     // unset $_SESSION variable for the run-time 
+    session_destroy();   // destroy session data in storage
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+
 // global configuration file
 require("common.inc");
 

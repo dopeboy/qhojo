@@ -75,6 +75,7 @@ class User extends Controller
                               );
                 }
 
+                session_unset();
                 session_destroy();
                 
                 $this->returnView(0, false,false);
