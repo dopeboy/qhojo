@@ -47,7 +47,7 @@
                 </a>
             </div>                    
             
-            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; text-align: center; ">
+            <div id="picture" style="height: 530px; width: 640px; vertical-align: middle; text-align: center; display: table-cell;">
 
 
             </div>

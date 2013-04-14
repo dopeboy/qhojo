@@ -6,6 +6,7 @@
     <script type="text/javascript" src="/js/jquery-ui.js"> </script>
     <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+      <script src="https://checkout.stripe.com/v2/checkout.js"></script>
 </head>
 
 <?php if ($this->state == 0):  ?>
@@ -21,7 +22,7 @@
                             First name:
                     </td>
                     <td>
-                            <input class="textbox"  id="cname" type="text" name="name" autocomplete="off" minlength="1" />
+                            <input class="required textbox"  id="cname" type="text" name="name" autocomplete="off" minlength="1" />
                     </td>
                 </tr>                
                 <tr>
@@ -61,7 +62,7 @@
     </div>
 </div>
 
-<?php elseif ($this->state == 2): ?>
+<?php elseif ($this->state == 2 || $this->state == 4): ?>
     
 <div id="masterdiv">
     <div id="mainheading">Additional Fields</div>
@@ -69,14 +70,14 @@
     <div class="subcontent">
         Before you post or reserve an item, we'll need to know a couple more things about you. Fill out the fields below to continue:
         <br/><br/>
-        <form id="additionalform" action="/user/signup/null/3" method="post">
+        <form id="additionalform" action="/user/signup/null/5" method="post">
             <table>                  
                 <tr>
                     <td>
                             Phone Number:
                     </td>
                     <td>
-                            <input class="textbox" type="text" id="phonenumber" name="phonenumber" />                          
+                            <input class="textbox required" type="text" id="phonenumber" name="phonenumber" />                          
                     </td>
                 </tr>
                 <tr>
@@ -84,10 +85,22 @@
                             Profile Picture:
                     </td>
                     <td>
+                        
                         <div id="picture" style="">
                             
                         </div>
                         <button id="add-pictures" value="">Upload Picture</button>                          
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                            Billing Information:
+                    </td>
+                    <td>
+                        <div id="picture" style="">
+                            
+                        </div>
+                        <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make billing agreement</a> <?php } ?>
                     </td>
                 </tr>                
                 <tr style="">

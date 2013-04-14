@@ -105,9 +105,21 @@ class User extends Controller
                 $this->returnView(null, true,false);
             }
             
+            // Express checkout
             else if ($this->state == 3)
             {
-                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file']);
+                $viewmodel->paypalExpressCheckout();
+            }
+            
+            // Paypal billing agreement created where id=token
+            else if ($this->state == 4 && $this->id != null)
+            {
+                $this->returnView(null, true,false);
+            }
+            
+            else if ($this->state == 5)
+            {
+                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file'], $this->postvalues['token']);
                 
                 if ($status == 0)
                 {

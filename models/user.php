@@ -135,13 +135,26 @@ class UserModel extends Model
             return $row == null ? 0 : -1;
         }
         
-        public function signupExtra($userid,$phonenumber, $profilepicture)
+        public function signupExtra($userid,$phonenumber, $profilepicture, $paypal_token)
         {
+            // Add request-specific fields to the request string.
+            $nvpStr = "&TOKEN=$paypal_token";
+                
+            $httpParsedResponseAr = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
+            
+            if("SUCCESS" != strtoupper($httpParsedResponseAr["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($httpParsedResponseAr["ACK"])) 
+            {
+                exit(print_r($httpParsedResponseAr, true));
+                return -1;                                
+            }   
+
             $sqlParameters[":userid"] =  $userid;
             $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
             $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
-            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid');
+            $sqlParameters[":paypal_token"] =  $httpParsedResponseAr['BILLINGAGREEMENTID'];
+
+            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
             
             return $preparedStatement->rowCount() == 1 ? 0 : -1;                
@@ -195,6 +208,51 @@ class UserModel extends Model
             $row = $preparedStatement->fetch(PDO::FETCH_NUM);
 
             return $row[0];
+        }
+        
+        public function paypalExpressCheckout()
+        {
+            global $paypal_environment;
+            $environment = $paypal_environment;
+            
+            // Set request-specific fields.
+            $paymentAmount = urlencode('0');
+            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
+            $paymentType = urlencode('AUTHORIZATION');				// or 'Sale' or 'Order'
+            $billingType = urlencode('MerchantInitiatedBilling');
+            $billingAgreementDesc = urlencode('qhojo');
+           // $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/item/test2/");
+            $returnURL = urlencode('http://www.yahoo.com');
+            $cancelURL = urlencode('http://www.yahoo.com');
+            $shipping = '1';
+            
+            // Add request-specific fields to the request string.
+            $nvpStr = "&NOSHIPPING=$shipping&PAYMENTREQUEST_0_AMT=$paymentAmount&ReturnUrl=$returnURL&CANCELURL=$cancelURL&PAYMENTREQUEST_0_PAYMENTACTION=$paymentType&PAYMENTREQUEST_0_CURRENCYCODE=$currencyID&L_BILLINGTYPE0=$billingType&L_BILLINGAGREEMENTDESCRIPTION0=$billingAgreementDesc";
+
+            // Execute the API operation; see the PPHttpPost function above.
+            $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $nvpStr);
+
+            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            {
+                // Redirect to paypal.com.
+                $token = urldecode($httpParsedResponseAr["TOKEN"]);
+                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
+                
+                if("sandbox" === $environment || "beta-sandbox" === $environment) 
+                {
+                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
+                }
+                
+                header("Location: $payPalURL");
+                exit;
+            } 
+            
+            else  
+            {
+                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+            }
+
+            return null;            
         }
 }
 

@@ -3,7 +3,6 @@
 require "Services/Twilio.php";
 
 
-
 class ItemModel extends Model 
 {
 	public function index($itemid, $userid) 
@@ -34,10 +33,53 @@ class ItemModel extends Model
 		return $rows;
 	}       
         
-	public function test() 
-	{
-		return null;
-	}           
+//	public function test() 
+//	{
+//            global $paypal_environment;
+//            $environment = $paypal_environment;
+//            
+//            // Set request-specific fields.
+//            $paymentAmount = urlencode('0');
+//            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
+//            $paymentType = urlencode('AUTHORIZATION');				// or 'Sale' or 'Order'
+//            $billingType = urlencode('MerchantInitiatedBilling');
+//            $billingAgreementDesc = urlencode('qhojo');
+//           // $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/item/test2/");
+//            $returnURL = urlencode('http://www.yahoo.com');
+//            $cancelURL = urlencode('http://www.yahoo.com');
+//            $shipping = '1';
+//            
+//            // Add request-specific fields to the request string.
+//            $nvpStr = "&NOSHIPPING=$shipping&PAYMENTREQUEST_0_AMT=$paymentAmount&ReturnUrl=$returnURL&CANCELURL=$cancelURL&PAYMENTREQUEST_0_PAYMENTACTION=$paymentType&PAYMENTREQUEST_0_CURRENCYCODE=$currencyID&L_BILLINGTYPE0=$billingType&L_BILLINGAGREEMENTDESCRIPTION0=$billingAgreementDesc";
+//
+//            // Execute the API operation; see the PPHttpPost function above.
+//            $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $nvpStr);
+//
+//            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
+//                    // Redirect to paypal.com.
+//                    $token = urldecode($httpParsedResponseAr["TOKEN"]);
+//                    $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
+//                    if("sandbox" === $environment || "beta-sandbox" === $environment) {
+//                            $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
+//                    }
+//                    header("Location: $payPalURL");
+//                    exit;
+//            } else  {
+//                    exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+//            }
+//
+//            return null;
+//	}           
+//        
+//        public function test2($token)
+//        {
+//            // Add request-specific fields to the request string.
+//            $nvpStr = "&TOKEN=$token";
+//                
+//            $httpParsedResponseAr = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
+//exit(print_r($httpParsedResponseAr, true));
+//return null;
+//        }
         
 	public function search($query) 
 	{
@@ -209,6 +251,7 @@ class ItemModel extends Model
                         error_log("4");    
                         
                         // TODO: MONEY STUFF HAPPENS HERE
+                        $this->paypalDoReferenceTransaction($row['RATE']*$row['DURATION'],$row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
                         
                         // send an email to lender and borrower and ask for feedback
                         $total = $row["RATE"] * $row["DURATION"];
@@ -531,6 +574,48 @@ class ItemModel extends Model
             
             return $preparedStatement->rowCount() == 1 ? 0 : 1;            
         }
+             
+        public function paypalDoReferenceTransaction($amount, $billing_agreement_id)
+        {
+            global $paypal_environment;
+            $environment = $paypal_environment;
+            
+            // Set request-specific fields.
+            $paymentAmount = urlencode($amount);
+            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
+            $paymentAction = urlencode('SALE');				// or 'Sale' or 'Order'
+            $referenceID = urlencode($billing_agreement_id);
+            
+            // Add request-specific fields to the request string.
+            $nvpStr = "&AMT=$paymentAmount&PAYMENTACTION=$paymentAction&CURRENCYCODE=$currencyID&REFERENCEID=$referenceID";
+
+            // Execute the API operation; see the PPHttpPost function above.
+            $httpParsedResponseAr = $this->PPHttpPost('DoReferenceTransaction', $nvpStr);
+
+            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            {
+                // Redirect to paypal.com.
+                $token = urldecode($httpParsedResponseAr["TOKEN"]);
+                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
+                
+                if("sandbox" === $environment || "beta-sandbox" === $environment) 
+                {
+                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
+                }
+                
+                header("Location: $payPalURL");
+                exit;
+            } 
+            
+            else  
+            {
+                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+            }
+
+            return null;            
+        }        
+        
+        
 }
 
 ?>

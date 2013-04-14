@@ -17,7 +17,13 @@ class Item extends Controller
         protected function test()
         {
 		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->test(), false,false);            
+		$this->returnView($viewmodel->test(), true,false);            
+        }
+        
+        protected function testest()
+        {
+		$viewmodel = new ItemModel();
+		$this->returnView($viewmodel->test2($this->id), true,false);                     
         }
         
 	protected function search() 
