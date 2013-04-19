@@ -100,6 +100,8 @@ class User extends Controller
                 $this->returnView($userid, false,true);
             }
             
+            // --- Extra signup
+            
             else if ($this->state == 2)
             {
                 $this->returnView(null, true,false);

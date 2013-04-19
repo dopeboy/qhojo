@@ -6,7 +6,6 @@
     <script type="text/javascript" src="/js/jquery-ui.js"> </script>
     <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-      <script src="https://checkout.stripe.com/v2/checkout.js"></script>
 </head>
 
 <?php if ($this->state == 0):  ?>
