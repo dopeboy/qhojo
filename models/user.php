@@ -140,21 +140,30 @@ class UserModel extends Model
             // Add request-specific fields to the request string.
             $nvpStr = "&TOKEN=$paypal_token";
                 
-            $httpParsedResponseAr = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
+            $firstResponse = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
             
-            if("SUCCESS" != strtoupper($httpParsedResponseAr["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($httpParsedResponseAr["ACK"])) 
+            if("SUCCESS" != strtoupper($firstResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($firstResponse["ACK"])) 
             {
-                exit(print_r($httpParsedResponseAr, true));
+                exit(print_r($firstResponse, true));
                 return -1;                                
             }   
+            
+            $secondResponse = $this->PPHttpPost('GetBillingAgreementCustomerDetails', $nvpStr);
+            
+            if("SUCCESS" != strtoupper($secondResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($secondResponse["ACK"])) 
+            {
+                exit(print_r($secondResponse, true));
+                return -1;                                
+            }               
 
             $sqlParameters[":userid"] =  $userid;
             $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
             $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
-            $sqlParameters[":paypal_token"] =  urldecode($httpParsedResponseAr['BILLINGAGREEMENTID']); // contains a dash which comes out as a %2d
+            $sqlParameters[":paypal_token"] =  urldecode($firstResponse['BILLINGAGREEMENTID']); // contains a dash which comes out as a %2d
+            $sqlParameters[":paypal_email"] = urldecode($secondResponse['EMAIL']);
 
-            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token where ID=:userid');
+            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token, PAYPAL_EMAIL=:paypal_email where ID=:userid');
             $preparedStatement->execute($sqlParameters);       
             
             return $preparedStatement->rowCount() == 1 ? 0 : -1;                

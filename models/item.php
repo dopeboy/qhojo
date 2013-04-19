@@ -35,16 +35,16 @@ class ItemModel extends Model
         
 	public function test($paypal_token) 
 	{
-//            $nvpStr = "&TOKEN=$paypal_token";
-//                
-//            $httpParsedResponseAr = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
-//            
-//           // if("SUCCESS" != strtoupper($httpParsedResponseAr["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($httpParsedResponseAr["ACK"])) 
-//           // {
-//            print(urldecode($httpParsedResponseAr['BILLINGAGREEMENTID']));
-//                exit(print_r($httpParsedResponseAr, true));
-//            //    return -1;                                
-//            //}   
+            $nvpStr = "&TOKEN=$paypal_token";
+                
+            $httpParsedResponseAr = $this->PPHttpPost('GetBillingAgreementCustomerDetails', $nvpStr);
+            
+           // if("SUCCESS" != strtoupper($httpParsedResponseAr["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($httpParsedResponseAr["ACK"])) 
+           // {
+           // print(urldecode($httpParsedResponseAr['BILLINGAGREEMENTID']));
+                exit(print_r($httpParsedResponseAr, true));
+            //    return -1;                                
+            //}   
         }
         
         public function testest($id)
@@ -225,7 +225,7 @@ class ItemModel extends Model
                         $this->paypalDoReferenceTransaction($row['RATE']*$row['DURATION'],$row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
                         
                         // MAKE TRANSFER TO LENDER
-                        
+                        $this->paypalMassPayToLender($row['LENDER_PAYPAL_EMAIL'],($row['RATE']*$row['DURATION']*0.06)-0.5);
                         
                         // send an email to lender and borrower and ask for feedback
                         $total = $row["RATE"] * $row["DURATION"];
@@ -568,27 +568,42 @@ class ItemModel extends Model
 
             if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
             {
-                // Redirect to paypal.com.
-                $token = urldecode($httpParsedResponseAr["TOKEN"]);
-                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
-                
-                if("sandbox" === $environment || "beta-sandbox" === $environment) 
-                {
-                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
-                }
-                
-                header("Location: $payPalURL");
-                exit;
+                return 0;
             } 
             
             else  
             {
-                error_log('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
-                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+                error_log('DoReferenceTransaction failed: ' . print_r($httpParsedResponseAr, true));
+                exit('DoReferenceTransaction failed: ' . print_r($httpParsedResponseAr, true));
             }
 
             return null;            
-        }        
+        }
+        
+        public function paypalMassPayToLender($paypal_email, $amount)
+        {
+            $recvType = 'EmailAddress';							
+            $currencyID = urlencode('USD');
+            
+            // Add request-specific fields to the request string.
+            $nvpStr = "&RECEIVERTYPE=$recvType&L_EMAIL0=$paypal_email&L_AMT0=$amount&CURRENCYCODE=$currencyID";
+            
+            // Execute the API operation; see the PPHttpPost function above.
+            $httpParsedResponseAr = $this->PPHttpPost('MassPay', $nvpStr);
+
+            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            {
+                return 0;
+            } 
+            
+            else  
+            {
+                error_log('MassPay failed: ' . print_r($httpParsedResponseAr, true));
+                exit('MassPay failed: ' . print_r($httpParsedResponseAr, true));
+            }
+
+            return null;                
+        }
         
         
 }

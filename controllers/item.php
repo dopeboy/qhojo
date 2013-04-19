@@ -16,9 +16,9 @@ class Item extends Controller
         
         protected function test()
         {
-		//$viewmodel = new ItemModel();
+		$viewmodel = new ItemModel();
                // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
-             //   $viewmodel->test('EC-20E63785JV446144G');
+                $viewmodel->test('EC-20E63785JV446144G');
         }
         
         protected function testest()
