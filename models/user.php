@@ -152,7 +152,7 @@ class UserModel extends Model
             $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
             $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
-            $sqlParameters[":paypal_token"] =  $httpParsedResponseAr['BILLINGAGREEMENTID'];
+            $sqlParameters[":paypal_token"] =  urldecode($httpParsedResponseAr['BILLINGAGREEMENTID']); // contains a dash which comes out as a %2d
 
             $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token where ID=:userid');
             $preparedStatement->execute($sqlParameters);       

@@ -16,14 +16,16 @@ class Item extends Controller
         
         protected function test()
         {
-		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->test(), true,false);            
+		//$viewmodel = new ItemModel();
+               // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
+             //   $viewmodel->test('EC-20E63785JV446144G');
         }
         
         protected function testest()
         {
-		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->test2($this->id), true,false);                     
+		//$viewmodel = new ItemModel();
+		#$viewmodel->testest('B%2d95E05095G29611425');
+               // $viewmodel->paypalDoReferenceTransaction(10,'B%2d95E05095G29611425');
         }
         
 	protected function search() 
