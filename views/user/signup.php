@@ -84,9 +84,9 @@
     <div id="mainheading">Additional Fields</div>
     <hr/>
     <div class="subcontent">
-        Before you post or reserve an item, we'll need to know a couple more things about you. Fill out the fields below to continue:
+        Before you post or reserve an item, we'll need to know a couple more things about you (like how to pay you, how to text you, and what you look like). Fill out the fields below to continue:
         <br/><br/>
-        <form id="additionalform" action="/user/signup/null/5" method="post">
+        <form id="additionalform" action="/user/signup/null/5" method="post" style="margin: 0">
             <table>  
                 <tr>
                     <td>
@@ -94,7 +94,7 @@
                     </td>
                     <td>
                         <div id="billing" style="">
-                            <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make Paypal billing agreement</a> <?php } ?>                            
+                            <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make Paypal Billing Agreement</a> <?php } ?>                            
                         </div>
                     </td>
                 </tr>     

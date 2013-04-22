@@ -130,7 +130,7 @@ class UserModel extends Model
         public function checkExtra($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null) LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null or PAYPAL_BILLING_AGREEMENT_ID is null or PAYPAL_EMAIL is null) LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
