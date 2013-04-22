@@ -11,6 +11,11 @@
     
     <div id="container">
         <div id="header">
+            <?php if ($_COOKIE['iwashere'] != "yes") { setcookie("iwashere", "yes", time()+315360000);  ?>
+            <div id="notify" style="background: rgba(255,0,0, .4); height:40px; text-align: center; line-height:2.5em">
+                First time visitor? Check out our <a href="/document/howitworks/">how-it-works guide</a>.
+            </div>
+            <?php } ?>
             <div id="banner">
                 <div class="threecol">
                     <div style="text-align:left;margin-top: 10px">

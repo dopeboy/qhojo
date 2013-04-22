@@ -13,24 +13,45 @@ $(document).ready(function()
     // lose focus
     $('.editable').blur(function() 
     {
-       //alert($(this).parent().find('.noneditable').attr('id'));
         var g = $(this).parent().find('.noneditable');
         var h = $(this).parent().find('.editPencil');
         
         // if there is text
       if ($(this).val().length > 0)
           {
+            if ($(this).attr('id') == 'deposit' && $(this).val() > 500)
+            {
+                alert("As of now, qhojo is not taking items worth more than $500.");
+                $(this).val('');
+            }
+            
+            else
+            {
               // hide the input box
               $(this).hide();
            
               g.text($(this).val());
               g.show();
               h.show();
-              
+            } 
               // unhide the div and put the text in there
           }
     });		
     
+      $(".editPencildropdown").click(function() 
+    {
+        var g = $(this).parent().find('.noneditable');
+        var h = $(this).parent().find('.editabledropdown');
+        
+        // hide the div
+        $(this).hide();
+        g.hide();
+        
+        // unhide the input box
+         h.show();
+         h.focus();      
+    });
+
     $(".editPencil").click(function() 
     {
         var g = $(this).parent().find('.noneditable');
@@ -204,10 +225,10 @@ function showResponse(responseText, statusText, xhr, $form)
     // is the json data object returned by the server 
 
  
-    if (responseText != null)
+    if (responseText != null && responseText != -1)
         window.location = "/item/post/" + responseText + "/2";
     else
-        alert("Error making reservation!");
+        alert("Error making post!");
  }  
 
 

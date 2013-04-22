@@ -14,12 +14,12 @@
 
 <div id="masterdiv">
     <?php if ($this->state == 0) { ?>
-    
+    <title>qhojo - Post</title>
     <form id="myForm" method="post" action="/item/post/null/1" style="margin: 0">
         
     <div id="topbar" style="width:100%;display:table;">
         <div id="mainheading" style="display:table-cell;">
-                <input id="title" name="title" class="editable" type="text" value="insert title here" style="font-size:100%; border: 1px solid #aaaaaa;">
+                <input id="title" name="title" class="editable" type="text" value="insert title here" style="font-size:100%; border: 1px solid #aaaaaa; width:500px">
                 <span id ="gg" class="noneditable" style="display:none"></span>
                 <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>        
         </div>
@@ -150,6 +150,7 @@
     
     <?php } ?>
     <?php if ($this->state == 2) { ?>
+    <title>qhojo - Post submitted</title>
     <div id="mainheading">
         Thanks!
     </div>

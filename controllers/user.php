@@ -86,11 +86,12 @@ class User extends Controller
             $viewmodel = new UserModel();
             
             if ($this->state == 0)
-                $this->returnView($viewmodel->signup(), true,false);
+                $this->returnView($viewmodel->signup(new LocationModel()), true,false);
             
             else if ($this->state == 1)
             {
-                $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password'], $this->postvalues['name']);
+                $userid = $viewmodel->signupAction($this->postvalues['emailaddress'],$this->postvalues['password'], $this->postvalues['name'], $this->postvalues['locationid']);
+                
                 if ($userid != -1)
                 {
                     $_SESSION['userid']  = $userid;               

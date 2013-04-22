@@ -7,6 +7,8 @@
 <div id="masterdiv">
     <?php if ($this->state == 0) { ?>  
     
+        <title>qhojo - Request <?php echo $viewmodel[0]['TITLE'];?></title>
+    
         <form id="myForm" action="/item/request/<?php echo $viewmodel[0]['ITEM_ID'] ?>/1" method="post" style="padding:0px; margin: 0px">
             <div id="mainheading">
                 Rental Request - <a href="/item/index/<?php echo $viewmodel[0]['ITEM_ID'];?>"><?php echo $viewmodel[0]['TITLE'];?></a>
@@ -128,6 +130,8 @@
         </form>
     
     <?php  } else if ($this->state == 2) { ?>
+        <title>qhojo - Request Submitted <?php echo $viewmodel[0]['TITLE'];?></title>
+        
     <div id="mainheading">
         Rental Request Submitted
     </div> 

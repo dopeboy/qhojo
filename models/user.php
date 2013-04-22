@@ -98,12 +98,13 @@ class UserModel extends Model
 		return $row;	                
         }          
         
-        public function signup()
-        {            
-            return 0;
+        public function signup($location_model)
+        {   
+            $row[] = $location_model->getAllLocations();
+            return $row;
         }
         
-        public function signupAction($emailaddress, $password, $first_name)
+        public function signupAction($emailaddress, $password, $first_name, $locationid)
         {
             // Does this email address exist?
             $sqlParameters[":email_address"] =  $emailaddress;
@@ -119,7 +120,8 @@ class UserModel extends Model
             $sqlParameters[":userid"] =  $userid = getRandomID();
             $sqlParameters[":first_name"] =  $first_name;
             $sqlParameters[":join_date"] =  date("Y-m-d H:i:s");
-            $preparedStatement = $this->dbh->prepare('insert into USER (ID,FIRST_NAME,EMAIL_ADDRESS,PASSWORD, JOIN_DATE) VALUES (:userid,:first_name, :email_address, :password, :join_date)');
+            $sqlParameters[":location_id"] =  $locationid;
+            $preparedStatement = $this->dbh->prepare('insert into USER (ID,FIRST_NAME,EMAIL_ADDRESS,LOCATION_ID, PASSWORD, JOIN_DATE) VALUES (:userid,:first_name, :email_address, :location_id, :password, :join_date)');
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? $userid : -1;
@@ -212,6 +214,7 @@ class UserModel extends Model
         public function getRequestCount($userid)
         {
             $sqlParameters[":userid"] =  $userid;
+            //$preparedStatement = $this->dbh->prepare('select (select count(*) from ITEM_REQUESTS_VW where LENDER_ID=:userid) + (select count(*) from ITEM_VW where (LENDER_ID=:userid or BORROWER_ID=:userid) and ITEM_STATE_ID=2 and TIMESTAMPDIFF(HOUR,NOW(),END_DATE) <= 24);');            
             $preparedStatement = $this->dbh->prepare('select count(*) from ITEM_REQUESTS_VW where LENDER_ID=:userid');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_NUM);

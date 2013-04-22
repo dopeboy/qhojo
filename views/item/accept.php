@@ -5,6 +5,8 @@
          <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />  
 </head>
 
+<title>qhojo - Rental Request Accepted</title>
+
 <div id="masterdiv">
     
     <div id="mainheading">

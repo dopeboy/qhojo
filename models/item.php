@@ -84,6 +84,10 @@ class ItemModel extends Model
 	{
 		$sqlParameters[":itemid"] =  $itemid;
 		$sqlParameters[":userid"] =  $userid;
+                
+                if ($duration != 1 || $duration != 2 || $duration != 3)
+                    $duration = 1;
+               
 		$sqlParameters[":duration"] =  $duration;
                 $sqlParameters[":message"] =  $message;
                 $sqlParameters[":requestid"] =  getRandomID();
@@ -193,63 +197,73 @@ class ItemModel extends Model
 	{
             error_log("cc:" . $confirmation_code);
             error_log("ph:" . $phone_number);
-		$sqlParameters[":confirmation_code"] =  $confirmation_code;
-                $sqlParameters[":phone_number"] =  $phone_number;
-                $sqlParameters[":status_id"] =  2;
-                $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and LENDER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
-		$preparedStatement->execute($sqlParameters);
-                $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-                
-                error_log("1");
+          
+            $sqlParameters[":confirmation_code"] =  $confirmation_code;
+            $sqlParameters[":phone_number"] =  $phone_number;
+            $sqlParameters[":status_id"] =  2;
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and LENDER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            error_log("1");
+            if ($preparedStatement->rowCount() == 1)
+            {
+                $sqlParameters = null;
+                $sqlParameters[":status_id"] =  3;
+                $sqlParameters[":item_id"] =  $row['ITEM_ID'];
+                $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
+                $preparedStatement->execute($sqlParameters);    
+                error_log("2");    
                 if ($preparedStatement->rowCount() == 1)
                 {
-                    $sqlParameters = null;
-                    $sqlParameters[":status_id"] =  3;
-                    $sqlParameters[":item_id"] =  $row['ITEM_ID'];
-                    $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
-                    $preparedStatement->execute($sqlParameters);    
-                    error_log("2");    
-                    if ($preparedStatement->rowCount() == 1)
-                    {
-                        error_log("3");    
-                        $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item and carry on with the rest of your day";
+                    error_log("3");    
+                    $message = "Hey " . $row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item and carry on with the rest of your day";
 
-                        global $TwilioAccountSid;   
-                        global $TwilioAuthToken;
-                        global $borrower_number;
-                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                        $sms = $client->account->sms_messages->create($borrower_number, $row["BORROWER_PHONE_NUMBER"],$message);   
-                        error_log("4");    
-                        
-                        // DEDUCT FROM BORROWER
-                        $this->paypalDoReferenceTransaction($row['RATE']*$row['DURATION'],$row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
-                        
-                        // MAKE TRANSFER TO LENDER
-                        $this->paypalMassPayToLender($row['LENDER_PAYPAL_EMAIL'],($row['RATE']*$row['DURATION']*0.06)-0.5);
-                        
-                        // send an email to lender and borrower and ask for feedback
-                        $total = $row["RATE"] * $row["DURATION"];
-                        
-                        $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . $total . " minus a 3% transaction fee. <br/><br/>";
-                        $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
-                        $message_to_lender .= "<br/><br/>-team qhojo";
-                        
-                        $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
-                        $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . $total . ". <br/><br/>";
-                        $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
-                        $message_to_borrower .= "<br/><br/>-team qhojo";                        
-                        
-                        $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
-                        $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
-                        
-                        return 0;
-                    }
+                    global $TwilioAccountSid;   
+                    global $TwilioAuthToken;
+                    global $borrower_number;
+                    $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+                    $sms = $client->account->sms_messages->create($borrower_number, $row["BORROWER_PHONE_NUMBER"],$message);   
+                    error_log("4");    
+
+                    // DEDUCT FROM BORROWER
+                    $status = $this->paypalDoReferenceTransaction($row['RATE']*$row['DURATION'],$row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
+
+                    if ($status != 0)
+                        exit("we got problems - 1");
                     
-                    return 2;
+                    global $transaction_fee_variable;
+                    global $transaction_fee_fixed;
+                    $total_without_fee = $row["RATE"] * $row["DURATION"];
+                    $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
+                    
+                    // MAKE TRANSFER TO LENDER
+                    $status = $this->paypalMassPayToLender($row['LENDER_PAYPAL_EMAIL'],$total_with_fee);
+                    
+                    if ($status != 0)
+                        exit("we got problems - 2");
+                    
+                    // send an email to lender and borrower and ask for feedback
+                    $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
+                    $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . $total_with_fee . ". <br/><br/>";
+                    $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
+                    $message_to_lender .= "<br/><br/>-team qhojo";
+
+                    $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
+                    $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . $total_without_fee . ". <br/><br/>";
+                    $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
+                    $message_to_borrower .= "<br/><br/>-team qhojo";                        
+
+                    $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
+                    $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
+
+                    return 0;
                 }
 
-		return 1;
+                return 2;
+            }
+
+            return 1;
 	}
 
 	public function getDuration($itemid)
@@ -272,6 +286,11 @@ class ItemModel extends Model
         
 	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files)
 	{ 
+            if ($deposit > 500)
+            {
+                return -1;
+            }
+            
             $filelist = array();
             
             foreach ($files as $file)
@@ -574,10 +593,8 @@ class ItemModel extends Model
             else  
             {
                 error_log('DoReferenceTransaction failed: ' . print_r($httpParsedResponseAr, true));
-                exit('DoReferenceTransaction failed: ' . print_r($httpParsedResponseAr, true));
+                return -1;
             }
-
-            return null;            
         }
         
         public function paypalMassPayToLender($paypal_email, $amount)
@@ -599,10 +616,8 @@ class ItemModel extends Model
             else  
             {
                 error_log('MassPay failed: ' . print_r($httpParsedResponseAr, true));
-                exit('MassPay failed: ' . print_r($httpParsedResponseAr, true));
+                return -1;
             }
-
-            return null;                
         }
         
         

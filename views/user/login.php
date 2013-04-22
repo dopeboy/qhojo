@@ -4,6 +4,8 @@
     <link type="text/css" rel="stylesheet" href="/css/user/login.css">
 </head>
 
+<title>qhojo - login</title>
+
 <div id="masterdiv">
     <div id="mainheading">Login</div>
     <hr/>

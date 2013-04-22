@@ -1,6 +1,8 @@
+<title> qhojo - legal </title>
+
 <div id="masterdiv">
     <div id="mainheading">
-        Legal
+        Legal (Under Construction)
     </div>
     <hr/>
     <div class="subheading">

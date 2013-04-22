@@ -10,6 +10,14 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
 }
 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
+
+if ($_COOKIE['iwashere'] != "yes") 
+{ 
+    //setcookie("iwashere", "yes", time()+315360000);  
+    //header("Location: http://example.com/index-first-time-visitor.php"); 
+}
+
+
 // global configuration file
 require("common.inc");
 

@@ -5,6 +5,8 @@
          <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />  
 </head>
 
+<title>qhojo - Submit Feedback</title>
+
 <div id="masterdiv">
     
     <?php if ($this->state == 0 || $this->state == 1) { ?>

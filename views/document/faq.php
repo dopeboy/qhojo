@@ -1,5 +1,5 @@
 
-
+<title>qhojo - faq</title>
 
 <div id="masterdiv">
     <div id="mainheading">

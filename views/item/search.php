@@ -4,7 +4,7 @@
         <link rel="stylesheet" type="text/css" href="/css/item/main.css" media="screen" />  
 </head>
 
-
+<title>qhojo - Search results for "<?php echo $this->id ?>"</title>
 
 <div id="masterdiv">
     <div id="mainheading">Search results for "<?php echo $this->id ?>"</div>

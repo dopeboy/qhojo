@@ -6,12 +6,16 @@ CREATE TABLE USER
 	LAST_NAME			VARCHAR(80),
 	EMAIL_ADDRESS			VARCHAR(80),
 	PASSWORD			CHAR(128),
+        LOCATION_ID                     INTEGER,
         PHONE_NUMBER                    VARCHAR(80),
         PROFILE_PICTURE_FILENAME        VARCHAR(80),
         PAYPAL_BILLING_AGREEMENT_ID     VARCHAR(255),
         PAYPAL_EMAIL                    VARCHAR(255),
         JOIN_DATE                       DATETIME
 );
+
+ALTER TABLE USER ADD INDEX ID (ID);
+ALTER TABLE USER ADD INDEX EMAIL_ADDRESS (EMAIL_ADDRESS);
 
 drop table if exists ITEM;
 CREATE TABLE ITEM
@@ -35,6 +39,9 @@ CREATE TABLE ITEM
         CREATE_DATE                     DATETIME
 );
 
+ALTER TABLE ITEM ADD INDEX ID (ID);
+ALTER TABLE ITEM ADD INDEX LENDER_ID (LENDER_ID);
+
 drop table if exists ITEM_STATE;
 CREATE TABLE ITEM_STATE
 (
@@ -50,6 +57,8 @@ CREATE TABLE ITEM_PICTURES
         PRIMARY_FLAG                    BOOL
 );
 
+ALTER TABLE ITEM_PICTURES ADD INDEX ITEM_ID (ITEM_ID);
+
 drop table if exists ITEM_REQUESTS;
 CREATE TABLE ITEM_REQUESTS
 (
@@ -61,20 +70,15 @@ CREATE TABLE ITEM_REQUESTS
         ACCEPTED_FLAG                   BOOL
 );
 
+ALTER TABLE ITEM_REQUESTS ADD INDEX ITEM_ID (ITEM_ID);
+ALTER TABLE ITEM_REQUESTS ADD INDEX REQUESTER_ID (REQUESTER_ID);
+
 drop table if exists LOCATION;
 CREATE TABLE LOCATION
 (
         ID                              INTEGER PRIMARY KEY,
         BOROUGH                         VARCHAR(80), 
 	NEIGHBORHOOD                    VARCHAR(80)
-);
-
--- POSTING_FEE in cents
-drop table if exists COMMISSION;
-CREATE TABLE COMMISSION
-(
-        TRANSACTION_FEE                 FLOAT,
-        POSTING_FEE                     INTEGER
 );
 
 /* VIEWS                                               */

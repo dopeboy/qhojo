@@ -30,7 +30,7 @@
     </tr>
 
     
-    <?php if (empty($items)) { ?> <tr><td colspan="10"><i>No data</i></td></tr> <?php } ?>
+    <?php if (empty($items)) { ?> <tr><td colspan="9"><i>No data</i></td></tr> <?php } ?>
     
     
     <?php foreach($items as $item) { ?>

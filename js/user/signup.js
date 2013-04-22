@@ -14,6 +14,20 @@ $(document).ready(function()
     }        
   }
     });
+    
+        $('#additionalform').validate( {
+    rules: {
+        "terms": {
+            required: true,
+            minlength: 1
+        },
+  errorPlacement: function ($error, $element) {
+       
+          
+        
+    }        
+  }
+    });
  
     $('#uploaderframe').attr('src', '/picture/upload/null/1'); 
 
@@ -27,9 +41,18 @@ $(document).ready(function()
                     alert ("Error");
             }
         });
-        
+
     $('#additionalform')
         .ajaxForm({
+            beforeSubmit: function (formData, jqForm, options) 
+            {
+                if ($('#billing').text().trim() != 'Complete' || $('#picture').children().length != 2)
+                {
+                    alert ("Missing fields.");
+                    return false;
+                }
+            },
+            
             success : function (response) 
             {   
                 if (response == -1)

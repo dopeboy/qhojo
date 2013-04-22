@@ -4,6 +4,8 @@
   
 </head>
 
+<title>qhojo - main</title>
+
 <div id="masterdiv">
     <div id="mainheading">All Items</div>
     <hr/>

@@ -10,6 +10,8 @@
               
 </head>
 
+<title>qhojo - <?php echo $viewmodel[0]['TITLE'] ?></title>
+
 <div id="masterdiv">
     <div id="topbar" style="width:100%;display:table;">
         <div id="mainheading" style="display:table-cell;"><?php echo $viewmodel[0]['TITLE'] ?></div>

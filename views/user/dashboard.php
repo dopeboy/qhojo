@@ -5,6 +5,7 @@
         <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" media="screen" />
 </head>
 
+<title>qhojo - dashboard</title>
 
 <div id="masterdiv">
     <div id="mainheading">
@@ -40,7 +41,7 @@
                     </td>
                 </tr>
             
-                <?php if (empty($items)) { ?> <tr><td colspan="10"><i>No data</i></td></tr> <?php } ?>
+                <?php if (empty($items)) { ?> <tr><td colspan="6"><i>No data</i></td></tr> <?php } ?>
 
                 <?php foreach($items as $item) { ?>
 

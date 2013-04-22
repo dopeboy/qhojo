@@ -9,7 +9,9 @@
 </head>
 
 <?php if ($this->state == 0):  ?>
-    
+
+<title>qhojo - sign up</title>
+
 <div id="masterdiv">
     <div id="mainheading">Sign Up</div>
     <hr/>
@@ -23,6 +25,19 @@
                     <td>
                             <input class="required textbox"  id="cname" type="text" name="name" autocomplete="off" minlength="1" />
                     </td>
+                </tr>   
+                <tr>
+                    <td>
+                            Location:
+                    </td>
+                    <td>
+                        <select id ="location" name="locationid" style="height: 30px; " class="required dropdown-menu">
+                            <option></option>
+                            <?php foreach ($viewmodel[0] as $location) { ?>
+                            <option value="<?php echo $location['ID']; ?>"><?php echo $location['NEIGHBORHOOD'] . ',' . $location['BOROUGH']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </td>                    
                 </tr>                
                 <tr>
                     <td>
@@ -37,7 +52,7 @@
                             Password:
                     </td>
                     <td>
-                            <input class="textbox" type="password" name="password" minlength="5" />                          
+                            <input class="required textbox" type="password" name="password" minlength="5" />                          
                     </td>
                 </tr>                   
                 <tr style="">
@@ -62,7 +77,9 @@
 </div>
 
 <?php elseif ($this->state == 2 || $this->state == 4): ?>
-    
+
+<title>qhojo - additional fields signup</title>
+
 <div id="masterdiv">
     <div id="mainheading">Additional Fields</div>
     <hr/>
@@ -70,13 +87,23 @@
         Before you post or reserve an item, we'll need to know a couple more things about you. Fill out the fields below to continue:
         <br/><br/>
         <form id="additionalform" action="/user/signup/null/5" method="post">
-            <table>                  
+            <table>  
+                <tr>
+                    <td>
+                            Billing Information:
+                    </td>
+                    <td>
+                        <div id="billing" style="">
+                            <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make Paypal billing agreement</a> <?php } ?>                            
+                        </div>
+                    </td>
+                </tr>     
                 <tr>
                     <td>
                             Phone Number:
                     </td>
                     <td>
-                            <input class="textbox required" type="text" id="phonenumber" name="phonenumber" />                          
+                            <input class="required textbox" type="text" id="phonenumber" name="phonenumber" />                          
                     </td>
                 </tr>
                 <tr>
@@ -90,18 +117,7 @@
                         </div>
                         <button id="add-pictures" value="">Upload Picture</button>                          
                     </td>
-                </tr>
-                <tr>
-                    <td>
-                            Billing Information:
-                    </td>
-                    <td>
-                        <div id="picture" style="">
-                            
-                        </div>
-                        <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make billing agreement</a> <?php } ?>
-                    </td>
-                </tr>                
+                </tr>           
                 <tr style="">
                     <td colspan="2">
                            <input type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" />

@@ -8,7 +8,7 @@
 <div id="masterdiv">
 
     <?php if ($this->state == 0) { ?>
-    
+    <title>qhojo - Delete Confirmation</title>
     <div id="mainheading">
         Delete Confirmation - <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>
     </div>
@@ -20,6 +20,7 @@
     </form>
     
     <?php } else if ($this->state == 2) { ?>
+    <title>qhojo - Deleted</title>
     <div id="mainheading">
         Item Deleted
     </div>    

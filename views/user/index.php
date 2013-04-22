@@ -7,10 +7,11 @@
          <link rel="stylesheet" type="text/css" href="/css/user/index.css" media="screen" />
 </head>
 
+<title>qhojo - <?php echo $viewmodel["USER"]["FIRST_NAME"]?></title>
+
 <div id="masterdiv">
     <div id="mainheading">
-        <?php echo $viewmodel["USER"]["FIRST_NAME"] . " " . $viewmodel["USER"]["LAST_NAME"]?>
-        
+        <?php echo $viewmodel["USER"]["FIRST_NAME"]?>
     </div>
     <hr/>
     <img id="profilepicture" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME']?>"><br/>
