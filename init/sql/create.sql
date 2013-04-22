@@ -11,7 +11,8 @@ CREATE TABLE USER
         PROFILE_PICTURE_FILENAME        VARCHAR(80),
         PAYPAL_BILLING_AGREEMENT_ID     VARCHAR(255),
         PAYPAL_EMAIL                    VARCHAR(255),
-        JOIN_DATE                       DATETIME
+        JOIN_DATE                       DATETIME,
+        ADMIN_FLAG                      BOOL DEFAULT 0
 );
 
 ALTER TABLE USER ADD INDEX ID (ID);

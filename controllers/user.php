@@ -25,6 +25,7 @@ class User extends Controller
                     $_SESSION['userid']  = $userid;
                     $_SESSION['firstname']  = $firstname;
                     $_SESSION['lastname']  = $lastname;
+                    $_SESSION['admin'] = $viewmodel->isAdmin($userid);
                     
                     header('Location: /item/main/');
                     exit;
@@ -95,7 +96,8 @@ class User extends Controller
                 if ($userid != -1)
                 {
                     $_SESSION['userid']  = $userid;               
-                    $_SESSION['firstname'] = $this->postvalues['name'];                    
+                    $_SESSION['firstname'] = $this->postvalues['name'];  
+                    $_SESSION['admin'] = $viewmodel->isAdmin($userid);                    
                 }
                 
                 $this->returnView($userid, false,true);
@@ -131,6 +133,16 @@ class User extends Controller
                 
                 else
                     $this->returnView(-1, false,true);
+            }
+        }
+        
+        protected function siteadmin()
+        {
+            $viewmodel = new UserModel();
+            
+            if ($this->admin == 1)
+            {
+                $this->returnView($viewmodel->siteAdmin(), true,false);
             }
         }
 }

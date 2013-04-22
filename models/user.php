@@ -127,10 +127,20 @@ class UserModel extends Model
             return $preparedStatement->rowCount() == 1 ? $userid : -1;
         }
         
+        public function isAdmin($userid)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and ADMIN_FLAG=1 LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            return $row == null ? 0 : 1;            
+        }
+        
         public function checkExtra($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null or PAYPAL_BILLING_AGREEMENT_ID is null or PAYPAL_EMAIL is null) LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null or PAYPAL_BILLING_AGREEMENT_ID is null or PAYPAL_EMAIL) LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -206,8 +216,8 @@ class UserModel extends Model
             }
             
             $hash = $salt . $hash;
-            error_log($hash);
-            error_log($password_from_db);
+            //error_log($hash);
+            //error_log($password_from_db);
             return $hash == $password_from_db;
         }
         
@@ -265,6 +275,16 @@ class UserModel extends Model
             }
 
             return null;            
+        }
+        
+        public function siteAdmin()
+        {
+            $sqlParameters[":currentdate"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_STATE_ID=2 and :currentdate > END_DATE');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $row;            
         }
 }
 

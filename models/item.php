@@ -8,7 +8,7 @@ class ItemModel extends Model
 	public function index($itemid, $userid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -65,7 +65,7 @@ class ItemModel extends Model
 	public function request($itemid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 		return $row;
@@ -74,7 +74,7 @@ class ItemModel extends Model
         public function getItemDetails($itemid)
         {
             $sqlParameters[":itemid"] =  $itemid;
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             return $preparedStatement->fetch(PDO::FETCH_ASSOC);            
         }
@@ -100,7 +100,7 @@ class ItemModel extends Model
 	public function requestComplete($itemid) 
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -269,7 +269,7 @@ class ItemModel extends Model
 	public function getDuration($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT DURATION FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT DURATION FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -354,7 +354,7 @@ class ItemModel extends Model
         public function postComplete($itemid)
         {
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		return $preparedStatement->fetch(PDO::FETCH_ASSOC);                
         }
@@ -412,7 +412,7 @@ class ItemModel extends Model
         public function feedback($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -423,7 +423,7 @@ class ItemModel extends Model
 	{
                 // Find out whether we are the borrower or the lender
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('select LENDER_ID, BORROWER_ID from ITEM_VW where ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('select LENDER_ID, BORROWER_ID from ITEM_VW where ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -456,7 +456,7 @@ class ItemModel extends Model
         public function feedbackComplete($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -533,7 +533,7 @@ class ItemModel extends Model
         public function acceptSuccess($itemid)
         {
             $sqlParameters[":itemid"] =  $itemid;
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
             
@@ -552,7 +552,7 @@ class ItemModel extends Model
         public function delete($itemid)
         {
             $sqlParameters[":itemid"] =  $itemid;
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
             
@@ -620,7 +620,41 @@ class ItemModel extends Model
             }
         }
         
+        public function chargeDeposit($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            return $row;            
+        }
         
+        public function chargeDepositAction($itemid)
+        {
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($row == null)
+                return -1;
+            
+            // Charge borrower (DoReferenceTransaction)
+            if ($this->paypalDoReferenceTransaction($row['DEPOSIT'], $row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']) == 0)
+            {
+                // Pay lender (MassPay)
+                if ($this->paypalMassPayToLender($row['LENDER_PAYPAL_EMAIL'], $row['DEPOSIT']) == 0)
+                        return $row['ITEM_ID'];
+                else
+                    return -3;
+            }
+            
+            else
+                return -2;
+            
+            // Set the item to ITEM_STATE=3
+        }
 }
 
 ?>

@@ -12,7 +12,7 @@
         dashboard
     </div>
     <hr/>
-    <a href="#" id="requestslink" style="font-weight: bold; text-decoration: underline">requests</a> | <a href="javascript:void(0);" id="borrowslink">borrows</a> | <a href="javascript:void(0);" id="loanslink">loans</a> | <a href="/user/index/<?php echo $this->userid ?>">me</a>
+    <a href="#" id="requestslink" style="font-weight: bold; text-decoration: underline">requests</a> | <a href="javascript:void(0);" id="borrowslink">borrows</a> | <a href="javascript:void(0);" id="loanslink">loans</a> | <a href="/user/index/<?php echo $this->userid ?>">me</a><?php if ($this->admin == 1 ) { ?> | <a href="/user/siteadmin/">admin</a><?php } ?>
     <br/><br/>
     <div id="requests" class="subcontent"  style="">
         <div class="subheading">sent to me</div><br/>

@@ -21,7 +21,7 @@
             <div style="text-align:center">
                 <div id="pricelender" style="display:inline-block;text-align: left">
 
-                    <div id="price" style="background-color: rgba(207,207,207, .5);height:270px;padding: 15px;  width: 284px; float: left">
+                    <div id="price" style="background-color: rgba(207,207,207, .5);height:270px;padding: 15px;  width: 274px; float: left">
                       <div>
                             rental rate
                             <div style="font-size: 250%">$<span id="rate"><?php echo $viewmodel[0]['RATE']?></span> / day</div>
@@ -33,7 +33,7 @@
                         </div>       
                     </div> 
 
-                    <div id="lender" style="width: 304px; margin-left: 60px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;float:left">
+                    <div id="lender" style="width: 274px; margin-left: 60px; padding: 15px;  vertical-align:middle;background-color: rgba(207,207,207, .5);height:270px;float:left">
 
                       lender<br/>
                         <img id="profilepicture" src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>

@@ -214,6 +214,19 @@ class Item extends Controller
             else if ($this->state == 2)
                 $this->returnView(null,true,false);
         }
+        
+        protected function chargedeposit()
+        {
+            if ($this->admin == 1 && $this->id != null)
+            {
+                $item_model = new ItemModel();
+                
+                if ($this->state == 0)
+                    $this->returnView($item_model->chargeDeposit($this->id), true, false);
+                else if ($this->state == 1)
+                    $this->returnView($item_model->chargeDepositAction($this->id), false, true);                    
+            }
+        }
 }
 
 ?>

@@ -11,6 +11,7 @@ class Loader
 	private $id;
         private $state;
 	private $userid;
+        private $admin;
 
 	//store the URL values on object creation
 	public function __construct($urlvalues, $postvalues, $filevalues, $sessionvalues) 
@@ -25,18 +26,20 @@ class Loader
                 $this->id = $this->IsNullOrEmptyString($this->urlvalues['id']) == true ?  "-1" :  $this->urlvalues['id'];
                 $this->state = $this->IsNullOrEmptyString($this->urlvalues['state']) == true ?  "-1" :  $this->urlvalues['state'];
                 $this->userid = $this->IsNullOrEmptyString($this->sessionvalues['userid']) == true ?  null :  $this->sessionvalues['userid'];            
-		
+		$this->admin = $this->IsNullOrEmptyString($this->sessionvalues['admin']) == true ?  null :  $this->sessionvalues['admin'];
+                
 		error_log("controller: " . $this->controller);
 		error_log("action: " . $this->action);		
 		error_log("id: " . $this->id);	
                 error_log("state: " . $this->state);	
                 error_log("userid: " . $this->userid);
+                error_log("admin: " . $this->admin);
 	}
 
 	//establish the requested controller as an object
 	public function createController() 
 	{
-		return new $this->controller($this->action,$this->urlvalues, $this->postvalues, $this->filevalues, $this->id, $this->userid, $this->state);
+		return new $this->controller($this->action,$this->urlvalues, $this->postvalues, $this->filevalues, $this->id, $this->userid, $this->state, $this->admin);
 	}
 
         public function IsNullOrEmptyString($question)

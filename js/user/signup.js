@@ -1,6 +1,12 @@
 $(document).ready(function()
 {
     
+    $('#expresscheckout').click(function()
+    {
+        $('#firstloader').show();
+        return true;
+    });
+    
     $('#myForm').validate( {
     rules: {
         "terms": {
@@ -50,6 +56,13 @@ $(document).ready(function()
                 {
                     alert ("Missing fields.");
                     return false;
+                }
+                
+                else
+                {
+                    $('#secondloader').show();
+                    $('#extrasubmitbutton').attr('disabled','true');
+                    return true;
                 }
             },
             

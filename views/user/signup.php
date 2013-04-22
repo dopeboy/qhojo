@@ -94,7 +94,7 @@
                     </td>
                     <td>
                         <div id="billing" style="">
-                            <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make Paypal Billing Agreement</a> <?php } ?>                            
+                            <?php if ($this->state == 4 && $this->id != null) { ?> Complete <input type="hidden" name="token" value="<?php echo $this->id;?>"/><?php } else { ?> <a id="expresscheckout" href="/user/signup/null/3">Make Paypal Billing Agreement</a>&nbsp;<img id="firstloader" style="display:none" src="/img/ajax-loader.gif"><?php } ?>                            
                         </div>
                     </td>
                 </tr>     
@@ -120,7 +120,7 @@
                 </tr>           
                 <tr style="">
                     <td colspan="2">
-                           <input type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" />
+                           <input id="extrasubmitbutton" type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" /><img id="secondloader" style="display:none" src="/img/ajax-loader.gif">
                     </td>
                 </tr>                       
             </table>                    

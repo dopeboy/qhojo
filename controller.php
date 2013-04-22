@@ -10,8 +10,9 @@ abstract class Controller
 	protected $id;
 	protected $userid;
         protected $state;
+        protected $admin;
 
-	public function __construct($action, $urlvalues, $postvalues, $filevalues, $id, $userid, $state) 
+	public function __construct($action, $urlvalues, $postvalues, $filevalues, $id, $userid, $state, $admin) 
 	{
 		$this->action = $action;
 		$this->urlvalues = $urlvalues;
@@ -20,6 +21,7 @@ abstract class Controller
 		$this->id = $id;
 		$this->userid = $userid;
                 $this->state = $state;
+                $this->admin = $admin;
 	}
 
 	public function executeAction() 
