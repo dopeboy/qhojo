@@ -33,18 +33,16 @@ class ItemModel extends Model
 		return $rows;
 	}       
         
-	public function test($paypal_token) 
+	public function test() 
 	{
-            $nvpStr = "&TOKEN=$paypal_token";
+            	$sqlParameters[":itemid"] =  '200001';
+		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
+		$preparedStatement->execute($sqlParameters);
+		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
                 
-            $httpParsedResponseAr = $this->PPHttpPost('GetBillingAgreementCustomerDetails', $nvpStr);
-            
-           // if("SUCCESS" != strtoupper($httpParsedResponseAr["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($httpParsedResponseAr["ACK"])) 
-           // {
-           // print(urldecode($httpParsedResponseAr['BILLINGAGREEMENTID']));
-                exit(print_r($httpParsedResponseAr, true));
-            //    return -1;                                
-            //}   
+                $gg = time() - strtotime($row['END_DATE']);
+                error_log(time() . "   " . strtotime($row['END_DATE']));
+                error_log(floor($gg / 3600));
         }
         
         public function testest($id)
@@ -195,18 +193,22 @@ class ItemModel extends Model
 
 	public function lenderConfirm($confirmation_code, $phone_number) 
 	{
+            global $demo;
+            
             error_log("cc:" . $confirmation_code);
             error_log("ph:" . $phone_number);
           
             $sqlParameters[":confirmation_code"] =  $confirmation_code;
             $sqlParameters[":phone_number"] =  $phone_number;
             $sqlParameters[":status_id"] =  2;
-            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and LENDER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and LENDER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
+            $td_hrs = (strtotime($row['END_DATE']) - time()) / 3600;    
+                
             error_log("1");
-            if ($preparedStatement->rowCount() == 1)
+            if ($preparedStatement->rowCount() == 1 && ($demo==true || $td_hrs <= 12))
             {
                 $sqlParameters = null;
                 $sqlParameters[":status_id"] =  3;
@@ -370,45 +372,6 @@ class ItemModel extends Model
             return implode($separator, $result);
         }        
         
-//        public function processFile($file, &$filename)
-//        {
-//            $arr = explode(".", $file["name"]);
-//            $name = current($arr);
-//            $extension = end($arr);   
-//            $allowedExts = array("jpg", "jpeg", "gif", "png", "JPG");
-//        
-//            if ((($file["type"] == "image/gif") || ($file["type"] == "image/jpeg") || ($file["type"] == "image/png") || ($file["type"] == "image/pjpeg"))
-//                && ($file["size"] < 10000000) && in_array($extension, $allowedExts))
-//            {     
-//                if ($file["error"] > 0)
-//                {    
-//                    return 2;
-//                }
-//              
-//                else
-//                {
-//                    $directory = "uploads/item/";
-//                    $filename = $name. "_" . date("Ymd_His") . "." . $extension;
-//                    
-//                    if (file_exists($directory.$filename))
-//                    {
-//                        return 3;
-//                    }
-//                    
-//                    else
-//                    {
-//                        move_uploaded_file($file["tmp_name"],$directory.$filename);
-//                        return 0;
-//                    }
-//                }
-//            }
-//            
-//            else
-//            {
-//                return 1;
-//            }            
-//        }
-        
         public function feedback($itemid)
 	{
 		$sqlParameters[":itemid"] =  $itemid;
@@ -427,7 +390,12 @@ class ItemModel extends Model
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-		$flag = ($row["LENDER_ID"] == $userid ? 0 : 1);
+                if ($row["LENDER_ID"] == $userid)
+                    $flag = 0;
+                else if ($row["BORROWER_ID"] == $userid)
+                    $flag = 1;
+                else
+                    return 1;   // Hacker alert
                 
                 $rating_query = null;
                 $comments_query = null;
@@ -473,8 +441,18 @@ class ItemModel extends Model
 		return $row;	            
         }
         
-        public function submitAcceptance($request_id)
+        public function submitAcceptance($request_id, $userid)
         {
+            $sqlParameters[":requestid"] =  $request_id;
+            $sqlParameters[":user_id"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from ITEM where ID = (select ITEM_ID from ITEM_REQUESTS where REQUEST_ID=:requestid) and LENDER_ID = :userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($row == NULL)
+                return 1;
+            
+            $sqlParameters = array();
             $sqlParameters[":requestid"] =  $request_id;
             $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 1 where REQUEST_ID=:requestid');
             $preparedStatement->execute($sqlParameters);
@@ -654,6 +632,11 @@ class ItemModel extends Model
                 return -2;
             
             // Set the item to ITEM_STATE=3
+        }
+        
+        public function chargeDepositComplete($itemid)
+        {
+            return null;      
         }
 }
 

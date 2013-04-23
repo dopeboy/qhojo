@@ -27,7 +27,12 @@ class User extends Controller
                     $_SESSION['lastname']  = $lastname;
                     $_SESSION['admin'] = $viewmodel->isAdmin($userid);
                     
-                    header('Location: /item/main/');
+                    if ($_SESSION['referrer'] != null)
+                        header('Location: ' . $_SESSION['referrer']);
+                    else
+                        header('Location: /item/main/');
+                                        
+                    $_SESSION['referrer'] = null;
                     exit;
                 }
 	}   
@@ -42,6 +47,7 @@ class User extends Controller
 	{
             if ($this->userid == null)
             {
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 header('Location: /user/login/null/2');
                 exit;
             }
@@ -129,6 +135,7 @@ class User extends Controller
                 if ($status == 0)
                 {
                     $this->returnView($_SESSION['referrer'], false,true);
+                    $_SESSION['referrer'] = null;
                 }
                 
                 else

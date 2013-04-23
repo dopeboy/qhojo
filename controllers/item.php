@@ -18,7 +18,7 @@ class Item extends Controller
         {
 		$viewmodel = new ItemModel();
                // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
-                $viewmodel->test('EC-20E63785JV446144G');
+                $viewmodel->test();
         }
         
         protected function testest()
@@ -40,6 +40,7 @@ class Item extends Controller
             
             if ($this->userid == null)
             {
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 header('Location: /user/login/null/2');
                 exit;
             }
@@ -79,13 +80,10 @@ class Item extends Controller
         {
             $viewmodel = new ItemModel();
             
-            if ($this->state==0)
-            {
+            if ($this->state==0 && $this->id=8295106)
                 $this->returnView($viewmodel->borrowerConfirm($this->postvalues['Body'],$this->postvalues['From']), false,false);
-                //$viewmodel->borrowerConfirm($this->postvalues['Body'],$this->postvalues['From']);
-            }
             
-            else if ($this->state==1)
+            else if ($this->state==1 && $this->id=4856915)
                 $this->returnView($viewmodel->lenderConfirm($this->postvalues['Body'],$this->postvalues['From']), false,false);
         }
 
@@ -97,6 +95,7 @@ class Item extends Controller
             if ($this->userid == null)
             {
                 header('Location: /user/login/null/3');
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 exit;
             }
             
@@ -129,6 +128,7 @@ class Item extends Controller
         {
             if ($this->userid == null)
             {
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 header('Location: /user/login/null/2');
                 exit;
             }
@@ -166,7 +166,7 @@ class Item extends Controller
             
             if ($this->state == 0)
             {
-                $this->returnView($item_model->submitAcceptance($this->id), false, true);
+                $this->returnView($item_model->submitAcceptance($this->id, $this->userid), false, true);
             }
             
             else if ($this->state == 1)
@@ -224,7 +224,9 @@ class Item extends Controller
                 if ($this->state == 0)
                     $this->returnView($item_model->chargeDeposit($this->id), true, false);
                 else if ($this->state == 1)
-                    $this->returnView($item_model->chargeDepositAction($this->id), false, true);                    
+                    $this->returnView($item_model->chargeDepositAction($this->id), false, true);       
+                else if ($this->state == 2)
+                    $this->returnView($item_model->chargeDepositComplete($this->id), true, false);       
             }
         }
 }

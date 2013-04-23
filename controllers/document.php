@@ -21,6 +21,16 @@ class Document extends Controller
     {
         $this->returnView(null, true,false);
     }
+    
+    protected function contact()
+    {
+        $this->returnView(null, true,false);
+    }
+    
+    protected function fees()
+    {
+        $this->returnView(null, true,false);
+    }
 }
 
 ?>

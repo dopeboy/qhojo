@@ -4,10 +4,16 @@ $dbhost = "localhost";
 $dbuser = "qho";
 $dbpass = 'admin';
 
+$demo = false;
+
 if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "demo.qhojo.com")
-    $dbname = "qhojo";
-else if ($_SERVER['SERVER_NAME'] == "yc.qhojo.com")
-    $dbname = "qhojo2";
+{
+    $dbname = "qhojo_staging";
+    $demo = true;
+}
+
+else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
+    $dbname = "qhojo_production";
 
 $version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
 
@@ -24,7 +30,7 @@ function getRandomID()
     return rand(100000,999999);
 }
 
-$transaction_fee_variable = 0.6;
+$transaction_fee_variable = 0.06;
 $transaction_fee_fixed = 0.50;
 
 ?>
