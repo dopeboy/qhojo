@@ -444,12 +444,12 @@ class ItemModel extends Model
         public function submitAcceptance($request_id, $userid)
         {
             $sqlParameters[":requestid"] =  $request_id;
-            $sqlParameters[":user_id"] =  $userid;
+            $sqlParameters[":userid"] =  $userid;
             $preparedStatement = $this->dbh->prepare('select 1 from ITEM where ID = (select ITEM_ID from ITEM_REQUESTS where REQUEST_ID=:requestid) and LENDER_ID = :userid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
             
-            if ($row == NULL)
+            if ($row == null)
                 return 1;
             
             $sqlParameters = array();
