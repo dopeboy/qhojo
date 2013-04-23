@@ -1,19 +1,22 @@
 <?php
 
 $dbhost = "localhost";
-$dbuser = "qho";
-$dbpass = 'admin';
 
-$demo = false;
-
-if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "demo.qhojo.com")
+if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "staging.qhojo.com")
 {
     $dbname = "qhojo_staging";
     $demo = true;
+    $dbuser = "qhostaging";
+    $dbpass = 'Z69afsGKVPHJjsO';
 }
 
 else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
+{
     $dbname = "qhojo_production";
+    $demo = false;
+    $dbuser = "qhoprod";
+    $dbpass = 'Gk1BLp5J6u5MsQr';
+}
 
 $version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
 

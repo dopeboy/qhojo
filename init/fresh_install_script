@@ -3,12 +3,15 @@ ONE TIME
 	mysql -u root -p
 	root
 
-        create user 'qho'@'localhost' identified by 'admin';
+        create user 'qhostaging'@'localhost' identified by 'Z69afsGKVPHJjsO';
+		create database qhojo_staging;
+        grant SELECT, INSERT, UPDATE on qhojo_staging.* to 'qhostaging'@'localhost' IDENTIFIED BY 'Z69afsGKVPHJjsO';
+		
+		create user 'qhoprod'@'localhost' identified by 'Gk1BLp5J6u5MsQr';
+		create database qhojo_production;
+        grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
 
-	create database qhojo
-
-        grant all privileges on *.* to 'qho'@'localhost' with grant option;
-
+		FLUSH PRIVILEGES;
 
 
         94  sudo cp default mysite
