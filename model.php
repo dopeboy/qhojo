@@ -46,17 +46,20 @@ abstract class Model
          */
         function PPHttpPost($methodName_, $nvpStr_) 
         {
-                global $paypal_environment;
+                global $paypal_environment, $paypal_username, $paypal_password, $paypal_signature;
                 $environment = $paypal_environment;
                 
                 // Set up your API credentials, PayPal end point, and API version.
-                $API_UserName = urlencode('manish-facilitator_api1.qhojo.com');
-                $API_Password = urlencode('1365794178');
-                $API_Signature = urlencode('AFcWxV21C7fd0v3bYYYRCpSSRl31AnCVEEsukrPp-owAJXlPJnskrwj2');
+                $API_UserName = urlencode($paypal_username);
+                $API_Password = urlencode($paypal_password);
+                $API_Signature = urlencode($paypal_signature);
                 $API_Endpoint = "https://api-3t.paypal.com/nvp";
-                if("sandbox" === $environment || "beta-sandbox" === $environment) {
+                
+                if("sandbox" === $environment || "beta-sandbox" === $environment) 
+                {
                         $API_Endpoint = "https://api-3t.$environment.paypal.com/nvp";
                 }
+                
                 $version = urlencode('86');
 
                 // Set the curl parameters.
