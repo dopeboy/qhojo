@@ -244,7 +244,6 @@ class UserModel extends Model
             $billingType = urlencode('MerchantInitiatedBilling');
             $billingAgreementDesc = urlencode('qhojo');
             $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/user/signup/null/4");
-            //$returnURL = urlencode('http://www.yahoo.com');
             $cancelURL = urlencode("http://" . $_SERVER['SERVER_NAME']);
             $shipping = '1';
             

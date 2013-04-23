@@ -35,6 +35,13 @@
     </div>
     <br/>
     <div class="subheading">
+        What kind of things can I rent out?
+    </div>
+    <div class="subcontent">
+        The only requirement we have is that the deposit value be less than $500. We suggest renting out durable items that can take on some wear-and-tear.
+    </div>
+    <br/>
+    <div class="subheading">
         How are payments handled?
     </div>
     <div class="subcontent">

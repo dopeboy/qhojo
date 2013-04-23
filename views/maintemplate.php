@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="/js/maintemplate.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/maintemplate.css" media="screen" />        	
         <script type="text/javascript" src="/js/jquery.form.js"></script> 
+        <?php require("analytics.php"); ?>
 </head>
 
 <body>

@@ -205,6 +205,7 @@ class ItemModel extends Model
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
+            // In production, the lender can only within 12 hours of the due date
             $td_hrs = (strtotime($row['END_DATE']) - time()) / 3600;    
                 
             error_log("1");
@@ -247,12 +248,12 @@ class ItemModel extends Model
                     
                     // send an email to lender and borrower and ask for feedback
                     $message_to_lender = "Hey " .  $row["LENDER_FIRST_NAME"] . "!<br/><br/>";
-                    $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . $total_with_fee . ". <br/><br/>";
+                    $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . number_format($total_with_fee,2) . ". <br/><br/>";
                     $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/0\">here</a>.";
                     $message_to_lender .= "<br/><br/>-team qhojo";
 
                     $message_to_borrower = "Hey " .  $row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
-                    $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . $total_without_fee . ". <br/><br/>";
+                    $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . number_format($total_without_fee,2) . ". <br/><br/>";
                     $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $row['ITEM_ID'] . "/1\">here</a>.";
                     $message_to_borrower .= "<br/><br/>-team qhojo";                        
 
@@ -473,7 +474,7 @@ class ItemModel extends Model
 
             // email to lender
             $message = "Hey " . $row['LENDER_FIRST_NAME'] . "!<br/><br/>";
-            $message .= "You have accepted " . $row['BORROWER_FIRST_NAME'] . "'s rental request. Your item, " . $row['TITLE'] . ", is now reserved for " . $row['DURATION'] . " days.<br/><br/>";
+            $message .= "You have accepted " . $row['BORROWER_FIRST_NAME'] . "'s rental request. Your item, " . $row['TITLE'] . ", is now reserved for " . $row['DURATION'] . " day(s).<br/><br/>";
             $message .= "Your confirmation code is: <b><u>" . $row['CONFIRMATION_CODE'] . "</b></u><br/><br/>";
             $message .= "Here's what you need to do next:<br/><br/>";
             $message .= "1) Over email, arrange to meet with " .  $row['BORROWER_FIRST_NAME'] . ". Here's " . $row['BORROWER_FIRST_NAME'] . "'s email address for reference: " .  $row['BORROWER_EMAIL_ADDRESS'] . "<br/>";
