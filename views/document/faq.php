@@ -17,7 +17,7 @@
         How does qhojo work?
     </div>
     <div class="subcontent">
-    Check out our <a href="/document/howitworks/">how-it-works guide.</a>
+    Check out our <a href="/document/howitworks/#borrower">how-it-works guide.</a>
     </div>
     <br/>
     <div class="subheading">

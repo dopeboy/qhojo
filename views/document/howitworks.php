@@ -5,11 +5,11 @@
 
 <div id="masterdiv">
     <div id="mainheading">
-        How it works (under construction)
+        How it works
     </div>
     <hr/>
     <div style="font-size: 150%">
-        <a id="borrowlink" href="#">I want to borrow something</a> | <a id="loanlink" href="#">I want to loan something out</a>
+        <a id="borrowlink" href="#borrower">I want to borrow something</a> | <a id="loanlink" href="#lender">I want to loan something out</a>
     </div>
     <div id="borrow" style="">
         <div id="frame1" class="frame">
@@ -99,12 +99,13 @@
 
             </div>
             <div class="picture">
-                frame 1
+                <img class="comic" src="/img/hiw-lender-1.jpg" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>
+        <hr class="style-two"/>
         <div id="frame2" class="frame">
             <div class="picture">
-                frame 2
+                <img class="comic" src="/img/hiw-lender-2.jpg" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 2. Chill
@@ -116,6 +117,7 @@
 
             </div>
         </div>
+        <hr class="style-two"/>
         <div id="frame3" class="frame">
             <div class="desc">
                 3. Give
@@ -127,12 +129,13 @@
 
             </div>
             <div class="picture">
-                frame 3
+                <img class="comic" src="/img/hiw-borrower-3.jpg" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>
+        <hr class="style-two"/>
         <div id="frame4" class="frame">
             <div class="picture">
-                frame 4
+                <img class="comic" src="/img/hiw-lender-4.jpg" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
                 4. Return
@@ -144,6 +147,7 @@
 
             </div>
         </div>
+        <hr class="style-two"/>
         <div id="frame5" class="frame">
             <div class="desc">
                 5. Profit
@@ -155,7 +159,7 @@
 
             </div>
             <div class="picture">
-                frame 5
+                <img class="comic" src="/img/hiw-lender-5.jpg" style="max-height: 100%; max-width: 100%">
             </div>            
         </div>           
     </div>

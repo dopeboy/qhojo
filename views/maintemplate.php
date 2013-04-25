@@ -16,7 +16,7 @@
         <div id="header">
             <?php if ($_COOKIE['iwashere'] != "yes") { ?>
             <div id="notify" style="background: rgba(255,0,0, .4); height:40px; text-align: center; line-height:2.5em">
-                First time visitor? Check out our <a href="/document/howitworks/">how-it-works guide</a>.
+                <b>First time visitor? Check out our <a href="/document/howitworks/">how-it-works guide</a>.</b>
             </div>
             <?php } ?>
             <div id="banner">
