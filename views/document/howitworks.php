@@ -120,7 +120,7 @@
         <hr class="style-two"/>
         <div id="frame3" class="frame">
             <div class="desc">
-                3. Give
+                3. Meet
 
                 <div class="text">
                     <br/>

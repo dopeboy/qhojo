@@ -40,9 +40,11 @@ class ItemModel extends Model
 		$preparedStatement->execute($sqlParameters);
 		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
                 
-                $gg = time() - strtotime($row['END_DATE']);
-                error_log(time() . "   " . strtotime($row['END_DATE']));
-                error_log(floor($gg / 3600));
+                error_log(date("Y-m-d H:i:s"));
+                $new = date("Y-m-d H:i:s",strtotime("+ 2 days"));
+                error_log($new);
+                error_log(date("m/d g:i A", strtotime($new)));
+
         }
         
         public function testest($id)
@@ -170,18 +172,23 @@ class ItemModel extends Model
                 error_log("2");    
                 
                 if ($preparedStatement->rowCount() == 1)
-                {
+                { 
                     error_log("3");    
-                    $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over.";
-                    $message2 = "When " . $row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify the item and then text this confirmation code back to us: " . $confirmation_code;
+                    $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
+                    $message2 = "When " . $row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify it and then text this confirmation code back to us: " . $confirmation_code;
+                    $message3 = "Thanks " . $row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $row["LENDER_PHONE_NUMBER"] . " by " . strtotime($sqlParameters[":enddate"]) . ".";
 
                     global $TwilioAccountSid;   
                     global $TwilioAuthToken;
                     global $lender_number;
                     $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
                     $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
-                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);     
                     error_log("4");    
+                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);
+                    error_log("5");    
+                    $sms = $client->account->sms_messages->create($lender_number, $row["BORROWER_PHONE_NUMBER"],$message3);
+                    error_log("6");
+                    
                     return 0;
                 }
 
