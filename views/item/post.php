@@ -24,7 +24,7 @@
                 <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>        
         </div>
             <div style="display:table-cell;width:50%;text-align:right">
-                <input type="submit" value="Reserve" disabled>
+                <input type="submit" value="Rent" style="width: 90px" disabled>
                 <input type="submit" value="Contact Lender" style="" disabled>
             </div>
     </div>
@@ -89,7 +89,7 @@
                     <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
                     <?php foreach ($viewmodel[3] as $network) {  ?>
 
-                    <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="is a member of the <?php echo $network['N'] ?> "></a>
+                    <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="<?php echo $viewmodel[0]['FIRST_NAME']; ?> is a member of the <?php echo $network['NETWORK_NAME'] ?> network."></a>
 
                     <?php } ?>                    
                 </div>
