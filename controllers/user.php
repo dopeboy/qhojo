@@ -113,7 +113,7 @@ class User extends Controller
             
             else if ($this->state == 2)
             {
-                $this->returnView($viewmodel->extraSignup(), true,false);
+                $this->returnView($viewmodel->extraSignup($this->userid), true,false);
             }
             
             // Express checkout
