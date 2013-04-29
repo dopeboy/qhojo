@@ -87,6 +87,11 @@
                 <img id="profilepicture" src="<?php echo $viewmodel[0]['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['PROFILE_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['ID']; ?>"><?php echo $viewmodel[0]['FIRST_NAME']; ?></a>
+                    <?php foreach ($viewmodel[3] as $network) {  ?>
+
+                    <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="is a member of the <?php echo $network['N'] ?> "></a>
+
+                    <?php } ?>                    
                 </div>
                 <div id="lender_feedback" style="">
                     <?php if ($viewmodel[2][0] == null) { ?> <i>No feedback</i> <?php } else { ?>
@@ -156,7 +161,11 @@
     </div>
     <hr/>
     <div class="subcontent">
-        Your post has been submitted! Click <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>">here</a> to see your post.
+        Your post has been submitted! Click <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>">here</a> to see it. 
+        <br/><br/>
+        Now sit back and wait for borrowers to request your item. Requests will appear in your <a href="/user/dashboard/">dashboard</a> so remember to keep checking it. Once you're happy with someone, simply accept their request.
+        <br/><br/>
+        Still confused? Check out our <a href="/document/howitworks/#lender">how-it-works</a> section.
     </div>
     <?php } ?>
 </div>

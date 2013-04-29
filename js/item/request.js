@@ -1,6 +1,6 @@
 $(document).ready(function() 
 { 
-    
+     $( document ).tooltip();
 
             $('#myForm').validate( {
     rules: {

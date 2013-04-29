@@ -6,6 +6,8 @@
     </script>          
     <link rel="stylesheet" href="/css/item/index.css" />
      <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />   
+         <script type="text/javascript" src="/js/jquery-ui.js"> </script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
       
               
 </head>
@@ -63,6 +65,11 @@
                <img id="profilepicture" src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                 <div style="font-size:250%">
                     <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
+                    <?php foreach ($viewmodel[4] as $network) {  ?>
+
+                    <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="<?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?> is a member of the <?php echo $network['NETWORK_NAME'] ?> network."></a>
+
+                    <?php } ?>
                 </div>
                 <div id="lender_feedback" style="">
                     <?php if ($viewmodel[2][0] == null) { ?> <i>No feedback</i> <?php } else { ?>

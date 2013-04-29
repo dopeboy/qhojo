@@ -9,16 +9,11 @@ RewriteRule ^.*$ - [NC,L]
 
 RewriteRule ^(img|css)($|/) - [L]
 
-#RewriteRule ^(user/signup/null/4?token=([a-zA-Z0-9\-]*)$ user/signup/$1/4 [NC,L]
-#RewriteCond %{user/signup/null/4} token=
-#RewriteRule (.*) user/signup/$1/4? [R=301]
-#RewriteRule ^user/signup/null/token=([0-9]*)/?$ user/login/$1/null    [R=301,NE,L]    # Handle product requests
 RewriteCond %{QUERY_STRING} ^token=([a-zA-Z0-9\-]*)$ [NC]
 RewriteRule ^user/signup/null/4$ /user/signup/%1/4? [L,R=301]
 RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9\s\-]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3&state=$4 [NC,L]
 #Note the \s in the id section. It is needed for searching
 #Note the \- in the id section. It is needed for the token paypal returns after a billing agreement has been signed.
-#  http://localhost/user/signup/null/4?token=123
 
 
 php_value upload_max_filesize 10M

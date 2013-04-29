@@ -5,17 +5,37 @@
         
          <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />          
          <link rel="stylesheet" type="text/css" href="/css/user/index.css" media="screen" />
+         <script type="text/javascript" src="/js/jquery-ui.js"> </script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />         
 </head>
 
 <title>qhojo - <?php echo $viewmodel["USER"]["FIRST_NAME"]?></title>
-
+</form>
 <div id="masterdiv">
-    <div id="mainheading">
-        <?php echo $viewmodel["USER"]["FIRST_NAME"]?>
+    <div id="topbar" style="width:100%;display:table;">
+        <div id="mainheading" style="display:table-cell;">
+            <?php echo $viewmodel["USER"]["FIRST_NAME"]?>
+        </div>
+        <div style="display:table-cell;width:50%;text-align:right">
+            <form style="margin: 0" action="/user/edit/<?php echo $viewmodel["USER"]['ID']?>/0"><?php if ($viewmodel["USER"]['ID'] == $this->userid) { ?> <input type="submit" value="Edit Profile"> <?php } ?></form>    
+        </div>
     </div>
     <hr/>
     <img id="profilepicture" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME']?>"><br/>
     <br/>
+    <div class="subheading">
+        Networks
+    </div>
+    <div class="subcontent">
+        <?php if ($viewmodel["NETWORKS"] == null) { echo "<i>No networks</i>"; } else { ?>        
+
+        <?php foreach($viewmodel["NETWORKS"] as $network) { ?>       
+        
+            <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="<?php echo $viewmodel["USER"]["FIRST_NAME"]; ?> is a member of the <?php echo $network['NETWORK_NAME'] ?> network."></a>
+        
+        <?php } } ?>
+    </div>   
+    <br/><br/>
     <div style="display:inline-block">
         <div style="float: left">
             <div class="subheading">

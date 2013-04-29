@@ -1,5 +1,12 @@
 $(document).ready(function()
-{ $('#uploaderframe').attr('src', '/picture/upload/null/0');  
+{ 
+    
+    
+    
+    $( document ).tooltip();
+ 
+    
+    $('#uploaderframe').attr('src', '/picture/upload/null/0');  
     
             $('.star').rating(
     {

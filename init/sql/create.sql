@@ -82,6 +82,30 @@ CREATE TABLE LOCATION
 	NEIGHBORHOOD                    VARCHAR(80)
 );
 
+drop table if exists NETWORK;
+CREATE TABLE NETWORK
+(
+        ID                              INTEGER PRIMARY KEY,
+        NAME                            VARCHAR(80),
+        EMAIL_EXTENSION                 VARCHAR(80),
+        ICON_IMAGE                      VARCHAR(80)
+);
+
+drop table if exists USER_NETWORK;
+CREATE TABLE USER_NETWORK
+(
+        CONFIRMATION_ID                 CHAR(13),
+        USER_ID                         INTEGER,
+        NETWORK_ID                      INTEGER,
+        USER_NETWORK_EMAIL              VARCHAR(80),
+        ACTIVE                          BOOL,
+        CREATION_DATE                   DATETIME,
+        CONFIRMED_DATE                  DATETIME
+);
+
+ALTER TABLE USER_NETWORK ADD INDEX CONFIRMATION_ID (CONFIRMATION_ID);
+ALTER TABLE USER_NETWORK ADD INDEX USER_ID (USER_ID);
+
 /* VIEWS                                               */
 
 CREATE OR REPLACE VIEW ITEM_VW AS

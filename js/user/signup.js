@@ -1,6 +1,27 @@
 $(document).ready(function()
 {
     
+    $('#networklist').change(function()
+    {
+        if ($('#networklist option:selected').attr('email') == '')
+        {
+            $('#networkemail').removeClass('required');
+            $('#networkemail').hide();
+            $('#atsymbol').hide();
+            $('#networkemailextension').hide();
+        }
+           
+       else
+       {
+           $('#networkemail').addClass('required');
+           $('#networkemail').show();
+           $('#atsymbol').show();
+           $('#networkemailextension').show();
+       }
+       
+        $('#networkemailextension').text($('#networklist option:selected').attr('email'));
+    });
+    
     $('#expresscheckout').click(function()
     {
         $('#firstloader').show();
@@ -68,8 +89,8 @@ $(document).ready(function()
             
             success : function (response) 
             {   
-                if (response == -1)
-                    alert ("Error");
+                if (response < 0)
+                    alert ("Error: " . response);
                 else
                     window.location = response;
             }

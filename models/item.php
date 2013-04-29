@@ -21,6 +21,8 @@ class ItemModel extends Model
                 
                 $row[] = $usermodel->checkIfUserAlreadyRequested($userid, $itemid);
                 
+                $row[] = $usermodel->getNetworksForUser($row[0]['LENDER_ID']);
+                
 		return $row;
 	}
         
@@ -35,15 +37,17 @@ class ItemModel extends Model
         
 	public function test() 
 	{
-            	$sqlParameters[":itemid"] =  '200001';
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
-		$preparedStatement->execute($sqlParameters);
-		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
-                
-                error_log(date("Y-m-d H:i:s"));
-                $new = date("Y-m-d H:i:s",strtotime("+ 2 days"));
-                error_log($new);
-                error_log(date("m/d g:i A", strtotime($new)));
+//            	$sqlParameters[":itemid"] =  '200001';
+//		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
+//		$preparedStatement->execute($sqlParameters);
+//		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
+//                
+//                error_log(date("Y-m-d H:i:s"));
+//                $new = date("Y-m-d H:i:s",strtotime("+ 2 days"));
+//                error_log($new);
+//                error_log(date("m/d g:i A", strtotime($new)));
+
+                        $this->sendEmail('do-not-reply@qhojo.com', 'ms3766@caa.columbia.edu', 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', 'sdfsdf');            
 
         }
         
@@ -68,6 +72,13 @@ class ItemModel extends Model
 		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
 		$preparedStatement->execute($sqlParameters);
 		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+                
+                $user_model = new UserModel();
+                
+                $row[] = $user_model->getFeedbackAsLender($row[0]['LENDER_ID']);
+                
+                $row[] = $user_model->getNetworksForUser($row[0]['LENDER_ID']);
+                
 		return $row;
 	}
         
@@ -85,7 +96,7 @@ class ItemModel extends Model
 		$sqlParameters[":itemid"] =  $itemid;
 		$sqlParameters[":userid"] =  $userid;
                 
-                if ($duration != 1 || $duration != 2 || $duration != 3)
+                if ($duration != 1 && $duration != 2 && $duration != 3)
                     $duration = 1;
                
 		$sqlParameters[":duration"] =  $duration;
@@ -176,7 +187,7 @@ class ItemModel extends Model
                     error_log("3");    
                     $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
                     $message2 = "When " . $row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify it and then text this confirmation code back to us: " . $confirmation_code;
-                    $message3 = "Thanks " . $row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $row["LENDER_PHONE_NUMBER"] . " by " . strtotime($sqlParameters[":enddate"]) . ".";
+                    $message3 = "Thanks " . $row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $row["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
 
                     global $TwilioAccountSid;   
                     global $TwilioAuthToken;
@@ -291,6 +302,7 @@ class ItemModel extends Model
             $row[] = $usermodel->getUserDetails($userid);
             $row[] = $locationmodel->getAllLocations();
             $row[] = $usermodel->getFeedbackAsLender($userid);
+            $row[] = $usermodel->getNetworksForUser($userid);
             return $row;
 	}
         
@@ -487,7 +499,7 @@ class ItemModel extends Model
             $message .= "1) Over email, arrange to meet with " .  $row['BORROWER_FIRST_NAME'] . ". Here's " . $row['BORROWER_FIRST_NAME'] . "'s email address for reference: " .  $row['BORROWER_EMAIL_ADDRESS'] . "<br/>";
             $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
             $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
-            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#lender\">how-it-works guide</a>";
             $message .= "<br/><br/>-team qhojo";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reservation Details', $message);
@@ -502,7 +514,7 @@ class ItemModel extends Model
             $message .= "1) Over email, arrange to meet with " .  $row['LENDER_FIRST_NAME'] . ". Here's " . $row['LENDER_FIRST_NAME'] . "'s email address for reference: " .  $row['LENDER_EMAIL_ADDRESS'] . "<br/>";
             $message .= "2) Once you guys meet, verify the quality of the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
             $message .= "3) We'll pass on this confirmation to " .  $row['LENDER_FIRST_NAME'] . " via text message. Once " .  $row['LENDER_FIRST_NAME'] . " has received it, he/she will hand the item over to you. At this point, the rental period has started and you are responsible to bring your item back after the agreed upon duration.<br/><br/>";
-            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks\">how-it-works guide</a>";
+            $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#borrower\">how-it-works guide</a>";
             $message .= "<br/><br/>-team qhojo";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reserved!', $message);

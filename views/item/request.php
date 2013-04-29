@@ -2,6 +2,8 @@
 	<script type="text/javascript" src="/js/item/request.js"></script>
            <link rel="stylesheet" href="/css/item/request.css" />
            <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
+                    <script type="text/javascript" src="/js/jquery-ui.js"> </script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 </head>
 
 <div id="masterdiv">
@@ -39,9 +41,14 @@
                         <img id="profilepicture" src="<?php echo $viewmodel[0]['LENDER_PICTURE_FILENAME'] == null ? "/img/stock_user_profile.jpg" : "/uploads/user/" . $viewmodel[0]['LENDER_PICTURE_FILENAME']?>"><br/>
                         <div style="font-size:250%">
                             <a href="/user/index/<?php echo $viewmodel[0]['LENDER_ID']; ?>"><?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?></a>
+                            <?php foreach ($viewmodel[2] as $network) {  ?>
+
+                             <img src="/img/network/<?php echo $network['ICON_IMAGE'] ?>" title="<?php echo $viewmodel[0]['LENDER_FIRST_NAME']; ?> is a member of the <?php echo $network['NETWORK_NAME'] ?> network."></a>
+
+                             <?php } ?>                              
                         </div>
                         <div id="lender_feedback" style="">
-                            <?php if ($viewmodel[2][0] == null) { ?> <i>No feedback</i> <?php } else { ?>
+                            <?php if ($viewmodel[1][0] == null) { ?> <i>No feedback</i> <?php } else { ?>
                                 <input name="rating2" type="radio" class="star" value="1" <?php if ($viewmodel[2][0] == 1) { ?> checked="checked" <?php } ?>/>
                                 <input name="rating2" type="radio" class="star" value="2" <?php if ($viewmodel[2][0] == 2) { ?> checked="checked" <?php } ?>/>
                                 <input name="rating2" type="radio" class="star" value="3" <?php if ($viewmodel[2][0] == 3) { ?> checked="checked" <?php } ?>/>
@@ -138,26 +145,6 @@
     <hr/>
     <?php echo $_SESSION['firstname']  ?>, we've passed on your rental request for <a href="/item/index/<?php echo $viewmodel[0]['ITEM_ID'];?>"><?php echo $viewmodel[0]['TITLE'];?></a> to <?php echo $viewmodel[0]['LENDER_FIRST_NAME'];?>.
     <br/><br/>
-    Once <?php echo $viewmodel[0]['LENDER_FIRST_NAME'];?> approves your rental request, you'll get an email from us explaining what you guys have to do next.
-<!--    
-    Your item, <a href="/item/index/<?php echo $viewmodel[0]['ITEM_ID'];?>"><?php echo $viewmodel[0]['TITLE'];?></a>,  has been reserved. Your confirmation code is <b><?php echo $viewmodel[0]['CONFIRMATION_CODE'];?></b>. We've emailed and texted it to you so don't worry about having to print it out.
-    <br/>
-    <br/>
-    <div class="subheading">
-        ...now what do I do?
-    </div>
-    <br/>
-    1) Agree with the lender on a time and place to meet via email.
-    <br/><br/>
-    2) Once you guys meet, check out the item to make sure it is what you expect and in the right quality. Once it is, text your confirmation code to us. 
-    <br/><br/>
-    3) As soon as you confirm, we'll send a text to the lender saying so. That'll be his or her cue to hand the item over for you to borrow.
-    <br/>
-    <br/>
-    <div class="subheading">
-        Still confused?
-    </div>
-    <br/>
-    Check out our <a href="/document/howitworks">how-it-works guide</a>.-->
+    If <?php echo $viewmodel[0]['LENDER_FIRST_NAME'];?> approves your rental request, you'll get an email from us explaining what you guys have to do next.
     <?php } ?>
 </div>

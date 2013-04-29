@@ -40,6 +40,11 @@ function getRandomID()
     return rand(100000,999999);
 }
 
+function getRandomGUID()
+{
+    return uniqid();
+}
+
 $transaction_fee_variable = 0.06;
 $transaction_fee_fixed = 0.50;
 

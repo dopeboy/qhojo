@@ -88,9 +88,9 @@
         <br/><br/>
         <form id="additionalform" action="/user/signup/null/5" method="post" style="margin: 0">
             <table>  
-                <tr>
+                <tr style="height: 25px">
                     <td>
-                            Billing Information:
+                            Billing Information (required):
                     </td>
                     <td>
                         <div id="billing" style="">
@@ -98,17 +98,17 @@
                         </div>
                     </td>
                 </tr>     
-                <tr>
+                <tr style="height: 25px">
                     <td>
-                            Phone Number:
+                            Phone Number (required):
                     </td>
                     <td>
                             <input class="required textbox" type="text" id="phonenumber" name="phonenumber" />                          
                     </td>
                 </tr>
-                <tr>
+                <tr style="height: 25px">
                     <td>
-                            Profile Picture:
+                            Profile Picture (required):
                     </td>
                     <td>
                         
@@ -117,7 +117,20 @@
                         </div>
                         <button id="add-pictures" value="">Upload Picture</button>                          
                     </td>
-                </tr>           
+                </tr>
+                <tr style="height: 25px">
+                    <td>Network (recommended):</td>
+                    <td>
+                        <select id="networklist" name="networkid">
+                            <option email="" value="">Select a network</option>
+                            <option email="" value="">---------</option>
+                            <?php foreach($viewmodel as $network) { ?>
+                            <option email="<?php echo $network['EMAIL_EXTENSION'] ?>" value="<?php echo $network['ID'] ?>"><?php echo $network['NAME'] ?></option>
+                            <?php } ?>
+                        </select>
+                        <input class="textbox" type="text" id="networkemail" name="networkemail" style="display:none"/><span id="atsymbol" style="display:none">@</span><span id="networkemailextension" style="display:none"></span>
+                    </td>
+                </tr>
                 <tr style="">
                     <td colspan="2">
                            <input id="extrasubmitbutton" type="submit" value="Submit" style="margin-right:0.5em; margin-top: 0.8em" /><img id="secondloader" style="display:none" src="/img/ajax-loader.gif">

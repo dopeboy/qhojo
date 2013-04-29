@@ -113,7 +113,7 @@ class User extends Controller
             
             else if ($this->state == 2)
             {
-                $this->returnView(null, true,false);
+                $this->returnView($viewmodel->extraSignup(), true,false);
             }
             
             // Express checkout
@@ -125,12 +125,12 @@ class User extends Controller
             // Paypal billing agreement created where id=token
             else if ($this->state == 4 && $this->id != null)
             {
-                $this->returnView(null, true,false);
+                $this->returnView($viewmodel->extraSignup($this->userid), true,false);
             }
             
             else if ($this->state == 5)
             {
-                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file'], $this->postvalues['token']);
+                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file'], $this->postvalues['token'], $this->postvalues['networkemail'], $this->postvalues['networkid']);
                 
                 if ($status == 0)
                 {
@@ -150,6 +150,49 @@ class User extends Controller
             if ($this->admin == 1)
             {
                 $this->returnView($viewmodel->siteAdmin(), true,false);
+            }
+        }
+        
+        protected function confirmnetwork()
+        {
+            if ($this->id != null && $this->state != null)
+            {
+                $viewmodel = new UserModel();
+                
+                if ($this->state == 0 && $viewmodel->confirmNetworkAction($this->id) == 0)
+                {
+                    header('Location: /user/confirmnetwork/' . $this->id . '/1');
+                    exit;                    
+                }
+                
+                else if ($this->state == 1)
+                    $this->returnView($viewmodel->confirmNetworkSuccess($this->id), true,false);
+                
+                else 
+                    $this->returnView(null, true,false);
+            }
+        }
+        
+        protected function edit()
+        {
+            if ($this->id == $this->userid)
+            {
+                $viewmodel = new UserModel();
+                
+                if ($this->state == 0)
+                {
+                    $this->returnView($viewmodel->editUser($this->userid), true,false);                    
+                }
+                
+                else if ($this->state == 1)
+                {
+                    $this->returnView($viewmodel->submitEditUser($this->postvalues['networkid'], $this->postvalues['networkemail'], $this->userid), false,true);
+                }
+                
+                else if ($this->state == 2)
+                {
+                     $this->returnView(null, true,false);      
+                }
             }
         }
 }

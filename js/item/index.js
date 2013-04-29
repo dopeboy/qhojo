@@ -1,5 +1,7 @@
 $(document).ready(function() 
 { 
+     $( document ).tooltip();
+     
        var mapOptions = 
            {
           zoom: 13,

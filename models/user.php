@@ -31,6 +31,7 @@ class UserModel extends Model
             $row["BORROWER_FEEDBACK"] = $this->getFeedbackAsBorrower($userid);
             $row["COMMENTS_AS_LENDER"] = $this->getCommentsAsLender($userid);
             $row["COMMENTS_AS_BORROWER"] = $this->getCommentsAsBorrower($userid);
+            $row["NETWORKS"] = $this->getNetworksForUser($userid);
             
             return $row;
         }
@@ -147,7 +148,7 @@ class UserModel extends Model
             return $row == null ? 0 : -1;
         }
         
-        public function signupExtra($userid,$phonenumber, $profilepicture, $paypal_token)
+        public function signupExtra($userid,$phonenumber, $profilepicture, $paypal_token, $network_email, $network_id)
         {
             // Add request-specific fields to the request string.
             $nvpStr = "&TOKEN=$paypal_token";
@@ -156,7 +157,7 @@ class UserModel extends Model
             
             if("SUCCESS" != strtoupper($firstResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($firstResponse["ACK"])) 
             {
-                exit(print_r($firstResponse, true));
+                error_log(print_r($firstResponse, true));
                 return -1;                                
             }   
             
@@ -164,8 +165,8 @@ class UserModel extends Model
             
             if("SUCCESS" != strtoupper($secondResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($secondResponse["ACK"])) 
             {
-                exit(print_r($secondResponse, true));
-                return -1;                                
+                error_log(print_r($secondResponse, true));
+                return -2;                                
             }               
 
             $sqlParameters[":userid"] =  $userid;
@@ -176,9 +177,50 @@ class UserModel extends Model
             $sqlParameters[":paypal_email"] = urldecode($secondResponse['EMAIL']);
 
             $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token, PAYPAL_EMAIL=:paypal_email where ID=:userid');
-            $preparedStatement->execute($sqlParameters);       
+            $preparedStatement->execute($sqlParameters);  
             
-            return $preparedStatement->rowCount() == 1 ? 0 : -1;                
+            if ($preparedStatement->rowCount() != 1)
+                return -3;
+            
+            if (trim($network_email) == '' || trim($network_id) == '')
+                return 0;
+            
+            // USER NETWORK STUFF
+            $status = $this->addNetwork($network_id, $network_email, $userid);
+            if ($status != 0)
+                    return $status;
+
+            return 0;                
+        }
+        
+        public function addNetwork($network_id, $network_email, $userid)
+        {
+            // Make an insert into user_network
+            $sqlParameters = array();
+            $sqlParameters[":userid"] =  $userid;
+            $sqlParameters[":confirmation_id"] =  getRandomGUID();
+            $sqlParameters[":network_id"] =  $network_id;
+            $sqlParameters[":user_network_email"] =  $network_email;
+            $sqlParameters[":active"] =  0;
+            $sqlParameters[":creation_date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('INSERT INTO USER_NETWORK (CONFIRMATION_ID,USER_ID,NETWORK_ID,USER_NETWORK_EMAIL,ACTIVE,CREATION_DATE) VALUES (:confirmation_id, :userid, :network_id, :user_network_email, :active, :creation_date)');
+            $preparedStatement->execute($sqlParameters);                
+            
+            if ($preparedStatement->rowCount() != 1)
+                return -4;
+            
+            // Send email to user about joining network. Include URL with unique code
+            $row = $this->getUserDetails($userid);
+            $network = $this->getNetworkDetails($network_id);
+            
+            $message = "Hey " .  $row["FIRST_NAME"] . "!<br/><br/>";
+            $message .= "Please confirm your network affiliation to " . $network['NAME'] . " by clicking the link below:<br/><br/>";
+            $message .= "<a href='http://" . $_SERVER['HTTP_HOST'] . "/user/confirmnetwork/" . $sqlParameters[":confirmation_id"] . "/0'>" . "http://" . $_SERVER['HTTP_HOST'] . "/user/confirmnetwork/" . $sqlParameters[":confirmation_id"] . "/0</a>";
+            $message .= "<br/><br/>-team qhojo";
+
+            $this->sendEmail('do-not-reply@qhojo.com', $network_email . "@" . $network['EMAIL_EXTENSION'], 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', $message);
+            
+            return 0;
         }
         
         public function checkIfUserAlreadyRequested($userid, $itemid)
@@ -284,6 +326,77 @@ class UserModel extends Model
             $row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 
             return $row;            
+        }
+        
+        public function extraSignup($userid)
+        {
+            return $this->getNetworksUserIsNotIn($userid);           
+        }
+        
+        public function getNetworkDetails($network_id)
+        {
+            $sqlParameters[":network_id"] =  $network_id;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM NETWORK where ID=:network_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            return $row;                 
+        }
+        
+        public function confirmNetworkAction($confirmation_id)
+        {
+            $sqlParameters[":confirmation_id"] =  $confirmation_id;
+            $sqlParameters[":confirmed_date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('UPDATE USER_NETWORK set ACTIVE=1, CONFIRMED_DATE=:confirmed_date where CONFIRMATION_ID=:confirmation_id and ACTIVE=0 LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? 0 : -1;
+        }
+        
+        public function confirmNetworkSuccess($confirmation_id)
+        {
+            $sqlParameters[":confirmation_id"] = $confirmation_id;
+            $preparedStatement = $this->dbh->prepare('SELECT u.FIRST_NAME, n.NAME, n.ICON_IMAGE FROM USER u INNER JOIN USER_NETWORK un on u.ID=un.USER_ID and un.CONFIRMATION_ID=:confirmation_id INNER JOIN NETWORK n on un.NETWORK_ID=n.ID LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            return $row;            
+        }
+        
+        public function getNetworksForUser($userid)
+        {
+            $sqlParameters[":userid"] = $userid;
+            $preparedStatement = $this->dbh->prepare('SELECT n.NAME as "NETWORK_NAME", n.ICON_IMAGE FROM USER_NETWORK un INNER JOIN NETWORK n on un.NETWORK_ID=n.ID where un.USER_ID=:userid and un.ACTIVE=1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $row;                
+        }
+        
+        public function getNetworksUserIsNotIn($userid)
+        {
+            $sqlParameters[":userid"] = $userid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM NETWORK where ID not in (select NETWORK_ID from USER_NETWORK where USER_ID=:userid and ACTIVE=1)');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $row;            
+        }
+        
+        public function editUser($userid)
+        {
+            $row["USER"] = $this->getUserDetails($userid);
+            $row["CURRENT_NETWORKS"] = $this->getNetworksForUser($userid);
+            $row["OUTSIDE_NETWORKS"] = $this->getNetworksUserIsNotIn($userid);
+            
+            return $row;
+        }
+        
+        public function submitEditUser($network_id, $network_email, $userid)
+        {
+            $status =  $this->addNetwork($network_id, $network_email, $userid);
+            
+            return $status == 0 ? $userid : $status;
         }
 }
 
