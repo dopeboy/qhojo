@@ -5,10 +5,18 @@ insert into ITEM_STATE VALUES (1,'RESERVED');
 insert into ITEM_STATE VALUES (2,'EXCHANGED');
 insert into ITEM_STATE VALUES (3,'RETURNED');
 
-insert into LOCATION (ID, BOROUGH, NEIGHBORHOOD) VALUES (1,'bk','dumbo');
-insert into LOCATION (ID, BOROUGH, NEIGHBORHOOD) VALUES (2,'mh','greenwich village');
-insert into LOCATION (ID, BOROUGH, NEIGHBORHOOD) VALUES (3,'mh','morningside heights');
-insert into LOCATION (ID, BOROUGH, NEIGHBORHOOD) VALUES (4,'mh','lower east side');
+insert into BOROUGH (ID, SHORT_NAME, FULL_NAME) VALUES (0,'mh','manhattan');
+insert into BOROUGH (ID, SHORT_NAME, FULL_NAME) VALUES (1,'bk','brooklyn');
+-- insert into BOROUGH (ID, SHORT_NAME, FULL_NAME) VALUES (2,'bx','the bronx');
+-- insert into BOROUGH (ID, SHORT_NAME, FULL_NAME) VALUES (3,'q','queens');
+-- insert into BOROUGH (ID, SHORT_NAME, FULL_NAME) VALUES (4,'si','staten island');
+
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (0,0,'greenwich village');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (1,0,'morningside heights');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (2,1,'dumbo');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (3,0,'lower east side');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (4,1,'fort greene');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (5,1,'park slope');
 
 insert into NETWORK VALUES (0,'NYU','nyu.edu', 'nyu.png');
 insert into NETWORK VALUES (1,'Columbia University','columbia.edu', 'columbia.png');

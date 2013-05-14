@@ -18,7 +18,7 @@ VALUES (4, 200002, 100002, 2, 'sdfsdf', 1);
 
 
 insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,LOCATION_ID,STATE_ID,LENDER_ID,ACTIVE_FLAG) 
-VALUES (200003,'Vacuum Cleaner', 'Dyson brand.', 5,150,4,0,100002, 1);
+VALUES (200003,'Vacuum Cleaner', 'Dyson brand.', 5,150,0,0,100002, 1);
 insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,LOCATION_ID,STATE_ID,LENDER_ID,ACTIVE_FLAG) 
 VALUES (200004,'Wilson Tennis Racquet', 'V-Matrix Technology with V-Lock Bridge has a new concave frame geometry broadens the racket sweet spot for increased power on off-centered hits. It consists of stop shock sleeves, power String for increased power and enlarged head for greater power.',
 15,100,1,0,100003, 1);

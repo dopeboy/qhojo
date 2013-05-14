@@ -28,11 +28,19 @@ class ItemModel extends Model
         
 	public function main() 
 	{
-		$preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0');
-		$preparedStatement->execute();
-		$rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-                                
-		return $rows;
+            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+            $preparedStatement->execute();
+            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+            $preparedStatement->execute();
+            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);            
+
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0');
+            $preparedStatement->execute();
+            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
 	}       
         
 	public function test() 
@@ -47,21 +55,101 @@ class ItemModel extends Model
 //                error_log($new);
 //                error_log(date("m/d g:i A", strtotime($new)));
 
-                        $this->sendEmail('do-not-reply@qhojo.com', 'ms3766@caa.columbia.edu', 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', 'sdfsdf');            
+                     //   $this->sendEmail('do-not-reply@qhojo.com', 'ms3766@caa.columbia.edu', 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', 'sdfsdf');            
 
         }
         
-        public function testest($id)
-                {
+        public function testest($card_uri)
+        {
+            Balanced\Settings::$api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";
             
+            Httpful\Bootstrap::init();
+            RESTful\Bootstrap::init();
+            Balanced\Bootstrap::init();
+            
+            // CREATE THE BUYER using the CARD URI
+           // $buyer = Balanced\Marketplace::mine()->createBuyer('tdes223322f2dds22t2@test.com',$card_uri);
+//error_log($buyer->uri);
+            // *****************save $buyer->uri in db
+
+            // MAKE THE HOLD
+           // $account =  Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC2qeChsdrGkymWXmmbQmRts');
+           // $hold = $account->hold('5678', 'GOOD BURGER PALO ALTO');
+           // error_log($hold->uri);
+            // *****************save $hold->uri to the db
+                        
+            // VOID THE HOLD
+            //$hold = Balanced\Hold::get("/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/holds/HL7dH6pFLs33AZN3w70c3fQP");
+            //$hold->void();
+
+            // DEBIT (rr x rd) + commission
+            //$account = Balanced\Account::get($buyer->uri);
+            //$account->debit('1234');    
+            
+            // CREDIT (rr x rd) via Paypal using MassPay. 
+            
+            
+            return 2;
         }
         
-	public function search($query) 
+        public function searchByLocation($location_id)
+        {
+            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+            $preparedStatement->execute();
+            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+            $preparedStatement->execute();
+            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+            
+            $sqlParameters[":location_id"] =  $location_id;
+            $preparedStatement = $this->dbh->prepare('select * from LOCATION_VW where ID=:location_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $rows["LOCATION"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where LOCATION_ID=:location_id and ITEM_STATE_ID=0');
+            $preparedStatement->execute($sqlParameters);
+            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        }
+        
+        public function searchByBorough($borough_id)
+        {
+            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+            $preparedStatement->execute();
+            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+            $preparedStatement->execute();
+            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+            
+            $sqlParameters[":borough_id"] =  $borough_id;
+            $preparedStatement = $this->dbh->prepare('select * from BOROUGH where ID=:borough_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $rows["BOROUGH"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);   
+            
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where BOROUGH_ID=:borough_id and ITEM_STATE_ID=0');
+            $preparedStatement->execute($sqlParameters);
+            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;            
+        }
+        
+	public function searchForItem($query) 
 	{
+            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+            $preparedStatement->execute();
+            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+            $preparedStatement->execute();
+            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+            
 		$sqlParameters[":search"] =  '%'. $query .'%';
                 $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0 and (lower(TITLE) like lower(:search) OR lower(DESCRIPTION) like lower(:search))');
 		$preparedStatement->execute($sqlParameters);
-		$rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+		$rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 
 		return $rows;
 	}
@@ -166,48 +254,63 @@ class ItemModel extends Model
             $sqlParameters[":confirmation_code"] =  $confirmation_code;
             $sqlParameters[":phone_number"] =  $phone_number;
             $sqlParameters[":status_id"] =  1;
-            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and BORROWER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id');
+            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where CONFIRMATION_CODE=:confirmation_code and BORROWER_PHONE_NUMBER=:phone_number and ITEM_STATE_ID=:status_id LIMIT 1');
             $preparedStatement->execute($sqlParameters);
-            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            $item_row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
             error_log("1");
-            if ($preparedStatement->rowCount() == 1)
+            if ($preparedStatement->rowCount() == 1 && $item_row["BORROWER_BP_BUYER_URI"] == null)
             {
-                $sqlParameters = null;
-                $sqlParameters[":status_id"] =  2;
-                $sqlParameters[":item_id"] =  $row['ITEM_ID'];
-                $sqlParameters[":startdate"] =  date("Y-m-d H:i:s");
-                $sqlParameters[":enddate"] =  date("Y-m-d H:i:s",strtotime("+" . $row['DURATION'] . " days"));
-                $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id, START_DATE=:startdate, END_DATE=:enddate WHERE ID=:item_id');
-                $preparedStatement->execute($sqlParameters);    
-                error_log("2");    
+                // Make the hold
+                $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
+                $hold = $account->hold($item_row["DURATION"]*$item_row["RATE"], 'qhojo.com');
+                error_log("2");
                 
-                if ($preparedStatement->rowCount() == 1)
-                { 
+                if ($hold->uri != null)
+                {
+                    error_log($hold->uri);
+
+                    // Update the state & hold_uri
+                    $sqlParameters = null;
+                    $sqlParameters[":status_id"] =  2;
+                    $sqlParameters[":bp_hold_uri"] =  $hold->uri;
+                    $sqlParameters[":item_id"] =  $item_row['ITEM_ID'];
+                    $sqlParameters[":startdate"] =  date("Y-m-d H:i:s");
+                    $sqlParameters[":enddate"] =  date("Y-m-d H:i:s",strtotime("+" . $item_row['DURATION'] . " days"));
+                    $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id, START_DATE=:startdate, END_DATE=:enddate, BORROWER_BP_HOLD_URI=:bp_hold_uri WHERE ID=:item_id LIMIT 1');
+                    $preparedStatement->execute($sqlParameters);    
                     error_log("3");    
-                    $message = "Hey " . $row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
-                    $message2 = "When " . $row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify it and then text this confirmation code back to us: " . $confirmation_code;
-                    $message3 = "Thanks " . $row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $row["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
 
-                    global $TwilioAccountSid;   
-                    global $TwilioAuthToken;
-                    global $lender_number;
-                    $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
-                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message);                        
-                    error_log("4");    
-                    $sms = $client->account->sms_messages->create($lender_number, $row["LENDER_PHONE_NUMBER"],$message2);
-                    error_log("5");    
-                    $sms = $client->account->sms_messages->create($lender_number, $row["BORROWER_PHONE_NUMBER"],$message3);
-                    error_log("6");
+                    if ($preparedStatement->rowCount() == 1)
+                    { 
+                        error_log("4");    
+                        $message = "Hey " . $item_row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $item_row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
+                        $message2 = "When " . $item_row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify it and then text this confirmation code back to us: " . $confirmation_code;
+                        $message3 = "Thanks " . $item_row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $item_row["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
+
+                        global $TwilioAccountSid;   
+                        global $TwilioAuthToken;
+                        global $lender_number;
+                        global $borrower_number;
+                        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+                        $sms = $client->account->sms_messages->create($lender_number, $item_row["LENDER_PHONE_NUMBER"],$message);                        
+                        error_log("5");    
+                        $sms = $client->account->sms_messages->create($lender_number, $item_row["LENDER_PHONE_NUMBER"],$message2);
+                        error_log("6");    
+                        $sms = $client->account->sms_messages->create($borrower_number, $item_row["BORROWER_PHONE_NUMBER"],$message3);
+                        error_log("7");
+
+                        return 0;
+                    }   
                     
-                    return 0;
+                    return 4;
                 }
-
-                return 2;
+ 
+                return 3;
             }
 
-            return 1;
-	}
+            return 2;
+        }
 
 	public function lenderConfirm($confirmation_code, $phone_number) 
 	{
@@ -308,7 +411,7 @@ class ItemModel extends Model
         
 	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files)
 	{ 
-            if ($deposit > 500)
+            if ($deposit > 2500)
             {
                 return -1;
             }
@@ -352,7 +455,7 @@ class ItemModel extends Model
             }
 
             $sql = "INSERT INTO ITEM_PICTURES (" . implode(",", array_keys($datafields) ) . ") VALUES " . implode(',', $question_marks);
-            error_log($sql);
+            //error_log($sql);
             //error_log($insert_values);
             
             $this->dbh->beginTransaction();

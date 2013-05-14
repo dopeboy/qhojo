@@ -18,20 +18,30 @@ class Item extends Controller
         {
 		$viewmodel = new ItemModel();
                // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
-                $viewmodel->test();
+                //$viewmodel->test();
+                $this->returnView($viewmodel->test(), true,false);
         }
         
         protected function testest()
         {
-		//$viewmodel = new ItemModel();
+		$viewmodel = new ItemModel();
+                $this->returnView($viewmodel->testest($this->postvalues["uri"]), false,false);
 		#$viewmodel->testest('B%2d95E05095G29611425');
                // $viewmodel->paypalDoReferenceTransaction(10,'B%2d95E05095G29611425');
         }
         
 	protected function search() 
 	{
-		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->search($this->id), true,false);
+            $viewmodel = new ItemModel();
+
+            if ($this->state == 0)
+                $this->returnView($viewmodel->searchForItem($this->id), true,false);
+                
+            else if ($this->state == 1)
+                 $this->returnView($viewmodel->searchByLocation($this->id), true,false); // Neighborhood
+            
+            else if ($this->state == 2)
+                $this->returnView($viewmodel->searchByBorough($this->id), true,false);
 	}
 
 	protected function request() 
@@ -45,12 +55,19 @@ class Item extends Controller
                 exit;
             }
             
-            else if ($usermodel->checkExtra($this->userid))
+            else if ($usermodel->checkExtraFields($this->userid))
             {
                 header('Location: /user/signup/null/2');
                 $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 exit;                
             }
+            
+            else if ($usermodel->checkDebitMethod($this->userid))
+            {
+                header('Location: /user/signup/null/4');
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
+                exit;                    
+            }            
             
             else
             {
@@ -99,12 +116,19 @@ class Item extends Controller
                 exit;
             }
             
-            else if ($usermodel->checkExtra($this->userid))
+            else if ($usermodel->checkExtraFields($this->userid))
             {
                 header('Location: /user/signup/null/2');
                 $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
                 exit;                
-            }            
+            }    
+            
+            else if ($usermodel->checkCreditMethod($this->userid))
+            {
+                header('Location: /user/signup/null/6');
+                $_SESSION['referrer'] = $_SERVER['REQUEST_URI'];
+                exit;                    
+            }
             
             else  if ($this->state == 0)
             {    

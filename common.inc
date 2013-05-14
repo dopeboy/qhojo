@@ -8,10 +8,15 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "stagin
     $demo = true;
     $dbuser = "qhostaging";
     $dbpass = 'Z69afsGKVPHJjsO';
+    
     $paypal_environment = "sandbox"; 
     $paypal_username = 'manish-facilitator_api1.qhojo.com';
     $paypal_password = '1365794178';
-    $paypal_signature = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AnCVEEsukrPp-owAJXlPJnskrwj2';    
+    $paypal_signature = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AnCVEEsukrPp-owAJXlPJnskrwj2'; 
+    $paypal_appid = "APP-80W284485P519543";
+    
+    $bp_api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";
+    
     $borrower_number = '9493287319';
     $lender_number = '9494852584';    
 }
@@ -44,6 +49,11 @@ function getRandomGUID()
 {
     return uniqid();
 }
+
+function startsWith($haystack, $needle)
+{
+    return !strncmp($haystack, $needle, strlen($needle));
+}     
 
 $transaction_fee_variable = 0.06;
 $transaction_fee_fixed = 0.50;

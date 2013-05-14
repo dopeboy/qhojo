@@ -1,5 +1,9 @@
 <?php
 
+require('lib/httpful/bootstrap.php');
+require('lib/restful/bootstrap.php');
+require('lib/balanced/bootstrap.php');
+
 abstract class Model 
 {
 	protected $dbh;

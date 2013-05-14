@@ -22,22 +22,15 @@ $(document).ready(function()
         $('#networkemailextension').text($('#networklist option:selected').attr('email'));
     });
     
-    $('#expresscheckout').click(function()
-    {
-        $('#firstloader').show();
-        return true;
-    });
+    $('#myForm').validate({
     
-    $('#myForm').validate( {
     rules: {
         "terms": {
             required: true,
             minlength: 1
         },
-  errorPlacement: function ($error, $element) {
-       
-          
-        
+  
+        errorPlacement: function ($error, $element) {
     }        
   }
     });
@@ -49,12 +42,21 @@ $(document).ready(function()
             minlength: 1
         },
   errorPlacement: function ($error, $element) {
-       
-          
-        
     }        
   }
     });
+    
+        $('#creditForm').validate( {
+    rules: {
+        "terms": {
+            required: true,
+            minlength: 1
+        },
+  errorPlacement: function ($error, $element) {
+    }        
+  }
+    });    
+    
  
     $('#uploaderframe').attr('src', '/picture/upload/null/1'); 
 
@@ -69,11 +71,11 @@ $(document).ready(function()
             }
         });
 
-    $('#additionalform')
+    $('#extraFormNonBill')
         .ajaxForm({
             beforeSubmit: function (formData, jqForm, options) 
             {
-                if ($('#billing').text().trim() != 'Complete' || $('#picture').children().length != 2)
+                if ($('#picture').children().length != 2)
                 {
                     alert ("Missing fields.");
                     return false;
@@ -95,6 +97,119 @@ $(document).ready(function()
                     window.location = response;
             }
         });
+        
+    $('#creditForm')
+        .ajaxForm({
+            beforeSubmit: function (formData, jqForm, options) 
+            {
+                $('#secondloader').show();
+                $('#creditsubmitbutton').attr('disabled',true);
+            },
+            
+            success : function (response) 
+            {
+                if (response < 0)
+                {
+                    alert ("Error: " + response);
+                    $('#creditsubmitbutton').attr('disabled',false);
+                    $('#secondloader').hide();
+                }
+                
+                else
+                    window.location = response;
+            }
+        });        
+        
+        
+//    $('#debitForm')
+//        .ajaxForm({
+//            beforeSubmit: function (formData, jqForm, options) 
+//            {
+//                $('#secondloader').show();
+//                $('#debitsubmitbutton').attr('disabled',true);
+//            },
+//            
+//            success : function (response) 
+//            {
+//                if (response < 0)
+//                {
+//                    alert ("Error: " + response);
+//                    $('#debitsubmitbutton').attr('disabled',false);
+//                    $('#secondloader').hide();
+//                }
+//                
+//                else
+//                    window.location = response;
+//            }
+//        });              
+        
+        
+        
+        balanced.init('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6');
+
+
+//    var cardData = {
+//  "name": "Bernhard Riemann",                 // Optional
+//  "card_number": "4111 1111 1111 1111",
+//  "expiration_month": 4,
+//  "expiration_year": 2014,
+//};
+
+        $('#credit-card-form').submit(function()
+        {
+            $('#secondloader').show();
+            $('#debitsubmitbutton').attr('disabled',true);     
+            
+            var $form = $('#credit-card-form');
+
+            // collect the data from the form.
+            var creditCardData = 
+            {
+                card_number: '4111 1111 1111 1111', //$form.find('.cc-number').val(),
+                expiration_month: '4', //$form.find('.cc-em').val(),
+                expiration_year: '2014', //$form.find('.cc-ey').val(),
+                security_code: $form.find('cc-csc').val()
+            };               
+            
+            balanced.card.create(creditCardData, responseCallbackHandler);
+            return false;
+            
+        }); 
+
+    function responseCallbackHandler(response) 
+    {
+       switch (response.status) {
+         case 400:
+             // missing or invalid field - check response.error for details
+             console.log(response.error);
+             break;
+         case 404:
+             // your marketplace URI is incorrect
+             console.log(response.error);
+             break;
+         case 201:
+             // WOO HOO! MONEY!
+             // response.data.uri == URI of the card resource
+             // you should store this returned card URI to later charge it
+             //console.log(response.data);
+
+            $.post('/user/signup/null/5', response.data, function(response) 
+            {
+                if (response < 0)
+                {
+                    alert ("Error: " + response);
+                    $('#debitsubmitbutton').attr('disabled',false);
+                    $('#secondloader').hide();
+                }
+                
+                else
+                    window.location = response;
+            });
+         }
+    }
+        
+        
+        
 
     $("#add-pictures").click(function() 
       {
@@ -116,8 +231,7 @@ $(document).ready(function()
 
        $('#picture').empty();
   
-   
-$("#uploaderframe").contents().find('.files').children('tr.template-download').children('td.name').children('a').each(function(i) { 
+   $("#uploaderframe").contents().find('.files').children('tr.template-download').children('td.name').children('a').each(function(i) { 
     
                 $('#picture').append('<img id=\'largeimage\' src=\'' + $(this).attr('href') + '\' style=\'max-height: 100px; max-width: 124px\'>');
                 

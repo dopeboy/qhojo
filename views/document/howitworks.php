@@ -32,7 +32,7 @@
                 <img class="comic" src="/img/hiw-borrower-2.jpg" style="max-height: 100%; max-width: 100%">
             </div>               
             <div class="desc">
-                2. Reserve
+                2. Request
 
                 <div class="text">
                     <br/>

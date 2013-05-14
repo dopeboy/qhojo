@@ -1,5 +1,7 @@
 <?php
 
+require('lib/adaptiveaccounts-sdk-php/samples/PPBootStrap.php');
+
 class UserModel extends Model 
 {
 	public function login() 
@@ -136,47 +138,46 @@ class UserModel extends Model
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
             return $row == null ? 0 : 1;            
-        }
+        }   
         
-        public function checkExtra($userid)
+        public function checkExtraFields($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null or PAYPAL_BILLING_AGREEMENT_ID is null or PAYPAL_EMAIL) LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (PROFILE_PICTURE_FILENAME is null or PHONE_NUMBER is null) LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-            return $row == null ? 0 : -1;
+            return $row == null ? 0 : 1;
         }
         
-        public function signupExtra($userid,$phonenumber, $profilepicture, $paypal_token, $network_email, $network_id)
+        public function checkCreditMethod($userid)
         {
-            // Add request-specific fields to the request string.
-            $nvpStr = "&TOKEN=$paypal_token";
-                
-            $firstResponse = $this->PPHttpPost('CreateBillingAgreement', $nvpStr);
-            
-            if("SUCCESS" != strtoupper($firstResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($firstResponse["ACK"])) 
-            {
-                error_log(print_r($firstResponse, true));
-                return -1;                                
-            }   
-            
-            $secondResponse = $this->PPHttpPost('GetBillingAgreementCustomerDetails', $nvpStr);
-            
-            if("SUCCESS" != strtoupper($secondResponse["ACK"]) && "SUCCESSWITHWARNING" != strtoupper($secondResponse["ACK"])) 
-            {
-                error_log(print_r($secondResponse, true));
-                return -2;                                
-            }               
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and PAYPAL_EMAIL_ADDRESS is null LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
 
+            return $row == null ? 0 : 1;            
+        }
+        
+        public function checkDebitMethod($userid)
+        {
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and BP_BUYER_URI is null LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
+
+            return $row == null ? 0 : 1;            
+        }        
+        
+        public function extraSignupFieldsAction($userid,$phonenumber, $profilepicture, $network_email, $network_id)
+        {
             $sqlParameters[":userid"] =  $userid;
             $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
             $sqlParameters[":phonenumber"] =  '+1' . str_replace( array_keys($arr), array_values($arr), $phonenumber);
             $sqlParameters[":profile_picture"] =  substr($profilepicture[0], strlen('uploads/user/'), strlen($profilepicture[0]));
-            $sqlParameters[":paypal_token"] =  urldecode($firstResponse['BILLINGAGREEMENTID']); // contains a dash which comes out as a %2d
-            $sqlParameters[":paypal_email"] = urldecode($secondResponse['EMAIL']);
 
-            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture, PAYPAL_BILLING_AGREEMENT_ID=:paypal_token, PAYPAL_EMAIL=:paypal_email where ID=:userid');
+            $preparedStatement = $this->dbh->prepare('update USER SET PHONE_NUMBER=:phonenumber, PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid LIMIT 1');
             $preparedStatement->execute($sqlParameters);  
             
             if ($preparedStatement->rowCount() != 1)
@@ -188,7 +189,7 @@ class UserModel extends Model
             // USER NETWORK STUFF
             $status = $this->addNetwork($network_id, $network_email, $userid);
             if ($status != 0)
-                    return $status;
+                    return -4;
 
             return 0;                
         }
@@ -258,8 +259,6 @@ class UserModel extends Model
             }
             
             $hash = $salt . $hash;
-            //error_log($hash);
-            //error_log($password_from_db);
             return $hash == $password_from_db;
         }
         
@@ -274,49 +273,148 @@ class UserModel extends Model
             return $row[0];
         }
         
-        public function paypalExpressCheckout()
+        public function signupBorrowerAction($userid, $card_uri)
         {
-            global $paypal_environment;
-            $environment = $paypal_environment;
+            global $bp_api_key;
             
-            // Set request-specific fields.
-            $paymentAmount = urlencode('0');
-            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
-            $paymentType = urlencode('AUTHORIZATION');				// or 'Sale' or 'Order'
-            $billingType = urlencode('MerchantInitiatedBilling');
-            $billingAgreementDesc = urlencode('qhojo');
-            $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/user/signup/null/4");
-            $cancelURL = urlencode("http://" . $_SERVER['SERVER_NAME']);
-            $shipping = '1';
+            Balanced\Settings::$api_key = $bp_api_key;
+            Httpful\Bootstrap::init();
+            RESTful\Bootstrap::init();
+            Balanced\Bootstrap::init();
             
-            // Add request-specific fields to the request string.
-            $nvpStr = "&NOSHIPPING=$shipping&PAYMENTREQUEST_0_AMT=$paymentAmount&ReturnUrl=$returnURL&CANCELURL=$cancelURL&PAYMENTREQUEST_0_PAYMENTACTION=$paymentType&PAYMENTREQUEST_0_CURRENCYCODE=$currencyID&L_BILLINGTYPE0=$billingType&L_BILLINGAGREEMENTDESCRIPTION0=$billingAgreementDesc";
-
-            // Execute the API operation; see the PPHttpPost function above.
-            $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $nvpStr);
-
-            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            try
             {
-                // Redirect to paypal.com.
-                $token = urldecode($httpParsedResponseAr["TOKEN"]);
-                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
-                
-                if("sandbox" === $environment || "beta-sandbox" === $environment) 
-                {
-                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
-                }
-                
-                header("Location: $payPalURL");
-                exit;
+                $buyer = Balanced\Marketplace::mine()->createBuyer($userid . '@user.qhojo.com',$card_uri);    
+            }
+            
+            catch (Exception $e)
+            {
+                return -1;
+            }
+            
+            // Save buyer uri into database
+            $sqlParameters[":buyer_uri"] =  $buyer->uri;
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set BP_BUYER_URI=:buyer_uri where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? 0 : -2;            
+        }
+        
+        public function signupLenderAction($userid, $paypalEmailAddress, $paypalFirstName, $paypalLastName)
+        {
+            if ($this->verifyPaypalAccount($paypalEmailAddress,$paypalFirstName, $paypalLastName))
+                return -1;
+            
+            // Paypal credentials verified. Let's save them into the database
+            $sqlParameters[":paypal_email"] =  $paypalEmailAddress;
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set PAYPAL_EMAIL_ADDRESS=:paypal_email where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? 0 : -2;            
+        }
+        
+        public function verifyPaypalAccount($paypalEmailAddress, $paypalFirstName, $paypalLastName)
+        {
+            $configMap = array("acct1.UserName" => $paypal_username, 
+                                 "acct1.Password" => $paypal_password,
+                                 "acct1.Signature" => $paypal_signature,
+                                 "acct1.AppId" => $paypal_appid,
+                                 "http.ConnectionTimeOut" => 30,
+                                 "http.Retry" => 5,
+                                 "mode" => $paypal_environment,
+                                 "service.SandboxEmailAddress" => "pp.devtools@gmail.com",
+                                 "log.FileName" => "PayPal.log",
+                                 "log.LogLevel" => "INFO",
+                                 "log.LogEnabled" => "FALSE"
+                                );
+
+            $getVerifiedStatus = new GetVerifiedStatusRequest();
+            $getVerifiedStatus->emailAddress = $paypalEmailAddress;
+            $getVerifiedStatus->firstName = $paypalFirstName;
+            $getVerifiedStatus->lastName = $paypalLastName;
+            $getVerifiedStatus->matchCriteria = 'NAME';
+
+            $service  = new AdaptiveAccountsService($configMap);
+            
+            try 
+            {
+                $response = $service->GetVerifiedStatus($getVerifiedStatus);
             } 
             
-            else  
+            catch(Exception $ex) 
             {
-                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+                require_once 'Common/Error.php';
+                exit;
             }
 
-            return null;            
-        }
+            $ack = strtoupper($response->responseEnvelope->ack);
+            error_log(print_r($response,true));
+            return $ack == "SUCCESS" ? 0 : -1;
+           
+//            if($ack != "SUCCESS")
+//            {
+//                echo "<b>Error </b>";
+//                echo "<pre>";
+//                print_r($response);
+//                echo "</pre>";		
+//            } 
+//            
+//            else 
+//            {
+//                echo "<pre>";
+//                print_r($response);
+//                echo "</pre>";
+//                echo "<table>";
+//                echo "<tr><td>Ack :</td><td><div id='Ack'>$ack</div> </td></tr>";
+//                echo "</table>";		
+//            }
+        }        
+        
+//        public function paypalExpressCheckout()
+//        {
+//            global $paypal_environment;
+//            $environment = $paypal_environment;
+//            
+//            // Set request-specific fields.
+//            $paymentAmount = urlencode('0');
+//            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
+//            $paymentType = urlencode('AUTHORIZATION');				// or 'Sale' or 'Order'
+//            $billingType = urlencode('MerchantInitiatedBilling');
+//            $billingAgreementDesc = urlencode('qhojo');
+//            $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/user/signup/null/4");
+//            $cancelURL = urlencode("http://" . $_SERVER['SERVER_NAME']);
+//            $shipping = '1';
+//            
+//            // Add request-specific fields to the request string.
+//            $nvpStr = "&NOSHIPPING=$shipping&PAYMENTREQUEST_0_AMT=$paymentAmount&ReturnUrl=$returnURL&CANCELURL=$cancelURL&PAYMENTREQUEST_0_PAYMENTACTION=$paymentType&PAYMENTREQUEST_0_CURRENCYCODE=$currencyID&L_BILLINGTYPE0=$billingType&L_BILLINGAGREEMENTDESCRIPTION0=$billingAgreementDesc";
+//
+//            // Execute the API operation; see the PPHttpPost function above.
+//            $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $nvpStr);
+//
+//            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+//            {
+//                // Redirect to paypal.com.
+//                $token = urldecode($httpParsedResponseAr["TOKEN"]);
+//                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
+//                
+//                if("sandbox" === $environment || "beta-sandbox" === $environment) 
+//                {
+//                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
+//                }
+//                
+//                header("Location: $payPalURL");
+//                exit;
+//            } 
+//            
+//            else  
+//            {
+//                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
+//            }
+//
+//            return null;            
+//        }
         
         public function siteAdmin()
         {
@@ -328,7 +426,7 @@ class UserModel extends Model
             return $row;            
         }
         
-        public function extraSignup($userid)
+        public function extraSignupFieldsView($userid)
         {
             return $this->getNetworksUserIsNotIn($userid);           
         }

@@ -1,5 +1,5 @@
         <?php $i=0; ?>
-        <?php foreach($viewmodel as $item) { ?>
+        <?php foreach($viewmodel["ITEMS"] as $item) { ?>
 
             <div class="card" style="<?php if ($i%4==0) { ?> margin-left:4px; <?php } ?><?php if ($i<4) { ?> margin-top:6px; <?php } ?>">
                 <div class="top">
@@ -17,7 +17,7 @@
                         </a>
                     </span>
                     <br/>
-                    location: <span class="location"><?php echo $item['NEIGHBORHOOD'] . ',' . $item['BOROUGH']; ?></span><br/>
+                    location: <span class="location"><a href="/item/search/<?php echo $item['LOCATION_ID']?>/1"><?php echo $item['NEIGHBORHOOD'] . ',' . $item['BOROUGH_SHORT']; ?></a></span><br/>
                     rate: <span class="rate">$<?php echo $item['RATE']; ?> /day</span><br/>
                     lender: <span class="lender"><a href="/user/index/<?php echo $item['LENDER_ID']?>"><?php echo $item['LENDER_FIRST_NAME']; ?></a></span>
                 </div>        

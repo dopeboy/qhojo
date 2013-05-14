@@ -20,7 +20,11 @@
         <div style="display:table-cell;width:50%;text-align:right">
             <form id="f" action="/item/request/<?php echo $viewmodel[0]['ITEM_ID'] ?>/0" method="get" style="padding:0px; margin: 0px">
                  <input type="submit" style="width: 90px" value="Rent" <?php if($viewmodel[0]['LENDER_ID'] == $this->userid || $viewmodel[0]['ITEM_STATE_ID'] != 0 || $viewmodel[3]) { ?> disabled <?php } ?>>
+                 <?php if ($this->userid == null) { ?>
+                 <input type="submit" value="Contact Lender" onclick="" disabled>
+                 <?php } else { ?>
                  <input type="submit" value="Contact Lender" onclick="location.href='mailto:<?php echo $viewmodel[0]['LENDER_EMAIL_ADDRESS'] ?>?Subject=Hi';return false"  <?php if($viewmodel[0]['LENDER_ID'] == $this->userid) { ?> disabled <?php } ?>>
+                 <?php } ?>
             </form>
         </div>
     </div>
@@ -102,8 +106,9 @@
        </div>
        <br/>
        <div id="address" style="">
-               <?php echo $viewmodel[0]['NEIGHBORHOOD'] . ',' . $viewmodel[0]['BOROUGH']; ?>
-                <div id="map_canvas" style="width:100%; height:300px"></div>
+        <?php echo $viewmodel[0]['NEIGHBORHOOD'] . ',' . $viewmodel[0]['BOROUGH_FULL']; ?>
+         <br/><br/>
+         <div id="map_canvas" style="width:100%; height:300px"></div>
        </div>
    </div>
     

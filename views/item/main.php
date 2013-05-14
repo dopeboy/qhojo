@@ -7,11 +7,16 @@
 <title>qhojo - main</title>
 
 <div id="masterdiv">
-    <div id="mainheading">All Items</div>
+    <div style="display: inline-block; width:100%; font-size: small">
+        <div id="mainheading" style="float: left; width: 30%">
+            All items
+        </div>
+        <div style="float: left; width: 70%; text-align: right">            
+            <?php require('location_embed.php'); ?>
+        </div>
+    </div>
     <hr/>
-    <div class="subcontent" style="padding-top: 0px;   overflow: hidden;white-space: nowrap;">
-            
-    <?php require('card_embed.php'); ?>
- 
+    <div class="subcontent" style="padding-top: 0px;   overflow: hidden;white-space: nowrap;">   
+        <?php require('card_embed.php'); ?>
     </div>
 </div>

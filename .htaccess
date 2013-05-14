@@ -11,8 +11,8 @@ RewriteRule ^(img|css)($|/) - [L]
 
 RewriteCond %{QUERY_STRING} ^token=([a-zA-Z0-9\-]*)$ [NC]
 RewriteRule ^user/signup/null/4$ /user/signup/%1/4? [L,R=301]
-RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9\s\-]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3&state=$4 [NC,L]
-#Note the \s in the id section. It is needed for searching
+RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9\s\-:]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3&state=$4 [NC,L]
+#Note the \s in the id section. It is needed for searching. ':' needed for location based searching.
 #Note the \- in the id section. It is needed for the token paypal returns after a billing agreement has been signed.
 
 

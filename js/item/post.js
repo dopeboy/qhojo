@@ -26,9 +26,9 @@ $(document).ready(function()
         // if there is text
       if ($(this).val().length > 0)
           {
-            if ($(this).attr('id') == 'deposit' && $(this).val() > 500)
+            if ($(this).attr('id') == 'deposit' && $(this).val() > 2500)
             {
-                alert("As of now, qhojo is not taking items worth more than $500.");
+                alert("As of now, qhojo is not taking items worth more than $2500.");
                 $(this).val('');
             }
             

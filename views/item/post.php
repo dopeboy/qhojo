@@ -19,7 +19,7 @@
         
     <div id="topbar" style="width:100%;display:table;">
         <div id="mainheading" style="display:table-cell;">
-                <input id="title" name="title" class="editable" type="text" value="insert title here" style="font-size:100%; border: 1px solid #aaaaaa; width:500px">
+                <input id="title" name="title" class="editable" type="text" placeholder="insert title here" style="font-size:100%; border: 1px solid #aaaaaa; width:500px">
                 <span id ="gg" class="noneditable" style="display:none"></span>
                 <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>        
         </div>
@@ -132,7 +132,7 @@
             <select id ="address" name="locationid" class="editabledropdown">
                 <option></option>
                 <?php foreach ($viewmodel[1] as $location) { ?>
-                <option value="<?php echo $location['ID']; ?>"><?php echo $location['NEIGHBORHOOD'] . ',' . $location['BOROUGH']; ?></option>
+                <option value="<?php echo $location['ID']; ?>"><?php echo $location['NEIGHBORHOOD'] . ',' . $location['BOROUGH_FULL']; ?></option>
                 <?php } ?>
             </select>
             <span class="noneditable" style="display:none"></span>

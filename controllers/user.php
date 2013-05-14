@@ -71,23 +71,32 @@ class User extends Controller
         
         protected function logout()
         {                
-                $_SESSION = array();
+            $_SESSION = array();
 
-                if (ini_get("session.use_cookies")) 
-                {
-                    $params = session_get_cookie_params();
-                    setcookie(session_name(), '', time() - 42000,
-                              $params["path"], $params["domain"],
-                              $params["secure"], $params["httponly"]
-                              );
-                }
+            if (ini_get("session.use_cookies")) 
+            {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                          $params["path"], $params["domain"],
+                          $params["secure"], $params["httponly"]
+                          );
+            }
 
-                session_unset();
-                session_destroy();
-                
-                $this->returnView(0, false,false);
+            session_unset();
+            session_destroy();
+
+            $this->returnView(0, false,false);
         }
         
+        // STATE IDS
+        // 0 - signup page
+        // 1 - signup action
+        // 2 - extra signup nonbill page
+        // 3 - extra signup nonbill action
+        // 4 - extra signup debit page
+        // 5 - extra signup debit action
+        // 6 - extra signup credit page
+        // 7 - extra signup credit action
         protected function signup()
         {
             $viewmodel = new UserModel();
@@ -109,28 +118,36 @@ class User extends Controller
                 $this->returnView($userid, false,true);
             }
             
-            // --- Extra signup
-            
-            else if ($this->state == 2)
+            // --- Extra signup (non-bill)
+            else if ($this->state == 2 && $this->userid != null)
             {
-                $this->returnView($viewmodel->extraSignup($this->userid), true,false);
+                $this->returnView($viewmodel->extraSignupFieldsView($this->userid), true,false);
             }
             
-            // Express checkout
-            else if ($this->state == 3)
+            // Extra signup action (non-bill)
+            else if ($this->state == 3 && $this->userid != null)
             {
-                $viewmodel->paypalExpressCheckout();
+                $status = $viewmodel->extraSignupFieldsAction($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file'], $this->postvalues['networkemail'], $this->postvalues['networkid']);
+
+                if ($status == 0)
+                {
+                    $this->returnView($_SESSION['referrer'], false,true);
+                    $_SESSION['referrer'] = null;
+                }
+                
+                else
+                    $this->returnView(-1, false,true);                
             }
             
-            // Paypal billing agreement created where id=token
-            else if ($this->state == 4 && $this->id != null)
+            // Debit
+            else if ($this->state == 4 && $this->userid != null)
             {
-                $this->returnView($viewmodel->extraSignup($this->userid), true,false);
-            }
+                $this->returnView($viewmodel->getUserDetails($this->userid), true,false);
+            }      
             
-            else if ($this->state == 5)
+            else if ($this->state == 5 && $this->userid != null)
             {
-                $status = $viewmodel->signupExtra($this->userid, $this->postvalues['phonenumber'],$this->postvalues['file'], $this->postvalues['token'], $this->postvalues['networkemail'], $this->postvalues['networkid']);
+                $status = $viewmodel->signupBorrowerAction($this->userid, $this->postvalues['uri']);
                 
                 if ($status == 0)
                 {
@@ -139,7 +156,27 @@ class User extends Controller
                 }
                 
                 else
-                    $this->returnView(-1, false,true);
+                    $this->returnView($status, false,true);                  
+            }      
+            
+            // Credit
+            else if ($this->state == 6 && $this->userid != null)
+            {
+                $this->returnView($viewmodel->getUserDetails($this->userid), true,false);
+            }       
+            
+            else if ($this->state == 7 && $this->userid != null)
+            {
+                $status = $viewmodel->signupLenderAction($this->userid, $this->postvalues['paypalemail'], $this->postvalues['paypalfirstname'], $this->postvalues['paypallastname']);
+                
+                if ($status == 0)
+                {
+                    $this->returnView($_SESSION['referrer'], false,true);
+                    $_SESSION['referrer'] = null;
+                }
+                
+                else
+                    $this->returnView($status, false,true);    
             }
         }
         
