@@ -261,6 +261,13 @@ class ItemModel extends Model
             error_log("1");
             if ($preparedStatement->rowCount() == 1 && $item_row["BORROWER_BP_BUYER_URI"] != null)
             {
+                global $bp_api_key;
+
+                Balanced\Settings::$api_key = $bp_api_key;
+                Httpful\Bootstrap::init();
+                RESTful\Bootstrap::init();
+                Balanced\Bootstrap::init();
+            
                 // Make the hold
                 $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
                 $hold = $account->hold($item_row["DURATION"]*$item_row["RATE"], 'qhojo.com');
