@@ -269,8 +269,18 @@ class ItemModel extends Model
                 Balanced\Bootstrap::init();
             
                 // Make the hold
-                $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
-                $hold = $account->hold($item_row["DURATION"]*$item_row["RATE"] * 100, 'qhojo.com');
+                try
+                {
+                    $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
+                    $hold = $account->hold($item_row["DEPOSIT"] * 100, 'qhojo.com');
+                }
+                
+                catch (Exception $e)
+                {
+                    error_log($e->getMessage());
+                    return 1;
+                }
+                
                 error_log("2");
                 
                 if ($hold->uri != null)
@@ -346,13 +356,31 @@ class ItemModel extends Model
                 RESTful\Bootstrap::init();
                 Balanced\Bootstrap::init();
                 
-                // Void the hold
-                $hold = Balanced\Hold::get($item_row['BORROWER_BP_HOLD_URI']);
-                $hold->void();                
+                try
+                {
+                    // Void the hold
+                    $hold = Balanced\Hold::get($item_row['BORROWER_BP_HOLD_URI']);
+                    $hold->void();  
+                }
                 
-                // Debit the borrower
-                $account = Balanced\Account::get($item_row['BORROWER_BP_BUYER_URI']);
-                $account->debit($item_row["DURATION"]*$item_row["RATE"] * 100);                    // cents
+                catch (Exception $e)
+                {
+                    error_log($e->getMessage());
+                    return 1;
+                }
+                
+                try
+                {
+                    // Debit the borrower
+                    $account = Balanced\Account::get($item_row['BORROWER_BP_BUYER_URI']);
+                    $account->debit($item_row["DURATION"]*$item_row["RATE"] * 100);                    // cents
+                }
+                
+                catch (Exception $e)
+                {
+                    error_log($e->getMessage());
+                    return 2;
+                }                
                 
                 // Pay the lender
                 global $transaction_fee_variable;
@@ -360,7 +388,12 @@ class ItemModel extends Model
                 $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
                 $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
                 $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
-                error_log("Paypal status: " . $status);
+                
+                if ($status != 0)
+                {
+                    error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
+                    return 3;
+                }
                 
                 $sqlParameters = null;
                 $sqlParameters[":status_id"] =  3;
@@ -380,23 +413,6 @@ class ItemModel extends Model
                     $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
                     $sms = $client->account->sms_messages->create($borrower_number, $item_row["BORROWER_PHONE_NUMBER"],$message);   
                     error_log("4");    
-
-//                    // DEDUCT FROM BORROWER
-//                    $status = $this->paypalDoReferenceTransaction($item_row['RATE']*$item_row['DURATION'],$item_row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
-
-//                    if ($status != 0)
-//                        exit("we got problems - 1");
-//                    
-//                    global $transaction_fee_variable;
-//                    global $transaction_fee_fixed;
-//                    $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
-//                    $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
-                    
-//                    // MAKE TRANSFER TO LENDER
-//                    $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL'],$total_with_fee);
-                    
-//                    if ($status != 0)
-//                        exit("we got problems - 2");
                     
                     // send an email to lender and borrower and ask for feedback
                     $message_to_lender = "Hey " .  $item_row["LENDER_FIRST_NAME"] . "!<br/><br/>";
@@ -415,10 +431,10 @@ class ItemModel extends Model
                     return 0;
                 }
 
-                return 2;
+                return 4;
             }
 
-            return 1;
+            return 5;
 	}
 
 	public function getDuration($itemid)
