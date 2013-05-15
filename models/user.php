@@ -317,6 +317,8 @@ class UserModel extends Model
         
         public function verifyPaypalAccount($paypalEmailAddress, $paypalFirstName, $paypalLastName)
         {
+            global $paypal_username,$paypal_password,$paypal_signature,$paypal_appid,$paypal_environment;
+            
             $configMap = array("acct1.UserName" => $paypal_username, 
                                  "acct1.Password" => $paypal_password,
                                  "acct1.Signature" => $paypal_signature,
@@ -345,8 +347,8 @@ class UserModel extends Model
             
             catch(Exception $ex) 
             {
-                require_once 'Common/Error.php';
-                exit;
+                //require_once 'lib/adaptiveaccounts-sdk-php/samples/Common/Error.php';
+                //exit;
             }
 
             $ack = strtoupper($response->responseEnvelope->ack);

@@ -13,7 +13,7 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "stagin
     $paypal_username = 'manish-facilitator_api1.qhojo.com';
     $paypal_password = '1365794178';
     $paypal_signature = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AnCVEEsukrPp-owAJXlPJnskrwj2'; 
-    $paypal_appid = "APP-80W284485P519543";
+    $paypal_appid = "APP-80W284485P519543T";
     
     $bp_api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";
     
