@@ -1,0 +1,3 @@
+[submodule "lib/adaptiveaccounts-sdk-php"]
+	path = lib/adaptiveaccounts-sdk-php
+	url = git://github.com/paypal/adaptiveaccounts-sdk-php.git
