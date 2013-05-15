@@ -10,9 +10,9 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "stagin
     $dbpass = 'Z69afsGKVPHJjsO';
     
     $paypal_environment = "sandbox"; 
-    $paypal_username = 'manish-facilitator_api1.qhojo.com';
-    $paypal_password = '1365794178';
-    $paypal_signature = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AnCVEEsukrPp-owAJXlPJnskrwj2'; 
+    $paypal_username = 'demo_api1.qhojo.com';
+    $paypal_password = '1368646290';
+    $paypal_signature = 'An5ns1Kso7MWUdW4ErQKJJJ4qi4-A4GQwNItFRcHwhMoa0YSuyJs7BJP'; 
     $paypal_appid = "APP-80W284485P519543T";
     
     $bp_api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";

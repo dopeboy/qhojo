@@ -66,7 +66,7 @@ class ItemModel extends Model
             Httpful\Bootstrap::init();
             RESTful\Bootstrap::init();
             Balanced\Bootstrap::init();
-            
+            $status = $this->paypalMassPayToLender('bob@qhojo.com',23);
             // CREATE THE BUYER using the CARD URI
            // $buyer = Balanced\Marketplace::mine()->createBuyer('tdes223322f2dds22t2@test.com',$card_uri);
 //error_log($buyer->uri);
@@ -359,12 +359,13 @@ class ItemModel extends Model
                 global $transaction_fee_fixed;
                 $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
                 $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
-                $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL'],$total_with_fee);
+                $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
+                error_log("Paypal status: " . $status);
                 
                 $sqlParameters = null;
                 $sqlParameters[":status_id"] =  3;
                 $sqlParameters[":item_id"] =  $item_row['ITEM_ID'];
-                $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id');
+                $preparedStatement = $this->dbh->prepare('update ITEM set STATE_ID=:status_id WHERE ID=:item_id LIMIT 1');
                 $preparedStatement->execute($sqlParameters);    
                 error_log("2");  
                 
@@ -383,19 +384,19 @@ class ItemModel extends Model
 //                    // DEDUCT FROM BORROWER
 //                    $status = $this->paypalDoReferenceTransaction($item_row['RATE']*$item_row['DURATION'],$item_row['BORROWER_PAYPAL_BILLING_AGREEMENT_ID']);
 
-                    if ($status != 0)
-                        exit("we got problems - 1");
-                    
-                    global $transaction_fee_variable;
-                    global $transaction_fee_fixed;
-                    $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
-                    $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
+//                    if ($status != 0)
+//                        exit("we got problems - 1");
+//                    
+//                    global $transaction_fee_variable;
+//                    global $transaction_fee_fixed;
+//                    $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
+//                    $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
                     
 //                    // MAKE TRANSFER TO LENDER
 //                    $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL'],$total_with_fee);
                     
-                    if ($status != 0)
-                        exit("we got problems - 2");
+//                    if ($status != 0)
+//                        exit("we got problems - 2");
                     
                     // send an email to lender and borrower and ask for feedback
                     $message_to_lender = "Hey " .  $item_row["LENDER_FIRST_NAME"] . "!<br/><br/>";
