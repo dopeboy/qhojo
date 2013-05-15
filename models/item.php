@@ -259,7 +259,7 @@ class ItemModel extends Model
             $item_row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
             error_log("1");
-            if ($preparedStatement->rowCount() == 1 && $item_row["BORROWER_BP_BUYER_URI"] == null)
+            if ($preparedStatement->rowCount() == 1 && $item_row["BORROWER_BP_BUYER_URI"] != null)
             {
                 // Make the hold
                 $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
