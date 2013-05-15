@@ -73,9 +73,9 @@ class ItemModel extends Model
             // *****************save $buyer->uri in db
 
             // MAKE THE HOLD
-           // $account =  Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC2qeChsdrGkymWXmmbQmRts');
-           // $hold = $account->hold('5678', 'GOOD BURGER PALO ALTO');
-           // error_log($hold->uri);
+            $account =  Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC1nlg6iqSR8gq76vPYwnNx6');
+            $hold = $account->hold('46', 'GOOD BURGER PALO ALTO');
+            error_log($hold->uri);
             // *****************save $hold->uri to the db
                         
             // VOID THE HOLD
@@ -270,7 +270,7 @@ class ItemModel extends Model
             
                 // Make the hold
                 $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
-                $hold = $account->hold($item_row["DURATION"]*$item_row["RATE"], 'qhojo.com');
+                $hold = $account->hold($item_row["DURATION"]*$item_row["RATE"] * 100, 'qhojo.com');
                 error_log("2");
                 
                 if ($hold->uri != null)
