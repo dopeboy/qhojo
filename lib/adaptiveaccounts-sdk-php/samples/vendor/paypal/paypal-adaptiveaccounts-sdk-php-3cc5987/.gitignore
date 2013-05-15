@@ -10,5 +10,5 @@ build
 *.bak
 
 # Composer
-#vendor
-#composer.lock
+vendor
+composer.lock
