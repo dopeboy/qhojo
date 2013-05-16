@@ -64,8 +64,8 @@
                   <div>
                         rental rate
                         <div style="font-size: 250%">
-                            $<input id="rate" name="rate" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
-                            <span class="noneditable" style="display:none; margin: 0; "></span>
+                            $<input id="rate" name="rate" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;"><span class="noneditable" style="display:none; margin: 0;padding: 0; "></span>
+                             / day
                             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>                            
                         </div>
                     </div>
@@ -73,8 +73,7 @@
                     <div>
                         deposit
                         <div style="font-size: 250%">
-                            $<input id="deposit" name="deposit" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;">
-                            <span class="noneditable" style="display:none"></span>
+                            $<input id="deposit" name="deposit" class="editable" type="text" value="" style="width:50%;font-size:100%;margin: 0; padding: 0;"><span class="noneditable" style="display:none"></span>
                             <a class="editPencil" href="javascript:void(0);" style="display:none"><img src ="/img/edit.png" ></a>     
                         </div>
                     </div>        
