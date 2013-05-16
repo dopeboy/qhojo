@@ -12,11 +12,19 @@
     <?php if ($this->state == 0 || $this->state == 1) { ?>
     
     <div id="mainheading">
-        Feedback - <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>
+        Feedback 
     </div>
     <hr/>
     
     <?php } ?>
+    
+    <div class="subheading" style="">
+    Item: 
+    </div>
+    <div class="subcontent">
+        <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>        
+    </div>
+    <br/>
     
     <?php if ($this->state == 1) { ?>
     

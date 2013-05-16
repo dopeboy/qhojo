@@ -197,7 +197,6 @@ class Item extends Controller
             {
                 $this->returnView($item_model->acceptSuccess($this->id), true, false);
             }
-            
         }
         
         protected function ignore()

@@ -92,7 +92,7 @@ $(document).ready(function()
             success : function (response) 
             {   
                 if (response < 0)
-                    alert ("Error: " . response);
+                    alert ("Error: " + response);
                 else
                     window.location = response;
             }

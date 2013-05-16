@@ -16,8 +16,7 @@ class User extends Controller
                 
                 if ($status != 0)
                 {
-                    header('Location: /user/login/null/1');
-                    exit;
+                    $this->returnView($status, false,true);
                 }
                 
                 else
@@ -28,12 +27,14 @@ class User extends Controller
                     $_SESSION['admin'] = $viewmodel->isAdmin($userid);
                     
                     if ($_SESSION['referrer'] != null)
-                        header('Location: ' . $_SESSION['referrer']);
+                    {
+                        $tmp = $_SESSION['referrer'];
+                        $_SESSION['referrer'] = null;
+                        $this->returnView($tmp, false,true);
+                    }
+                        
                     else
-                        header('Location: /item/main/');
-                                        
-                    $_SESSION['referrer'] = null;
-                    exit;
+                        $this->returnView('/item/main/', false,true);
                 }
 	}   
         
@@ -140,12 +141,12 @@ class User extends Controller
             }
             
             // Debit
-            else if ($this->state == 4 && $this->userid != null)
+            else if ($this->state == 4 && $this->userid != null && !$viewmodel->checkExtraFields($this->userid))
             {
                 $this->returnView($viewmodel->getUserDetails($this->userid), true,false);
             }      
             
-            else if ($this->state == 5 && $this->userid != null)
+            else if ($this->state == 5 && $this->userid != null && !$viewmodel->checkExtraFields($this->userid))
             {
                 $status = $viewmodel->signupBorrowerAction($this->userid, $this->postvalues['uri']);
                 
@@ -160,12 +161,12 @@ class User extends Controller
             }      
             
             // Credit
-            else if ($this->state == 6 && $this->userid != null)
+            else if ($this->state == 6 && $this->userid != null && !$viewmodel->checkExtraFields($this->userid))
             {
                 $this->returnView($viewmodel->getUserDetails($this->userid), true,false);
             }       
             
-            else if ($this->state == 7 && $this->userid != null)
+            else if ($this->state == 7 && $this->userid != null && !$viewmodel->checkExtraFields($this->userid))
             {
                 $status = $viewmodel->signupLenderAction($this->userid, $this->postvalues['paypalemail'], $this->postvalues['paypalfirstname'], $this->postvalues['paypallastname']);
                 
@@ -177,6 +178,12 @@ class User extends Controller
                 
                 else
                     $this->returnView($status, false,true);    
+            }
+            
+            // Error
+            else
+            {
+                
             }
         }
         

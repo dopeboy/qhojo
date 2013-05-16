@@ -181,19 +181,19 @@ class ItemModel extends Model
         // Passed in parameters are all of the borrower
         public function submitRequest($itemid, $userid, $duration, $message)
 	{
-		$sqlParameters[":itemid"] =  $itemid;
-		$sqlParameters[":userid"] =  $userid;
-                
-                if ($duration != 1 && $duration != 2 && $duration != 3)
-                    $duration = 1;
-               
-		$sqlParameters[":duration"] =  $duration;
-                $sqlParameters[":message"] =  $message;
-                $sqlParameters[":requestid"] =  getRandomID();
-		$preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:requestid, :itemid, :userid, :duration, :message)');
-		$preparedStatement->execute($sqlParameters);
-            
-                return $preparedStatement->rowCount() == 1 ? 0 : 1;
+            $sqlParameters[":itemid"] =  $itemid;
+            $sqlParameters[":userid"] =  $userid;
+
+            if ($duration < 1 || $duration > 7)
+                $duration = 1;
+
+            $sqlParameters[":duration"] =  $duration;
+            $sqlParameters[":message"] =  $message;
+            $sqlParameters[":requestid"] =  getRandomID();
+            $preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:requestid, :itemid, :userid, :duration, :message)');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? 0 : 1;
 	}
         
 	public function requestComplete($itemid) 
@@ -272,12 +272,13 @@ class ItemModel extends Model
                 try
                 {
                     $account =  Balanced\Account::get($item_row["BORROWER_BP_BUYER_URI"]);
-                    $hold = $account->hold($item_row["DEPOSIT"] * 100, 'qhojo.com');
+                    $hold = $account->hold($item_row["DEPOSIT"] * 100, 'qhojo.com'); // cents
                 }
                 
                 catch (Exception $e)
                 {
                     error_log($e->getMessage());
+                    error_log("borrowerConfirm FML 1");
                     return 1;
                 }
                 
@@ -285,8 +286,6 @@ class ItemModel extends Model
                 
                 if ($hold->uri != null)
                 {
-                    error_log($hold->uri);
-
                     // Update the state & hold_uri
                     $sqlParameters = null;
                     $sqlParameters[":status_id"] =  2;
@@ -320,12 +319,15 @@ class ItemModel extends Model
                         return 0;
                     }   
                     
+                    error_log("borrowerConfirm FML 4");
                     return 4;
                 }
- 
+                
+                error_log("borrowerConfirm FML 3");
                 return 3;
             }
 
+            error_log("borrowerConfirm FML 2");
             return 2;
         }
 
@@ -366,32 +368,37 @@ class ItemModel extends Model
                 catch (Exception $e)
                 {
                     error_log($e->getMessage());
+                    error_log("lenderConfirm FML 1");
                     return 1;
                 }
-                
-                try
-                {
-                    // Debit the borrower
-                    $account = Balanced\Account::get($item_row['BORROWER_BP_BUYER_URI']);
-                    $account->debit($item_row["DURATION"]*$item_row["RATE"] * 100);                    // cents
-                }
-                
-                catch (Exception $e)
-                {
-                    error_log($e->getMessage());
-                    return 2;
-                }                
                 
                 // Pay the lender
                 global $transaction_fee_variable;
                 global $transaction_fee_fixed;
                 $total_without_fee = $item_row["RATE"] * $item_row["DURATION"];
                 $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
+                
+                try
+                {
+                    // Debit the borrower
+                    $account = Balanced\Account::get($item_row['BORROWER_BP_BUYER_URI']);
+                    $account->debit($total_without_fee * 100);                    // cents
+                }
+                
+                catch (Exception $e)
+                {
+                    error_log($e->getMessage());
+                    error_log("lenderConfirm FML 2");
+                    return 2;
+                }                
+                
+                // Pay the lender
                 $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
                 
                 if ($status != 0)
                 {
                     error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
+                    error_log("lenderConfirm FML 3");
                     return 3;
                 }
                 
@@ -431,9 +438,11 @@ class ItemModel extends Model
                     return 0;
                 }
 
+                error_log("lenderConfirm FML 4");
                 return 4;
             }
 
+            error_log("lenderConfirm FML 5");
             return 5;
 	}
 
@@ -458,8 +467,9 @@ class ItemModel extends Model
         
 	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files)
 	{ 
-            if ($deposit > 2500)
+            if ($deposit == null || $deposit > 2500 || $rate == null || $rate < 1)
             {
+                error_log("submitPost FML -1");
                 return -1;
             }
             
