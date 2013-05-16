@@ -5,7 +5,7 @@
     <script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/jquery-ui.js"> </script>
     <script type="text/javascript" src="/js/jquery.validate.min.js"> </script>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="/css/jquery-ui.css" />
     <script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
 </head>
 

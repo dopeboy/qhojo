@@ -27,10 +27,15 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     $demo = false;
     $dbuser = "qhoprod";
     $dbpass = 'Gk1BLp5J6u5MsQr';
+    
     $paypal_environment = "live";
     $paypal_username = 'manish_api1.qhojo.com';
     $paypal_password = 'B6N846FPXC5PQLT8';
     $paypal_signature = 'AF7jlDuoQteYjEgQ3PedOaXwgaERAMnh-YCySl0ucSxMvw7PXJ9BBfH6';
+    $paypal_appid = "APP-9RX52455H6095371W";
+    
+    $bp_api_key = "1f2306b8be5711e2ac7e026ba7f8ec28";
+    
     $borrower_number = '9177466195';
     $lender_number = '3476730097';        
 }

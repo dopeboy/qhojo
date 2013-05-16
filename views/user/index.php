@@ -6,7 +6,7 @@
          <link rel="stylesheet" type="text/css" href="/css/jquery.rating.css" media="screen" />          
          <link rel="stylesheet" type="text/css" href="/css/user/index.css" media="screen" />
          <script type="text/javascript" src="/js/jquery-ui.js"> </script>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />         
+        <link rel="stylesheet" href="/css/jquery-ui.css" />         
 </head>
 
 <title>qhojo - <?php echo $viewmodel["USER"]["FIRST_NAME"]?></title>
