@@ -144,55 +144,82 @@
     <div id="mainheading">Borrower Billing Fields</div>
     <hr/>
     <div class="subcontent">
-        <?php echo $viewmodel["FIRST_NAME"] ?>, before you rent an item, we're gonna need to know how you're going to pay us in the future. Right now, we currently accept payments from all major credit cards. We will <u>always</u> let you know before we charge you.
+        <?php echo $viewmodel["FIRST_NAME"] ?>, before you rent an item, we're gonna need to know how you're going to pay us in the future. We currently accept payments from all major credit cards. We will <u>always</u> let you know before we charge you.
         <br/><br/>
-        <form id="credit-card-form" action="/user/signup/null/5" method="post" style="margin: 0">                 
-            <table>  
-                <tr style="height: 25px">
-                    <td>
-                            Card Number:
-                    </td>
-                    <td>
-                        <input type="text"
-                       autocomplete="off"
-                       placeholder="Card Number"
-                       class="cc-number">                
-                    </td>
-                </tr>      
-                <tr style="height: 25px">
-                    <td>
-                            Expiration (MM/YYYY):
-                    </td>
-                    <td>
-                        <input type="text"
+        <div style="display:inline-block; width: 100%">
+            <div style="float:left; width:65%">
+                <form id="credit-card-form" action="/user/signup/null/5" method="post" style="margin: 0">                 
+                    <table>  
+                        <tr style="height: 25px">
+                            <td>
+                                <b>Card Number:</b>
+                            </td>
+                            <td>
+                                <input type="text"
                                autocomplete="off"
-                               placeholder="Expiration Month"
-                               class="cc-em">
-                        <span>/</span>
-                        <input type="text"
+                               placeholder="Card Number"
+                               class="cc-number textbox"
+                               >                
+                            </td>
+                        </tr>      
+                        <tr style="height: 25px">
+                            <td>
+                                <b>Expiration (MM/YYYY):</b>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       autocomplete="off"
+                                       placeholder="Expiration Month"
+                                       class="cc-em textbox"
+                                       >
+                                <span>/</span>
+                                <input type="text"
+                                       autocomplete="off"
+                                       placeholder="Expiration Year"
+                                       class="cc-ey textbox">           
+                            </td>
+                        </tr>   
+                        <tr style="height: 25px">
+                            <td>
+                                    <b>Card Security Code:</b>
+                            </td>
+                            <td>
+                                <input type="text"
                                autocomplete="off"
-                               placeholder="Expiration Year"
-                               class="cc-ey">           
-                    </td>
-                </tr>   
-                <tr style="height: 25px">
-                    <td>
-                            CSC:
-                    </td>
-                    <td>
-                        <input type="text"
-                       autocomplete="off"
-                       placeholder="CSC"
-                       class="cc-csc">             
-                    </td>
-                </tr>   
-                <tr style="">
-                    <td colspan="2">
-                        <button type="submit" id="debitsubmitbutton" class="btn">Submit</button><img id="secondloader" style="display:none" src="/img/ajax-loader.gif">
-                    </td>
-                </tr>                    
-            </table>             
-        </form>       
+                               placeholder="CSC"
+                               class="cc-csc textbox">             
+                            </td>
+                        </tr>   
+                        <tr>
+                            <td colspan="2">
+                                <img src="/img/cc_logos.png" style="margin-top: 5px; margin-bottom: 5px">
+                            </td>
+                        </tr>
+  
+                        <tr style="">
+                            <td colspan="2">
+                                <button type="submit" id="debitsubmitbutton" class="btn">Submit</button><img id="secondloader" style="display:none" src="/img/ajax-loader.gif">
+                            </td>
+                        </tr>                    
+                    </table>             
+                </form>     
+            </div>
+            <div style="float: left; width: 35%">
+                <div style="float: left;margin-right:20px; margin-top: 10px">
+                    <!-- Begin DigiCert/ClickID site seal HTML and JavaScript -->
+                    <div id="DigiCertClickID_DGkXoYAj" data-language="en_US" style="">
+                            <a href="http://www.digicert.com/ssl-certificate.htm"></a>
+                    </div>
+                    <script type="text/javascript">
+                    var __dcid = __dcid || [];__dcid.push(["DigiCertClickID_DGkXoYAj", "13", "m", "black", "DGkXoYAj"]);(function(){var cid=document.createElement("script");cid.async=true;cid.src="//seal.digicert.com/seals/cascade/seal.min.js";var s = document.getElementsByTagName("script");var ls = s[(s.length - 1)];ls.parentNode.insertBefore(cid, ls.nextSibling);}());
+                    </script>
+                    <!-- End DigiCert/ClickID site seal HTML and JavaScript -->
+                </div>
+                <div style="float: left; margin-left: 20px; margin-top: 10px">
+                    <a href="http://www.balancedpayments.com" target="_blank"><img src="/img/balanced-logo-print.png"></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

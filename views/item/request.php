@@ -130,7 +130,7 @@
             <br/><br/>
        
             <div style="margin:0px auto; max-width:100%; display:table;">
-                <input id="submitbutton" type="submit" >
+                <input id="submitbutton" type="submit" value="submit">
                 <img id="loading" style="display:none" src="/img/ajax-loader.gif">
             </div>
            
