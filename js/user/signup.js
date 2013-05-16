@@ -62,12 +62,21 @@ $(document).ready(function()
 
     $('#myForm')
         .ajaxForm({
+            beforeSubmit: function (formData, jqForm, options) 
+            {
+                $('#secondloader').show();
+                $('#submitbutton').attr('disabled',true);
+            },
+            
             success : function (response) 
             {   
                 if (response != -1)
                     window.location = "/item/main";
                 else
                     alert ("Error");
+                
+                $('#secondloader').hide();
+                $('#submitbutton').attr('disabled',false);
             }
         });
 

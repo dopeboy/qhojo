@@ -63,7 +63,7 @@
                 </tr>                    
                 <tr style="">
                     <td colspan="2">
-                           <input type="submit" value="Submit" style="margin-right:0.5em; margin-left: 0px; margin-top: 0.8em" />
+                           <input id="submitbutton" type="submit" value="Submit" style="margin-right:0.5em; margin-left: 0px; margin-top: 0.8em" /><img id="secondloader" style="display:none" src="/img/ajax-loader.gif">
                     </td>
                 </tr>    
                 <tr style="">
