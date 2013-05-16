@@ -73,10 +73,11 @@ $(document).ready(function()
                 if (response != -1)
                     window.location = "/item/main";
                 else
+                {
                     alert ("Error");
-                
-                $('#secondloader').hide();
-                $('#submitbutton').attr('disabled',false);
+                    $('#secondloader').hide();
+                    $('#submitbutton').attr('disabled',false);                    
+                }
             }
         });
 

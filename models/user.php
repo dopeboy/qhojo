@@ -289,6 +289,7 @@ class UserModel extends Model
             
             catch (Exception $e)
             {
+                error_log($e->getMessage());
                 return -1;
             }
             
