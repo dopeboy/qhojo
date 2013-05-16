@@ -2,7 +2,7 @@
 	<script type="text/javascript" src="/js/user/dashboard.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/user/dashboard.css" media="screen" />
         <script type="text/javascript" src="/js/jquery-ui.js"></script>
-        <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css" media="screen" />
 </head>
 
 <title>qhojo - dashboard</title>
