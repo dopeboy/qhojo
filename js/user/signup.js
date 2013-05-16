@@ -130,7 +130,10 @@ $(document).ready(function()
             }
         });        
         
-        balanced.init('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6');
+        if (document.domain == "localhost" || document.domain == "staging.qhojo.com")
+            balanced.init('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6');
+        else if (document.domain == "qhojo.com")
+            balanced.init('/v1/marketplaces/MPX4F8Wx05ETX8BWY4aC00U');
 
         $('#credit-card-form').submit(function()
         {   

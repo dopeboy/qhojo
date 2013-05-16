@@ -287,9 +287,9 @@ class UserModel extends Model
                 $buyer = Balanced\Marketplace::mine()->createBuyer($userid . '@user.qhojo.com',$card_uri);    
             }
             
-            catch (Exception $e)
+             catch (Balanced\Exceptions\HTTPError $e)
             {
-                error_log($e->getMessage());
+                error_log($e->response);
                 return -1;
             }
             
