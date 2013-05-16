@@ -302,7 +302,7 @@ class ItemModel extends Model
                         error_log("4");    
                         $message = "Hey " . $item_row["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $item_row["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
                         $message2 = "When " . $item_row["BORROWER_FIRST_NAME"] . " comes back to return the item, verify it and then text this confirmation code back to us: " . $confirmation_code;
-                        $message3 = "Thanks " . $item_row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. The item must be returned to " . $item_row["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
+                        $message3 = "Thanks " . $item_row["BORROWER_FIRST_NAME"] . ". The rental duration has now started. We've placed a hold of \${$item_row["DEPOSIT"]} on your credit card. The item must be returned to " . $item_row["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($sqlParameters[":enddate"])) . ".";
 
                         global $TwilioAccountSid;   
                         global $TwilioAuthToken;
@@ -411,7 +411,7 @@ class ItemModel extends Model
                 if ($preparedStatement->rowCount() == 1)
                 {
                     error_log("3");    
-                    $message = "Hey " . $item_row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $item_row["LENDER_FIRST_NAME"] . "'s confirmation. You can go ahead and return the item and carry on with the rest of your day";
+                    $message = "Hey " . $item_row["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $item_row["LENDER_FIRST_NAME"] . "'s confirmation. Go ahead and return the item. The hold of \${$item_row["DEPOSIT"]} on your credit card has been released.";
 
                     global $TwilioAccountSid;   
                     global $TwilioAuthToken;
@@ -424,15 +424,15 @@ class ItemModel extends Model
                     $message_to_lender = "Hey " .  $item_row["LENDER_FIRST_NAME"] . "!<br/><br/>";
                     $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . number_format($total_with_fee,2) . ". <br/><br/>";
                     $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $item_row['ITEM_ID'] . "/0\">here</a>.";
-                    $message_to_lender .= "<br/><br/>-team qhojo";
+                    $message_to_lender .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
 
                     $message_to_borrower = "Hey " .  $item_row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
-                    $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your paypal account: we have deducted \$" . number_format($total_without_fee,2) . ". <br/><br/>";
+                    $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your credit card account: we have deducted \$" . number_format($total_without_fee,2) . ". <br/><br/>";
                     $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $item_row['ITEM_ID'] . "/1\">here</a>.";
-                    $message_to_borrower .= "<br/><br/>-team qhojo";                        
+                    $message_to_borrower .= "<br/><br/>-team qhojo<br/>http://qhojo.com";                     
 
                     $this->sendEmail('do-not-reply@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
-                    $this->sendEmail('do-not-reply@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
+                    $this->sendEmail('do-not-reply@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
 
                     return 0;
                 }
@@ -659,7 +659,7 @@ class ItemModel extends Model
             $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
             $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
             $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#lender\">how-it-works guide</a>";
-            $message .= "<br/><br/>-team qhojo";
+            $message .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reservation Details', $message);
             
@@ -671,10 +671,10 @@ class ItemModel extends Model
             $message .= "Your confirmation code is: <b><u>" . $row['CONFIRMATION_CODE'] . "</b></u>. We just texted it to you. Hang on to it because you'll need it later.<br/><br/>";
             $message .= "Here's what you need to do next:<br/><br/>";
             $message .= "1) Over email, arrange to meet with " .  $row['LENDER_FIRST_NAME'] . ". Here's " . $row['LENDER_FIRST_NAME'] . "'s email address for reference: " .  $row['LENDER_EMAIL_ADDRESS'] . "<br/>";
-            $message .= "2) Once you guys meet, verify the quality of the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
+            $message .= "2) Once you guys meet, check out the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
             $message .= "3) We'll pass on this confirmation to " .  $row['LENDER_FIRST_NAME'] . " via text message. Once " .  $row['LENDER_FIRST_NAME'] . " has received it, he/she will hand the item over to you. At this point, the rental period has started and you are responsible to bring your item back after the agreed upon duration.<br/><br/>";
             $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#borrower\">how-it-works guide</a>";
-            $message .= "<br/><br/>-team qhojo";
+            $message .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reserved!', $message);
           

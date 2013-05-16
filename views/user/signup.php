@@ -205,7 +205,7 @@
                 </form>     
             </div>
             <div style="float: left; width: 35%">
-                <div style="float: left;margin-right:20px; margin-top: 10px">
+                <div style="float: left;margin-right:10px; margin-top: 10px">
                     <!-- Begin DigiCert/ClickID site seal HTML and JavaScript -->
                     <div id="DigiCertClickID_DGkXoYAj" data-language="en_US" style="">
                             <a href="http://www.digicert.com/ssl-certificate.htm"></a>
@@ -215,7 +215,7 @@
                     </script>
                     <!-- End DigiCert/ClickID site seal HTML and JavaScript -->
                 </div>
-                <div style="float: left; margin-left: 20px; margin-top: 10px">
+                <div style="float: left; margin-left: 10px; margin-top: 10px">
                     <a href="http://www.balancedpayments.com" target="_blank"><img src="/img/balanced-logo-print.png"></a>
                 </div>
             </div>

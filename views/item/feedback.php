@@ -18,16 +18,14 @@
     
     <?php } ?>
     
+    <?php if ($this->state == 1) { ?>
     <div class="subheading" style="">
     Item: 
     </div>
     <div class="subcontent">
         <a href="/item/index/<?php echo $viewmodel['ITEM_ID'];?>"><?php echo $viewmodel['TITLE'];?></a>        
     </div>
-    <br/>
-    
-    <?php if ($this->state == 1) { ?>
-    
+    <br/>    
     <div class="subheading" style="">
         Lender
     </div><br/>
