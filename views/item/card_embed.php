@@ -1,4 +1,5 @@
         <?php $i=0; ?>
+        <?php if (empty($viewmodel["ITEMS"])) { ?> <i>No items found</i> <?php } ?>
         <?php foreach($viewmodel["ITEMS"] as $item) { ?>
 
             <div class="card" style="<?php if ($i%4==0) { ?> margin-left:4px; <?php } ?><?php if ($i<4) { ?> margin-top:6px; <?php } ?>">

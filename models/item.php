@@ -424,12 +424,12 @@ class ItemModel extends Model
                     $message_to_lender = "Hey " .  $item_row["LENDER_FIRST_NAME"] . "!<br/><br/>";
                     $message_to_lender .= "Now that the transaction is complete, we owe you some money. Check your paypal account: we have deposited \$" . number_format($total_with_fee,2) . ". <br/><br/>";
                     $message_to_lender .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $item_row['ITEM_ID'] . "/0\">here</a>.";
-                    $message_to_lender .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
+                    $message_to_lender .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";
 
                     $message_to_borrower = "Hey " .  $item_row["BORROWER_FIRST_NAME"] . "!<br/><br/>";
                     $message_to_borrower .= "Now that the transaction is complete, we're gonna need some of your money. Check your credit card account: we have deducted \$" . number_format($total_without_fee,2) . ". <br/><br/>";
                     $message_to_borrower .= "Also, when you get a second, help our community be a better one. Give us your feedback on this transaction by clicking <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/item/feedback/" . $item_row['ITEM_ID'] . "/1\">here</a>.";
-                    $message_to_borrower .= "<br/><br/>-team qhojo<br/>http://qhojo.com";                     
+                    $message_to_borrower .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";                  
 
                     $this->sendEmail('do-not-reply@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - Transaction Complete!', $message_to_lender);
                     $this->sendEmail('do-not-reply@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - Transaction Complete!', $message_to_borrower);
@@ -659,7 +659,7 @@ class ItemModel extends Model
             $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
             $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
             $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#lender\">how-it-works guide</a>";
-            $message .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
+            $message .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reservation Details', $message);
             
@@ -674,7 +674,7 @@ class ItemModel extends Model
             $message .= "2) Once you guys meet, check out the item. Once satisfied, reply to the text we sent you with the confirmation code above. (In case you lose the original text, here's the number you need to send the code to: " . $borrower_number . ")<br/>";
             $message .= "3) We'll pass on this confirmation to " .  $row['LENDER_FIRST_NAME'] . " via text message. Once " .  $row['LENDER_FIRST_NAME'] . " has received it, he/she will hand the item over to you. At this point, the rental period has started and you are responsible to bring your item back after the agreed upon duration.<br/><br/>";
             $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#borrower\">how-it-works guide</a>";
-            $message .= "<br/><br/>-team qhojo<br/>http://qhojo.com";
+            $message .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";
             
             $this->sendEmail('do-not-reply@qhojo.com', $row['BORROWER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', 'qhojo - ' . $row['TITLE'] . ' Reserved!', $message);
           
