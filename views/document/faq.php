@@ -31,21 +31,21 @@
         What happens if the item I rent out never gets returned?
     </div>
     <div class="subcontent">
-        If the item is not returned after the rental duration, the borrower (who signed a billing agreement with us) will be charged the full value of the item. This amount will be transferred to the lender.
+        If the item is not returned after the rental duration, the borrower will be charged the full value of the item. This amount will be transferred to the lender.
     </div>
     <br/>
     <div class="subheading">
         What kind of things can I rent out?
     </div>
     <div class="subcontent">
-        The only requirement we have is that the deposit value be less than $500. We suggest renting out durable items that can take on some wear-and-tear.
+        We suggest renting out durable items that can take on some wear-and-tear. Sporting equipment, electronics, and outdoor gear are good examples.
     </div>
     <br/>
     <div class="subheading">
         How are payments handled?
     </div>
     <div class="subcontent">
-        Everything is handled through Paypal.<br/><br/> Before you post or rent an item on qhojo, you sign a Paypal billing agreement with us. We'll make it very clear when and how much we're going to debit or credit you.
+        Borrowers are charged using their credit card. Lenders are paid using PayPal.
     </div>    
     <br/>
     <div class="subheading">

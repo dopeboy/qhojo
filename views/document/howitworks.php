@@ -48,7 +48,7 @@
 
                 <div class="text">
                     <br/>
-                   Meet the lender and check out the item. Once you're satisfied, text the confirmation code to us. We'll notify the lender, via text, of your confirmation and they'll hand over the item to you.
+                   Meet the lender and check out the item. Once you're satisfied, text the confirmation code to us. We'll notify the lender of your confirmation and they'll hand over the item to you. We'll also put a hold on your credit card for the amount of the deposit.  
                 </div>
 
             </div>
@@ -78,7 +78,7 @@
 
                 <div class="text">
                     <br/>
-                   Once the rental period is over, meet the lender and have them confirm with us that the item is OK. When we get their confirmation, we'll let you know via text message. At that point, you'll hand the item back over and be billed the rental amount.<br/><br/>Ta da! All done.
+                   Once the rental period is over, meet the lender and have them confirm with us that the item is OK. When we get their confirmation, we'll let you know via text message. At that point, you'll hand the item back over and be billed the rental amount. We'll also release the hold on your credit card. <br/><br/>Ta da! All done.
                 </div>
 
             </div>

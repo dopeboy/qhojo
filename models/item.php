@@ -633,7 +633,7 @@ class ItemModel extends Model
             
             $sqlParameters = array();
             $sqlParameters[":requestid"] =  $request_id;
-            $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 1 where REQUEST_ID=:requestid');
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM_REQUESTS set ACCEPTED_FLAG = 1 where REQUEST_ID=:requestid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
 
             $itemreq = $this->getRequest($request_id);
@@ -641,12 +641,12 @@ class ItemModel extends Model
             $sqlParameters = array();
             $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
             $sqlParameters[":confirmation_code"] = $confirmation_code = getRandomID();
-            $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid');
+            $preparedStatement = $this->dbh->prepare('UPDATE ITEM set STATE_ID = 1,CONFIRMATION_CODE=:confirmation_code where ID=:itemid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             
             $sqlParameters = array();
             $sqlParameters[":itemid"] =  $itemreq['ITEM_ID'];
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid');
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
