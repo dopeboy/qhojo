@@ -38,7 +38,7 @@
                 <img id ="largeimage" src="<?php echo $file['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $file['FILENAME'];?>" style="max-height: 500px; max-width: 640px" >
             </div>
             
-            <div id="thumbs" style="position: absolute; bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
+            <div id="thumbs" style="bottom:0;  height:50px; width:100%; background-color: rgba(207,207,207, .5);">
             <?php foreach ($viewmodel[1] as $pic) {  ?>
 
             <img class src="<?php echo $pic['FILENAME']== null ? "/img/stock.png" : "/uploads/item/" . $pic['FILENAME']; ?>" style="height:50px"></a>
@@ -116,6 +116,4 @@
 
 		
 
-
-</html>
 

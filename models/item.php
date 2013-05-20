@@ -1,7 +1,17 @@
 <?php
 
 require "Services/Twilio.php";
-
+require 'lib/rest-api-sdk-php/sample/bootstrap.php';
+use PayPal\Api\Address;
+use PayPal\Api\Amount;
+use PayPal\Api\AmountDetails;
+use PayPal\Api\CreditCard;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\FundingInstrument;
+use PayPal\Api\Transaction;
+use PayPal\Rest\ApiContext;
+use PayPal\Auth\OAuthTokenCredential;
 
 class ItemModel extends Model 
 {
@@ -57,6 +67,60 @@ class ItemModel extends Model
 
                      //   $this->sendEmail('do-not-reply@qhojo.com', 'ms3766@caa.columbia.edu', 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', 'sdfsdf');            
 
+
+$addr = new Address();
+$addr->setLine1('52 N Main ST');
+$addr->setCity('Johnstown');
+$addr->setCountry_code('US');
+$addr->setPostal_code('43210');
+$addr->setState('OH');
+$apiContext = new ApiContext(new OAuthTokenCredential(
+		'AW-kvRAjKJW_wDW4kPSJLsVxMlDqT-_6-KNd0rRA0PhIk-wCrsBcJq__nVSW',
+		'EFfObBBANHlXBJbS3SmDeBYMJjx862PFEFHf97f9_2t85rDR3R7WqcvKs2TK'));
+$apiContext->setConfig(array(
+	'mode' => 'sandbox',
+	'http.ConnectionTimeOut' => 30,
+	'log.LogEnabled' => false,
+	'log.FileName' => '../PayPal.log',
+	'log.LogLevel' => 'FINE'
+));
+$card = new CreditCard();
+$card->setNumber('4417119669820331');
+$card->setType('visa');
+$card->setExpire_month('11');
+$card->setExpire_year('2018');
+$card->setCvv2('874');
+$card->setFirst_name('Joe');
+$card->setLast_name('Shopper');
+$card->setBilling_address($addr);
+
+$fi = new FundingInstrument();
+$fi->setCredit_card($card);
+
+$payer = new Payer();
+$payer->setPayment_method('credit_card');
+$payer->setFunding_instruments(array($fi));
+
+$amountDetails = new AmountDetails();
+$amountDetails->setSubtotal('7.41');
+$amountDetails->setTax('0.03');
+$amountDetails->setShipping('0.03');
+
+$amount = new Amount();
+$amount->setCurrency('USD');
+$amount->setTotal('7.47');
+$amount->setDetails($amountDetails);
+
+$transaction = new Transaction();
+$transaction->setAmount($amount);
+$transaction->setDescription('This is the payment transaction description.');
+
+$payment = new Payment();
+$payment->setIntent('sale');
+$payment->setPayer($payer);
+$payment->setTransactions(array($transaction));
+
+$payment->create($apiContext);
         }
         
         public function testest($card_uri)
