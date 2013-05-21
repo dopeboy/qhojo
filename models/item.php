@@ -465,14 +465,14 @@ class ItemModel extends Model
                 }                
                 
                 // Pay the lender
-//                $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
-//                
-//                if ($status != 0)
-//                {
-//                    error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
-//                    error_log("lenderConfirm FML 3");
-//                    return 3;
-//                }
+                $status = $this->paypalMassPayToLender($item_row['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
+                
+                if ($status != 0)
+                {
+                    error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
+                    error_log("lenderConfirm FML 3");
+                    return 3;
+                }
                 
                 $sqlParameters = null;
                 $sqlParameters[":status_id"] =  3;
