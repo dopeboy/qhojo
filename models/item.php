@@ -139,7 +139,7 @@ class ItemModel extends Model
             Httpful\Bootstrap::init();
             RESTful\Bootstrap::init();
             Balanced\Bootstrap::init();
-            $status = $this->paypalMassPayToLender('bob@qhojo.com',23);
+           // $status = $this->paypalMassPayToLender('bob@qhojo.com',23);
             // CREATE THE BUYER using the CARD URI
            // $buyer = Balanced\Marketplace::mine()->createBuyer('tdes223322f2dds22t2@test.com',$card_uri);
 //error_log($buyer->uri);

@@ -120,7 +120,8 @@ $(document).ready(function()
             {
                 if (response < 0)
                 {
-                    alert ("Error: " + response);
+                    //alert ("Error: " + response);
+                    alert("Something was wrong with your Paypal informatin. Try again.")
                     $('#creditsubmitbutton').attr('disabled',false);
                     $('#secondloader').hide();
                 }
@@ -164,7 +165,8 @@ $(document).ready(function()
 
     function responseCallbackHandler(response) 
     {
-       switch (response.status) {
+       switch (response.status) 
+       {
          case 400:
              // missing or invalid field - check response.error for details
              alert(response.error);
@@ -177,6 +179,12 @@ $(document).ready(function()
             $('#secondloader').hide();
             $('#debitsubmitbutton').attr('disabled',false);             
              break;
+         case 402:
+            // card declined
+            alert("Your card is not valid. Try again.");
+            $('#secondloader').hide();
+            $('#debitsubmitbutton').attr('disabled',false);             
+             break;            
          case 201:
              // WOO HOO! MONEY!
              // response.data.uri == URI of the card resource

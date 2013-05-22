@@ -58,7 +58,7 @@
                 </tr>                   
                 <tr style="">
                     <td colspan="2">
-                        <input type="checkbox" name="terms" style="margin-top: 0.8em; margin-left: 0px"><label id="text">I agree to the <a href="/document/legal">terms and conditions</a> of qhojo inc.</label>
+                        <input type="checkbox" name="terms" style="margin-top: 0.8em; margin-left: 0px"><label id="text">I agree to the <a href="/document/legal" target="_blank">terms and conditions</a> of qhojo LLC.</label>
                     </td>
                 </tr>                    
                 <tr style="">
@@ -231,7 +231,7 @@
     <div id="mainheading">Lender Billing Fields</div>
     <hr/>
     <div class="subcontent">
-        <?php echo $viewmodel["FIRST_NAME"] ?>, before you post an item, we're gonna need to know how to pay you. Fill in your PayPal details below. If you don't have a PayPal account, create one <a href="https://www.paypal.com/home">here</a>.
+        <?php echo $viewmodel["FIRST_NAME"] ?>, before you post an item, we're gonna need to know how to pay you. Fill in your PayPal details below. If you don't have a PayPal account, create one <a href="https://www.paypal.com/home" target="_blank">here</a>.
         <br/><br/>
         <form id="creditForm" action="/user/signup/null/7" method="post" style="margin: 0">                 
             <table>  
