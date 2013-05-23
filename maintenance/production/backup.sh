@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 db="qhojo_production";
-username="qhoprod";
-password="Gk1BLp5J6u5MsQr";
+username="root";
+password="LhKyaecuCgYR";
 
 export TZ=":America/New_York"
 directory="backups";

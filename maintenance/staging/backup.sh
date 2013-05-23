@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 db="qhojo_staging";
-username="qhostaging";
-password="m2KIw4QbVt7r71O";
+username="root";
+password="LhKyaecuCgYR";
 
 export TZ=":America/New_York"
 directory="backups";
