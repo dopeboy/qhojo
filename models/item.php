@@ -266,7 +266,31 @@ class ItemModel extends Model
             $preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:requestid, :itemid, :userid, :duration, :message)');
             $preparedStatement->execute($sqlParameters);
 
-            return $preparedStatement->rowCount() == 1 ? 0 : 1;
+            if ($preparedStatement->rowCount() != 1)
+                return 1;
+            
+            // Send an email to the lender saying they received a request
+            
+            // Get the lender's information first
+            $sqlParameters = array();
+            $sqlParameters[":itemid"] =  $itemid;
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW a, USER b where a.ITEM_ID=:itemid and b.ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $item_row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($preparedStatement->rowCount() != 1)
+                return 2;            
+            
+            // Send the email
+            $title = "qhojo - You've received a rental request for {$item_row['TITLE']}";
+            $message_to_lender = "Hey " .  $item_row["LENDER_FIRST_NAME"] . "!<br/><br/>";
+            $message_to_lender .= "You've received a rental request from {$item_row["FIRST_NAME"]} for your following post: <a href=\"http://{$_SERVER['HTTP_HOST']}/item/index/{$item_row["ITEM_ID"]}\">{$item_row["TITLE"]}</a>. Check your <a href=\"http://{$_SERVER['HTTP_HOST']}/user/dashboard\">dashboard</a> to see the entire rental request.";
+            $message_to_lender .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";
+
+            $this->sendEmail('do-not-reply@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'do-not-reply@qhojo.com', $title, $message_to_lender);
+            
+            return 0;
 	}
         
 	public function requestComplete($itemid) 
