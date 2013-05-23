@@ -23,7 +23,9 @@ ONE TIME
 
 enable SSL
 install mutt for backups
-crontab maintenance/production/nightly_backup_cron_definition
+
+under manish
+	crontab maintenance/production/nightly_backup_cron_definition
 
 LOGIN 
 	mysql -umanish -h localhost -padmin -D qhojo
