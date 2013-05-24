@@ -20,7 +20,7 @@ if [[ $? -ne 0 ]] ; then
 fi
 
 # Needed because the user producing this SQL is different than the one that will use it for a restore
-sed -i~ '/^\/\*\!50013 DEFINER/d' $sqlfile > $sqlfile
+sed -i~ '/^\/\*\!50013 DEFINER/d' $sqlfile
 
 tar -zcvf $tarfile ../../uploads/ $sqlfile;
 
