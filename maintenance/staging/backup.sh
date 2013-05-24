@@ -19,6 +19,9 @@ if [[ $? -ne 0 ]] ; then
     exit 1;
 fi
 
+# Needed because the user producing this SQL is different than the one that will use it for a restore
+sed '/^\/\*\!50013 DEFINER/d' $sqlfile > $sqlfile
+
 tar -zcvf $tarfile ../../uploads/ $sqlfile;
 
 if [[ $? -ne 0 ]] ; then
