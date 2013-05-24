@@ -11,6 +11,14 @@ ONE TIME
 	create database qhojo_production;
         grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
 
+ create user 'backupuser'@'localhost' identified by '3W16aba38yP2fxr';
+GRANT SELECT, SHOW VIEW ON *.* TO  'backupuser'@'localhost' IDENTIFIED BY '3W16aba38yP2fxr';
+
+ create user 'restorestaging'@'localhost' identified by 'abcdefghj';
+GRANT all ON qhojo_staging.* TO  'restorestaging'@'localhost' IDENTIFIED BY 'abcdefghj';
+
+
+
 	FLUSH PRIVILEGES;
 
         94  sudo cp default mysite

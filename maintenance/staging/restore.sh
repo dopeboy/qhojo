@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 db="qhojo_staging";
-username="root";
-password="LhKyaecuCgYR";
+username="restorestaging";
+password="abcdefghj";
 
 if [ $# -ne 1 ]
 then

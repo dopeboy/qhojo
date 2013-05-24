@@ -2,7 +2,7 @@
 
 db="qhojo_production";
 username="root";
-password="LhKyaecuCgYR";
+password=$1;
 
 if [ $# -ne 1 ]
 then
