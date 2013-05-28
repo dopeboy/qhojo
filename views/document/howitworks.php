@@ -3,6 +3,8 @@
     <script type="text/javascript" src="/js/document/howitworks.js"></script>
 </head>    
 
+<title>qhojo - how it works</title>
+
 <div id="masterdiv">
     <div id="mainheading">
         How it works

@@ -121,7 +121,7 @@ $(document).ready(function()
                 if (response < 0)
                 {
                     //alert ("Error: " + response);
-                    alert("Something was wrong with your Paypal informatin. Try again.")
+                    alert("Something was wrong with your Paypal information. Try again.")
                     $('#creditsubmitbutton').attr('disabled',false);
                     $('#secondloader').hide();
                 }

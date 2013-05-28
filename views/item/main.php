@@ -4,7 +4,7 @@
   
 </head>
 
-<title>qhojo - main</title>
+<title>qhojo - peer to peer renting for small goods</title>
 
 <div id="masterdiv">
     <div style="display: inline-block; width:100%; font-size: small">

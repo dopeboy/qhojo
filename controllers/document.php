@@ -31,6 +31,11 @@ class Document extends Controller
     {
         $this->returnView(null, true,false);
     }
+    
+    protected function about()
+    {
+        $this->returnView(null, true,false);
+    }
 }
 
 ?>
