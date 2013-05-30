@@ -4,7 +4,7 @@
         <link rel="stylesheet" type="text/css" href="/css/item/main.css" media="screen" />  
 </head>
 
-<title>qhojo - Search results for "<?php echo $this->id ?>"</title>
+<title>qhojo - peer-to-peer renting for small goods.</title>
 
 <div id="masterdiv" style="">
     <div style="display: inline-block; width:100%; font-size: small; ">
