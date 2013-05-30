@@ -20,3 +20,7 @@ insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (5,1,'park slope');
 
 insert into NETWORK VALUES (0,'NYU','nyu.edu', 'nyu.png');
 insert into NETWORK VALUES (1,'Columbia University','columbia.edu', 'columbia.png');
+
+insert into TAG VALUES (0,'photo');
+insert into TAG VALUES (1,'video');
+insert into TAG VALUES (2,'outdoor');

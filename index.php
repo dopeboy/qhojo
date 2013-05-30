@@ -22,13 +22,13 @@ require("model.php");
 require("models/user.php");
 require("models/item.php");
 require("models/location.php");
+require("models/tag.php");
 require("models/document.php");
 require("models/picture.php");
 
 //require the controller classes
 require("controllers/user.php");
 require("controllers/item.php");
-require("controllers/location.php");
 require("controllers/document.php");
 require("controllers/picture.php");
 

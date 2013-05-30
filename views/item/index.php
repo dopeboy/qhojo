@@ -100,6 +100,22 @@
     
    <br/>
    
+   <div id="tags">
+       <div class="subheading" style="">
+           Hash tags
+       </div>
+       <br/>
+       <div id="content">
+            <?php if ($viewmodel[5] == null) { ?> <i>None</i> <?php } else { ?>
+                <?php foreach ($viewmodel[5] as $tag) { ?>
+                #<?php echo $tag['TAG_NAME']; ?>&nbsp;
+                <?php } ?>          
+            <?php } ?>
+       </div>       
+   </div>
+   
+   <br/>
+   
    <div id="location">
        <div class="subheading" >
            Location

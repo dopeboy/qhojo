@@ -8,14 +8,9 @@
     <div id="mainheading">
         About
     </div>
-    <hr/>
-    <div class="subheading">
-        Story 
-    </div>    
-    
-    <div class="subcontent">
-        In the fall of 2012, I was planning my first trip to Turkey. I wanted to explore Istanbul as well as the countryside. 
-        I knew I needed a traveling backpack for this itinerary so I went to a local sports goods store and bought a $300 20 liter traveling backpack. The trip and backpack were great. But ever since then,
+    <hr/>    
+
+        I love traveling. And in the fall of 2012, I was planning my first trip to Turkey. I needed a hiking backpack though. So I went to a local sports goods store and bought a $300 20 liter traveling backpack. The trip and backpack were great. But ever since then,
         my backpack has been in my closet.
  
         Sitting unused. Collecting dust. And wasting space.
@@ -34,7 +29,6 @@
         <i>-Manish Sinha, Founder</i>
         <br/><br/>
         <img src="/img/manish.jpg" style="max-height:">
-        
-    </div>    
     
 </div>
+

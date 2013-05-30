@@ -17,119 +17,38 @@ class ItemModel extends Model
 {
 	public function index($itemid, $userid) 
 	{
-		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid LIMIT 1');
-		$preparedStatement->execute($sqlParameters);
-		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
-		$preparedStatement = $this->dbh->prepare('SELECT FILENAME FROM ITEM_PICTURES where ITEM_ID=:itemid');
-		$preparedStatement->execute($sqlParameters);
-		$row[] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            $preparedStatement = $this->dbh->prepare('SELECT FILENAME FROM ITEM_PICTURES where ITEM_ID=:itemid');
+            $preparedStatement->execute($sqlParameters);
+            $row[] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 
-                $usermodel = new UserModel();                
-                $row[] = $usermodel->getFeedbackAsLender($row[0]['LENDER_ID']);
-                
-                $row[] = $usermodel->checkIfUserAlreadyRequested($userid, $itemid);
-                
-                $row[] = $usermodel->getNetworksForUser($row[0]['LENDER_ID']);
-                
-		return $row;
-	}
-        
-	public function main() 
-	{
-            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
-            $preparedStatement->execute();
-            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-            
-            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
-            $preparedStatement->execute();
-            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);            
+            $usermodel = new UserModel();                
+            $row[] = $usermodel->getFeedbackAsLender($row[0]['LENDER_ID']);
 
-            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0');
-            $preparedStatement->execute();
-            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            $row[] = $usermodel->checkIfUserAlreadyRequested($userid, $itemid);
 
-            return $rows;
-	}       
+            $row[] = $usermodel->getNetworksForUser($row[0]['LENDER_ID']);
+
+            $tag_model = new TagModel();
+            $row[] = $tag_model->getTagsForItem($itemid);
+
+            return $row;
+	}     
         
 	public function test() 
-	{
-//            	$sqlParameters[":itemid"] =  '200001';
-//		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
-//		$preparedStatement->execute($sqlParameters);
-//		$row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
-//                
-//                error_log(date("Y-m-d H:i:s"));
-//                $new = date("Y-m-d H:i:s",strtotime("+ 2 days"));
-//                error_log($new);
-//                error_log(date("m/d g:i A", strtotime($new)));
+	{            
+            $status = $this->paypalMassPayToLender('arithmetic@gmail.com',1);
 
-                     //   $this->sendEmail('do-not-reply@qhojo.com', 'ms3766@caa.columbia.edu', 'do-not-reply@qhojo.com', 'qhojo - Confirm Network Affiliation', 'sdfsdf');            
-
-
-//$addr = new Address();
-//$addr->setLine1('52 N Main ST');
-//$addr->setCity('Johnstown');
-//$addr->setCountry_code('US');
-//$addr->setPostal_code('43210');
-//$addr->setState('OH');
-//$apiContext = new ApiContext(new OAuthTokenCredential(
-//		'AW-kvRAjKJW_wDW4kPSJLsVxMlDqT-_6-KNd0rRA0PhIk-wCrsBcJq__nVSW',
-//		'EFfObBBANHlXBJbS3SmDeBYMJjx862PFEFHf97f9_2t85rDR3R7WqcvKs2TK'));
-//$apiContext->setConfig(array(
-//	'mode' => 'sandbox',
-//	'http.ConnectionTimeOut' => 30,
-//	'log.LogEnabled' => false,
-//	'log.FileName' => '../PayPal.log',
-//	'log.LogLevel' => 'FINE'
-//));
-//$card = new CreditCard();
-//$card->setNumber('4417119669820331');
-//$card->setType('visa');
-//$card->setExpire_month('11');
-//$card->setExpire_year('2018');
-//$card->setCvv2('874');
-//$card->setFirst_name('Joe');
-//$card->setLast_name('Shopper');
-//$card->setBilling_address($addr);
-//
-//$fi = new FundingInstrument();
-//$fi->setCredit_card($card);
-//
-//$payer = new Payer();
-//$payer->setPayment_method('credit_card');
-//$payer->setFunding_instruments(array($fi));
-//
-//$amountDetails = new AmountDetails();
-//$amountDetails->setSubtotal('7.41');
-//$amountDetails->setTax('0.03');
-//$amountDetails->setShipping('0.03');
-//
-//$amount = new Amount();
-//$amount->setCurrency('USD');
-//$amount->setTotal('7.47');
-//$amount->setDetails($amountDetails);
-//
-//$transaction = new Transaction();
-//$transaction->setAmount($amount);
-//$transaction->setDescription('This is the payment transaction description.');
-//
-//$payment = new Payment();
-//$payment->setIntent('sale');
-//$payment->setPayer($payer);
-//$payment->setTransactions(array($transaction));
-//
-//$payment->create($apiContext);
-            
-                            $status = $this->paypalMassPayToLender('arithmetic@gmail.com',1);
-                
-                if ($status != 0)
-                {
-                   // error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
-                    error_log("lenderConfirm FML 3");
-                    return 3;
-                }
+            if ($status != 0)
+            {
+                // error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
+                error_log("lenderConfirm FML 3");
+                return 3;
+            }
         }
         
         public function testest($card_uri)
@@ -161,11 +80,10 @@ class ItemModel extends Model
             
             // CREDIT (rr x rd) via Paypal using MassPay. 
             
-            
             return 2;
         }
         
-        public function searchByLocation($location_id)
+        public function search($query, $borough, $neighborhood, $tag)
         {
             $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
             $preparedStatement->execute();
@@ -175,72 +93,150 @@ class ItemModel extends Model
             $preparedStatement->execute();
             $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
             
-            $sqlParameters[":location_id"] =  $location_id;
-            $preparedStatement = $this->dbh->prepare('select * from LOCATION_VW where ID=:location_id LIMIT 1');
-            $preparedStatement->execute($sqlParameters);
-            $rows["LOCATION"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            $tag_model = new TagModel();
+            $rows["TAGS"] = $tag_model->getAllTags();
             
-            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where LOCATION_ID=:location_id and ITEM_STATE_ID=0');
-            $preparedStatement->execute($sqlParameters);
-            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-
-            return $rows;
-        }
-        
-        public function searchByBorough($borough_id)
-        {
-            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
-            $preparedStatement->execute();
-            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            // If they're all empty, return all items
+            if ($query == null && $borough == null & $neighborhood == null && $tag == null)
+            {
+                $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0');
+                $preparedStatement->execute();
+                $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);                
+            }
             
-            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
-            $preparedStatement->execute();
-            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+            else if ($borough != null)
+            {
+                if ($tag != null)
+                {
+                    $query = "select a.* from ITEM_VW a, ITEM_TAG b where a.BOROUGH_ID=:borough_id and a.ITEM_STATE_ID=0 and a.ITEM_ID=b.ITEM_ID  and b.TAG_ID=:tag_id";
+                    $sqlParameters[":tag_id"] =  $tag;
+                }
+                
+                else
+                    $query = "select a.* from ITEM_VW a where a.BOROUGH_ID=:borough_id and a.ITEM_STATE_ID=0";
+                
+                $sqlParameters[":borough_id"] =  $borough;
+                $preparedStatement = $this->dbh->prepare($query);
+                $preparedStatement->execute($sqlParameters);
+                $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);                  
+            }
             
-            $sqlParameters[":borough_id"] =  $borough_id;
-            $preparedStatement = $this->dbh->prepare('select * from BOROUGH where ID=:borough_id LIMIT 1');
-            $preparedStatement->execute($sqlParameters);
-            $rows["BOROUGH"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);   
+            else if ($neighborhood != null)
+            {
+                if ($tag != null)
+                {
+                    $query = "select a.* from ITEM_VW a, ITEM_TAG b where a.LOCATION_ID=:location_id and a.ITEM_STATE_ID=0 and a.ITEM_ID=b.ITEM_ID and b.TAG_ID=:tag_id";
+                    $sqlParameters[":tag_id"] =  $tag;
+                }
+                
+                else
+                    $query = "select a.* from ITEM_VW a where a.LOCATION_ID=:location_id and a.ITEM_STATE_ID=0";
+                
+                $sqlParameters[":location_id"] =  $neighborhood;
+                $preparedStatement = $this->dbh->prepare($query);
+                $preparedStatement->execute($sqlParameters);
+                $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);  
+            }
             
-            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where BOROUGH_ID=:borough_id and ITEM_STATE_ID=0');
-            $preparedStatement->execute($sqlParameters);
-            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-
-            return $rows;            
-        }
-        
-	public function searchForItem($query) 
-	{
-            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
-            $preparedStatement->execute();
-            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            else if ($tag != null)
+            {
+                $sqlParameters[":tag"] =  $tag;
+                $preparedStatement = $this->dbh->prepare('select a.* from ITEM_VW a, ITEM_TAG b where a.ITEM_STATE_ID=0 and a.ITEM_ID=b.ITEM_ID and b.TAG_ID=:tag');
+                $preparedStatement->execute($sqlParameters);
+                $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);                  
+            }
             
-            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
-            $preparedStatement->execute();
-            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
-            
+            else if ($query != null)
+            {
 		$sqlParameters[":search"] =  '%'. $query .'%';
                 $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0 and (lower(TITLE) like lower(:search) OR lower(DESCRIPTION) like lower(:search))');
 		$preparedStatement->execute($sqlParameters);
-		$rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-
-		return $rows;
-	}
+		$rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);              
+            }
+            
+            return $rows;
+        }
+        
+//        public function searchByLocation($location_id)
+//        {
+//            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+//            $preparedStatement->execute();
+//            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//            
+//            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+//            $preparedStatement->execute();
+//            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+//            
+//            $sqlParameters[":location_id"] =  $location_id;
+//            $preparedStatement = $this->dbh->prepare('select * from LOCATION_VW where ID=:location_id LIMIT 1');
+//            $preparedStatement->execute($sqlParameters);
+//            $rows["LOCATION"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+//            
+//            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where LOCATION_ID=:location_id and ITEM_STATE_ID=0');
+//            $preparedStatement->execute($sqlParameters);
+//            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//            
+//            $tag_model = new TagModel();
+//            $rows["TAGS"] = $tag_model->getAllTags();
+//
+//            return $rows;
+//        }
+//        
+//        public function searchByBorough($borough_id)
+//        {
+//            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+//            $preparedStatement->execute();
+//            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//            
+//            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+//            $preparedStatement->execute();
+//            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+//            
+//            $sqlParameters[":borough_id"] =  $borough_id;
+//            $preparedStatement = $this->dbh->prepare('select * from BOROUGH where ID=:borough_id LIMIT 1');
+//            $preparedStatement->execute($sqlParameters);
+//            $rows["BOROUGH"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);   
+//            
+//            $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where BOROUGH_ID=:borough_id and ITEM_STATE_ID=0');
+//            $preparedStatement->execute($sqlParameters);
+//            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//            
+//            $tag_model = new TagModel();
+//            $rows["TAGS"] = $tag_model->getAllTags();            
+//
+//            return $rows;            
+//        }
+//        
+//	public function searchForItem($query) 
+//	{
+//            $preparedStatement = $this->dbh->prepare('select * from BOROUGH');
+//            $preparedStatement->execute();
+//            $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//            
+//            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+//            $preparedStatement->execute();
+//            $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+//            
+//		$sqlParameters[":search"] =  '%'. $query .'%';
+//                $preparedStatement = $this->dbh->prepare('select * from ITEM_VW where ITEM_STATE_ID=0 and (lower(TITLE) like lower(:search) OR lower(DESCRIPTION) like lower(:search))');
+//		$preparedStatement->execute($sqlParameters);
+//		$rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+//
+//		return $rows;
+//	}
 
 	public function request($itemid) 
 	{
-		$sqlParameters[":itemid"] =  $itemid;
-		$preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
-		$preparedStatement->execute($sqlParameters);
-		$row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-                
-                $user_model = new UserModel();
-                
-                $row[] = $user_model->getFeedbackAsLender($row[0]['LENDER_ID']);
-                
-                $row[] = $user_model->getNetworksForUser($row[0]['LENDER_ID']);
-                
-		return $row;
+            $sqlParameters[":itemid"] =  $itemid;
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW WHERE ITEM_ID=:itemid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row[] = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+            $user_model = new UserModel();
+            $row[] = $user_model->getFeedbackAsLender($row[0]['LENDER_ID']);
+            $row[] = $user_model->getNetworksForUser($row[0]['LENDER_ID']);
+
+            return $row;
 	}
         
         public function getItemDetails($itemid)
@@ -558,10 +554,14 @@ class ItemModel extends Model
             $row[] = $locationmodel->getAllLocations();
             $row[] = $usermodel->getFeedbackAsLender($userid);
             $row[] = $usermodel->getNetworksForUser($userid);
+            
+            $tag_model = new TagModel();
+            $row[] = $tag_model->getAllTags();
+            
             return $row;
 	}
         
-	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files)
+	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files, $tags)
 	{ 
             if ($deposit == null || $deposit > 2500 || $rate == null || $rate < 1)
             {
@@ -608,8 +608,6 @@ class ItemModel extends Model
             }
 
             $sql = "INSERT INTO ITEM_PICTURES (" . implode(",", array_keys($datafields) ) . ") VALUES " . implode(',', $question_marks);
-            //error_log($sql);
-            //error_log($insert_values);
             
             $this->dbh->beginTransaction();
             $stmt = $this->dbh->prepare ($sql);
@@ -622,10 +620,50 @@ class ItemModel extends Model
             catch (PDOException $e)
             {
                 error_log($e->getMessage());
+                return -1;
             }
             
             $this->dbh->commit();
+            
+            // Handle tags. They're optional
+            if (!empty($tags))
+            {
+                // item tags
+                $datafields = array('ITEM_ID' => '', 'TAG_ID' => '');
+                $data = array();
+                
+                foreach ($tags as $tag)
+                {
+                    $data[] = array('ITEM_ID' => $itemid, 'TAG_ID' => $tag);
+                }         
 
+                $insert_values = array();
+                $question_marks = array();
+                foreach($data as $d)
+                {
+                    $question_marks[] = '('  . $this->placeholders('?', sizeof($d)) . ')';
+                    $insert_values = array_merge($insert_values, array_values($d));
+                }            
+
+                $sql = "INSERT INTO ITEM_TAG (" . implode(",", array_keys($datafields) ) . ") VALUES " . implode(',', $question_marks);
+
+                $this->dbh->beginTransaction();
+                $stmt = $this->dbh->prepare ($sql);
+
+                try 
+                {
+                    $stmt->execute($insert_values);
+                } 
+
+                catch (PDOException $e)
+                {
+                    error_log($e->getMessage());
+                    return -2;
+                }
+
+                $this->dbh->commit();
+            }
+            
             return $itemid;	
 	}   
         

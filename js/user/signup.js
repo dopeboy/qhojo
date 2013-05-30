@@ -71,7 +71,7 @@ $(document).ready(function()
             success : function (response) 
             {   
                 if (response != -1)
-                    window.location = "/item/main";
+                    window.location = "/";
                 else
                 {
                     alert ("Error");

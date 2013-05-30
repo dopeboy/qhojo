@@ -7,25 +7,19 @@ class Item extends Controller
 		$viewmodel = new ItemModel();
 		$this->returnView($viewmodel->index($this->id, $this->userid), true,false);
 	}
-
-	protected function main() 
-	{
-		$viewmodel = new ItemModel();
-		$this->returnView($viewmodel->main(null), true,false);
-	}
         
         protected function test()
         {
-		$viewmodel = new ItemModel();
+		//$viewmodel = new ItemModel();
                // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
                 //$viewmodel->test();
-                $this->returnView($viewmodel->test(), true,false);
+               // $this->returnView($viewmodel->test(), true,false);
         }
         
         protected function testest()
         {
-		$viewmodel = new ItemModel();
-                $this->returnView($viewmodel->testest($this->postvalues["uri"]), false,false);
+		//$viewmodel = new ItemModel();
+              //  $this->returnView($viewmodel->testest($this->postvalues["uri"]), false,false);
 		#$viewmodel->testest('B%2d95E05095G29611425');
                // $viewmodel->paypalDoReferenceTransaction(10,'B%2d95E05095G29611425');
         }
@@ -33,15 +27,14 @@ class Item extends Controller
 	protected function search() 
 	{
             $viewmodel = new ItemModel();
-
-            if ($this->state == 0)
-                $this->returnView($viewmodel->searchForItem($this->id), true,false);
-                
-            else if ($this->state == 1)
-                 $this->returnView($viewmodel->searchByLocation($this->id), true,false); // Neighborhood
-            
-            else if ($this->state == 2)
-                $this->returnView($viewmodel->searchByBorough($this->id), true,false);
+            $this->returnView($viewmodel->search
+            (
+                (isset($this->urlvalues['query'])) ? $this->urlvalues['query'] : null,
+                (isset($this->urlvalues['borough'])) ? $this->urlvalues['borough'] : null,
+                (isset($this->urlvalues['neighborhood'])) ? $this->urlvalues['neighborhood'] : null,
+                (isset($this->urlvalues['tag'])) ? $this->urlvalues['tag'] : null
+            ),
+            true,false);
 	}
 
 	protected function request() 
@@ -138,7 +131,7 @@ class Item extends Controller
             
             else if ($this->state == 1)
             {
-                $this->returnView($item_model->submitPost($_SESSION['itemid'],$this->userid,$this->postvalues['title'],$this->postvalues['rate'],$this->postvalues['deposit'],$this->postvalues['description'],$this->postvalues['locationid'],$this->postvalues['file']), false,true);
+                $this->returnView($item_model->submitPost($_SESSION['itemid'],$this->userid,$this->postvalues['title'],$this->postvalues['rate'],$this->postvalues['deposit'],$this->postvalues['description'],$this->postvalues['locationid'],$this->postvalues['file'], $this->postvalues['tags']), false,true);
             }
             
             else if ($this->state == 2)

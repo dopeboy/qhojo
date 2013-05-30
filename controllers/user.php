@@ -34,7 +34,7 @@ class User extends Controller
                     }
                         
                     else
-                        $this->returnView('/item/main/', false,true);
+                        $this->returnView('/', false,true);
                 }
 	}   
         

@@ -22,9 +22,9 @@ class Loader
                 $this->sessionvalues = $sessionvalues;
 
                 $this->controller = $this->IsNullOrEmptyString($this->urlvalues['controller']) == true ?  "item" :  $this->urlvalues['controller'];
-                $this->action = $this->IsNullOrEmptyString($this->urlvalues['action']) == true ?  "main" :  $this->urlvalues['action'];
-                $this->id = $this->IsNullOrEmptyString($this->urlvalues['id']) == true ?  "-1" :  $this->urlvalues['id'];
-                $this->state = $this->IsNullOrEmptyString($this->urlvalues['state']) == true ?  "-1" :  $this->urlvalues['state'];
+                $this->action = $this->IsNullOrEmptyString($this->urlvalues['action']) == true ?  "search" :  $this->urlvalues['action'];
+                $this->id = $this->IsNullOrEmptyString($this->urlvalues['id']) == true ?  "" :  $this->urlvalues['id'];
+                $this->state = $this->IsNullOrEmptyString($this->urlvalues['state']) == true ?  "" :  $this->urlvalues['state'];
                 $this->userid = $this->IsNullOrEmptyString($this->sessionvalues['userid']) == true ?  null :  $this->sessionvalues['userid'];            
 		$this->admin = $this->IsNullOrEmptyString($this->sessionvalues['admin']) == true ?  null :  $this->sessionvalues['admin'];
                 

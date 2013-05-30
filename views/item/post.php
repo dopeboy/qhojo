@@ -122,6 +122,20 @@
     
    <br/>
    
+   <div id="tags">
+       <div class="subheading" style="">
+           Hash tags
+       </div>
+       <br/>
+       <div id="content">
+            <?php foreach ($viewmodel[4] as $tag) { ?>
+           <input type="checkbox" name="tags[]" value="<?php echo $tag['ID']; ?>"/>#<?php echo $tag['NAME']; ?>&nbsp;
+            <?php } ?>            
+       </div>       
+   </div>
+   
+   <br/>
+   
    <div id="location">
        <div class="subheading">
            Location
@@ -149,7 +163,7 @@
    
 
 <div id="dialog-form" title="Upload Item Pictures" style="overflow: hidden">
-  <iframe id="uploaderframe" src="" style="width: 100%; height: 100%;" frameborder="0"/>
+  <iframe id="uploaderframe" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
 </div>
     
     <?php } ?>

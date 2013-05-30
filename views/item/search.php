@@ -8,13 +8,39 @@
 
 <div id="masterdiv" style="">
     <div style="display: inline-block; width:100%; font-size: small; ">
-        <div id="mainheading" style="float: left; width: 55%">
-            <?php if ($this->state == 0): ?>Search results for "<?php echo $this->id ?>"
-            <?php elseif ($this->state == 1): ?> All items in <?php echo $viewmodel["LOCATION"]["NEIGHBORHOOD"] . "," . $viewmodel["LOCATION"]["BOROUGH_FULL"]; ?>
-            <?php elseif ($this->state == 2): ?> All items in <?php echo $viewmodel["BOROUGH"]["FULL_NAME"]; endif; ?>
+        <div id="mainheadin" style="float: left; width: 55%">
+            <div id="boroughs">
+                <a id="all" href="/item/search/">all</a> | 
+                <?php foreach ($viewmodel["BOROUGHS"] as $key=>$borough) {?> 
+                <a class="borough" href="/item/search?borough=<?php echo $borough["ID"]; ?>" boroughid="<?php echo $borough["ID"]; ?>"><?php echo $borough["SHORT_NAME"] . '</a>' . ($key == count($viewmodel["BOROUGHS"])-1 ? "" : ' | ');  ?>
+                <?php } ?>
+            </div>
+            
+            <?php foreach ($viewmodel["BOROUGHS"] as $key=>$borough) { $str = ""; ?>
+            <div class="neighborhoods" boroughid="<?php echo $borough["ID"]; ?>" style="display:none">
+                <?php foreach ($viewmodel["NEIGHBORHOODS"] as $key=>$neighborhood ) 
+                      { 
+                            if ($borough["ID"] == $neighborhood["BOROUGH_ID"])
+                            {
+                                 $str .= "<a class=\"neighborhood\" neighborhoodid=\"" . $neighborhood["ID"] . "\" href=\"/item/search?neighborhood=" . $neighborhood["ID"] . "\">" . $neighborhood["FULL_NAME"] . "</a> | ";
+                            }
+                      }
+
+                      echo substr($str, 0, -2);
+                 ?>
+            </div>
+            <?php } ?>
         </div>
         <div style="float: left; width: 45%; text-align: right">            
-            <?php require('location_embed.php'); ?>
+            <div id="tags">
+                <?php foreach ($viewmodel["TAGS"] as $key=>$tag) { 
+                    
+                    if (isset($this->urlvalues['borough']))
+                    
+                    ?> 
+                   <a class="tag" tagid="<?php echo $tag["ID"]; ?>" href="/item/search?<?php echo (isset($this->urlvalues['borough']) ? ("borough=" . $this->urlvalues['borough']) : "") . (isset($this->urlvalues['neighborhood']) ? ("&neighborhood=" . $this->urlvalues['neighborhood']) : "") . "&tag=" . $tag['ID']; ?>">#<?php echo $tag['NAME'] . '</a>' . ($key == count($viewmodel["TAGS"])-1 ? "" : ' | ');?>
+                <?php } ?>
+           </div>
         </div>        
     </div>
     <hr/>

@@ -112,8 +112,23 @@ CREATE TABLE USER_NETWORK
         CONFIRMED_DATE                  DATETIME
 );
 
-ALTER TABLE USER_NETWORK ADD INDEX CONFIRMATION_ID (CONFIRMATION_ID);
-ALTER TABLE USER_NETWORK ADD INDEX USER_ID (USER_ID);
+drop table if exists TAG;
+CREATE TABLE TAG
+(
+        ID                              INTEGER PRIMARY KEY,
+        NAME                            VARCHAR(160)
+);
+
+ALTER TABLE TAG ADD INDEX ID (ID);
+
+drop table if exists ITEM_TAG;
+CREATE TABLE ITEM_TAG
+(
+        ITEM_ID                         INTEGER,
+        TAG_ID                          INTEGER
+);
+
+ALTER TABLE ITEM_TAG ADD INDEX ITEM_ID (ITEM_ID);
 
 /* VIEWS                                               */
 
@@ -189,3 +204,10 @@ FROM ITEM_REQUESTS ir
 INNER JOIN ITEM_VW it on ir.ITEM_ID=it.ITEM_ID
 INNER JOIN USER u1 on ir.REQUESTER_ID=u1.ID
 where it.ITEM_STATE_ID=0 and ir.ACCEPTED_FLAG is null;
+
+CREATE OR REPLACE VIEW TAG_VW AS
+SELECT 
+it.ITEM_ID,
+t.NAME as "TAG_NAME"
+FROM ITEM_TAG it
+INNER JOIN TAG t on it.TAG_ID=t.ID;

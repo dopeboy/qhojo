@@ -8,11 +8,11 @@
 
 <div id="masterdiv">
     <div style="display: inline-block; width:100%; font-size: small">
-        <div id="mainheading" style="float: left; width: 30%">
-            All items
+        <div id="mainheadin" style="float: left; width: 40%">
+              <?php require('location_embed.php'); ?>
         </div>
-        <div style="float: left; width: 70%; text-align: right">            
-            <?php require('location_embed.php'); ?>
+        <div style="float: left; width: 60%; text-align: right">            
+            photo | outdoor
         </div>
     </div>
     <hr/>
