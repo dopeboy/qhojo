@@ -70,7 +70,7 @@ class UploadHandler
             // Defines which files can be displayed inline when downloaded:
             'inline_file_types' => '/\.(gif|jpe?g|png)$/i',
             // Defines which files (based on their names) are accepted for upload:
-            'accept_file_types' => '/.+$/i',
+            'accept_file_types' => '/(\.|\/)(gif|jpe?g|png)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
             'max_file_size' => null,
@@ -224,7 +224,7 @@ class UploadHandler
 
     protected function is_valid_file_object($file_name) {
         $file_path = $this->get_upload_path($file_name);
-        if (is_file($file_path) && $file_name[0] !== '.') {
+        if (is_file($file_path) && $file_name[0] !== '.' && strpos($file_name,'deleted') == null) {
             return true;
         }
         return false;
@@ -259,6 +259,8 @@ class UploadHandler
         if (!is_dir($upload_dir)) {
             return array();
         }
+        
+        error_log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         return array_values(array_filter(array_map(
             array($this, $iteration_method),
             scandir($upload_dir)

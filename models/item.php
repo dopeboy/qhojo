@@ -41,23 +41,43 @@ class ItemModel extends Model
         
 	public function test() 
 	{            
-            $status = $this->paypalMassPayToLender('arithmetic@gmail.com',1);
+            //$status = $this->paypalMassPayToLender('arithmetic@gmail.com',1);
 
-            if ($status != 0)
-            {
+            //if ($status != 0)
+          //  {
                 // error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
-                error_log("lenderConfirm FML 3");
-                return 3;
-            }
+             //   error_log("lenderConfirm FML 3");
+             //   return 3;
+           // }
+            
         }
         
-        public function testest($card_uri)
+        public function testest()
         {
             Balanced\Settings::$api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";
             
             Httpful\Bootstrap::init();
             RESTful\Bootstrap::init();
             Balanced\Bootstrap::init();
+            
+            $marketplace = \Balanced\Marketplace::mine();
+
+            $account = Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC7cwcHRdank5o2CCyVPHXXU');
+            
+            $card = Balanced\Card::get($account->cards->uri);
+            
+            //$card->
+            foreach ($card->items as $card)
+            {
+                if ($card->is_valid)
+                {
+                    $blah .= print_r($card->last_four,true);
+                }
+            }
+            
+            return $blah;
+            //return print_r($card->items);
+            
            // $status = $this->paypalMassPayToLender('bob@qhojo.com',23);
             // CREATE THE BUYER using the CARD URI
            // $buyer = Balanced\Marketplace::mine()->createBuyer('tdes223322f2dds22t2@test.com',$card_uri);

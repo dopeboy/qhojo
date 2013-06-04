@@ -41,7 +41,7 @@ class UserModel extends Model
         public function getUserDetails($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM USER WHERE ID=:userid');
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_VW WHERE ID=:userid');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -124,7 +124,7 @@ class UserModel extends Model
             $sqlParameters[":first_name"] =  $first_name;
             $sqlParameters[":join_date"] =  date("Y-m-d H:i:s");
             $sqlParameters[":location_id"] =  $locationid;
-            $preparedStatement = $this->dbh->prepare('insert into USER (ID,FIRST_NAME,EMAIL_ADDRESS,LOCATION_ID, PASSWORD, JOIN_DATE) VALUES (:userid,:first_name, :email_address, :location_id, :password, :join_date)');
+            $preparedStatement = $this->dbh->prepare('insert into USER (ID,FIRST_NAME,EMAIL_ADDRESS,LOCATION_ID, PASSWORD, JOIN_DATE, ACTIVE_FLAG) VALUES (:userid,:first_name, :email_address, :location_id, :password, :join_date, 1)');
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? $userid : -1;
@@ -309,8 +309,10 @@ class UserModel extends Model
             
             // Paypal credentials verified. Let's save them into the database
             $sqlParameters[":paypal_email"] =  $paypalEmailAddress;
+            $sqlParameters[":paypal_first_name"] =  $paypalFirstName;
+            $sqlParameters[":paypal_last_name"] =  $paypalLastName;
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('UPDATE USER set PAYPAL_EMAIL_ADDRESS=:paypal_email where ID=:userid LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set PAYPAL_EMAIL_ADDRESS=:paypal_email, PAYPAL_FIRST_NAME=:paypal_first_name, PAYPAL_LAST_NAME=:paypal_last_name where ID=:userid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? 0 : -2;            
@@ -484,21 +486,98 @@ class UserModel extends Model
             return $row;            
         }
         
+        public function getCreditCardForUser($userid)
+        {
+            // Get the BP Account URI first
+            $sqlParameters[":user_id"] = $userid;
+            $preparedStatement = $this->dbh->prepare('SELECT BP_BUYER_URI FROM USER_VW where ID=:user_id and BP_BUYER_URI is not null LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
+            
+            if ($row == null)
+                return null;
+            
+                global $bp_api_key;
+
+                Balanced\Settings::$api_key = $bp_api_key;
+                
+            Httpful\Bootstrap::init();
+            RESTful\Bootstrap::init();
+            Balanced\Bootstrap::init();
+            
+            $marketplace = \Balanced\Marketplace::mine();
+            $account = Balanced\Account::get($row["BP_BUYER_URI"]);
+            $card = Balanced\Card::get($account->cards->uri);
+            
+//            //$card->
+            foreach ($card->items as $card)
+            {
+                if ($card->is_valid)
+                {
+                    return $card;
+                }
+            }        
+            
+            // No valid cards
+            return null;
+        }
+        
         public function editUser($userid)
         {
+            $location_model = new LocationModel();
+            
             $row["USER"] = $this->getUserDetails($userid);
             $row["CURRENT_NETWORKS"] = $this->getNetworksForUser($userid);
             $row["OUTSIDE_NETWORKS"] = $this->getNetworksUserIsNotIn($userid);
+            $row["LOCATIONS"] = $location_model->getAllLocations();
+            $row["CREDITCARD"] = $this->getCreditCardForUser($userid);
             
             return $row;
         }
         
-        public function submitEditUser($network_id, $network_email, $userid)
+        public function editEmailAction($emailAddress, $userid)
+        {
+            $sqlParameters[":userid"] = $userid;
+            $sqlParameters[":email_address"] = $emailAddress;
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set EMAIL_ADDRESS=:email_address where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? $emailAddress : "Error: Email address didn't submit successfully";            
+        }
+        
+        public function editPaypalEmailAddressAction($paypalFirstName, $paypalLastName, $paypalEmailAddress, $userid)
+        {
+            $status = $this->signupLenderAction($userid, $paypalEmailAddress,$paypalFirstName, $paypalLastName);
+
+            return $status == 0 ? json_encode(array('ppFirstName'=> $paypalFirstName,'ppLastName'=>$paypalLastName,'ppEmailAddress'=>$paypalEmailAddress)) : "Error: Invalid PayPal credentials.";
+        }
+        
+        public function editNetworkAction($network_id, $network_email, $userid)
         {
             $status =  $this->addNetwork($network_id, $network_email, $userid);
             
-            return $status == 0 ? $userid : $status;
+            return $status == 0 ? 0 : "Error: Email could not be dispatched";
         }
+        
+        public function editProfilePicture($picture, $userid)
+        {
+            $sqlParameters[":userid"] = $userid;
+            $sqlParameters[":profile_picture"] =  substr($picture, strlen('uploads/user/'), strlen($picture));
+            $preparedStatement = $this->dbh->prepare('update USER SET PROFILE_PICTURE_FILENAME=:profile_picture where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);              
+            
+            return $preparedStatement->rowCount() == 1 ? 0 : "Error: Profile picture did not upload successfully."; 
+        }
+        
+        public function editLocation($location_id, $userid)
+        {
+            $sqlParameters[":userid"] = $userid;
+            $sqlParameters[":location_id"] =  $location_id;
+            $preparedStatement = $this->dbh->prepare('update USER SET LOCATION_ID=:location_id where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);              
+            
+            return $preparedStatement->rowCount() == 1 ? 0 : "Error: Location did not update successfully."; 
+        }        
 }
 
 ?>

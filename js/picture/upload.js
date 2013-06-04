@@ -20,6 +20,7 @@ $(function () {
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
         maxNumberOfFiles: window.location.pathname.slice(-1) == 0 ? 8 : 1,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         url: '/picture/handler/null/' + window.location.pathname.slice(-1)
     });
 

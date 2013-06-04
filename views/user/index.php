@@ -17,7 +17,7 @@
             <?php echo $viewmodel["USER"]["FIRST_NAME"]?>
         </div>
         <div style="display:table-cell;width:50%;text-align:right">
-            <form style="margin: 0" action="/user/edit/<?php echo $viewmodel["USER"]['ID']?>/0"><?php if ($viewmodel["USER"]['ID'] == $this->userid) { ?> <input type="submit" value="Edit Profile"> <?php } ?></form>    
+            <form style="margin: 0" action="/user/edit/<?php echo $viewmodel["USER"]['ID']?>/0"><?php if ($this->userid != null && $viewmodel["USER"]['ID'] == $this->userid) { ?> <input type="submit" value="Edit Profile"> <?php } ?></form>    
         </div>
     </div>
     <hr/>

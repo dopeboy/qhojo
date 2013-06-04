@@ -168,7 +168,7 @@ class User extends Controller
             
             else if ($this->state == 7 && $this->userid != null && !$viewmodel->checkExtraFields($this->userid))
             {
-                $status = $viewmodel->signupLenderAction($this->userid, $this->postvalues['paypalemail'], $this->postvalues['paypalfirstname'], $this->postvalues['paypallastname']);
+                $status = $viewmodel->signupLenderAction($this->userid, trim($this->postvalues['paypalemail']), trim($this->postvalues['paypalfirstname']), trim($this->postvalues['paypallastname']));
                 
                 if ($status == 0)
                 {
@@ -230,13 +230,28 @@ class User extends Controller
                 
                 else if ($this->state == 1)
                 {
-                    $this->returnView($viewmodel->submitEditUser($this->postvalues['networkid'], $this->postvalues['networkemail'], $this->userid), false,true);
+                    $this->returnView($viewmodel->editEmailAction(trim($this->postvalues['data']), $this->userid), false,true);
                 }
                 
                 else if ($this->state == 2)
                 {
-                     $this->returnView(null, true,false);      
+                    $this->returnView($viewmodel->editPaypalEmailAddressAction(trim($this->postvalues['ppFirstName']),trim($this->postvalues['ppLastName']),trim($this->postvalues['ppEmailAddress']), $this->userid), false,true);      
                 }
+                
+                else if ($this->state == 3)
+                {
+                    $this->returnView($viewmodel->editNetworkAction(trim($this->postvalues['networkid']),trim($this->postvalues['email']), $this->userid), false,true);      
+                }               
+                
+                else if ($this->state == 4)
+                {
+                    $this->returnView($viewmodel->editProfilePicture($this->postvalues['picture'],$this->userid), false,true);      
+                }
+                
+                else if ($this->state == 5)
+                {
+                    $this->returnView($viewmodel->editLocation($this->postvalues['location_id'],$this->userid), false,true);      
+                }                
             }
         }
 }

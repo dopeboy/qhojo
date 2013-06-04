@@ -10,17 +10,18 @@ class Item extends Controller
         
         protected function test()
         {
-		//$viewmodel = new ItemModel();
+		$viewmodel = new ItemModel();
                // $viewmodel->paypalDoReferenceTransaction(10,'B2d66A51794KM8357618');
                 //$viewmodel->test();
-               // $this->returnView($viewmodel->test(), true,false);
+               $this->returnView($viewmodel->test(), true,false);
         }
         
         protected function testest()
         {
-		//$viewmodel = new ItemModel();
+		$viewmodel = new ItemModel();
               //  $this->returnView($viewmodel->testest($this->postvalues["uri"]), false,false);
-		#$viewmodel->testest('B%2d95E05095G29611425');
+		//$viewmodel->testest('B%2d95E05095G29611425', false, true);
+                $this->returnView($viewmodel->testest(), false,true);
                // $viewmodel->paypalDoReferenceTransaction(10,'B%2d95E05095G29611425');
         }
         
