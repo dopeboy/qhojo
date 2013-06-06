@@ -120,6 +120,7 @@ class UserModel extends Model
                         
             $sqlParameters[":email_address"] =  $emailaddress;
             $sqlParameters[":password"] =  $this->hashPassword($emailaddress, $password);
+            
             $sqlParameters[":userid"] =  $userid = getRandomID();
             $sqlParameters[":first_name"] =  $first_name;
             $sqlParameters[":join_date"] =  date("Y-m-d H:i:s");
@@ -163,7 +164,7 @@ class UserModel extends Model
         public function checkDebitMethod($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and BP_BUYER_URI is null LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('select 1 from USER where ID=:userid and (BP_BUYER_URI is null or BP_PRIMARY_CARD_URI is null) LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC); 
 
@@ -265,7 +266,6 @@ class UserModel extends Model
         public function getRequestCount($userid)
         {
             $sqlParameters[":userid"] =  $userid;
-            //$preparedStatement = $this->dbh->prepare('select (select count(*) from ITEM_REQUESTS_VW where LENDER_ID=:userid) + (select count(*) from ITEM_VW where (LENDER_ID=:userid or BORROWER_ID=:userid) and ITEM_STATE_ID=2 and TIMESTAMPDIFF(HOUR,NOW(),END_DATE) <= 24);');            
             $preparedStatement = $this->dbh->prepare('select count(*) from ITEM_REQUESTS_VW where LENDER_ID=:userid');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_NUM);
@@ -285,6 +285,7 @@ class UserModel extends Model
             try
             {
                 $buyer = Balanced\Marketplace::mine()->createBuyer($userid . '@user.qhojo.com',$card_uri);    
+                $account = Balanced\Account::get($buyer->uri);                
             }
             
              catch (Balanced\Exceptions\HTTPError $e)
@@ -296,7 +297,8 @@ class UserModel extends Model
             // Save buyer uri into database
             $sqlParameters[":buyer_uri"] =  $buyer->uri;
             $sqlParameters[":userid"] =  $userid;
-            $preparedStatement = $this->dbh->prepare('UPDATE USER set BP_BUYER_URI=:buyer_uri where ID=:userid LIMIT 1');
+            $sqlParameters[":card_uri"] =  $card_uri;
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set BP_BUYER_URI=:buyer_uri, BP_PRIMARY_CARD_URI=:card_uri where ID=:userid LIMIT 1');
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? 0 : -2;            
@@ -357,69 +359,7 @@ class UserModel extends Model
             $ack = strtoupper($response->responseEnvelope->ack);
             error_log(print_r($response,true));
             return $ack == "SUCCESS" ? 0 : -1;
-           
-//            if($ack != "SUCCESS")
-//            {
-//                echo "<b>Error </b>";
-//                echo "<pre>";
-//                print_r($response);
-//                echo "</pre>";		
-//            } 
-//            
-//            else 
-//            {
-//                echo "<pre>";
-//                print_r($response);
-//                echo "</pre>";
-//                echo "<table>";
-//                echo "<tr><td>Ack :</td><td><div id='Ack'>$ack</div> </td></tr>";
-//                echo "</table>";		
-//            }
         }        
-        
-//        public function paypalExpressCheckout()
-//        {
-//            global $paypal_environment;
-//            $environment = $paypal_environment;
-//            
-//            // Set request-specific fields.
-//            $paymentAmount = urlencode('0');
-//            $currencyID = urlencode('USD');							// or other currency code ('GBP', 'EUR', 'JPY', 'CAD', 'AUD')
-//            $paymentType = urlencode('AUTHORIZATION');				// or 'Sale' or 'Order'
-//            $billingType = urlencode('MerchantInitiatedBilling');
-//            $billingAgreementDesc = urlencode('qhojo');
-//            $returnURL = urlencode("http://" . $_SERVER['SERVER_NAME']  . "/user/signup/null/4");
-//            $cancelURL = urlencode("http://" . $_SERVER['SERVER_NAME']);
-//            $shipping = '1';
-//            
-//            // Add request-specific fields to the request string.
-//            $nvpStr = "&NOSHIPPING=$shipping&PAYMENTREQUEST_0_AMT=$paymentAmount&ReturnUrl=$returnURL&CANCELURL=$cancelURL&PAYMENTREQUEST_0_PAYMENTACTION=$paymentType&PAYMENTREQUEST_0_CURRENCYCODE=$currencyID&L_BILLINGTYPE0=$billingType&L_BILLINGAGREEMENTDESCRIPTION0=$billingAgreementDesc";
-//
-//            // Execute the API operation; see the PPHttpPost function above.
-//            $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $nvpStr);
-//
-//            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
-//            {
-//                // Redirect to paypal.com.
-//                $token = urldecode($httpParsedResponseAr["TOKEN"]);
-//                $payPalURL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=$token";
-//                
-//                if("sandbox" === $environment || "beta-sandbox" === $environment) 
-//                {
-//                    $payPalURL = "https://www.$environment.paypal.com/webscr&cmd=_express-checkout&token=$token";
-//                }
-//                
-//                header("Location: $payPalURL");
-//                exit;
-//            } 
-//            
-//            else  
-//            {
-//                exit('SetExpressCheckout failed: ' . print_r($httpParsedResponseAr, true));
-//            }
-//
-//            return null;            
-//        }
         
         public function siteAdmin()
         {
@@ -490,33 +430,31 @@ class UserModel extends Model
         {
             // Get the BP Account URI first
             $sqlParameters[":user_id"] = $userid;
-            $preparedStatement = $this->dbh->prepare('SELECT BP_BUYER_URI FROM USER_VW where ID=:user_id and BP_BUYER_URI is not null LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('SELECT BP_PRIMARY_CARD_URI FROM USER_VW where ID=:user_id and BP_PRIMARY_CARD_URI is not null LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
             
             if ($row == null)
                 return null;
             
-                global $bp_api_key;
+            global $bp_api_key;
+            Balanced\Settings::$api_key = $bp_api_key;
 
-                Balanced\Settings::$api_key = $bp_api_key;
-                
             Httpful\Bootstrap::init();
             RESTful\Bootstrap::init();
             Balanced\Bootstrap::init();
             
-            $marketplace = \Balanced\Marketplace::mine();
-            $account = Balanced\Account::get($row["BP_BUYER_URI"]);
-            $card = Balanced\Card::get($account->cards->uri);
-            
-//            //$card->
-            foreach ($card->items as $card)
+            try
             {
-                if ($card->is_valid)
-                {
-                    return $card;
-                }
-            }        
+                $card = Balanced\Card::get($row["BP_PRIMARY_CARD_URI"]);
+                return $card->is_valid ? $card : null;
+            }
+            
+            catch (Exception $e)
+            {
+                error_log($e->getMessage());
+                return null;
+            }  
             
             // No valid cards
             return null;
@@ -577,7 +515,79 @@ class UserModel extends Model
             $preparedStatement->execute($sqlParameters);              
             
             return $preparedStatement->rowCount() == 1 ? 0 : "Error: Location did not update successfully."; 
-        }        
+        }
+        
+        public function removeCreditCard($userid)
+        {
+            // First check if there's a record in the ITEM table where borrower_id=me and item_status=2. If so, you're not allowed to remove a card.
+            $sqlParameters[":userid"] = $userid;
+            $preparedStatement = $this->dbh->prepare('select 1 from ITEM_VW where BORROWER_ID=:userid and ITEM_STATE_ID=2 LIMIT 1');
+            $preparedStatement->execute($sqlParameters); 
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($row != null) return "Error: Can't remove a card because you have an active transaction open";
+            
+            // Get the card
+            $card = $this->getCreditCardForUser($userid);
+            if ($card == null) return "Error: No credit card to remove";
+            
+            try
+            {
+                $card->invalidate();
+            }
+
+            catch (Exception $e)
+            {
+                error_log($e->getMessage());
+                return "Error: Couldn't remove the card";
+            }
+
+            $sqlParameters= array();
+            $sqlParameters[":userid"] = $userid;
+            $preparedStatement = $this->dbh->prepare('update USER SET BP_PRIMARY_CARD_URI=null where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);              
+            
+            return $preparedStatement->rowCount() == 1 ? 0 : "Error: DB change didn't go through.";             
+        }
+        
+        public function addCard($userid, $card_uri)
+        {
+            // Get the account URI
+            $sqlParameters[":userid"] =  $userid;
+            $preparedStatement = $this->dbh->prepare('select BP_BUYER_URI from USER where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);     
+            
+            if ($row == null || $row["BP_BUYER_URI"] == null)
+                return -1;
+            
+            global $bp_api_key;
+            
+            Balanced\Settings::$api_key = $bp_api_key;
+            Httpful\Bootstrap::init();
+            RESTful\Bootstrap::init();
+            Balanced\Bootstrap::init();
+            
+            try
+            {
+                $account = Balanced\Account::get($row["BP_BUYER_URI"]); 
+                $account->addCard($card_uri);
+            }
+            
+             catch (Balanced\Exceptions\HTTPError $e)
+            {
+                error_log($e->response);
+                return -2;
+            }
+            
+            // Save buyer uri into database
+            $sqlParameters[":userid"] =  $userid;
+            $sqlParameters[":card_uri"] =  $card_uri;
+            $preparedStatement = $this->dbh->prepare('UPDATE USER set BP_PRIMARY_CARD_URI=:card_uri where ID=:userid LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+
+            return $preparedStatement->rowCount() == 1 ? 0 : -3;                    
+        }
 }
 
 ?>

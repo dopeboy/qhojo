@@ -12,7 +12,8 @@ CREATE TABLE USER
         PAYPAL_EMAIL_ADDRESS            VARCHAR(80),
         PAYPAL_FIRST_NAME               VARCHAR(80),
         PAYPAL_LAST_NAME                VARCHAR(80),
-        BP_BUYER_URI                    VARCHAR(80),
+        BP_BUYER_URI                    VARCHAR(160),
+        BP_PRIMARY_CARD_URI             VARCHAR(160),
         JOIN_DATE                       DATETIME,
         ADMIN_FLAG                      BOOL DEFAULT 0,
         ACTIVE_FLAG                     INTEGER
@@ -72,7 +73,8 @@ CREATE TABLE ITEM_REQUESTS
 	REQUESTER_ID                    INTEGER,
         DURATION                        INTEGER,
         MESSAGE                         TEXT,
-        ACCEPTED_FLAG                   BOOL
+        ACCEPTED_FLAG                   BOOL, 
+        CREATE_DATE                     DATETIME
 );
 
 ALTER TABLE ITEM_REQUESTS ADD INDEX ITEM_ID (ITEM_ID);
@@ -228,6 +230,7 @@ u.PAYPAL_EMAIL_ADDRESS,
 u.PAYPAL_FIRST_NAME,
 u.PAYPAL_LAST_NAME,
 u.BP_BUYER_URI,
+u.BP_PRIMARY_CARD_URI,
 u.JOIN_DATE,
 u.ADMIN_FLAG,
 l.ID as "LOCATION_ID",

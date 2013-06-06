@@ -79,10 +79,20 @@
             </div>
             <br/>
             
-            Credit Card Last Four: <?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->last_four?><br/>
-            Credit Card Type: <?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->card_type?><br/>
-            Credit Card Expiration: <?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->expiration_month . '/' . $viewmodel["CREDITCARD"]->expiration_year ?><br/>
-            
+            <div id="cc">
+                Credit Card Last Four: <span class="ccFields"><?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->last_four?></span><br/>
+                Credit Card Type: <span class="ccFields"><?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->card_type?></span><br/>
+                Credit Card Expiration: <span class="ccFields"><?php echo $viewmodel["CREDITCARD"] == null ? '<i>None</i>' : $viewmodel["CREDITCARD"]->expiration_month . '/' . $viewmodel["CREDITCARD"]->expiration_year ?></span><img class="checkmark" src="/img/checkmark.png" style="opacity: 0">
+                <a id="cardEditButton" href="#"><img src="/img/edit.png" style=""/></a>
+
+               
+                <input class="button" id="addCardButton" type="button" value="Add Card" style="display:none;" <?php echo $viewmodel["CREDITCARD"] == null ? '' : 'disabled' ?> onclick="window.location='/user/addcard/<?php echo $viewmodel["USER"]["ID"]; ?>/0'"/>
+                <input class="button" id="removeCardButton" type="button" value="Remove Card" style="display:none;" <?php echo $viewmodel["CREDITCARD"] == null ? 'disabled' : '' ?>/>
+         
+                    <input class="button" id="cancelEditCardButton" type="button" value="Cancel" style="display:none;" />
+                    <img class="loading" src="/img/ajax-loader.gif" style="display:none">
+                <br/>
+            </div>
         </div>
         <br/>    
         

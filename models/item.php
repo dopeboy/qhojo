@@ -59,23 +59,31 @@ class ItemModel extends Model
             Httpful\Bootstrap::init();
             RESTful\Bootstrap::init();
             Balanced\Bootstrap::init();
+  
             
-            $marketplace = \Balanced\Marketplace::mine();
+            $card = Balanced\Card::get("/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/cards/CC4IeFuTtDWL9MG7iu3DMTN6");
 
-            $account = Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC7cwcHRdank5o2CCyVPHXXU');
-            
-            $card = Balanced\Card::get($account->cards->uri);
-            
-            //$card->
-            foreach ($card->items as $card)
-            {
-                if ($card->is_valid)
-                {
-                    $blah .= print_r($card->last_four,true);
-                }
-            }
-            
-            return $blah;
+            return print_r($card,true);          
+  
+//$card->items[0]->is_valid = false;
+//$card->items[0]->save();
+
+//            $marketplace = \Balanced\Marketplace::mine();
+//
+//            $account = Balanced\Account::get('/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6/accounts/AC7cwcHRdank5o2CCyVPHXXU');
+//            
+//            $card = Balanced\Card::get($account->cards->uri);
+//            
+//            //$card->
+//            foreach ($card->items as $card)
+//            {
+//                if ($card->is_valid)
+//                {
+//                    $blah .= print_r($card->last_four,true);
+//                }
+//            }
+//            
+//            return $blah;
             //return print_r($card->items);
             
            // $status = $this->paypalMassPayToLender('bob@qhojo.com',23);
@@ -279,7 +287,8 @@ class ItemModel extends Model
             $sqlParameters[":duration"] =  $duration;
             $sqlParameters[":message"] =  $message;
             $sqlParameters[":requestid"] =  getRandomID();
-            $preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE) VALUES (:requestid, :itemid, :userid, :duration, :message)');
+            $sqlParameters[":create_date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('INSERT INTO ITEM_REQUESTS (REQUEST_ID,ITEM_ID,REQUESTER_ID,DURATION,MESSAGE, CREATE_DATE) VALUES (:requestid, :itemid, :userid, :duration, :message, :create_date)');
             $preparedStatement->execute($sqlParameters);
 
             if ($preparedStatement->rowCount() != 1)
@@ -583,7 +592,7 @@ class ItemModel extends Model
         
 	public function submitPost($itemid, $userid, $title, $rate,$deposit,$description, $locationid, $files, $tags)
 	{ 
-            if ($deposit == null || $deposit > 2500 || $rate == null || $rate < 1)
+            if ($deposit == null || $deposit < 1 || $deposit > 2500 || $rate == null || $rate < 1)
             {
                 error_log("submitPost FML -1");
                 return -1;

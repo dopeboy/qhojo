@@ -251,9 +251,28 @@ class User extends Controller
                 else if ($this->state == 5)
                 {
                     $this->returnView($viewmodel->editLocation($this->postvalues['location_id'],$this->userid), false,true);      
+                }  
+                
+                else if ($this->state == 6)
+                {
+                    $this->returnView($viewmodel->removeCreditCard($this->userid), false,true);      
                 }                
             }
         }
+        
+        protected function addcard()
+        {
+            $user_model = new UserModel();
+            
+            if ($this->id == $this->userid && $user_model->checkDebitMethod($this->userid))
+            {
+                if ($this->state == 0)
+                    $this->returnView($user_model->getUserDetails($this->userid), true,false);
+                
+                else if ($this->state == 1)
+                    $this->returnView($user_model->addCard($this->userid, $this->postvalues['uri']), false, true);
+            }                
+        }        
 }
 
 ?>

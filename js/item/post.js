@@ -189,24 +189,12 @@ $("#uploaderframe").contents().find('.files').children('tr.template-download').c
  
  function check(formData, jqForm, options) 
  { 
-//           function getImages()
-// {
-//     result = [];
-//     $('#thumbs').children('img').each(function(i) { result.push({file:$(this).attr('src')}); });
-//     return JSON.stringify(result);
-// }
 
-         var queryString = $.param(formData); 
- 
-    // jqForm is a jQuery object encapsulating the form element.  To access the 
-    // DOM element for the form do this: 
-    // var formElement = jqForm[0]; 
-
-
+    var queryString = $.param(formData); 
     
-    if ($('#address').val() == '' || $('#thumbs').children().length == 0 || $('#rate').val() == '' || $('#deposit').val() == ''  || $('#desc').text() == '')
+    if ($('#address').val() == '' || $('#thumbs').children().length == 0 || $('#rate').val() == '' || $('#rate').val() < 1 || $('#deposit').val() == '' || $('#deposit').val() < 1 || $('#desc').text() == '')
     {
-        alert("Missing some fields!");
+        alert("Missing or incorrect fields!");
         return false;
     }
 

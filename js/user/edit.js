@@ -53,6 +53,64 @@ $(document).ready(function()
       }
     });
     
+    $('#cardEditButton').click(function() 
+    {
+        $(this).hide();
+        $(this).siblings('.button').show();
+    });
+    
+    $('#cancelEditCardButton').click(function() 
+    {
+        $(this).hide();
+        $(this).siblings('.button').hide();
+        $("#cardEditButton").show();
+        $('#cancelEditCardButton').attr('disabled', false);
+    });
+    
+    $('#removeCardButton').click(function() 
+    {
+          $('#removeCardButton').attr('disabled', true);
+          $('#cancelEditCardButton').attr('disabled', true);
+          
+            $(this).siblings('.loading').show();        
+            var thisReference = $(this);
+            
+        //post
+        $.ajax(
+        {
+            url:'/user/edit/' + $('#userid').val() + "/6",
+            type:'post',
+            data: {},
+            success: function(data) 
+            {
+                if (data.substring(0, 5) === "Error")
+                {
+                    alert(data);
+                    thisReference.siblings('.loading').hide();
+                    $('#cancelEditCardButton').click();
+                    
+                }
+
+                else
+                {
+                    thisReference.siblings('.loading').hide();
+                     $('#cancelEditCardButton').click();
+                    $('#addCardButton').attr('disabled', false);           
+                    
+                     thisReference.siblings('.checkmark').css('opacity',"1.0").fadeTo(1500, 0);
+                     thisReference.siblings('.ccFields').html('<i>None</i>');
+                     thisReference.remove();
+                      
+                }
+
+            },
+            error: function(req) 
+            {
+                alert("Error in request. Please try again later.");                    
+            }
+        }); 
+    });    
+    
     $('#submitPictureButton').click(function() 
       {
           $('#submitPictureButton').attr('disabled', true);

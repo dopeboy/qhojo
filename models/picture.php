@@ -260,7 +260,6 @@ class UploadHandler
             return array();
         }
         
-        error_log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         return array_values(array_filter(array_map(
             array($this, $iteration_method),
             scandir($upload_dir)
