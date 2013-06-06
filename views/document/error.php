@@ -3,5 +3,5 @@
         Oops
     </div>
     <hr/>
-    Some went wrong.
+    Something went wrong.
 </div>

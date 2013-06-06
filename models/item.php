@@ -399,6 +399,8 @@ class ItemModel extends Model
                 
                 catch (Exception $e)
                 {
+                    $error_msg = "Something went wrong. Halt the transaction. Error code 1. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Deposit: {$item_row["DEPOSIT"]}";
+                    $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR 1!', $error_msg);                    
                     error_log($e->getMessage());
                     error_log("borrowerConfirm FML 1");
                     return 1;
@@ -821,7 +823,7 @@ class ItemModel extends Model
             $message .= "Here's what you need to do next:<br/><br/>";
             $message .= "1) Over email, arrange to meet with " .  $row['BORROWER_FIRST_NAME'] . ". Here's " . $row['BORROWER_FIRST_NAME'] . "'s email address for reference: " .  $row['BORROWER_EMAIL_ADDRESS'] . "<br/>";
             $message .= "2) Once you guys meet, " .  $row['BORROWER_FIRST_NAME'] . " will check out your item. Once satisfied, " . $row['BORROWER_FIRST_NAME'] . " will confirm to qhojo via text message." . "<br/>";
-            $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring your item back after the agreed upon duration.<br/><br/>";
+            $message .= "3) We'll pass on this confirmation to you via text message. <b>Only hand the item over once you've received this confirmation from us</b>. At this point, the rental period has started and " . $row['BORROWER_FIRST_NAME'] . " will be responsible to bring the item back after the agreed upon duration.<br/><br/>";
             $message .= "Still confused? Check out our <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/document/howitworks/#lender\">how-it-works guide</a>";
             $message .= "<br/><br/>-team qhojo<br/><a href=\"http://qhojo.com\">http://qhojo.com</a>";
             
