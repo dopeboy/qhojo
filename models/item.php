@@ -399,8 +399,13 @@ class ItemModel extends Model
                 
                 catch (Exception $e)
                 {
-                    $error_msg = "Something went wrong. Halt the transaction. Error code 1. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Deposit: {$item_row["DEPOSIT"]}";
-                    $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR 1!', $error_msg);                    
+                    $error_msg = "Something went wrong. Halt the transaction. Action: borrowerConfirm. Error code 1. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Deposit: {$item_row["DEPOSIT"]}<br/>";
+                    $error_msg .= $e->getMessage();
+                    
+                    $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                    $this->sendEmail('support@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                    $this->sendEmail('support@qhojo.com', 'support@qhojo.com', 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                    
                     error_log($e->getMessage());
                     error_log("borrowerConfirm FML 1");
                     return 1;
@@ -447,6 +452,10 @@ class ItemModel extends Model
                     return 4;
                 }
                 
+                $error_msg = "Something went wrong. Halt the transaction. Action: borrowerConfirm. Error code 3. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Deposit: {$item_row["DEPOSIT"]}<br/>";
+                $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                $this->sendEmail('support@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);    
+                $this->sendEmail('support@qhojo.com', 'support@qhojo.com', 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);       
                 error_log("borrowerConfirm FML 3");
                 return 3;
             }
@@ -491,6 +500,13 @@ class ItemModel extends Model
                 
                 catch (Exception $e)
                 {
+                    $error_msg = "Something went wrong. Halt the transaction. Action: lenderConfirm. Error code 1. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. <br/>";
+                    $error_msg .= $e->getMessage();
+                    
+                    $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                    $this->sendEmail('support@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);    
+                    $this->sendEmail('support@qhojo.com', 'support@qhojo.com', 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR !', $error_msg);                      
+                    
                     error_log($e->getMessage());
                     error_log("lenderConfirm FML 1");
                     return 1;
@@ -510,6 +526,13 @@ class ItemModel extends Model
                 
                 catch (Exception $e)
                 {
+                    $error_msg = "Something went wrong. Halt the transaction. Action: lenderConfirm. Error code 2. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Debit: {$total_without_fee}<br/>";
+                    $error_msg .= $e->getMessage();
+                    
+                    $this->sendEmail('support@qhojo.com', $item_row['LENDER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);        
+                    $this->sendEmail('support@qhojo.com', $item_row['BORROWER_EMAIL_ADDRESS'], 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);    
+                    $this->sendEmail('support@qhojo.com', 'support@qhojo.com', 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);                      
+                    
                     error_log($e->getMessage());
                     error_log("lenderConfirm FML 2");
                     return 2;
@@ -520,9 +543,12 @@ class ItemModel extends Model
                 
                 if ($status != 0)
                 {
+                    $error_msg = "Something went wrong. Action: lenderConfirm. Error code 3. Item ID: {$item_row['ITEM_ID']}. Confirmation code: {$confirmation_code}. Phone number: {$phone_number}. Pay: {$total_with_fee}. Lender PP: {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}<br/>";
+                    $this->sendEmail('support@qhojo.com', 'support@qhojo.com', 'support@qhojo.com', 'qhojo - ' . $item_row['TITLE'] . ' - ERROR!', $error_msg);                      
+                    
                     error_log("Error with sending {$total_with_fee} to {$item_row['LENDER_PAYPAL_EMAIL_ADDRESS']}");
                     error_log("lenderConfirm FML 3");
-                    return 3;
+                    //return 3;
                 }
                 
                 $sqlParameters = null;
