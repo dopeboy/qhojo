@@ -859,7 +859,7 @@ class ItemModel extends Model
             
             // email to borrower
             $message = "Hey " . $row['BORROWER_FIRST_NAME'] . "!<br/><br/>";
-            $message .= "Your rental request for item " . $row['TITLE'] . " for a duration of " . $row['DURATION'] . " days has been approved! <br/><br/>";
+            $message .= "Your rental request for item " . $row['TITLE'] . " for a duration of " . $row['DURATION'] . " day(s) has been approved! <br/><br/>";
             $message .= "Your confirmation code is: <b><u>" . $row['CONFIRMATION_CODE'] . "</b></u>. We just texted it to you. Hang on to it because you'll need it later.<br/><br/>";
             $message .= "Here's what you need to do next:<br/><br/>";
             $message .= "1) Over email, arrange to meet with " .  $row['LENDER_FIRST_NAME'] . ". Here's " . $row['LENDER_FIRST_NAME'] . "'s email address for reference: " .  $row['LENDER_EMAIL_ADDRESS'] . "<br/>";
