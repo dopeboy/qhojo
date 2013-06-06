@@ -169,7 +169,10 @@ class Item extends Controller
                 $this->returnView($item_model->feedbackComplete($this->id),true,false);                
             
             else
-                $this->returnView("Error", true,false);
+            {
+                header('Location: /document/error');
+                exit;                
+            }
         }
         
         protected function accept()
