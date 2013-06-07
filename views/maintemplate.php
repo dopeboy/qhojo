@@ -48,7 +48,7 @@
 
         <div id="footer">
             <div id="footercontent">
-                <a href="/document/about/">about</a> | <a href="http://qhojo.wordpress.com/">blog</a> | <a href="/document/legal/">legal</a> | <a href="/document/contact/">contact</a> | <?php global $version; echo $version; ?> |  &#169; 2013 qhojo LLC
+                <a href="/document/about/">about</a> | <a href="/document/howitworks/">how it works</a> | <a href="http://qhojo.wordpress.com/">blog</a> | <a href="/document/legal/">legal</a> | <a href="/document/contact/">contact</a> | <?php global $version; echo $version; ?> |  &#169; 2013 qhojo LLC
             </div>
         </div>
     </div>

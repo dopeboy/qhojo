@@ -9,7 +9,6 @@
         About
     </div>
     <hr/>    
-
         I love traveling. And in the fall of 2012, I was planning my first trip to Turkey. I needed a hiking backpack though. So I went to a local sports goods store and bought a $300 20 liter traveling backpack. The trip and backpack were great. But ever since then,
         my backpack has been in my closet.
  
@@ -24,7 +23,7 @@
         I couldn't find any comparable service out there that would let me rent and borrow items from other people. <br/><br/>
         So I built one.
         <br/><br/>
-        Launched in the summer of 2013, <b>qhojo</b> (pronounced co-joe) is a peer-to-peer rental service for small goods.
+        Launched into beta in the summer of 2013, <b>qhojo</b> (pronounced co-joe) is a peer-to-peer rental service for small goods.
         <br/><br/>
         <i>-Manish Sinha, Founder</i>
         <br/><br/>
