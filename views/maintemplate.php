@@ -48,7 +48,7 @@
 
         <div id="footer">
             <div id="footercontent">
-                <a href="/document/about/">about</a> | <a href="/document/howitworks/">how it works</a> | <a href="http://qhojo.wordpress.com/">blog</a> | <a href="/document/legal/">legal</a> | <a href="/document/contact/">contact</a> | <?php global $version; echo $version; ?> |  &#169; 2013 qhojo LLC <a href="https://twitter.com/qhojonyc"><img src="/img/twitter-bird-light-bgs.png" style="margin-left: 3px"></a>
+                <a href="/document/about/">about</a> | <a href="/document/howitworks/">how it works</a> | <a href="http://qhojo.wordpress.com/">blog</a> | <a href="/document/legal/">legal</a> | <a href="/document/contact/">contact</a> | <?php global $version; echo $version; ?> |  &#169; 2013 qhojo LLC <a href="https://twitter.com/qhojonyc"><img src="/img/twitter-bird-light-bgs.png" style="margin-left: 3px"></a><a href="https://www.facebook.com/pages/Qhojo/131352593731804"><img src="/img/fb.png" style="margin-left: 5px"></a>
             </div>
         </div>
     </div>
