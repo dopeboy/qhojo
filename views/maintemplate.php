@@ -7,6 +7,8 @@
 	<script type="text/javascript" src="/js/maintemplate.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/maintemplate.css" media="screen" />        	
         <script type="text/javascript" src="/js/jquery.form.js"></script> 
+        <meta name="description" content="peer-to-peer renting for small goods."> 
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8">        
         <?php require("analytics.php"); ?>
 </head>
 

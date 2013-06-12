@@ -17,7 +17,7 @@ insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (2,1,'dumbo');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (3,0,'lower east side');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (4,1,'fort greene');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (5,1,'park slope');
-
+-- Added 06/12
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (6,1,'williamsburg');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (7,1,'bushwick');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (8,1,'prospect heights');
