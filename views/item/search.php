@@ -8,7 +8,7 @@
 
 <div id="masterdiv" style="">
     <div style="display: inline-block; width:100%; font-size: small; ">
-        <div id="mainheadin" style="float: left; width: 55%">
+        <div id="mainheadin" style="float: left; width: 60%">
             <div id="boroughs">
                 <a id="all" href="/item/search/">all</a> | 
                 <?php foreach ($viewmodel["BOROUGHS"] as $key=>$borough) {?> 
@@ -22,7 +22,7 @@
                       { 
                             if ($borough["ID"] == $neighborhood["BOROUGH_ID"])
                             {
-                                 $str .= "<a class=\"neighborhood\" neighborhoodid=\"" . $neighborhood["ID"] . "\" href=\"/item/search?neighborhood=" . $neighborhood["ID"] . "\">" . $neighborhood["FULL_NAME"] . "</a> | ";
+                                 $str .= "<a class=\"neighborhood\" neighborhoodid=\"" . $neighborhood["ID"] . "\" href=\"/item/search?neighborhood=" . $neighborhood["ID"] . "\">" . $neighborhood["FULL_NAME"] . "</a> " . ($key == 8 ? '<br/>' : '| ');
                             }
                       }
 
@@ -31,7 +31,7 @@
             </div>
             <?php } ?>
         </div>
-        <div style="float: left; width: 45%; text-align: right">            
+        <div style="float: left; width: 40%; text-align: right">            
             <div id="tags">
                 <?php foreach ($viewmodel["TAGS"] as $key=>$tag) { 
                     

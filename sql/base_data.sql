@@ -18,6 +18,14 @@ insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (3,0,'lower east sid
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (4,1,'fort greene');
 insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (5,1,'park slope');
 
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (6,1,'williamsburg');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (7,1,'bushwick');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (8,1,'prospect heights');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (9,1,'clinton hill');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (10,1,'crown heights');
+insert into NEIGHBORHOOD (ID, BOROUGH_ID, FULL_NAME) VALUES (11,1,'bed-stuy');
+
+
 insert into NETWORK VALUES (0,'NYU','nyu.edu', 'nyu.png');
 insert into NETWORK VALUES (1,'Columbia University','columbia.edu', 'columbia.png');
 
