@@ -30,7 +30,7 @@
                         </form>
                     </div>
 
-                    <div><a href="/"><img src="/img/logo4.png"/></a></div>
+                    <div><a href="/"><img src="/img/logo2.png"/></a></div>
 
                     <div class="headerlinks" style="text-align: right; margin-top: 15px">
                         

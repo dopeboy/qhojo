@@ -117,7 +117,7 @@ class ItemModel extends Model
             $preparedStatement->execute();
             $rows["BOROUGHS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
             
-            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD');
+            $preparedStatement = $this->dbh->prepare('select * from NEIGHBORHOOD ORDER BY BOROUGH_ID, FULL_NAME');
             $preparedStatement->execute();
             $rows["NEIGHBORHOODS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
             
