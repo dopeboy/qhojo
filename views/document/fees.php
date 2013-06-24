@@ -10,7 +10,7 @@
     For lenders
     </div>
     <div class="subcontent">
-        <b><?php global $transaction_fee_variable, $transaction_fee_fixed; echo $transaction_fee_variable*100?>% + $<?php echo number_format($transaction_fee_fixed,2); ?></b> off each successful rental transaction.
+        <b><?php global $transaction_fee_variable, $transaction_fee_fixed; echo $transaction_fee_variable*100?>%</b> off each successful transaction.
     </div>
     <br/>
     <div class="subheading">

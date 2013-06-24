@@ -61,6 +61,6 @@ function startsWith($haystack, $needle)
 }     
 
 $transaction_fee_variable = 0.08;
-$transaction_fee_fixed = 0.50;
+$transaction_fee_fixed = 0.00;
 
 ?>
