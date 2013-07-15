@@ -1,0 +1,52 @@
+ONE TIME
+
+	mysql -u root -p
+	root
+
+        create user 'qhostaging'@'localhost' identified by 'Z69afsGKVPHJjsO';
+	create database qhojo_staging;
+	grant SELECT, INSERT, UPDATE on qhojo_staging.* to 'qhostaging'@'localhost' IDENTIFIED BY 'Z69afsGKVPHJjsO';
+		
+	create user 'qhoprod'@'localhost' identified by 'Gk1BLp5J6u5MsQr';
+	create database qhojo_production;
+        grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
+
+ create user 'backupuser'@'localhost' identified by '3W16aba38yP2fxr';
+GRANT SELECT, SHOW VIEW ON *.* TO  'backupuser'@'localhost' IDENTIFIED BY '3W16aba38yP2fxr';
+
+ create user 'restorestaging'@'localhost' identified by 'abcdefghj';
+GRANT all ON qhojo_staging.* TO  'restorestaging'@'localhost' IDENTIFIED BY 'abcdefghj';
+
+
+
+	FLUSH PRIVILEGES;
+
+        94  sudo cp default mysite
+          95  sudo vim mysite
+                change the directory root here
+                change allowoverride to all
+          99  a2enmod rewrite
+          97  sudo a2dissite default && sudo a2ensite mysite
+          98  sudo /etc/init.d/apache2 restart
+
+enable SSL
+install mutt for backups
+
+under manish
+	crontab maintenance/production/nightly_backup_cron_definition
+
+LOGIN 
+	mysql -umanish -h localhost -padmin -D qhojo
+
+RUN
+	mysql -umanish -h localhost -padmin < create.sql > out
+
+
+GET: curl -g -HAccept:text/plain http://localhost?action=GET_USER_ID\&email=joe
+
+POST: curl -d "param1=value1&param2=value2" http://example.com/base/
+
+tail -f /var/log/apache2/error.log
+
+ron@qhojo.com / ronrules
+brick@qhojo.com / brickrules
