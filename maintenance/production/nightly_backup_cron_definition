@@ -1,1 +1,0 @@
-0 0 * * * cd /home/manish/public_html/maintenance/production/ && ./backup.sh
