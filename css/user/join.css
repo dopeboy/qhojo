@@ -1,0 +1,27 @@
+#join
+{
+    	max-width: 380px;
+	padding: 35px;
+}
+
+.form-join
+{
+    margin: 0;
+}
+
+.form-join .form-join-heading, .form-join .checkbox 
+{
+	margin-bottom: 10px;
+}
+      
+input[type="text"],
+input[type="password"] 
+{
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+        width: 300px;
+}
+
+
