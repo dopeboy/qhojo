@@ -12,5 +12,7 @@ $(document).ready(function()
         'slow');
     
     });
+    
+    $('[rel=tooltip]').tooltip();
 
 });

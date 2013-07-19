@@ -16,18 +16,5 @@ $(document).ready(function()
         }
     }, 
     1);
-    
-    $('.rentlink').click(function(e)
-    {
-        e.preventDefault();
-        $('#searchcontainer').show("slow");
-
-        $(document.body).animate(
-        {
-            'scrollTop':   $('#searchcontainer').offset().top - $('.navbar-fixed-top').height() - 50
-        }, 
-        'slow');
-        $('#searchbar').focus();
-    });
 
 });

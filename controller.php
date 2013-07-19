@@ -39,7 +39,7 @@ abstract class Controller
             $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php';
 
             if ($fullview) 
-                require('views/maintemplate.php');
+                require('views/main.php');
 
             else 
                 require($viewloc);
