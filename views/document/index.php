@@ -9,7 +9,7 @@
 
          
          <div class="span4" style="">
-             <div class="card"  style="margin-left: 70px;">
+             <div class="card"  style="">
                  <div class="item-image" style="background-image: url('/img/card_image2.png');">
                      <div class="item-price">
                          $25 
@@ -61,7 +61,7 @@
          </div>
          
          <div class="span4" >
-             <div class="card" style="margin-right: 70px;">
+             <div class="card" style="">
                  <div class="item-image" style="background-image: url('/img/card_image4.png');">
                      <div class="item-price">
                          $25 
