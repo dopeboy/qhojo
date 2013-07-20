@@ -27,6 +27,16 @@
 {
     font-size: 60px;
     margin-bottom: 40px;
-    padding-left: 30px
+    padding-left: 20px
 }
 
+.sheet.headliner
+{
+    padding: 40px;
+}
+
+.sheet
+{
+    padding-left: 0px;
+    padding-right: 0px;
+}
