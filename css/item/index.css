@@ -1,0 +1,39 @@
+.visuals
+{
+    margin-bottom: 30px;      
+}
+
+.section.preview, .section.item-price
+{
+    height: 450px;    
+}
+
+.thumbnail img
+{
+    margin-bottom: 20px
+}
+
+.details
+{}
+
+.details .subsection.reviews
+{
+    margin-bottom: 0px;
+}
+
+.details .subsection
+{
+    margin-bottom: 20px;
+}
+
+.rental-rate
+{
+    margin-bottom: 20px    
+}
+
+.lender-picture
+{
+    margin-bottom: 0px; 
+    height: 165px; 
+    width: auto;    
+}

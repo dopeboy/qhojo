@@ -61,7 +61,7 @@ hr
     background-color: whitesmoke
 }
 
-.sheet h1,h2,h3, h4
+.sheet h1,h2,h3, h4, h5
 {
     margin: 0;
 }
@@ -96,7 +96,21 @@ hr
     width: 300px; 
     height: 300px; 
     border: 1px #b6b6b6 solid;
-    margin: 0 auto; 
+}
+
+.card.left
+{
+    float: left;
+}
+
+.card.middle
+{
+    margin: 0px auto;
+}
+
+.card.right
+{
+    float: right;
 }
 
 .card .item-image
@@ -160,6 +174,7 @@ hr
 legend
 {
     border-bottom-color: #b6b6b6;
+    font-size: 30px;
 }
 
 .sheet
@@ -176,7 +191,6 @@ input[type="password"]
     height: auto;
     margin-bottom: 15px;
     padding: 7px 9px;
-    width: 300px;
 }
 
 legend+.control-group
@@ -187,4 +201,63 @@ legend+.control-group
 .control-group
 {
     margin-bottom: 0px;
+}
+
+form
+{
+    margin: 0;
+}
+
+a.fill-div 
+{
+    color: inherit;
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+.navbar-inverse .navbar-inner 
+{
+    background: #45484d; /* Old browsers */
+    background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #45484d 0%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */    
+}
+
+
+.section
+{
+    background-color: rgba(207,207,207, .5); 
+    height: 100%; 
+    padding: 20px    
+}
+
+.section.split
+{
+    margin-bottom: 30px;
+}
+
+.section.split:last-child
+{
+    margin-bottom: 0px;
+}
+
+.reviews h3
+{
+    margin-bottom: 5px;
+}
+
+.review
+{
+    margin-bottom: 20px;
+}
+
+.review-top
+{
+    margin-bottom: 5px
 }

@@ -15,10 +15,13 @@
         </style>
         <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="/css/main.css">
+    
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
         <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
         
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
         <script src="/js/vendor/bootstrap.min.js"></script>
         <script src="/js/main.js"></script>
 
@@ -48,7 +51,7 @@
                         <a class="brand" href="/">Qhojo</a>
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
-                                <li class=""><a href="#">Borrow</a></li>
+                                <li class=""><a href="/item/search/">Borrow</a></li>
                                 <li><a href="#">Lend</a></li>
                             </ul>
                             <ul class="nav pull-right">

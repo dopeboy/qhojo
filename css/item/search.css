@@ -1,0 +1,25 @@
+#name
+{
+    height: 44px; 
+    width: 100%; 
+    margin-bottom: 0px
+}
+
+#location
+{
+    height: 44px;
+    width: 100%; 
+    margin-left: -15px;
+    margin-bottom: 0px    
+}
+
+#search-button
+{
+    margin-left: -30px    
+}
+
+.pagination
+{
+    margin-top: 40px;
+    margin-bottom: 0px;
+}

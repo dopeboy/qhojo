@@ -3,13 +3,13 @@
 
 <div class="sheet headliner">
      
-    <h1 style="">Cameras in New York City</h1>                             
+    <h1 style="">Gear in New York City</h1>                             
  
     <div class="row-fluid text-center" style="">
 
          
          <div class="span4" style="">
-             <div class="card"  style="">
+             <div class="card left"  style="">
                  <div class="item-image" style="background-image: url('/img/card_image2.png');">
                      <div class="item-price">
                          $25 
@@ -27,7 +27,7 @@
                      <div class="span8 text-left item-details" style="">
                          <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Brooklyn, NY</div>
                          <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a week</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
+                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Number of Transactions" style=""><i class="icon-check"></i> 23</div>
                      </div>                      
                  </div>                 
              </div>
@@ -36,7 +36,7 @@
          
          
          <div class="span4" >
-             <div class="card">
+             <div class="card middle">
                  <div class="item-image" style="background-image: url('/img/card_image3.png');">
                      <div class="item-price">
                          $12 
@@ -61,7 +61,7 @@
          </div>
          
          <div class="span4" >
-             <div class="card" style="">
+             <div class="card right" style="">
                  <div class="item-image" style="background-image: url('/img/card_image4.png');">
                      <div class="item-price">
                          $25 
@@ -103,7 +103,7 @@
              </div>      
              <div class="bottom text-left">
                 <h4>Search</h4>
-                <p>Search for the camera you want.</p>
+                <p>Search for the gear you want.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -115,7 +115,7 @@
              </div>      
              <div class="bottom text-left">
                 <h4>Reserve</h4>
-                <p>Select a rental duration and pickup time for your camera. Send any questions to the lender.</p>
+                <p>Select a rental duration and pickup time for your gear. Send any questions to the lender.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -127,7 +127,7 @@
              </div>      
              <div class="bottom text-left">
                 <h4>Shoot</h4>
-                <p>Meet the lender, pick up the camera, and start shooting your favorite pictures.</p>
+                <p>Meet the lender, pick up the gear, and start shooting your favorite pictures.</p>
              </div>                               
          </div>                    
     </div>
@@ -213,7 +213,7 @@
              </div>      
              <div class="bottom text-left">
                 <h4>Choose</h4>
-                <p>Select, vet, and approve a rental request. The approved borrower will setup a meeting time with you to pick up the camera.</p>
+                <p>Select, vet, and approve a rental request. The approved borrower will setup a meeting time with you to pick up the gear.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -225,7 +225,7 @@
              </div>      
              <div class="bottom text-left">
                 <h4>Profit</h4>
-                <p>Once the borrower has returned the camera to you, we'll send you the money you are due minus a 8% commission fee.</p>
+                <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a 8% commission fee.</p>
              </div>                               
          </div>                    
     </div>
@@ -244,7 +244,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Theft</h4>
-                If your borrower doesn't return the camera, you will be compensated for the full value of the item subject to Qhojo's insurance policy.
+                If your borrower doesn't return the gear, you will be compensated for the full value of the item subject to Qhojo's insurance policy.
             </div>
         </div>            
     </div>    
@@ -260,7 +260,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Damage</h4>
-                If your camera is damaged, we'll supply you with a replacement and get the camera repaired for you subject to Qhojo's insurance policy.
+                If your gear is damaged, we'll supply you with a replacement and get the gear repaired for you subject to Qhojo's insurance policy.
             </div>
         </div>            
     </div>  

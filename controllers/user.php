@@ -12,9 +12,17 @@ class User extends Controller
             $this->returnView(null, true,false);
         }
         
+        protected function index()
+        {
+            $this->returnView(null, true,false);
+        }
         
+        protected function dashboard()
+        {
+            $this->returnView(null, true,false);
+        }
         
-        
+        /*
         
         
         
@@ -282,7 +290,7 @@ class User extends Controller
                 else if ($this->state == 1)
                     $this->returnView($user_model->addCard($this->userid, $this->postvalues['uri']), false, true);
             }                
-        }        
+        }        */
 }
 
 ?>

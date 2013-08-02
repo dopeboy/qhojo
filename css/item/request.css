@@ -1,0 +1,19 @@
+/* 
+    Document   : request
+    Created on : Jul 23, 2013, 5:30:42 PM
+    Author     : manish
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.section
+{
+    margin-bottom: 15px;
+    background: inherit;
+    padding: 0px;
+}
+
+input[type="text"]
+{
+    margin: 0px;
+}

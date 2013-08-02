@@ -2,7 +2,27 @@
 
 class Item extends Controller 
 {
-	protected function index() 
+	protected function search() 
+	{            
+            $this->returnView(null,true,false);
+	}
+        
+        protected function index() 
+	{
+            $this->returnView(null,true,false);
+	}
+        
+	protected function request() 
+	{
+            $this->returnView(null,true,false);
+        }
+        
+	protected function feedback() 
+	{
+            $this->returnView(null,true,false);
+        }        
+        
+	/*protected function index() 
 	{
 		$viewmodel = new ItemModel();
 		$this->returnView($viewmodel->index($this->id, $this->userid), true,false);
@@ -248,7 +268,7 @@ class Item extends Controller
                 else if ($this->state == 2)
                     $this->returnView($item_model->chargeDepositComplete($this->id), true, false);       
             }
-        }
+        }*/
 }
 
 ?>

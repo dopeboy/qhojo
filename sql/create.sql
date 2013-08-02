@@ -1,0 +1,217 @@
+drop table if exists USER;
+CREATE TABLE USER
+(
+    ID                               INTEGER PRIMARY KEY,
+    FIRST_NAME                      VARCHAR(80),
+    LAST_NAME                       VARCHAR(80),
+    EMAIL_ADDRESS                   VARCHAR(80),
+    PASSWORD                        CHAR(128),
+    ZIPCODE                         INTEGER,
+    PHONE_NUMBER                    VARCHAR(80),
+    PROFILE_PICTURE_FILENAME        VARCHAR(80),
+    PAYPAL_EMAIL_ADDRESS            VARCHAR(80),
+    PAYPAL_FIRST_NAME               VARCHAR(80),
+    PAYPAL_LAST_NAME                VARCHAR(80),
+    BP_BUYER_URI                    VARCHAR(160),
+    BP_PRIMARY_CARD_URI             VARCHAR(160),
+    JOIN_DATE                       DATETIME,
+    ADMIN_FLAG                      BOOL DEFAULT 0,
+    ACTIVE_FLAG                     INTEGER
+);
+
+ALTER TABLE USER ADD INDEX ID (ID);
+ALTER TABLE USER ADD INDEX EMAIL_ADDRESS (EMAIL_ADDRESS);
+
+drop table if exists ITEM;
+CREATE TABLE ITEM
+(
+    ID                                  INTEGER PRIMARY KEY,
+    TITLE 				VARCHAR(80),
+    DESCRIPTION                         TEXT,
+    RATE				INTEGER,
+    DEPOSIT				INTEGER,                  
+    ZIPCODE                             INTEGER,
+    LENDER_ID                           INTEGER,
+    ACTIVE_FLAG                         INTEGER,
+    CREATE_DATE                         DATETIME
+);
+
+ALTER TABLE ITEM ADD INDEX ID (ID);
+ALTER TABLE ITEM ADD INDEX LENDER_ID (LENDER_ID);
+
+drop table if exists STATE;
+CREATE TABLE STATE
+(
+    ID                                  INTEGER PRIMARY KEY,
+    NAME                                VARCHAR(80),
+    ACTIVE                              BOOL
+);
+
+ALTER TABLE STATE ADD INDEX ID (ID);
+
+drop table if exists EDGE
+CREATE TABLE EDGE
+(
+    ID                                  INTEGER PRIMARY KEY,
+    STATE_A_ID                          INTEGER,
+    STATE_B_ID                          INTEGER,
+    DESCRIPTION                         VARCHAR(80),
+    ACTIVE                              BOOL    
+);
+
+ALTER TABLE EDGE ADD INDEX ID (ID);
+ALTER TABLE EDGE ADD INDEX STATE_B_ID (STATE_B_ID);
+
+drop table if exists TRANSACTION;
+CREATE TABLE TRANSACTION
+(
+    ID                                  INTEGER PRIMARY KEY,
+    ITEM_ID                             INTEGER,
+    BORROWER_ID                         INTEGER,
+    LENDER_TO_BORROWER_REVIEW           INTEGER,
+    BORROWER_TO_LENDER_REVIEW           INTEGER,
+    LENDER_TO_BORROWER_COMMENTS         TEXT,
+    BORROWER_TO_LENDER_COMMENTS         TEXT
+);
+
+ALTER TABLE TRANSACTION ADD INDEX ID (ID);
+ALTER TABLE TRANSACTION ADD INDEX ITEM_ID (ITEM_ID);
+ALTER TABLE TRANSACTION ADD INDEX BORROWER_ID (BORROWER_ID);
+
+drop table if exists DETAIL;
+CREATE TABLE DETAIL
+(
+    TRANSACTION_ID                      INTEGER PRIMARY KEY,
+    EDGE_ID                             INTEGER,
+    ENTRY_DATE                          DATETIME,
+    MESSAGE                             TEXT,
+    USER_ID                             INTEGER
+);
+
+ALTER TABLE DETAIL ADD INDEX TRANSACTION_ID (TRANSACTION_ID);
+ALTER TABLE DETAIL ADD INDEX EDGE_ID (EDGE_ID);
+
+drop table if exists ITEM_PICTURES;
+CREATE TABLE ITEM_PICTURES
+(
+	ITEM_ID                         INTEGER,
+	FILENAME                        VARCHAR(80),
+        PRIMARY_FLAG                    BOOL
+);
+
+ALTER TABLE ITEM_PICTURES ADD INDEX ITEM_ID (ITEM_ID);
+
+/* VIEWS                                               */
+
+CREATE OR REPLACE VIEW USER_VW AS
+SELECT 
+u.ID as "USER_ID",
+u.FIRST_NAME,
+u.LAST_NAME,
+CONCAT(u.FIRST_NAME,' ',UPPER(LEFT(u.LAST_NAME,1)),'.') as NAME,
+u.EMAIL_ADDRESS,
+u.PASSWORD,
+u.PHONE_NUMBER,
+u.PROFILE_PICTURE_FILENAME,
+u.PAYPAL_EMAIL_ADDRESS,
+u.PAYPAL_FIRST_NAME,
+u.PAYPAL_LAST_NAME,
+u.BP_BUYER_URI,
+u.BP_PRIMARY_CARD_URI,
+u.JOIN_DATE,
+u.ADMIN_FLAG,
+u.ACTIVE_FLAG
+FROM USER u;
+
+CREATE OR REPLACE VIEW BASE_VW AS
+SELECT 
+i.ID as "ITEM_ID",
+i.TITLE,
+i.DESCRIPTION,
+i.RATE,
+i.DEPOSIT,                  
+i.ZIPCODE,
+i.LENDER_ID,
+i.ACTIVE_FLAG,
+i.CREATE_DATE,
+t.ID as "TRANSACTION_ID",
+t.BORROWER_ID,
+d.EDGE_ID,
+d.ENTRY_DATE,
+d.MESSAGE,
+d.USER_ID,
+
+FROM ITEM i
+INNER JOIN TRANSACTION t on i.ID=t.ITEM_ID   
+INNER JOIN DETAIL d on d.TRANSACTION_ID=t.ID  
+INNER JOIN EDGE e on e.ID=d.EDGE_ID 
+INNER JOIN STATE s on s.ID=e.STATE_B_ID;
+
+-- select * from .. inner join (select edge_id, max(state_b_id) frm bb group by edge-id
+
+CREATE OR REPLACE VIEW REQUESTS_VW AS
+SELECT * 
+FROM BASE_VW b
+where max(b.
+
+
+-- CREATE OR REPLACE VIEW ITEM_REQUESTS_VW AS
+-- SELECT 
+-- ir.REQUEST_ID,
+-- ir.ITEM_ID,
+-- it.TITLE,
+-- it.RATE,
+-- ir.REQUESTER_ID,
+-- u1.FIRST_NAME as "REQUESTER_NAME",
+-- u1.EMAIL_ADDRESS as "REQUESTER_EMAIL_ADDRESS",
+-- ir.DURATION,
+-- ir.MESSAGE,
+-- it.LENDER_ID
+-- FROM ITEM_REQUESTS ir
+-- INNER JOIN ITEM it on ir.ITEM_ID=it.ID
+-- INNER JOIN USER u1 on ir.REQUESTER_ID=u1.ID
+-- where ir.ACCEPTED_FLAG is null;
+
+-- CREATE OR REPLACE VIEW TRANSACTION_VW AS
+-- SELECT 
+-- t.ID as "TRANSACTION_ID", 
+-- t.ITEM_ID,
+-- t.TITLE,
+-- t.DESCRIPTION,
+-- t.RATE,
+-- t.DEPOSIT,
+-- t.ZIPCODE,
+-- t.RESERVED_DATE,                   
+-- t.EXCHANGED_DATE,
+-- t.RETURNED_DATE,           
+-- ir.DURATION+DURATION as "DUE_DATE",
+-- it.LENDER_ID,
+-- u1.NAME as "LENDER_NAME",
+-- u1.PROFILE_PICTURE_FILENAME as "LENDER_PICTURE_FILENAME",
+-- u1.PHONE_NUMBER as "LENDER_PHONE_NUMBER",
+-- u1.EMAIL_ADDRESS as "LENDER_EMAIL_ADDRESS",
+-- u1.PAYPAL_EMAIL_ADDRESS as "LENDER_PAYPAL_EMAIL_ADDRESS",
+-- ir.REQUESTER_ID as BORROWER_ID,
+-- u2.NAME as "BORROWER_NAME",
+-- u2.PROFILE_PICTURE_FILENAME as "BORROWER_PICTURE_FILENAME",
+-- u2.PHONE_NUMBER as "BORROWER_PHONE_NUMBER",
+-- u2.EMAIL_ADDRESS as "BORROWER_EMAIL_ADDRESS",
+-- u2.BP_BUYER_URI as "BORROWER_BP_BUYER_URI",
+-- ir.DURATION,
+-- t.LENDER_TO_BORROWER_STARS,
+-- t.BORROWER_TO_LENDER_STARS,
+-- t.CONFIRMATION_CODE,
+-- t.LENDER_TO_BORROWER_COMMENTS,
+-- t.BORROWER_TO_LENDER_COMMENTS,
+-- ir.REQUEST_ID,
+-- t.BORROWER_BP_HOLD_URI
+-- FROM TRANSACTION t
+-- INNER JOIN ITEM it on it.ID=t.ITEM_ID
+-- INNER JOIN USER_VW u1 on u1.USER_ID=it.LENDER_ID
+-- INNER JOIN ITEM_REQUESTS ir on t.ITEM_ID=ir.ITEM_ID and ir.ACCEPTED_FLAG=true
+-- LEFT JOIN USER_VW u2 on u2.USER_ID=ir.REQUESTER_ID;
+
+
+
+
+
