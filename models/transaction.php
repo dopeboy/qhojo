@@ -4,7 +4,7 @@ class TransactionModel extends Model
 {    
     public function processDetails($details)
     {
-        $transactions = [];
+        $transactions = null;
         
         foreach ($details as $key=>$detail)
         {
