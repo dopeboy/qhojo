@@ -6,7 +6,6 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -51,7 +50,7 @@
                         <a class="brand" href="/">Qhojo</a>
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
-                                <li class=""><a href="/item/search/">Borrow</a></li>
+                                <li class=""><a href="/item/search.php">Borrow</a></li>
                                 <li><a href="#">Lend</a></li>
                             </ul>
                             <ul class="nav pull-right">

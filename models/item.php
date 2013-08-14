@@ -15,7 +15,134 @@ require "Services/Twilio.php";
 
 class ItemModel extends Model 
 {
-	public function index($itemid, $userid) 
+    public function getThreeLatestItems()
+    {
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW ORDER BY CREATE_DATE DESC LIMIT 3');
+        $preparedStatement->execute();
+        $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+        return $rows;
+    }
+    
+    // For search, you can:
+    // do query
+    // do location
+    // do query + location
+    // do user_id
+    // do nothing (returns all items)
+    public function search($query, $location, $user_id, $page)
+    {
+        $where = '';
+        $query_clause = '';
+        $location_clause = '';
+        $user_clause = '';
+        $sqlParameters = null;
+        
+        if ($query != null || $location != null || $user_id != null)
+            $where = ' WHERE ';
+        
+        if ($query != null || $location != null)
+        {
+            if ($query != null)
+            {
+                $sqlParameters[":query"] =  '%' . $query . '%';
+                $query_clause = ' (lower(TITLE) like lower(:query) OR lower(DESCRIPTION) like lower(:query))';
+            }
+
+            if ($location != null)
+            {
+                $sqlParameters[":location"] =  $location;
+
+                if ($query != null)
+                    $location_clause = ' AND ';
+
+                if (strlen($location) == 5 && is_numeric($location))
+                    $location_clause .= ' (ZIPCODE=:location)';
+                else
+                {
+                    $sqlParameters[":location"] = '%' . $sqlParameters[":location"] . '%';    
+                    $location_clause .= ' (lower(CITY) like lower(:location))';
+                }
+            }
+        }
+        
+        else if ($user_id != null)
+        {
+            $sqlParameters[":user_id"] =  $user_id;
+            $user_clause = ' LENDER_ID = :user_id';
+            
+            $sqlParametersUser[":user_id"] =  $user_id;
+            $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME FROM USER_VW where USER_ID=:user_id LIMIT 1');
+            $preparedStatement->execute($sqlParametersUser);
+            $rows["USER_FIRST_NAME"] = $preparedStatement->fetchColumn();                
+        }
+
+        global $results_per_page;
+        if ($page == null)
+            $start_at = 0;
+        else
+            $start_at = ($page-1) * $results_per_page;
+        
+        // First find the total number of results. 
+        $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW' . $where . $query_clause . $location_clause . $user_clause);
+        $preparedStatement->execute($sqlParameters);
+        $rows["ITEMS_COUNT"] = $preparedStatement->fetchColumn();           
+        
+        if ($rows["ITEMS_COUNT"] != 0)
+        {
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW ' . $where . $query_clause . $location_clause . $user_clause . ' ORDER BY CREATE_DATE DESC LIMIT ' . $start_at . ',' . $results_per_page);
+            $preparedStatement->execute($sqlParameters);
+            $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
+        }
+        
+        return $rows;
+    }
+    
+    public function index($item_id)
+    {
+        $sqlParameters[":item_id"] =  $item_id;
+        $row['ITEM'] = $this->getItem($item_id);;
+
+        $preparedStatement = $this->dbh->prepare('SELECT FILENAME FROM ITEM_PICTURE where ITEM_ID=:item_id');
+        $preparedStatement->execute($sqlParameters);
+        $row['ITEM_PICTURES'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $sqlParameters[":source"] =  'B';
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REVIEW_VW where ITEM_ID=:item_id and SOURCE=:source');
+        $preparedStatement->execute($sqlParameters);
+        $row['ITEM_REVIEWS'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $row;
+    }
+    
+    public function request($item_id)
+    {
+        $row['ITEM'] =  $this->getItem($item_id);
+        return $row;
+    }
+    
+    private function getItem($item_id)
+    {
+        $sqlParameters[":item_id"] =  $item_id;
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        
+        return $preparedStatement->fetch(PDO::FETCH_ASSOC);        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	/*public function index($itemid, $userid) 
 	{
             $sqlParameters[":itemid"] =  $itemid;
             $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW where ITEM_ID=:itemid LIMIT 1');
@@ -1008,7 +1135,7 @@ class ItemModel extends Model
         public function chargeDepositComplete($itemid)
         {
             return null;      
-        }
+        }*/
 }
 
 ?>

@@ -1,3 +1,13 @@
+function getURLParameter(name) 
+{
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");  
+var regexS = "[\\?&]"+name+"=([^&#]*)";  
+var regex = new RegExp( regexS );  
+var results = regex.exec( window.location.href ); 
+ if( results == null )    return "";  
+else    return results[1];
+}
+
 $(document).ready(function()
 {
     // If we're coming from another page, disable the immediate scroll to anchor and then smooth scroll to anchor.'

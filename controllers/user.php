@@ -14,12 +14,12 @@ class User extends Controller
         
         protected function index()
         {
-            $this->returnView(null, true,false);
-        }
+            $this->returnView($this->user_model->index($this->id), true,false);
+        }    
         
         protected function dashboard()
         {
-            $this->returnView(null, true,false);
+            $this->returnView($this->user_model->dashboard($this->id), true,false);
         }
         
         /*

@@ -45,6 +45,18 @@ $version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
+$item_picture_path = "/uploads/item/";
+$user_picture_path = "/uploads/user/";
+
+$results_per_page = 12;
+
+function reverseGeoCode($zipcode)
+{
+    $jsonurl = "http://maps.googleapis.com/maps/api/geocode/json?address=" . $zipcode . "&sensor=false";
+    $json = file_get_contents($jsonurl);
+    print_r(json_decode($json,true),true);    
+}
+
 function getRandomID()
 {
     return rand(100000,999999);

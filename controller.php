@@ -12,6 +12,9 @@ abstract class Controller
     protected $state;
     protected $admin;
 
+    protected $item_model;
+    protected $user_model;
+    
     public function __construct($action, $urlvalues, $postvalues, $filevalues, $id, $userid, $state, $admin) 
     {
         $this->action = $action;
@@ -22,6 +25,9 @@ abstract class Controller
         $this->userid = $userid;
         $this->state = $state;
         $this->admin = $admin;
+        
+        $this->item_model = new ItemModel();
+        $this->user_model = new UserModel();
     }
 
     public function executeAction() 

@@ -1,9 +1,10 @@
 <script src="/js/bootstrap-datepicker.js"></script>
 <script src="/js/item/request.js"></script>
-
+<link rel="stylesheet" href="/css/datepicker.css">
+<link rel="stylesheet" href="/css/item/request.css">
 
 <div class="sheet">
-    <legend>Rental Request - <a href="#">Canon 7D</a></legend>
+    <legend>Rental Request - <a href="/item/index/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?> "><?php echo $viewmodel['ITEM']['TITLE'] ?> </a></legend>
 
     <div class="section">
         <h3>Rental Duration</h3>
@@ -16,31 +17,20 @@
     <div class="section">
         <h3>Cost</h3>
         <div class="" >  
-            $<span id="rental-rate">25</span> (Daily Rate) x <soan id="rentalDuration">?</soan> days = $<span id="total">?</span>
+            $<span id="rental-rate"><?php echo $viewmodel['ITEM']['RATE'] ?></span> (Daily Rate) x <soan id="rentalDuration">?</soan> days = $<span id="total">?</span>
         </div>        
     </div>
     
     <div class="section">
         <h3>Security Hold</h3>
         <div class="" >  
-            There will be a $1500 hold placed on your credit card for the rental duration. 
+            There will be a $<?php echo $viewmodel['ITEM']['DEPOSIT'] ?> hold placed on your credit card for the rental duration. 
         </div>        
     </div>
     
     <button type="submit" class="btn btn-large btn-primary" rel="tooltip" title="first tooltip">Submit Request</button>
 
-
-    
-
-        
-
-    
-
-
 </div>
 
-<link rel="stylesheet" href="/css/datepicker.css">
 
-
-<link rel="stylesheet" href="/css/item/request.css">
 

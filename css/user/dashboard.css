@@ -59,12 +59,12 @@ button.leave-feedback
 
 #requests-table th.message, #current-transactions-table th.status
 {
-    width: 42%;
+    width: 41%;
 }
 
 #requests-table th.action, #current-transactions-table th.action
 {
-    width: 9%;
+    width: 10%;
 }
 
 
@@ -87,4 +87,27 @@ button.leave-feedback
 #past-transactions-table th.status
 {
     width: 51%;
+}
+
+input[type="radio"].reject-radio
+{
+    vertical-align: middle; 
+    margin-top: -1px;    
+}
+
+.reject-options
+{
+    margin-bottom:20px;    
+}
+
+.dropdown-menu
+{
+    min-width: 0px;
+    width:90px    
+}
+
+.thumbnail
+{
+    max-width: 160px;
+    max-height: 125px;
 }

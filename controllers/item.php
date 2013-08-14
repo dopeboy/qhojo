@@ -4,23 +4,31 @@ class Item extends Controller
 {
 	protected function search() 
 	{            
-            $this->returnView(null,true,false);
+            $this->returnView($this->item_model->search
+            (
+                !empty($this->urlvalues['query']) ? trim($this->urlvalues['query']) : null,
+                !empty($this->urlvalues['location']) ? trim($this->urlvalues['location']) : null,
+                !empty($this->urlvalues['user_id']) ? trim($this->urlvalues['user_id']) : null,
+                !empty($this->urlvalues['page']) ? trim($this->urlvalues['page']) : null
+            ),
+            true,false);
 	}
         
         protected function index() 
 	{
-            $this->returnView(null,true,false);
+            $this->returnView($this->item_model->index($this->id),true,false);
 	}
         
 	protected function request() 
 	{
-            $this->returnView(null,true,false);
+            $this->returnView($this->item_model->request($this->id),true,false);
         }
         
 	protected function feedback() 
 	{
             $this->returnView(null,true,false);
-        }        
+        }      
+       
         
 	/*protected function index() 
 	{

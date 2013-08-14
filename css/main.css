@@ -91,86 +91,6 @@ hr
     color: #999;
 }
 
-.card
-{
-    width: 300px; 
-    height: 300px; 
-    border: 1px #b6b6b6 solid;
-}
-
-.card.left
-{
-    float: left;
-}
-
-.card.middle
-{
-    margin: 0px auto;
-}
-
-.card.right
-{
-    float: right;
-}
-
-.card .item-image
-{
-    height: 225px;
-    position:relative;    
-}
-
-.card .item-image .item-price
-{
-    float: right; 
-    margin-right: 10px; 
-    margin-top: 10px; 
-    padding: 3px; 
-    background-color: whitesmoke; 
-    border: 1px solid #b6b6b6;
-    font-size: smaller;     
-}
-
-.card .item-image .item-price hr
-{
-    border-bottom: 1px black dotted; 
-    margin: 0    
-}
-
-.card .item-image .item-title
-{
-    background-color: rgba(0%,0%,0%,0.4); 
-    height: 25px;
-    color: white;
-    line-height:1.8em; 
-    position:absolute; 
-    bottom:0;
-    width: 100%
-}
-
-.card .item-info
-{
-    background-color: white; 
-    height: 75px; 
-}
-
-.card .item-info .item-lender
-{
-    border-right: 1px black dotted; 
-    padding: 5px 0px
-}
-
-.card .item-info .item-details
-{
-    padding: 6px 0px;
-}
-
-.card .item-info .item-details .descriptor
-{
-    padding-bottom: 1px; 
-    margin-bottom: 0;
-    width: 70%;
-}
-
 legend
 {
     border-bottom-color: #b6b6b6;
@@ -229,7 +149,6 @@ a.fill-div
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */    
 }
 
-
 .section
 {
     background-color: rgba(207,207,207, .5); 
@@ -247,17 +166,15 @@ a.fill-div
     margin-bottom: 0px;
 }
 
-.reviews h3
+textarea
 {
-    margin-bottom: 5px;
+    width: 100%;  
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;    
 }
 
-.review
+.modal-body
 {
-    margin-bottom: 20px;
-}
-
-.review-top
-{
-    margin-bottom: 5px
+    padding: 20px;
 }

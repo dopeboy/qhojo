@@ -4,6 +4,79 @@ require('lib/adaptiveaccounts-sdk-php/samples/PPBootStrap.php');
 
 class UserModel extends Model 
 {
+    public function index($user_id)
+    {
+        $row["USER"] = $this->getUserDetails($user_id);
+        
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);
+        $row["NUM_ITEMS_POSTED"] = $preparedStatement->fetchColumn();
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REVIEW_VW WHERE REVIEWER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["REVIEWS_BY_ME"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REVIEW_VW WHERE REVIEWEE_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["REVIEWS_OF_ME"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
+        
+        return $row;
+    }
+    
+    public function getUserDetails($user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        
+        return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
+    }
+    
+    public function dashboard($user_id)
+    {
+        $transaction_model = new TransactionModel();
+        $sqlParameters[":user_id"] =  $user_id;
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["LENDING"]["REQUESTS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));        
+        
+        //error_log(print_r($row["LENDING"]["REQUESTS"],true));
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["LENDING"]["CURRENT_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));       
+        
+       
+ 
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_REVIEWED_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["LENDING"]["PAST_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
+        
+         error_log(print_r($row["LENDING"]["PAST_TRANSACTIONS"],true));
+// 
+//        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE BORROWER_ID=:user_id');
+//        $preparedStatement->execute($sqlParameters);        
+//        $row["BORROWING"]["REQUESTS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
+//        
+//        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
+//        $preparedStatement->execute($sqlParameters);        
+//        $row["BORROWING"]["CURRENT_TRANSACTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
+// 
+//        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
+//        $preparedStatement->execute($sqlParameters);        
+//        $row["BORROWING"]["PAST_TRANSACTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);    
+//        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REJECT_OPTIONS_VW');
+        $preparedStatement->execute($sqlParameters);        
+        $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          
+        
+        return $row;        
+    }
+
+        
+    /*
 	public function verify($emailaddress, $password, &$userid, &$firstname, &$lastname) 
 	{
             $sqlParameters[":email"] =  $emailaddress;
@@ -582,7 +655,7 @@ class UserModel extends Model
             $preparedStatement->execute($sqlParameters);
 
             return $preparedStatement->rowCount() == 1 ? 0 : -3;                    
-        }
+        }*/
 }
 
 ?>

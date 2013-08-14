@@ -24,9 +24,8 @@
     // require the model classes
     require("models/user.php");
     require("models/item.php");
-    //require("models/location.php");
-    //require("models/tag.php");
     require("models/document.php");
+    require("models/transaction.php");
     //require("models/picture.php");
 
     // require the controller classes
@@ -37,11 +36,12 @@
 
     $log = KLogger::instance('logs/', KLogger::DEBUG);
 
-    $log->logInfo("------------------------------------------------------------");
-    $log->logInfo("post: " . print_r($_POST,true));
-    $log->logInfo("get: " . print_r($_GET,true));
-    $log->logInfo("files: " . print_r($_FILES,true));
-    $log->logInfo("session: " . print_r($_SESSION,true));
+    error_log("------------------------------------------------------------");
+    error_log("------------------------------------------------------------");
+    error_log("post: " . print_r($_POST,true));
+    error_log("get: " . print_r($_GET,true));
+    error_log("files: " . print_r($_FILES,true));
+    error_log("session: " . print_r($_SESSION,true));
 
     $loader = new Loader($_GET, $_POST, $_FILES, $_SESSION, $log);   
 

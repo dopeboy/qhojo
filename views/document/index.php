@@ -7,8 +7,7 @@
  
     <div class="row-fluid text-center" style="">
 
-         
-         <div class="span4" style="">
+<!--         <div class="span4" style="">
              <div class="card left"  style="">
                  <div class="item-image" style="background-image: url('/img/card_image2.png');">
                      <div class="item-price">
@@ -83,9 +82,10 @@
                      </div>                      
                  </div>                 
              </div>
-         </div>
+         </div>-->
          
     
+    <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>
                      
      </div>                
 </div>
