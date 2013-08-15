@@ -1,6 +1,6 @@
 <?php 
 
-    $output_str = 'Within ';
+    $output_str = 'Responds within ';
 
     if ($response_time < 60)
         $output_str .= 'an hour';

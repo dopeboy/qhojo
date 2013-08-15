@@ -42,51 +42,29 @@ button.leave-feedback
     margin-bottom: 10px;
 }
 
-#requests-table th.item, #current-transactions-table th.item
+#requests-table th.item, #current-transactions-table th.item, #past-transactions-table th.item
 {
     width: 35%;
 }
 
-#requests-table th.total, #current-transactions-table th.total
+#requests-table th.total, #current-transactions-table th.total, #past-transactions-table th.total
 {
     width: 5%;
 }
 
-#requests-table th.requester, #current-transactions-table th.borrower
+#requests-table th.user, #current-transactions-table th.user, #past-transactions-table th.user
 {
     width: 9%;
 }
 
-#requests-table th.message, #current-transactions-table th.status
+#requests-table th.message, #current-transactions-table th.status, #past-transactions-table th.status
 {
     width: 41%;
 }
 
-#requests-table th.action, #current-transactions-table th.action
+#requests-table th.action, #current-transactions-table th.action, #past-transactions-table th.action
 {
     width: 10%;
-}
-
-
-
-#past-transactions-table th.item
-{
-    width: 35%;
-}
-
-#past-transactions-table th.total
-{
-    width: 5%;
-}
-
-#past-transactions-table th.borrower
-{
-    width: 9%;
-}
-
-#past-transactions-table th.status
-{
-    width: 51%;
 }
 
 input[type="radio"].reject-radio
@@ -110,4 +88,9 @@ input[type="radio"].reject-radio
 {
     max-width: 160px;
     max-height: 125px;
+}
+
+a.show-hide-history
+{
+    text-decoration: none;
 }

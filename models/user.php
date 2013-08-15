@@ -42,32 +42,35 @@ class UserModel extends Model
         $preparedStatement->execute($sqlParameters);        
         $row["LENDING"]["REQUESTS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));        
         
-        //error_log(print_r($row["LENDING"]["REQUESTS"],true));
-        
         $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE LENDER_ID=:user_id');
         $preparedStatement->execute($sqlParameters);        
         $row["LENDING"]["CURRENT_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));       
         
-       
- 
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_REVIEWED_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_NEED_LENDER_FEEDBACK_VW WHERE LENDER_ID=:user_id');
         $preparedStatement->execute($sqlParameters);        
-        $row["LENDING"]["PAST_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
+        $row["LENDING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
         
-         error_log(print_r($row["LENDING"]["PAST_TRANSACTIONS"],true));
-// 
-//        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE BORROWER_ID=:user_id');
-//        $preparedStatement->execute($sqlParameters);        
-//        $row["BORROWING"]["REQUESTS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
-//        
-//        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
-//        $preparedStatement->execute($sqlParameters);        
-//        $row["BORROWING"]["CURRENT_TRANSACTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
-// 
-//        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
-//        $preparedStatement->execute($sqlParameters);        
-//        $row["BORROWING"]["PAST_TRANSACTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);    
-//        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM COMPLETED_BY_LENDER_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["LENDING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
+        
+         
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE BORROWER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["BORROWING"]["REQUESTS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));        
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["BORROWING"]["CURRENT_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));       
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_NEED_BORROWER_FEEDBACK_VW WHERE BORROWER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["BORROWING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM COMPLETED_BY_BORROWER_VW WHERE BORROWER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);        
+        $row["BORROWING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));
+        
         $preparedStatement = $this->dbh->prepare('SELECT * FROM REJECT_OPTIONS_VW');
         $preparedStatement->execute($sqlParameters);        
         $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          

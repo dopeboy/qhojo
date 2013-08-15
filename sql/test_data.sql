@@ -134,14 +134,14 @@ insert into TRANSACTION VALUES
     100001
 );
 
-insert into DETAIL VALUES (555555, 0,'2013-07-14','Hi I want to use this for the weekend.',100000); -- put json here: start, end, msg
+insert into DETAIL VALUES (555555, 0,'2013-07-14','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100000); -- put json here: start, end, msg
 insert into DETAIL VALUES (555555, 1,'2013-07-15',null,100001); -- put json here for confirmation code
 insert into DETAIL VALUES (555555, 3,'2013-07-18',null,100000); -- json here, bp hold uri
 insert into DETAIL VALUES (555555, 7,'2013-07-21',null,100001);
-insert into DETAIL VALUES (555555, 11,'2013-07-23','{"COMMENT":"Bad", "RATING" : 0}',100000);
-insert into DETAIL VALUES (555555, 13,'2013-07-26','{"COMMENT":"Good", "RATING" : 1}',100001);
+insert into DETAIL VALUES (555555, 12,'2013-07-23','{"COMMENT":"Bad", "RATING" : 0}',100001);
+insert into DETAIL VALUES (555555, 14,'2013-07-26','{"COMMENT":"Good", "RATING" : 1}',100000);
 
-insert into DETAIL VALUES (655555, 0,'2013-07-11','Hi I want to use this for the weekend.',100000); -- put json here: start, end, msg
+insert into DETAIL VALUES (655555, 0,'2013-07-11','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100000); -- put json here: start, end, msg
 insert into DETAIL VALUES (655555, 1,'2013-07-12',null,100001); -- put json here for confirmation code
 insert into DETAIL VALUES (655555, 3,'2013-07-13',null,100000); -- json here, bp hold uri
 insert into DETAIL VALUES (655555, 7,'2013-07-24',null,100001);
@@ -187,7 +187,7 @@ insert into TRANSACTION VALUES
     100001
 );
 
-insert into DETAIL VALUES (166666, 0,'2013-07-19',null,100001); -- put json here for confirmation code
+insert into DETAIL VALUES (166666, 0,'2013-07-19','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100001); -- put json here for confirmation code
 insert into DETAIL VALUES (166666, 1,'2013-07-21',null,100001); -- put json here for confirmation code
 
 
@@ -218,7 +218,7 @@ insert into TRANSACTION VALUES
     100001
 );
 
-insert into DETAIL VALUES (116666, 0,'2013-07-19',null,100001); -- put json here for confirmation code
+insert into DETAIL VALUES (116666, 0,'2013-07-19','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100001); -- put json here for confirmation code
 insert into DETAIL VALUES (116666, 2,'2013-07-23',null,100001); -- put json here for confirmation code
 
 
@@ -253,6 +253,8 @@ insert into DETAIL VALUES (126666, 0,'2013-07-13','{"START_DATE":"08/01", "END_D
 insert into DETAIL VALUES (126666, 1,'2013-07-12',null,100001); -- put json here for confirmation code
 insert into DETAIL VALUES (126666, 3,'2013-07-13',null,100000); -- json here, bp hold uri
 insert into DETAIL VALUES (126666, 7,'2013-07-24',null,100001);
+insert into DETAIL VALUES (126666, 12,'2013-07-24',null,100001);
+
 
 
 
@@ -484,5 +486,5 @@ insert into TRANSACTION VALUES
     100000
 );
 
-insert into DETAIL VALUES (139377, 0,'2013-07-19 12:15:54',null,100000); -- put json here for confirmation code
+insert into DETAIL VALUES (139377, 0,'2013-07-19 12:15:54','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100000); -- put json here for confirmation code
 insert into DETAIL VALUES (139377, 1,'2013-07-19 12:29:54',null,100000); -- put json here for confirmation code

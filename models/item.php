@@ -106,8 +106,9 @@ class ItemModel extends Model
         $preparedStatement->execute($sqlParameters);
         $row['ITEM_PICTURES'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
-        $sqlParameters[":source"] =  'B';
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM REVIEW_VW where ITEM_ID=:item_id and SOURCE=:source');
+        $sqlParameters[":lender_id"] =  $row['ITEM']["LENDER_ID"];
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REVIEW_VW where ITEM_ID=:item_id AND REVIEWEE_ID=:lender_id');
         $preparedStatement->execute($sqlParameters);
         $row['ITEM_REVIEWS'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
