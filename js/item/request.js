@@ -5,20 +5,20 @@ $(document).ready(function()
     {
         var millisecondsInADay = 24*60*60*1000;
         
-        var d1 = new Date($('#dpd1').val());
-        var d2 = new Date($('#dpd2').val());
+        var d1 = new Date($('#date-start').val());
+        var d2 = new Date($('#date-end').val());
         var numDays = (d2-d1)/millisecondsInADay;
-        
-        console.log(numDays);
  
         $('#rentalDuration').text(numDays);
         $('#total').text(numDays * $('#rental-rate').text());
+        
+        $('#date').val(numDays);
     }
     
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    var checkin = $('#dpd1').datepicker({
+    var checkin = $('#date-start').datepicker({
       onRender: function(date) {
         return date.valueOf() < now.valueOf() ? 'disabled' : '';
       }
@@ -32,9 +32,10 @@ $(document).ready(function()
         updateTotal();
       }
       checkin.hide();
-      $('#dpd2')[0].focus();
+      $('#date-end')[0].focus();
     }).data('datepicker');
-    var checkout = $('#dpd2').datepicker({
+    
+    var checkout = $('#date-end').datepicker({
       onRender: function(date) {
         return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
       }
@@ -42,5 +43,33 @@ $(document).ready(function()
       checkout.hide();
       updateTotal();
     }).data('datepicker');
+    
+    jQuery.validator.addMethod("nonNull", function(value, element) 
+    {
+        return value != '';
+    }, 
+    "Please specify a date");
+
+    $("form#request").data('validate_options',
+    {
+        ignore: "",
+        errorElement: "span",
+        errorClass: "text-error",
+        rules:
+        {
+            date:
+            {
+                number:true,
+                required:true
+            }
+        }
+    });
+
 
 });
+
+function customResponseHandler(responseText)  
+{ 
+     window.location = responseText.URL;
+} 
+         

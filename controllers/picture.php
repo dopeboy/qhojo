@@ -12,7 +12,7 @@ class Picture extends Controller
             exit;
         }
            
-        $this->returnView(null, false,false);
+        $this->returnView(null, false);
     }
     
     protected function handler()
@@ -31,7 +31,7 @@ class Picture extends Controller
         
         $viewmodel = new PictureModel();
         
-        $this->returnView($viewmodel->handler($_SESSION['itemid'], $this->id, $this->state, $this->userid, $this->postvalues['del'], $this->postvalues['file']), false,true);
+        $this->returnView($viewmodel->handler($_SESSION['itemid'], $this->id, $this->state, $this->userid, $this->postvalues['del'], $this->postvalues['file']),true);
     }
 }
 

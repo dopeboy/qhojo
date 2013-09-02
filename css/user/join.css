@@ -3,4 +3,13 @@
     max-width: 550px;
 }
   
+input[type="text"],
+input[type="password"] 
+{
+    width: 300px;
+}
 
+.text-error
+{
+    padding-left: 20px;
+}

@@ -4,7 +4,7 @@ insert into USER VALUES
     'Brian',
     'Fantana',
     'arithmetic@gmail.com',
-    'blah',
+    '8a17f7a49320d8b43862253d70da43c839cc164c517903007dc38f6ed163126b118e4e723fe7a14c5f50bfdcfafa51777a6d98122131b4ba01af0214487fbabf',
     '10001',
     'New York',
     'NY',
@@ -18,7 +18,7 @@ insert into USER VALUES
     null,
     null,
     '2013-07-31',
-    1,
+    0,
     1
 );
 
@@ -42,7 +42,7 @@ insert into USER VALUES
     null,
     null,
     '2013-07-31',
-    1,
+    0,
     1
 );    
 
@@ -253,7 +253,7 @@ insert into DETAIL VALUES (126666, 0,'2013-07-13','{"START_DATE":"08/01", "END_D
 insert into DETAIL VALUES (126666, 1,'2013-07-12',null,100001); -- put json here for confirmation code
 insert into DETAIL VALUES (126666, 3,'2013-07-13',null,100000); -- json here, bp hold uri
 insert into DETAIL VALUES (126666, 7,'2013-07-24',null,100001);
-insert into DETAIL VALUES (126666, 12,'2013-07-24',null,100001);
+insert into DETAIL VALUES (126666, 12,'2013-07-24','{"COMMENT":"Sucked", "RATING" : 0}',100001);
 
 
 

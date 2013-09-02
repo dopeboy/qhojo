@@ -22,6 +22,8 @@
         
         <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
         <script src="/js/vendor/bootstrap.min.js"></script>
+        <script src="/js/jquery.form.js"></script> 
+        
         <script src="/js/main.js"></script>
 
         <script>
@@ -56,8 +58,27 @@
                             <ul class="nav pull-right">
                                 <li><a class="hiwlink" href="/#borrow">How to Borrow</a></li>
                                 <li><a class="hiwlink" href="/#lend">How to Lend</a></li>
-                                <li><a href="/user/join">Join</a></li>
-                                <li><a href="/user/login">Sign in</a></li>
+                                <?php if (!empty($_SESSION["USER"]["USER_ID"])) { ?>
+                                <li class="dropdown">
+
+                                    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+
+                                      <?php echo $_SESSION["USER"]["NAME"];?>
+                                      <b class="caret"></b>
+                                    </a>
+                                    
+                                    <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/index/<?php echo $_SESSION["USER"]["USER_ID"];?>">Profile</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard</a></li>
+                                        <li role="presentation" class="divider"></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/signout">SIgn out</a></li>
+                                    </ul>
+                                </li>
+                                  
+                                <?php } else { ?>
+                                    <li><a href="/user/join">Join</a></li>
+                                    <li><a href="/user/signin">Sign in</a></li>
+                                <?php } ?>
                             </ul>
                         </div><!--/.nav-collapse -->
                     </div>
@@ -65,6 +86,11 @@
             </div>
 
             <div class="container">
+                <div class="alert alert-error">
+                    <strong>Error: </strong>
+                    <span id="error-message"></span>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
                 <?php require($viewloc); ?>
             </div> <!-- /container -->
 

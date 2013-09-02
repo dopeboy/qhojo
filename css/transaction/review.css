@@ -1,0 +1,59 @@
+table
+{
+    background-color: white;
+    width: 100%;
+    table-layout: fixed;
+}
+
+i
+{
+    margin-right: 10px;
+}
+
+.actions-list
+{
+    list-style-type: none;
+    margin-left: 0px;
+}
+
+.statuses
+{
+    margin-bottom: 10px;
+}
+
+.review-transaction-table th.item
+{
+    width: 35%;
+}
+
+.review-transaction-table th.total
+{
+    width: 5%;
+}
+
+.review-transaction-table th.user
+{
+    width: 9%;
+}
+
+.review-transaction-table th.status
+{
+    width: 51%;
+}
+
+#review .dropdown-menu
+{
+    min-width: 0px;
+    width:90px    
+}
+
+.thumbnail
+{
+    max-width: 160px;
+    max-height: 125px;
+}
+
+#rate-transaction, #comment-transaction
+{
+    margin-bottom: 20px;
+}

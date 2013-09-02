@@ -21,6 +21,8 @@
                     echo "info";
                 else if($transaction['FINAL_STATE_ID'] == 500) 
                     echo "warning"; 
+                else if($transaction['FINAL_STATE_ID'] == 650) 
+                    echo "important";                 
                 else if($transaction['FINAL_STATE_ID'] == 700 || ($transaction['FINAL_STATE_ID'] == 1100 && $lender_view==1) || ($transaction['FINAL_STATE_ID'] == 900 && $lender_view==0)) 
                     echo "important";   
                 else if ($transaction['FINAL_STATE_ID'] == 900 || $transaction['FINAL_STATE_ID'] == 1200 || 

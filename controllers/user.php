@@ -2,32 +2,116 @@
 
 class User extends Controller 
 {
-	protected function login() 
+	protected function signin() 
 	{
-            $this->returnView(null, true,false);
+            if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0))
+                $this->returnView(null, $method);
+           
+            else if (($method = Method::POST) && User::userNotSignedIn($method) && $this->state == 1)
+            {
+                $user_info = $this->user_model->verify
+                (
+                    $method, 
+                    $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress')),
+                    $this->validateParameter($this->postvalues['password'],"password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
+                );
+                
+                $this->directUser($user_info);
+            }
 	}
         
         protected function join()
         {
-            $this->returnView(null, true,false);
+            if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
+                $this->returnView(null, $method);
+            
+            else if (($method = Method::POST) && User::userNotSignedIn($method) && $this->state == 1)
+            {
+                $user_info = $this->user_model->join
+                (
+                    $method,
+                    $this->validateParameter($this->postvalues['firstname'],"firstname",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
+                    $this->validateParameter($this->postvalues['lastname'],"lastname",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
+                    $this->validateParameter($this->postvalues['zipcode'],"zipcode",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidZipCode')),
+                    $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress')),
+                    $this->validateParameter($this->postvalues['password'],"password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
+                );
+                
+                $this->directUser($user_info);                
+            }
         }
         
         protected function index()
         {
-            $this->returnView($this->user_model->index($this->id), true,false);
+            $method = Method::GET;
+            $this->returnView($this->user_model->index($method, $this->validateParameter($this->id,"User ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
         }    
         
         protected function dashboard()
         {
-            $this->returnView($this->user_model->dashboard($this->id), true,false);
+            if (($method = Method::GET) && User::userSignedIn($method))
+                $this->returnView($this->user_model->dashboard($method, $_SESSION["USER"]["USER_ID"]), $method);
         }
         
-        /*
+        protected function signout()
+        {
+            $_SESSION = array();
+
+            if (ini_get("session.use_cookies")) 
+            {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                          $params["path"], $params["domain"],
+                          $params["secure"], $params["httponly"]
+                          );
+            }
+
+            session_unset();
+            session_destroy();
+
+            header('Location: /') ;           
+        }
         
+        private function directUser($user_info)
+        {
+            $_SESSION["USER"]['USER_ID']  = $user_info["USER_ID"];
+            $_SESSION["USER"]['FIRST_NAME']  = $user_info["FIRST_NAME"];
+            $_SESSION["USER"]['NAME'] = $user_info["NAME"];
+            $_SESSION["USER"]['ADMIN']  = $user_info["ADMIN"];
+
+            // If the user came in from another page, send them back to where they were
+            if (!empty($_SESSION['referrer']))
+            {
+                $tmp = $_SESSION['referrer'];
+                $_SESSION['referrer'] = null;
+                $this->returnView($tmp, Method::POST);
+            }
+
+            // Else, send them to the search page
+            else
+            {
+                $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);                            
+            }
+        }
         
+        public static function userSignedIn($method)
+        {
+            if (empty($_SESSION["USER"]["USER_ID"]))
+                throw new UserNotLoggedInException($method);
+
+            return true;
+        }
+
+        public static function userNotSignedIn($method)
+        {
+            if (!empty($_SESSION["USER"]["USER_ID"]))
+                throw new UserAlreadyLoggedInException($method);
+
+            return true;
+        }        
         
- 	protected function verify() 
-	{
+ 	/*protected function verify() 
+	{NAME, FIRST_NAME, ID, PASSWORD, ADMIN 
 		$viewmodel = new UserModel();
                 $userid = $firstname = $lastname = null;
 		$status = $viewmodel->verify($this->postvalues['emailaddress'],$this->postvalues['password'], $userid, $firstname, $lastname);
@@ -54,7 +138,13 @@ class User extends Controller
                     else
                         $this->returnView('/', false,true);
                 }
-	}   
+	} 
+        
+        
+        
+        
+        
+  
         
         protected function index()
         {

@@ -1,24 +1,32 @@
 $(document).ready(function(){
 
-              $("#signup").validate({
-                      rules:{
-                              fname:"required",
-                              lname:"required",
-                              zipcode: 
-                                {
-                                              required:true
-                                },                                  
-                              email:{
-                                              required:true,
-                                              email: true
-                                      },
-                              passwd:{
-                                      required:true,
-                                      minlength: 8
-                              }
-                      },
+    $("form#join").data('validate_options',
+    {
+        errorElement: "span",
+        errorClass: "text-error",
+        rules:
+        {
+            firstname:"required",
+            lastname:"required",
+            zipcode: 
+            {
+                required:true
+            },                                  
+            email:
+            {
+                required:true,
+                email: true
+            },
+            password:
+            {
+                required:true,
+                minlength: 8
+            }
+        }
+    });
+});
 
-                      errorClass: "help-inline"
-
-              });
-      });
+function customResponseHandler(responseText)  
+{ 
+     window.location = responseText.URL;
+} 

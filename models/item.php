@@ -1,6 +1,6 @@
 <?php
 
-require "Services/Twilio.php";
+require "lib/twilio/Twilio.php";
 //require 'lib/rest-api-sdk-php/sample/bootstrap.php';
 //use PayPal\Api\Address;
 //use PayPal\Api\Amount;
@@ -15,7 +15,7 @@ require "Services/Twilio.php";
 
 class ItemModel extends Model 
 {
-    public function getThreeLatestItems()
+    public function getThreeLatestItems($method)
     {
         $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW ORDER BY CREATE_DATE DESC LIMIT 3');
         $preparedStatement->execute();
@@ -29,7 +29,7 @@ class ItemModel extends Model
     // do query + location
     // do user_id
     // do nothing (returns all items)
-    public function search($query, $location, $user_id, $page)
+    public function search($method, $query, $location, $user_id, $page)
     {
         $where = '';
         $query_clause = '';
@@ -97,7 +97,7 @@ class ItemModel extends Model
         return $rows;
     }
     
-    public function index($item_id)
+    public function index($method, $user_id, $item_id)
     {
         $sqlParameters[":item_id"] =  $item_id;
         $row['ITEM'] = $this->getItem($item_id);;
@@ -112,14 +112,61 @@ class ItemModel extends Model
         $preparedStatement->execute($sqlParameters);
         $row['ITEM_REVIEWS'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
+        // Has user already requested item?
+        $sqlParameters = array();
+        $sqlParameters[":item_id"] =  $item_id;
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:user_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row['ALREADY_REQUESTED']= ($preparedStatement->fetch(PDO::FETCH_ASSOC)  != null);
+        
         return $row;
     }
     
-    public function request($item_id)
+    public function request($method, $user_id, $item_id)
     {
+        // Has user already requested item?
+        $sqlParameters[":item_id"] =  $item_id;
+        $sqlParameters[":borrower_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:borrower_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+        
+        if ($row != null)
+            throw new UserHasAlreadyRequestedItemException($method, $user_id);
+            
+        // Is the item active?
         $row['ITEM'] =  $this->getItem($item_id);
+        
+        if ($row['ITEM'] == null)
+            throw new RequestInactiveItemException($method, $user_id);
+        
         return $row;
-    }
+    }  
+    
+    // 100 -> 200
+    public function submitRequest($method, $item_id, $requestor_id, $start_date, $end_date, $message)
+    {
+        // Call this for validation purposes
+        $this->request($method, $requestor_id, $item_id);
+        
+        $start = new DateTime($start_date); 
+        $end = new DateTime($end_date); 
+        
+        global $maximum_rental_duration_days;
+        if ($end->diff($start)->d > $maximum_rental_duration_days)
+            throw new RentalDurationExceedsLimitException($maximum_rental_duration_days, $method, $requestor_id);
+        
+        $transaction_model = new TransactionModel();
+        $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200), array("START DATE" => $start_date, "END DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
+    }   
+    
+    public function requestSubmitted($method, $item_id)
+    {   
+        $row['ITEM'] =  $this->getItem($item_id);     
+        return $row['ITEM'];
+    }     
     
     private function getItem($item_id)
     {

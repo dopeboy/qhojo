@@ -86,9 +86,17 @@ hr
     color: whitesmoke;
 }
 
-.navbar-inverse .nav>li>a:hover
+.navbar-inverse .nav li.dropdown>.dropdown-toggle .caret
+{
+    border-top-color: whitesmoke;
+    border-bottom-color: whitesmoke;
+}
+
+.navbar-inverse .nav>li>a:hover, .navbar-inverse .nav li.dropdown>.dropdown-toggle .caret:hover
 {
     color: #999;
+    border-top-color: #999;
+    border-bottom-color: #999;
 }
 
 legend
@@ -177,4 +185,18 @@ textarea
 .modal-body
 {
     padding: 20px;
+}
+
+div.alert
+{
+    display: none;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);    
 }

@@ -4,7 +4,7 @@ require('lib/adaptiveaccounts-sdk-php/samples/PPBootStrap.php');
 
 class UserModel extends Model 
 {
-    public function index($user_id)
+    public function index($method, $user_id)
     {
         $row["USER"] = $this->getUserDetails($user_id);
         
@@ -24,7 +24,76 @@ class UserModel extends Model
         return $row;
     }
     
-    public function getUserDetails($user_id)
+    public function dashboard($method, $user_id)
+    {
+        $transaction_model = new TransactionModel();
+        
+        $row["LENDING"]["REQUESTS"] = $transaction_model->getLendingRequests($user_id);
+        $row["LENDING"]["CURRENT_TRANSACTIONS"] = $transaction_model->getLendingReservedAndExchanged($user_id);
+        $row["LENDING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->getLendingReturnedAndNeedReview($user_id);
+        $row["LENDING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->getLendingCompleted($user_id);
+        
+        $row["BORROWING"]["REQUESTS"] = $transaction_model->getBorrowingRequests($user_id);
+        $row["BORROWING"]["CURRENT_TRANSACTIONS"] = $transaction_model->getBorrowingReservedAndExchanged($user_id);
+        $row["BORROWING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->getBorrowingReturnedAndNeedReview($user_id);
+        $row["BORROWING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->getBorrowingCompleted($user_id);
+
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM REJECT_OPTIONS_VW');
+        $preparedStatement->execute();        
+        $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          
+        
+        return $row;        
+    }
+
+    public function verify($method, $email_address, $password) 
+    {
+        $sqlParameters[":email"] =  $email_address;
+        $preparedStatement = $this->dbh->prepare('SELECT NAME, FIRST_NAME, USER_ID, PASSWORD, ADMIN FROM USER_VW WHERE EMAIL_ADDRESS=:email LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+        
+        if ($row == null || !$this->comparePasswords($password, $row['PASSWORD']) )
+            throw new InvalidLoginException($method);
+
+        return $row;
+    }
+    
+    public function join($method, $firstname, $lastname, $zipcode, $email, $password)
+    {
+        // Does this email address exist?
+        $sqlParameters[":email"] =  $email;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_VW WHERE EMAIL_ADDRESS=:email LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+        if ($row != null)
+            throw new UserWithEmailAlreadyExists($email, $method);
+
+        // Reverse geocode the zip to find the state and city
+        $location = $this->reverseGeocode($zipcode);
+        
+        $sqlParameters[":city"] = $location["CITY"];
+        $sqlParameters[":state"] =  $location["STATE"];
+        $sqlParameters[":email"] =  $email;
+        $sqlParameters[":password"] =  $this->hashPassword($email, $password);
+        $sqlParameters[":user_id"] = getRandomID();
+        $sqlParameters[":firstname"] =  $firstname;
+        $sqlParameters[":lastname"] =  $lastname;
+        $sqlParameters[":zipcode"] =  $zipcode;
+        $sqlParameters[":join_date"] =  date("Y-m-d H:i:s");
+        
+        $preparedStatement = $this->dbh->prepare('INSERT INTO USER (ID,FIRST_NAME,LAST_NAME,ZIPCODE,CITY,STATE,EMAIL_ADDRESS, PASSWORD, JOIN_DATE, ACTIVE) VALUES (:user_id,:firstname, :lastname, :zipcode, :city, :state, :email, :password, :join_date, 1)');
+        $preparedStatement->execute($sqlParameters);
+        
+        $user['USER_ID'] = $sqlParameters[":user_id"];
+        $user['FIRST_NAME'] = $firstname;
+        $user['NAME'] = $firstname . ' ' . $lastname[0] . '.';
+        $user['ADMIN'] = 0;
+        
+        return $user;
+    }
+    
+    private function getUserDetails($user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;
         $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
@@ -33,51 +102,44 @@ class UserModel extends Model
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
     }
     
-    public function dashboard($user_id)
+    private function comparePasswords($password_from_login, $password_from_db)
     {
-        $transaction_model = new TransactionModel();
-        $sqlParameters[":user_id"] =  $user_id;
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE LENDER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["LENDING"]["REQUESTS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));        
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE LENDER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["LENDING"]["CURRENT_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));       
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_NEED_LENDER_FEEDBACK_VW WHERE LENDER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["LENDING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM COMPLETED_BY_LENDER_VW WHERE LENDER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["LENDING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
-        
-         
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM REQUESTED_VW WHERE BORROWER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["BORROWING"]["REQUESTS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));        
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM RESERVED_AND_EXCHANGED_VW WHERE BORROWER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["BORROWING"]["CURRENT_TRANSACTIONS"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));       
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM RETURNED_AND_NEED_BORROWER_FEEDBACK_VW WHERE BORROWER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["BORROWING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));     
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM COMPLETED_BY_BORROWER_VW WHERE BORROWER_ID=:user_id');
-        $preparedStatement->execute($sqlParameters);        
-        $row["BORROWING"]["PAST_TRANSACTIONS"]["COMPLETED"] = $transaction_model->processDetails($preparedStatement->fetchAll(PDO::FETCH_ASSOC));
-        
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM REJECT_OPTIONS_VW');
-        $preparedStatement->execute($sqlParameters);        
-        $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          
-        
-        return $row;        
-    }
+        $salt = substr($password_from_db, 0, 64);
+        $hash = $salt . $password_from_login;
 
+        for ( $i = 0; $i < 100000; $i ++ ) 
+        {
+          $hash = hash('sha256', $hash);
+        }
+
+        $hash = $salt . $hash;
+        return $hash == $password_from_db;
+    }    
+    
+    private function hashPassword($username, $password)
+    {
+        $salt = hash('sha256', uniqid(mt_rand(), true) . 'qhojo' . strtolower($username));
+        $hash = $salt . $password;
+
+        for ( $i = 0; $i < 100000; $i ++ ) 
+        {
+          $hash = hash('sha256', $hash);
+        }            
+
+        return $salt . $hash;
+    }    
+    
+    private function reverseGeocode($zipcode)
+    {
+        // FILL IN
+        $info["CITY"] = "LOL";
+        $info["STATE"] = "ROFL";
+        
+        // If it fails, throw invalid zipcode exception
+        // throw new InvalidZipcodeException($zipcode);
+        
+        return $info;
+    }
         
     /*
 	public function verify($emailaddress, $password, &$userid, &$firstname, &$lastname) 

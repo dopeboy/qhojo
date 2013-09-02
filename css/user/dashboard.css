@@ -42,27 +42,27 @@ button.leave-feedback
     margin-bottom: 10px;
 }
 
-#requests-table th.item, #current-transactions-table th.item, #past-transactions-table th.item
+.requests-table th.item, .current-transactions-table th.item, .past-transactions-table th.item
 {
     width: 35%;
 }
 
-#requests-table th.total, #current-transactions-table th.total, #past-transactions-table th.total
+.requests-table th.total, .current-transactions-table th.total, .past-transactions-table th.total
 {
     width: 5%;
 }
 
-#requests-table th.user, #current-transactions-table th.user, #past-transactions-table th.user
+.requests-table th.user, .current-transactions-table th.user, .past-transactions-table th.user
 {
     width: 9%;
 }
 
-#requests-table th.message, #current-transactions-table th.status, #past-transactions-table th.status
+.requests-table th.message, .current-transactions-table th.status, .past-transactions-table th.status
 {
     width: 41%;
 }
 
-#requests-table th.action, #current-transactions-table th.action, #past-transactions-table th.action
+.requests-table th.action, .current-transactions-table th.action, .past-transactions-table th.action
 {
     width: 10%;
 }
@@ -78,7 +78,7 @@ input[type="radio"].reject-radio
     margin-bottom:20px;    
 }
 
-.dropdown-menu
+#dashboard .dropdown-menu
 {
     min-width: 0px;
     width:90px    

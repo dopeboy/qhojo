@@ -1,16 +1,16 @@
 <div class="sheet " id="join" style="">
-        <form class="form-join" id="signup">
+        <form class="form-submit" id="join" autocomplete="off" action="/user/join/null/1" method="post">
             <legend>Join</legend>	
             
             <div class="control-group">
                 <div class="controls">
-                    <input type="text" class="input-block-level" placeholder="First Name" id="fname" name="fname">
+                    <input type="text" class="input-block-level" placeholder="First Name" id="firstname" name="firstname">
                 </div>
             </div>                           
                   
                 <div class="control-group">
                     <div class="controls">
-                        <input type="text" class="input-block-level" placeholder="Last Name" id="lname" name="lname">
+                        <input type="text" class="input-block-level" placeholder="Last Name" id="lastname" name="lastname">
                     </div>
 		</div>                       
                         
@@ -28,7 +28,7 @@
             
                 <div class="control-group">
                     <div class="controls">
-                         <input type="password" class="input-block-level" placeholder="Password" id="passwd" name="passwd"> 
+                         <input type="password" class="input-block-level" placeholder="Password" id="password" name="password"> 
                     </div>
 		</div>                  
 

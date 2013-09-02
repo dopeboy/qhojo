@@ -1,6 +1,9 @@
 <?php 
 
 global $item_picture_path, $user_picture_path; 
+
+
+
 if (empty($transactions) || count($transactions) == 0): ?> <tr><td colspan="5"><i>No requests</i></td></tr>
 
 <?php 
@@ -33,7 +36,7 @@ else: foreach($transactions as $key=>$transaction)
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" style="">
-                    <li><a tabindex="-1" href="#">Accept</a></li>
+                    <li><a data-toggle="modal" tabindex="-1" href="#accept-<?php echo $transaction['TRANSACTION_ID']; ?>">Accept</a></li>
                     <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Reject</a></li>
                 </ul>
                 <div id="reject-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -64,7 +67,23 @@ else: foreach($transactions as $key=>$transaction)
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                         <button class="btn btn-primary">Submit</button>
                     </div>
-                </div>                            
+                </div>     
+                
+                <div id="accept-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3>Accept <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
+                    </div>
+                    <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
+                        <label>
+                            <p>Are you sure?</p>
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-primary">Yes</button>
+                    </div>
+                </div>                  
             </div>
         </div>
     </td>

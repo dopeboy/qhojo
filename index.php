@@ -15,7 +15,6 @@
     require("common.inc");
     require 'lib/klogger/KLogger.php';
 
-
     // require the general classes
     require("loader.php");
     require("controller.php");
@@ -32,7 +31,17 @@
     require("controllers/user.php");
     require("controllers/item.php");
     require("controllers/document.php");
+    require("controllers/transaction.php");
     //require("controllers/picture.php");
+    
+    // exception classes
+    require("exception.php");
+    
+    // enums
+    require("enum.php");
+    
+    // validator methods
+    require("validator.php");
 
     $log = KLogger::instance('logs/', KLogger::DEBUG);
 

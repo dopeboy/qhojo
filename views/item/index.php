@@ -46,7 +46,7 @@
             <div class="section split action">
                 <h2 class="text-center" id="rental-rate">$<?php echo $viewmodel['ITEM']['RATE']?> / day</h2>
                 <form action="/item/request/<?php echo $viewmodel['ITEM']['ITEM_ID']?>" method="get">
-                    <button id="rentlink" class="btn btn-success btn-large btn-block" type="submit" >Borrow</button>    
+                    <button id="rentlink" class="btn btn-success btn-large btn-block <?php if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $viewmodel['ITEM']["LENDER_ID"]) || $viewmodel['ALREADY_REQUESTED']) {?>disabled<?php } ?>" type="submit" >Borrow</button>    
                 </form>                    
             </div>
        

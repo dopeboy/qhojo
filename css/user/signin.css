@@ -1,9 +1,9 @@
-#login
+#signin
 {
     max-width: 300px;
 }
 
-.form-login .checkbox 
+#form-signin .checkbox 
 {
     margin-bottom: 10px;
 }
