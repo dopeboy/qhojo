@@ -14,7 +14,7 @@
             <div class="tab-pane active" id="lending">
                 <div class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
-                        Requests (<?php echo count($viewmodel["LENDING"]["REQUESTS"]); ?>)
+                        Requests (<span id="requests-count"><?php echo count($viewmodel["LENDING"]["REQUESTS"]); ?></span>)
                     </h4>        
                     <table class="table table-bordered requests-table" style="">
                         <thead>
@@ -38,7 +38,7 @@
 
                 <div class="dashboard-section current-transactions">
                     <h4 class="section-header">
-                        Current Transactions (<?php echo count($viewmodel["LENDING"]["CURRENT_TRANSACTIONS"]); ?>)
+                        Current Transactions (<span id="current-count"><?php echo count($viewmodel["LENDING"]["CURRENT_TRANSACTIONS"]); ?></span>)
                     </h4>        
                     <table class="table table-bordered current-transactions-table">
                         <thead>
@@ -63,7 +63,7 @@
 
                 <div class="dashboard-section past-transactions">
                     <h4 class="section-header">
-                        Past Transactions (<?php echo count($viewmodel["LENDING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"]) + count($viewmodel["LENDING"]["PAST_TRANSACTIONS"]["COMPLETED"]); ?>)
+                        Past Transactions (<span id="past-count"><?php echo count($viewmodel["LENDING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"]) + count($viewmodel["LENDING"]["PAST_TRANSACTIONS"]["COMPLETED"]); ?></span>)
                     </h4>        
                     <table class="table table-bordered past-transactions-table" >
                         <thead>
@@ -105,7 +105,7 @@
             <div class="tab-pane" id="borrowing">
                 <div id="" class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
-                        Requests (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]); ?>)
+                        Requests (<span id="requests-count"><?php echo count($viewmodel["BORROWING"]["REQUESTS"]); ?></span>)
                     </h4>        
                     <table id="" class="table table-bordered requests-table" style="">
                         <thead>
@@ -129,7 +129,7 @@
 
                 <div id="" class="dashboard-section current-transactions">
                     <h4 class="section-header">
-                        Current Transactions (<?php echo count($viewmodel["BORROWING"]["CURRENT_TRANSACTIONS"]); ?>)
+                        Current Transactions (<span id="current-count"><?php echo count($viewmodel["BORROWING"]["CURRENT_TRANSACTIONS"]); ?></span>)
                     </h4>        
                     <table id="" class="table table-bordered current-transactions-table">
                         <thead>
@@ -154,7 +154,7 @@
 
                 <div id="" class="dashboard-section past-transactions">
                     <h4 class="section-header">
-                        Past Transactions (<?php echo count($viewmodel["BORROWING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"]) + count($viewmodel["BORROWING"]["PAST_TRANSACTIONS"]["COMPLETED"]); ?>)
+                        Past Transactions (<span id="past-count"><?php echo count($viewmodel["BORROWING"]["PAST_TRANSACTIONS"]["AWAITING_REVIEW"]) + count($viewmodel["BORROWING"]["PAST_TRANSACTIONS"]["COMPLETED"]); ?></span>)
                     </h4>        
                     <table id="" class="table table-bordered past-transactions-table" >
                         <thead>

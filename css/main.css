@@ -200,3 +200,10 @@ div.alert
     -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);    
 }
+
+div.alert-modal
+{
+    width: 75%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}

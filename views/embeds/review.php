@@ -25,8 +25,11 @@
         else if ($diff_weeks > 0)
             $diff_output_string = $diff_weeks . ' week' . ($diff_weeks > 1 ? 's' : '') . ' ago';
         
-        else
+        else if ($diff_days > 0)
             $diff_output_string = $diff_days . ' day' . ($diff_days > 1 ? 's' : '') . ' ago';        
+        
+        else
+            $diff_output_string = '1 hour ago';   
     
     ?>
 

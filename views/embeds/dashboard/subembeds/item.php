@@ -10,7 +10,8 @@
             $<?php echo $transaction['RATE']; ?> / day
         </div>
         <div>
-            <?php echo $transaction["REQ"]['START_DATE']; ?> - <?php echo $transaction["REQ"]['END_DATE']; ?>
+            <?php $d = new DateTime($transaction["REQ"]['START_DATE']); echo $d->format('m/d'); ?> -  <?php $d = new DateTime($transaction["REQ"]['END_DATE']); echo $d->format('m/d'); ?>             
+            
         </div>
         <div>
             <span class="label label-<?php 

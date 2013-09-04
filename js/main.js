@@ -90,14 +90,21 @@ function showResponse(responseText, statusText, xhr, $form)
     // Houston we got a problem
     if (responseText.Error != null)
     {
-        $('.alert-error').fadeIn("slow");
-        $('#error-message').text(responseText.Error.Message);
-        $form.find('button[type=submit]').removeAttr('disabled');
+        if (responseText.Error.ModalID != null)
+        {
+            $('#alert-error-modal-' + responseText.Error.ModalID).fadeIn("slow");
+            $('#error-message-modal-' + responseText.Error.ModalID).text(responseText.Error.Message);
+            $form.find('button[type=submit]').removeAttr('disabled');
+        }
+
+        else   
+        {
+            $('.alert-error').fadeIn("slow");
+            $('#error-message').text(responseText.Error.Message);
+            $form.find('button[type=submit]').removeAttr('disabled');
+        }
     }
     
     else
-    {
         customResponseHandler(responseText);
-    }
-
 }

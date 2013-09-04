@@ -184,7 +184,9 @@
     </div>      
 
    <div class="text-center">
-        <button class="rentlink btn btn-large btn-primary" type="button">Borrow >></button>
+       <form action="/item/search.php" method="get">
+            <button class="rentlink btn btn-large btn-primary" type="submit">Borrow >></button>
+       </form>       
    </div>                     
 </div>
 
@@ -282,7 +284,9 @@
     </div>      
 
    <div class="text-center">
-        <button class="rentlink btn btn-large btn-primary" type="button">Lend >></button>
+       <form action="/item/post" method="get">
+            <button class="rentlink btn btn-large btn-primary" type="submit">Lend >></button>
+       </form>
    </div>                     
 </div>            
 

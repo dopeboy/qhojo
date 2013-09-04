@@ -6,14 +6,16 @@ abstract class BaseException extends Exception
     protected $timestamp = null;
     protected $json = null;
     protected $method = null;
+    protected $modal_id = null;
     
-    public function __construct($message, $method, $user_id = 0, Exception $previous = null) 
+    public function __construct($message, $method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
         $this->user_id = $user_id;
         $this->timestamp = new DateTime();
         $this->message = $message;
         $this->view = $method;
-        $this->json = json_encode(array ("Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
+        $this->modal_id = $modal_id;
+        $this->json = json_encode(array ("Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
         parent::__construct($message, null, $previous);
     }     
     
@@ -68,7 +70,7 @@ class InvalidZipcodeException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null) 
     {
-        parent::__construct("The supplied zipcode is invalid.", $method, $user_id, $previous);
+        parent::__construct("The supplied zipcode is invalid. Please try again.", $method, $user_id, $previous);
     }    
 }
 
@@ -167,5 +169,22 @@ class RentalDurationExceedsLimitException extends BaseException
         parent::__construct("You can't request to rent an item for that long. Please choose a duration under " . $max . " days", $method, $user_id, $previous);
     }       
 }
+
+class RejectRequestException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The request has already been rejected or withdrawn.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class CancelRequestException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The request has already been cancelled. Please cancel out of this window.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 
 ?>

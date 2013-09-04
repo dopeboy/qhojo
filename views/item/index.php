@@ -1,9 +1,6 @@
 <?php global $item_picture_path;global $user_picture_path;?>
 
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
-</script>   
-    
+
 <div class="sheet">
     <legend><?php echo $viewmodel['ITEM']['TITLE']?></legend>
     <div class="row-fluid">
@@ -31,7 +28,7 @@
                 <div class="subsection" id="hold-policy">
                     <h3>Hold Policy</h3>
                     <p>
-                        A $<?php echo $viewmodel['ITEM']['DEPOSIT']?> hold will be placed on your credit card at the start of the rental period.
+                        A $<?php echo $viewmodel['ITEM']['DEPOSIT']?> hold will be placed on the borrower's credit card at the start of the rental period.
                     </p>
                  </div>                      
 
@@ -92,6 +89,11 @@
         </div>
     </div>    
 </div>
+
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
+</script>   
+    
 
 <!--
 <div class="sheet">

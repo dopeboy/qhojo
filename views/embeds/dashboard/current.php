@@ -9,7 +9,7 @@ else: foreach($transactions as $key=>$transaction)
 {     
 ?>
 
-<tr>
+<tr id="<?php echo $transaction['TRANSACTION_ID']; ?>">
     <td>
         <?php require(dirname(dirname(__FILE__)) . '/dashboard/subembeds/item.php'); ?> 
     </td>
@@ -43,19 +43,39 @@ else: foreach($transactions as $key=>$transaction)
          </div>
          
         <div id="cancel-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="alert-error-modal-<?php echo $transaction['TRANSACTION_ID']; ?>" class="alert alert-error alert-modal" style="">
+                <strong>Error: </strong>
+                <span id="error-message-modal-<?php echo $transaction['TRANSACTION_ID']; ?>"></span>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>Cancel <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
+                <h3>Cancel <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] . '\'s' : "your" ?> request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
             </div>
-            <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
-                <label>
-                    <p>Are you sure?</p>
-                </label>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-primary">Yes</button>
-            </div>
+            <form class="form-submit" id="cancel-<?php echo $lender_view == 1 ? 'lender' : 'borrower' ?>" action="/transaction/cancel/<?php echo $transaction['TRANSACTION_ID']; ?>/<?php echo $lender_view; ?>" method="post">
+                <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
+                   
+                    <?php if ($lender_view == 1) { ?>
+                    <p>Specify a reason for canceling this request:</p>
+                    <?php } else { ?> 
+                    <p>Specify a reason for canceling your request:</p>
+                    <?php } ?>
+                    
+                    <div class="cancel-options" style="">
+                        <?php foreach($viewmodel["CANCEL_OPTIONS"] as $key=>$option) { ?>
+                        <div class="radio">
+                            <input class="required" type="radio" name="cancel-option" id="<?php echo $transaction['TRANSACTION_ID'] . '_' . $option['CANCEL_OPTION_ID']; ?>" value="<?php echo $option['CANCEL_OPTION_ID']; ?>" >
+                            <?php echo $option['CANCEL_DESCRIPTION']; ?>
+                        </div>                                        
+                        <?php } ?>
+                    </div>
+                    <textarea id="txtarea-<?php echo $transaction['TRANSACTION_ID']; ?>" name="reason" rows="3" placeholder="Optional: Fill out a message here to specify more detail." style=""></textarea>                          
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button class="btn btn-primary">Yes</button>
+                </div>
+            </form>
         </div>  
          
         <div id="contact-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

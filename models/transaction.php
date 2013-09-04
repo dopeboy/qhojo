@@ -180,6 +180,56 @@ class TransactionModel extends Model
         return $transaction_id;
     }
     
+    // $source = 0 means borrower is withdrawing their request, else lender is rejecting the request
+    public function rejectRequest($method, $user_id, $transaction_id, $source, $reject_option, $reject_reason)
+    {
+        // Check if user is lender on this req'd transaction
+        $sqlParameters[":transaction_id"] =  $transaction_id;
+        $sqlParameters[":user_id"] =  $user_id;
+        $clause = $source == 0 ? "BORROWER" : "LENDER";
+        
+        $preparedStatement = $this->dbh->prepare('select 1 from REQUESTED_VW where TRANSACTION_ID=:transaction_id and ' . $clause . '_ID=:user_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+        if ($row == null)
+            throw new RejectRequestException($method, $user_id, null, $transaction_id);    
+        
+        // 200 -> 401
+        if ($source == 0)
+            $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,401), array("REJECT_ID" => $reject_option, "REASON" => $reject_reason), $user_id);
+        // 200 -> 400
+        else if ($source == 1)
+            $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,400), array("REJECT_ID" => $reject_option, "REASON" => $reject_reason), $user_id);
+        else
+             throw new RejectRequestException($method, $user_id, null, $transaction_id);    
+    }    
+    
+    // $source = 0 means borrower, else lender
+    public function cancelRequest($method, $user_id, $transaction_id, $source, $cancel_option, $cancel_reason)
+    {
+        // Is user a borrower on this transaction
+        $sqlParameters[":transaction_id"] =  $transaction_id;
+        $sqlParameters[":user_id"] =  $user_id;            
+        $clause = $source == 0 ? "BORROWER" : "LENDER";
+
+        $preparedStatement = $this->dbh->prepare('select 1 from RESERVED_AND_EXCHANGED_AND_LATE_VW where TRANSACTION_ID=:transaction_id and ' . $clause . '_ID=:user_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
+        
+        if ($row == null)
+            throw new CancelRequestException($method, $user_id, null, $transaction_id);            
+
+        // 300 -> 601
+        if ($source == 0)
+            $this->insertDetail($method, $transaction_id, $this->getEdgeID(300,601), array("CANCEL_ID" => $cancel_option, "REASON" => $cancel_reason), $user_id);      
+        // 300 -> 600
+        else if ($source == 1)
+            $this->insertDetail($method, $transaction_id, $this->getEdgeID(300,600), array("CANCEL_ID" => $cancel_option, "REASON" => $cancel_reason), $user_id); 
+        else
+             throw new CancelRequestException($method, $user_id, null, $transaction_id);          
+    }
+    
     private function denormalize($details)
     {
         $transactions = null;

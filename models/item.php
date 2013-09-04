@@ -159,14 +159,22 @@ class ItemModel extends Model
         
         $transaction_model = new TransactionModel();
         $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
-        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200), array("START DATE" => $start_date, "END DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200), array("START_DATE" => $start_date, "END_DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
     }   
     
     public function requestSubmitted($method, $item_id)
     {   
         $row['ITEM'] =  $this->getItem($item_id);     
         return $row['ITEM'];
-    }     
+    }
+    
+    public function post($method, $user_id)
+    {   
+        $user_model = new UserModel(); 
+        $row["USER"] = $user_model->getUserDetails($user_id);
+        
+        return $row;
+    }    
     
     private function getItem($item_id)
     {

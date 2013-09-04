@@ -1,0 +1,19 @@
+input[type="text"]#title
+{
+    width: 750px;
+}
+
+input[type="text"]#rate
+{
+    width: 100px;
+}
+
+.non-editable
+{
+    display: none;
+}
+
+textarea
+{
+    margin-bottom: 0px;
+}

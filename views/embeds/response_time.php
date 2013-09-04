@@ -2,7 +2,9 @@
 
     $output_str = 'Responds within ';
 
-    if ($response_time < 60)
+    if ($response_time == null)
+        $output_str = "No responses";
+    else if ($response_time < 60)
         $output_str .= 'an hour';
     else if ($response_time >= 60 && $response_time < 60*24)
         $output_str .= 'a day';

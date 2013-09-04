@@ -21,7 +21,7 @@ class User extends Controller
 	}
         
         protected function join()
-        {
+        {        
             if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
                 $this->returnView(null, $method);
             
@@ -38,7 +38,7 @@ class User extends Controller
                 );
                 
                 $this->directUser($user_info);                
-            }
+            } 
         }
         
         protected function index()

@@ -40,7 +40,15 @@ class UserModel extends Model
 
         $preparedStatement = $this->dbh->prepare('SELECT * FROM REJECT_OPTIONS_VW');
         $preparedStatement->execute();        
-        $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          
+        $row["REJECT_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);     
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM CANCEL_OPTIONS_VW');
+        $preparedStatement->execute();        
+        $row["CANCEL_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);          
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM WITHDRAW_OPTIONS_VW');
+        $preparedStatement->execute();        
+        $row["WITHDRAW_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);                  
         
         return $row;        
     }
@@ -70,7 +78,7 @@ class UserModel extends Model
             throw new UserWithEmailAlreadyExists($email, $method);
 
         // Reverse geocode the zip to find the state and city
-        $location = $this->reverseGeocode($zipcode);
+        $location = $this->reverseGeocode($zipcode, $method);
         
         $sqlParameters[":city"] = $location["CITY"];
         $sqlParameters[":state"] =  $location["STATE"];
@@ -93,7 +101,7 @@ class UserModel extends Model
         return $user;
     }
     
-    private function getUserDetails($user_id)
+    public function getUserDetails($user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;
         $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
@@ -129,14 +137,33 @@ class UserModel extends Model
         return $salt . $hash;
     }    
     
-    private function reverseGeocode($zipcode)
+    private function reverseGeocode($zipcode, $method)
     {
-        // FILL IN
-        $info["CITY"] = "LOL";
-        $info["STATE"] = "ROFL";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "http://maps.googleapis.com/maps/api/geocode/json?address=" . $zipcode . "&sensor=false"); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+        $output = json_decode(curl_exec($ch));
+        curl_close($ch);  
+
+        if ($output->status != "OK")
+            throw new InvalidZipcodeException($method);
         
-        // If it fails, throw invalid zipcode exception
-        // throw new InvalidZipcodeException($zipcode);
+        $address_components = $output->results[0]->address_components;
+
+        foreach ($address_components as $component)
+        {
+            // City
+            if (in_array('locality',$component->types))
+                $info["CITY"] = $component->long_name;
+
+            // State
+            if (in_array('administrative_area_level_1',$component->types))
+                $info["STATE"] = $component->short_name;
+            
+            // Country--has to be inside the US
+            if (in_array('country',$component->types) && $component->short_name != 'US')
+                throw new InvalidZipcodeException($method);       
+        }         
         
         return $info;
     }

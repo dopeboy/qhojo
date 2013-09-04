@@ -70,11 +70,7 @@ abstract class Validator
     {
         if ($parameter_value != 0 && $parameter_value != 1)
             throw new InvalidReviewRatingException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
-    }        
-    
-    static function isValidReviewComment ($parameter_value,$parameter_name, $method) 
-    {
-    }            
+    }                
 }
 
 ?>

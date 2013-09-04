@@ -53,7 +53,7 @@
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
                                 <li class=""><a href="/item/search.php">Borrow</a></li>
-                                <li><a href="#">Lend</a></li>
+                                <li><a href="/item/post">Lend</a></li>
                             </ul>
                             <ul class="nav pull-right">
                                 <li><a class="hiwlink" href="/#borrow">How to Borrow</a></li>
