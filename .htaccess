@@ -21,6 +21,8 @@ RewriteRule ^user/signup/null/4$ /user/signup/%1/4? [L,R=301]
 # For the search page, we're not using the id and state. We're using a slew of GET parameters
 RewriteRule ^item/search/? index.php?controller=item&action=search&id=&state= [QSA]
 
+RewriteRule ^picture/delete/?([a-zA-Z0-9]*)?/?([0-9]*)?/? index.php?controller=picture&action=delete&id=$1&state=$2 [QSA]
+
 # The main rule
 RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3&state=$4 [NC,L]
 

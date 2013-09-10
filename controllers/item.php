@@ -30,7 +30,7 @@ class Item extends Controller
             
             else if (($method = Method::POST) && User::userSignedIn($method) && $this->state == 1)
             {
-                $this->returnView($this->item_model->submitRequest
+                $this->item_model->submitRequest
                 (
                     $method, 
                     $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty')),
@@ -38,8 +38,7 @@ class Item extends Controller
                     $this->validateParameter($this->postvalues['date-start'],"Start Date",$method,array('Validator::isNotNullAndNotEmpty', 'Validator::isValidDate')),
                     $this->validateParameter($this->postvalues['date-end'],"End Date",$method,array('Validator::isNotNullAndNotEmpty', 'Validator::isValidDate')),
                     $this->validateParameter($this->postvalues['message'],"Message",$method,array('Validator::isNotNullAndNotEmpty'))
-                )
-                ,$method);     
+                );    
                 
                 $this->returnView(json_encode(array("URL" => "/item/request/" . $this->id . "/2")), $method);    
             }
@@ -51,8 +50,34 @@ class Item extends Controller
         protected function post()
         {
             if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == null || $this->state == 0))
+            {
                 $this->returnView($this->item_model->post($method, $_SESSION["USER"]["USER_ID"]), $method);            
+            }
+            
+            // [title] => dsf\n    [hold] => 12\n    [rate] => 12\n    [location] => 12345\n    [zipcode] => 12345\n
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 1))
+            {
+                $this->item_model->submitPost
+                (
+                    $method, 
+                    $_SESSION["USER"]["USER_ID"],
+                    $this->validateParameter($this->postvalues['item_id'],"Item ID",$method,array('Validator::isNotNullAndNotEmpty')),
+                    $this->validateParameter($this->postvalues['title'],"Item Title",$method,array('Validator::isNotNullAndNotEmpty')),
+                    $this->validateParameter($this->postvalues['description'],"Item Description",$method,array('Validator::isNotNullAndNotEmpty')),
+                    $this->validateParameter($this->postvalues['hold'],"Hold Amount",$method,array('Validator::isNotNullAndNotEmpty', 'Validator::isValidItemHoldValue')),
+                    $this->validateParameter($this->postvalues['rate'],"Rental Rate",$method,array('Validator::isNotNullAndNotEmpty', 'Validator::isValidItemRentalRate')),
+                    $this->validateParameter($this->postvalues['location'],"Item Zipcode",$method,array('Validator::isNotNullAndNotEmpty', 'Validator::isValidZipcode')),
+                    $this->validateParameter($this->postvalues['file'],"Item Pictures",$method,array('Validator::isNotNullAndNotEmpty'))
+                );
+                
+                $this->returnView(json_encode(array("URL" => "/item/post/" . $this->postvalues['item_id'] . "/2")), $method);
+            }
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 2))
+                $this->returnView($this->item_model->postSubmitted($method, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty')), $_SESSION["USER"]["USER_ID"]), $method);             
         }
+        
+        
        
         
 	/*protected function index() 

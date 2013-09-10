@@ -56,7 +56,10 @@ abstract class Controller
     
     protected function validateParameter($parameter_value, $parameter_name, $method, $callbacks)
     {
-        $parameter_value = trim($parameter_value);
+        if (is_array($parameter_value))
+            $parameter_value = array_map('trim', $parameter_value);
+        else
+            $parameter_value = trim($parameter_value);
         
         foreach ($callbacks as $callback)
         {

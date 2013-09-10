@@ -172,9 +172,77 @@ class ItemModel extends Model
     {   
         $user_model = new UserModel(); 
         $row["USER"] = $user_model->getUserDetails($user_id);
+        $row["ITEM"]["ITEM_ID"] = getRandomID();
         
         return $row;
     }    
+    
+    public function submitPost($method, $user_id, $item_id, $title, $description, $hold, $rate, $zipcode, $files)
+    {
+        $location = $this->reverseGeocode($zipcode, $method);
+
+        $sqlParameters[":item_id"] =  $item_id;
+        $sqlParameters[":title"] =  $title;
+        $sqlParameters[":description"] =  $description;
+        $sqlParameters[":rate"] =  $rate;
+        $sqlParameters[":deposit"] =  $hold;
+        $sqlParameters[":zipcode"] =  $zipcode;
+        $sqlParameters[":city"] =  $location['CITY'];
+        $sqlParameters[":state"] =  $location['STATE'];
+        $sqlParameters[":lender_id"] =  $user_id;
+        $sqlParameters[":active"] =  1;
+        $sqlParameters[":create_date"] =  date("Y-m-d H:i:s");                    
+                    
+        $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,ZIPCODE,CITY,STATE,LENDER_ID, ACTIVE, CREATE_DATE) VALUES (:item_id,:title,:description,:rate,:deposit,:zipcode,:city,:state,:lender_id, :active, :create_date)');
+        $preparedStatement->execute($sqlParameters);
+        
+        // Handle the files
+        $sqlParameters[] = array();
+        $datafields = array('ITEM_ID' => '', 'FILENAME' => '', 'PRIMARY_FLAG' => '');
+
+        foreach ($files as $key=>$file)
+        {
+            $data[] = array('ITEM_ID' => $item_id, 'FILENAME' => $file, 'PRIMARY_FLAG' => $key == 0 ? 1 : 0);
+        }
+
+        $insert_values = array();
+        foreach($data as $d)
+        {
+            $question_marks[] = '('  . $this->placeholders('?', sizeof($d)) . ')';
+            $insert_values = array_merge($insert_values, array_values($d));
+        }
+
+        $sql = "INSERT INTO ITEM_PICTURE (" . implode(",", array_keys($datafields) ) . ") VALUES " . implode(',', $question_marks);
+
+        $this->dbh->beginTransaction();
+        $stmt = $this->dbh->prepare ($sql);
+        $stmt->execute($insert_values);
+        $this->dbh->commit();        
+    }
+    
+    public function postSubmitted($method, $item_id, $user_id)
+    {
+        $row["ITEM"] = $this->getItem($item_id);
+        
+        if ($row["ITEM"] == null)
+            throw new ItemSubmissionIssueException($method,$user_id);
+        
+        return $row;
+    }
+    
+    public function canUserModifyItem($item_id, $user_id)
+    {
+        // If the item doesn't exist, then yes.
+        $sqlParameters[":item_id"] =  $item_id;
+        $preparedStatement = $this->dbh->prepare('SELECT LENDER_ID FROM ITEM_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);        
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+        if ($row == null)
+            return true;
+        
+        // If it does exist, are we the lender on it?
+        return $row["LENDER_ID"] == $user_id;
+    }
     
     private function getItem($item_id)
     {
@@ -184,6 +252,18 @@ class ItemModel extends Model
         
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);        
     }
+    
+    private function placeholders($text, $count=0, $separator=",")
+    {
+        $result = array();
+        if($count > 0){
+            for($x=0; $x<$count; $x++){
+                $result[] = $text;
+            }
+        }
+
+        return implode($separator, $result);
+    }    
     
     
     

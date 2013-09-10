@@ -1,4 +1,4 @@
-<?php global $item_picture_path;global $user_picture_path;?>
+<?php global $item_picture_path;global $user_picture_path; global $item_thumb_subdir; ?>
 
 
 <div class="sheet">
@@ -8,7 +8,7 @@
             <div class="row-fluid" id="visuals">
                 <div class="span3 text-center section" id="item-thumbs">
                     <?php foreach ($viewmodel['ITEM_PICTURES'] as $key=>$picture) { ?>
-                        <img class="thumbnail" src="<?php echo $item_picture_path . $viewmodel['ITEM']['ITEM_ID'] . '/' . $picture['FILENAME']?>">                    
+                        <img class="thumbnail" full="<?php echo $item_picture_path . $viewmodel['ITEM']['ITEM_ID'] . '/' . $picture['FILENAME']?>" src="<?php echo $item_picture_path . $viewmodel['ITEM']['ITEM_ID'] . $item_thumb_subdir . '/' . $picture['FILENAME']?>">                    
                     <?php } ?>
                 </div>
 

@@ -186,5 +186,37 @@ class CancelRequestException extends BaseException
     }       
 }
 
+class InvalidItemRentalRateException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("An invalid item rental rate was supplied. Please try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidItemHoldValueException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("An invalid item hold value was supplied. Please try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class UserCannotModifyItemException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("You are not the owner of the item and cannot modify it.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class ItemSubmissionIssueException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Something went wrong. Your item didn't get posted successfully. Try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 
 ?>

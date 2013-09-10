@@ -3,7 +3,7 @@
     margin-bottom: 20px;      
 }
 
-.section#item-thumbs, .section#item-price
+.section#item-thumbs, .section#item-price, #item-picture
 {
     height: 450px;    
     overflow:auto;

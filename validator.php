@@ -4,7 +4,10 @@ abstract class Validator
 {
     static function isNotNullAndNotEmpty ($parameter_value,$parameter_name, $method) 
     {
-        if ($parameter_value == null || $parameter_value == '') 
+        if (is_array($parameter_value) && count($parameter_value) == 0)
+            throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);    
+            
+        else if ($parameter_value == null || $parameter_value == '') 
             throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);    
     }
 
@@ -70,7 +73,19 @@ abstract class Validator
     {
         if ($parameter_value != 0 && $parameter_value != 1)
             throw new InvalidReviewRatingException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
-    }                
+    }        
+    
+    static function isValidItemRentalRate ($parameter_value,$parameter_name, $method) 
+    {
+        if (!is_int(intval($parameter_value)) || $parameter_value < 1)
+            throw new InvalidItemRentalRateException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
+    }
+    
+    static function isValidItemHoldValue ($parameter_value,$parameter_name, $method) 
+    {
+        if (!is_int(intval($parameter_value)) || $parameter_value < 1 || $parameter_value > 2500)
+            throw new InvalidItemHoldValueException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
+    }    
 }
 
 ?>

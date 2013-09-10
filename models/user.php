@@ -136,37 +136,6 @@ class UserModel extends Model
 
         return $salt . $hash;
     }    
-    
-    private function reverseGeocode($zipcode, $method)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://maps.googleapis.com/maps/api/geocode/json?address=" . $zipcode . "&sensor=false"); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-        $output = json_decode(curl_exec($ch));
-        curl_close($ch);  
-
-        if ($output->status != "OK")
-            throw new InvalidZipcodeException($method);
-        
-        $address_components = $output->results[0]->address_components;
-
-        foreach ($address_components as $component)
-        {
-            // City
-            if (in_array('locality',$component->types))
-                $info["CITY"] = $component->long_name;
-
-            // State
-            if (in_array('administrative_area_level_1',$component->types))
-                $info["STATE"] = $component->short_name;
-            
-            // Country--has to be inside the US
-            if (in_array('country',$component->types) && $component->short_name != 'US')
-                throw new InvalidZipcodeException($method);       
-        }         
-        
-        return $info;
-    }
         
     /*
 	public function verify($emailaddress, $password, &$userid, &$firstname, &$lastname) 

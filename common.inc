@@ -47,6 +47,9 @@ $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
 $item_picture_path = "/uploads/item/";
 $user_picture_path = "/uploads/user/";
+$item_thumb_subdir = '/thumbnail';
+$user_thumb_subdir = '/thumbnail';
+$item_card_subdir = '/card';
 
 $results_per_page = 12;
 

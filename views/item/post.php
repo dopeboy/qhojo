@@ -4,7 +4,8 @@
 <link rel="stylesheet" href="/css/item/post.css">
     
 <div class="sheet">
-    <form class="form-submit" id="post" action="/item/post/" method="post">
+    <?php if ($this->state == 0) { ?>
+    <form class="form" id="post" action="/item/post/null/1" method="post">
         <legend>
             <div class="non-editable" id="title">
                 <span id="title" class="value"></span>    
@@ -24,7 +25,11 @@
                     </div>
 
                     <div class="span9 text-center" id="item-picture">
-
+                        <div id="add-pictures" style="">
+                            <a id="add-pictures-link" href="#" class="fill-div" >
+                                <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-success btn-large btn-block" type="button" style="">Upload Pictures</button>     
+                            </a>
+                        </div>                             
                     </div>       
                 </div>
 
@@ -32,7 +37,7 @@
                     <div class="subsection" id="description">
                         <h3>Description</h3>
 
-                        <textarea id="description" class="editable" placeholder="Enter in some descriptive details about the item here." style=""></textarea>
+                        <textarea id="description" name="description" class="editable" placeholder="Enter in some descriptive details about the item here." style=""></textarea>
 
                         <div class="non-editable">
                             <p>
@@ -47,11 +52,11 @@
                     <div class="subsection" id="hold-policy">
                         <h3>Hold Policy</h3>
 
-                        A $<input type="text" class="input-block-level editable positive-integer" placeholder="Enter item amount" id="hold" name="hold" style="width:151px; ; margin-top: 0px; margin-bottom: 0px"><span id="hold-policy" class="non-editable value"></span>  
+                        A $<input type="text" class="input-block-level editable positive-integer" placeholder="Enter item amount" id="hold" name="hold" style=""><span id="hold-policy" class="non-editable value"></span>  
 
                         hold will be placed on the borrower's credit card at the start of the rental period.
                         <a href="javascript:void(0);">
-                            <i class="icon-pencil icon-2x" id="hold" style="margin-left: 10px; display:none"></i>
+                            <i class="icon-pencil icon-2x" id="hold" style=""></i>
                         </a>  
                     </div>                      
 
@@ -66,9 +71,9 @@
                 <div class="section split action">
 
 
-                    <h2 class="" id="rental-rate" style="display:inline">$</h2>
+                    <h2 class="rental-rate" style="">$</h2>
                     <input type="text" class="input-block-level editable positive-integer" placeholder="Rate" id="rate" name="rate" style="">
-                    <h2  style="display:inline">&nbsp;/ day                                     
+                    <h2  class="rental-rate" style="">&nbsp;/ day                                     
                     </h2>
 
                     <div class="non-editable">
@@ -94,23 +99,47 @@
                 </div>
 
                 <div class="section split map">
-                    <input type="hidden" id="location" name="location" value="<?php echo $viewmodel['USER']['ZIPCODE']?>"/>
+                    <input type="hidden" id="location" name="location" value="<?php echo $viewmodel['USER']['ZIPCODE']?>" style=""/>
 
-                    <div class="non-editable" style="display: block">    
+                    <div id="map" class="non-editable" style="">    
                         <div id="map_canvas" style=""></div>    
                         <a href="javascript:void(0);">
                             <i class="icon-pencil icon-2x " id="zipcode" style=""></i>
                         </a>  
                     </div>
 
-                    <input type="text" class="input-block-level editable positive-integer" placeholder="Enter zipcode" id="zipcode" name="zipcode" value="<?php echo $viewmodel['USER']['ZIPCODE']?>" style="display:none">
+                    <input type="text" class="input-block-level editable positive-integer" placeholder="Enter zipcode" id="zipcode" name="zipcode" value="<?php echo $viewmodel['USER']['ZIPCODE']?>" style="">
 
                 </div>            
             </div>
-        </div>    
+        </div>  
 
-        <button id="rentlink" class="btn btn-primary btn-large btn-block" type="submit" style="width: 150px; margin: 20px auto 0px auto;" >Submit</button>     
+        <button id="post-submit" class="btn btn-primary btn-large btn-block" type="submit" style="" >Submit</button>     
+        <input type="hidden" id="item_id" name="item_id" value="<?php echo $viewmodel["ITEM"]["ITEM_ID"]; ?>">
     </form>
+    
+    <div id="upload-item-pictures" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+        <div class="modal-header">
+            <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Upload Item Pictures</h3>
+        </div>
+        <div class="modal-body text-left" style="">
+            <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 
+        </div>
+        <div class="modal-footer">
+            <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
+        </div>
+    </div>
+    
+    <?php } else if ($this->state == 2) { ?>
+    <legend>
+        Item Listed
+    </legend>    
+    <div>
+        Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have submitted your item <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. You're all done! 
+    </div>
+    <?php } ?>
+    
 </div>
 
 <script type="text/javascript"

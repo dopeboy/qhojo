@@ -139,7 +139,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/quality.png">
                 </a>
             </div>
         </div>
@@ -155,7 +155,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/safety.png">
                 </a>
             </div>
         </div>
@@ -171,7 +171,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/cost.png">
                 </a>
             </div>
         </div>
@@ -239,7 +239,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/theft.png">
                 </a>
             </div>
         </div>
@@ -255,7 +255,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/damage.png">
                 </a>
             </div>
         </div>
@@ -271,7 +271,7 @@
         <div class="span2 offset1">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img src="img/square.png">
+                    <img src="/img/late_policy.png">
                 </a>
             </div>
         </div>

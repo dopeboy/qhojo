@@ -25,14 +25,14 @@
     require("models/item.php");
     require("models/document.php");
     require("models/transaction.php");
-    //require("models/picture.php");
+    require("models/picture.php");
 
     // require the controller classes
     require("controllers/user.php");
     require("controllers/item.php");
     require("controllers/document.php");
     require("controllers/transaction.php");
-    //require("controllers/picture.php");
+    require("controllers/picture.php");
     
     // exception classes
     require("exception.php");

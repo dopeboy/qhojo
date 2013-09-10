@@ -35,7 +35,7 @@ $(document).ready(function()
 
      $('.thumbnail').hover(function()
      {
-        $('#largeimage').attr('src',$(this).attr('src'));
+        $('#largeimage').attr('src',$(this).attr('full'));
      });
 
     $( "#contact-btn" ).click(function() 

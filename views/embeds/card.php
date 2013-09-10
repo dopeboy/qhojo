@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/embeds/card.css">
 
-<?php global $item_picture_path, $user_picture_path; ?>
+<?php global $item_picture_path, $user_picture_path, $item_card_subdir; ?>
 <?php if (!isset($viewmodel["ITEMS"]) || count($viewmodel["ITEMS"]) == 0): ?> <i>No items found</i>
 <?php else: foreach($viewmodel["ITEMS"] as $key=>$item) { ?>
 
@@ -10,7 +10,7 @@
             
          <div class="span4" style="">
              <div class="card <?php if ($key%3==0) {echo "left"; } else if ($key%3==1) {echo "middle";} else if ($key%3==2) {echo "right";} ?>">
-                 <div class="item-image" style="background-image: url('<?php echo $item_picture_path . $item['ITEM_ID'] . "/" . $item['ITEM_PICTURE_FILENAME'] ?>')">
+                 <div class="item-image" style="background-image: url('<?php echo $item_picture_path . $item['ITEM_ID'] . $item_card_subdir . "/" . $item['ITEM_PICTURE_FILENAME'] ?>')">
                      <a href="/item/index/<?php echo $item['ITEM_ID'];?>" class="fill-div">
                         <div class="item-price">
                             $<?php echo $item['RATE']; ?> 

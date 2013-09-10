@@ -49,9 +49,10 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="/">Qhojo</a>
+                        <a class="brand" href="/" style="padding: 0px"><img src="/img/logo.gif"></a>
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
+                              
                                 <li class=""><a href="/item/search.php">Borrow</a></li>
                                 <li><a href="/item/post">Lend</a></li>
                             </ul>
