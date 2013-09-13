@@ -162,7 +162,7 @@ class ItemModel extends Model
         
         $transaction_model = new TransactionModel();
         $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
-        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200), array("START_DATE" => $start_date, "END_DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
     }   
     
     public function requestSubmitted($method, $item_id)
