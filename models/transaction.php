@@ -407,7 +407,7 @@ class TransactionModel extends Model
         error_log("cc:" . $confirmation_code);
         error_log("ph:" . $phone_number);
 
-        $sqlParameters[":phone_number"] =  '+' . $phone_number;
+        $sqlParameters[":phone_number"] =  $phone_number;
         $preparedStatement = $this->dbh->prepare('select * from USER_VW where PHONE_NUMBER=:phone_number LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $borrower = $preparedStatement->fetch(PDO::FETCH_ASSOC);
@@ -485,7 +485,7 @@ class TransactionModel extends Model
         error_log("cc:" . $confirmation_code);
         error_log("ph:" . $phone_number);
 
-        $sqlParameters[":phone_number"] =  '+' . $phone_number;
+        $sqlParameters[":phone_number"] =  $phone_number;
         $preparedStatement = $this->dbh->prepare('select * from USER_VW where PHONE_NUMBER=:phone_number LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $lender = $preparedStatement->fetch(PDO::FETCH_ASSOC);
