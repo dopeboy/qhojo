@@ -335,11 +335,14 @@ class TransactionModel extends Model
         $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         $transactions = $this->denormalize($rows);
         
-        // 250 -> 300
-        foreach($transactions as $transaction)
+        if ($transactions != null)
         {
-            $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,300,$method, $user_id), array("CONFIRMATION_CODE" => getRandomID()), $user_id);          
-        }        
+            // 250 -> 300
+            foreach($transactions as $transaction)
+            {
+                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,300,$method, $user_id), array("CONFIRMATION_CODE" => getRandomID()), $user_id);          
+            }               
+        }     
     }    
     
     private function denormalize($details)
