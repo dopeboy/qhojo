@@ -30,11 +30,11 @@ class User extends Controller
                 $user_info = $this->user_model->join
                 (
                     $method,
-                    $this->validateParameter($this->postvalues['firstname'],"firstname",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
-                    $this->validateParameter($this->postvalues['lastname'],"lastname",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
-                    $this->validateParameter($this->postvalues['zipcode'],"zipcode",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidZipCode')),
-                    $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress')),
-                    $this->validateParameter($this->postvalues['password'],"password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
+                    $this->validateParameter($this->postvalues['firstname'],"First Name",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
+                    $this->validateParameter($this->postvalues['lastname'],"Last Name",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
+                    $this->validateParameter($this->postvalues['zipcode'],"Zipcode",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidZipCode')),
+                    $this->validateParameter($this->postvalues['email'],"Email Address",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress')),
+                    $this->validateParameter($this->postvalues['password'],"Password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
                 );
                 
                 $this->directUser($user_info);                
@@ -72,26 +72,144 @@ class User extends Controller
             header('Location: /') ;           
         }
         
+        // Profile Picture (100), Blurb(500), Phone # (200), PP (300), CC (400)
+        protected function extrasignup()
+        {
+            if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 0)
+            {
+                if ($status = $this->user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"]))
+                {
+                    if (!empty($this->urlvalues['return']))
+                        $this->pushReturnURL ($this->urlvalues['return']);
+                    
+                    header('Location: /user/extrasignup/null/' . $status);
+                }
+                
+                else
+                {
+                    // At this point, all fields are in. So if the user has any transactions that are in the
+                    // pending state, switch them over to reserved
+                    $this->transaction_model->movePendingToReserved($method, $_SESSION["USER"]["USER_ID"]);
+                    
+                    if (($url = $this->popReturnURL()) != null)
+                        header('Location: ' . $url);                    
+                    
+                    else
+                        header('Location: /user/dashboard/');                    
+                }
+            }
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 100))
+            {
+                $this->returnView(null, $method);            
+            }
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 101))
+            {
+                $this->user_model->submitProfilePicture
+                (
+                    $method,
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->validateParameter($this->postvalues['profile-picture'],"Profile Picture",$method,array('Validator::isNotNullAndNotEmpty'))
+                );
+                
+                $this->returnView(json_encode(array("Action" => "SUBMIT-PROFILE-PICTURE", "URL" => "/user/extrasignup/null/0")), $method); 
+            }
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 200))
+            {
+                $this->returnView($this->user_model->phoneNumber($method, $_SESSION["USER"]['USER_ID']), $method);            
+            }     
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 201))
+            {
+                $this->user_model->sendPhoneVerificationCode
+                (
+                    $method, 
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->postvalues['phonenumber'],"Phone Number",$method,array('Validator::isNotNullAndNotEmpty')
+                );
+                
+                $this->returnView(json_encode(array("Action" => "VERIFY-PHONE", "Status" => "OK")), $method);   
+            }
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && $this->state == 202)
+            {
+                $this->user_model->verifyVerificationCode
+                (
+                    $method, 
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->postvalues['verificationcode'],"Verification Code",$method,array('Validator::isNotNullAndNotEmpty')
+                );
+                
+                $this->returnView(json_encode(array("Action" => "VERIFY-VERIFICATION-CODE", "URL" => "/user/extrasignup/null/0")), $method);     
+            }             
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 300))
+            {
+                $this->returnView(null, $method);            
+            }         
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 301))
+            {
+                $this->user_model->submitPaypal
+                (
+                    $method,
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->validateParameter($this->postvalues['firstname'],"firstname",$method,array('Validator::isNotNullAndNotEmpty')),
+                    $this->validateParameter($this->postvalues['lastname'],"lastname",$method,array('Validator::isNotNullAndNotEmpty')),
+                    $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress'))
+                );
+                
+                 $this->returnView(json_encode(array("Action" => "SUBMIT-PAYPAL", "URL" => "/user/extrasignup/null/0")), $method);           
+            }    
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 400))
+                $this->returnView(null, $method);            
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 401))
+            {
+                $this->user_model->submitCreditCard
+                (
+                    $method,
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->validateParameter($this->postvalues['card-uri'],"Card URI",$method,array('Validator::isNotNullAndNotEmpty'))
+                );
+                
+                 $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/extrasignup/null/0")), $method);           
+            }
+            
+            else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 500))
+                $this->returnView(null, $method);          
+            
+            else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 501))
+            {
+                $this->user_model->submitBlurb
+                (
+                    $method,
+                    $_SESSION["USER"]['USER_ID'],
+                    $this->validateParameter($this->postvalues['blurb'],"Blurb",$method,array('Validator::isNotNullAndNotEmpty'))
+                );
+                
+                $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/extrasignup/null/0")), $method);           
+            }            
+        }
+        
         private function directUser($user_info)
         {
             $_SESSION["USER"]['USER_ID']  = $user_info["USER_ID"];
             $_SESSION["USER"]['FIRST_NAME']  = $user_info["FIRST_NAME"];
             $_SESSION["USER"]['NAME'] = $user_info["NAME"];
             $_SESSION["USER"]['ADMIN']  = $user_info["ADMIN"];
-
+            $_SESSION["RETURN_URL"] = null;
+            
             // If the user came in from another page, send them back to where they were
-            if (!empty($_SESSION['referrer']))
-            {
-                $tmp = $_SESSION['referrer'];
-                $_SESSION['referrer'] = null;
-                $this->returnView($tmp, Method::POST);
-            }
+            if (($url = $this->popReturnURL()) != null)
+                $this->returnView($url, Method::POST);
 
             // Else, send them to the search page
             else
-            {
                 $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);                            
-            }
         }
         
         public static function userSignedIn($method)

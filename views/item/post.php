@@ -1,8 +1,13 @@
-<?php global $item_picture_path;global $user_picture_path;?>
+<?php global $item_picture_path;global $user_picture_path;global $user_thumb_subdir;?>
 
 <link rel="stylesheet" href="/css/item/index.css">
 <link rel="stylesheet" href="/css/item/post.css">
-    
+
+<?php
+    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+?>
+
 <div class="sheet">
     <?php if ($this->state == 0) { ?>
     <form class="form" id="post" action="/item/post/null/1" method="post">
@@ -26,9 +31,7 @@
 
                     <div class="span9 text-center" id="item-picture">
                         <div id="add-pictures" style="">
-                            <a id="add-pictures-link" href="#" class="fill-div" >
-                                <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-success btn-large btn-block" type="button" style="">Upload Pictures</button>     
-                            </a>
+                            <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-success btn-large btn-block" type="button" style="">Upload Pictures</button>                                
                         </div>                             
                     </div>       
                 </div>
@@ -89,7 +92,7 @@
 
                 <div class="section split text-center" id="lender">
                     <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>">
-                        <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['USER']['USER_ID'] . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
+                        <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
                     </a>
                     <h2 class="" style="">
                         <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>"><?php echo $viewmodel['USER']['NAME']; ?></a>

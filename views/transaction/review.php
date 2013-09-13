@@ -14,7 +14,7 @@ $awaiting_review = 1;
     
     <?php if ($this->state == 0) { ?>
     <legend>
-        Review - <?php echo $transaction["TITLE"] ?>
+        Review - <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo $transaction["TITLE"] ?></a>
     </legend>
 
     <div id="" class="">    

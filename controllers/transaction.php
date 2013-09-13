@@ -61,6 +61,103 @@ class Transaction extends Controller
             
             $this->returnView(json_encode(array("TransactionID" => $this->id, "Action" => "CANCEL", "Source" => $this->state == 0 ? "borrowing" : "lending")), $method); 
         }        
+    } 
+    
+    protected function accept()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 0)
+        {
+//            if (lender fields not ready)
+//                    redirect lender to extra signup page
+//
+//            else if (borrower fields not ready)
+//                    explain to lender what is going on
+//                    dispatch email
+//                    move transaction to pending state
+//
+//            else
+//                    move transaction to reserved state
+//                    send emails
+  
+            $user_model = new UserModel();
+            
+            if (($status = $user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"])))
+            {
+                //$this->pushReturnURL();
+                header('Location: /user/extrasignup/null/0' . '?return=' . $_SERVER['REQUEST_URI']);
+            }
+            
+            // Find the borrower ID on the current transaction
+            else if (($status = $user_model->userNeedsExtraFields($this->transaction_model->getBorrowerOfRequest($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))))))
+                header('Location: /transaction/pending/' . $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty')) . '/0');
+            
+            else
+            {
+                $this->transaction_model->acceptRequest
+                (
+                    $method, 
+                    $_SESSION["USER"]["USER_ID"], 
+                    $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))
+                );     
+                
+                  header('Location: /transaction/accept/' . $this->id . '/1');
+            }
+        }
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 1)
+        {
+            $this->returnView($this->transaction_model->acceptRequestSuccess($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);  
+        }            
+    }
+    
+    protected function pending()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 0)
+        {
+            $this->transaction_model->pending
+            (
+                $method, 
+                $_SESSION["USER"]["USER_ID"], 
+                $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))
+            );
+            
+            header('Location: /transaction/pending/' . $this->id . '/1');
+        } 
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 1)
+        {
+            $this->returnView($this->transaction_model->pendingView($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method); 
+        }            
+    }
+    
+    protected function borrowerconfirm()
+    {
+        if (($method = Method::POST) && $this->state==0 && $this->validateParameter($this->id,"ID",$method,array('Validator::isNotNullAndNotEmpty'))==8295106)
+        {    
+            $this->transaction_model->borrowerConfirm
+            (
+                $method,
+                $this->validateParameter($this->postvalues['Body'],"Text Message Body",$method,array('Validator::isNotNullAndNotEmpty')),
+                $this->validateParameter($this->postvalues['From'],"Text Message Phone Number",$method,array('Validator::isNotNullAndNotEmpty'))
+            );
+
+            $this->returnView("Great Success", $method);
+        }
+    }
+    
+    protected function lenderconfirm()
+    {
+        if (($method = Method::POST) && $this->state==0 && $this->validateParameter($this->id,"ID",$method,array('Validator::isNotNullAndNotEmpty'))==4856915)
+        {    
+            $this->transaction_model->lenderConfirm
+            (
+                $method,
+                $this->validateParameter($this->postvalues['Body'],"Text Message Body",$method,array('Validator::isNotNullAndNotEmpty')),
+                $this->validateParameter($this->postvalues['From'],"Text Message Phone Number",$method,array('Validator::isNotNullAndNotEmpty'))
+            );
+
+            $this->returnView("Great Success", $method);
+        }
     }    
     
 }

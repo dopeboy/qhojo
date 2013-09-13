@@ -6,6 +6,11 @@ $join_date = $date->format('F Y');
 
 ?>
 
+<?php
+    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+?>
+
 <div class="sheet">
     <legend><?php echo $viewmodel["USER"]["NAME"]?></legend>
     
@@ -62,15 +67,15 @@ $join_date = $date->format('F Y');
                   <ul class="icons-ul" style="">
                     <li>
                           <i class="icon-li icon-phone"></i>
-                            <?php if ($viewmodel["USER"]["PHONE_VERIFIED"] == 0) { ?>
-                                <span class="text-error">Phone verified</span>
+                            <?php if ($viewmodel["USER"]["PHONE_VERIFIED"] == null) { ?>
+                                <span class="text-error">Phone not verified</span>
                             <?php } else { ?>
                                 <span class="text-success">Phone verified</span>
                             <?php } ?>
                     </li>
                     <li>
                         <i class="icon-li icon-credit-card"></i> 
-                            <?php if (empty($viewmodel["USER"]["BP_PRIMARY_CARD_URI"]) == 0) { ?>
+                            <?php if ($viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null) { ?>
                                 <span class="text-error">Credit card not verified</span>
                             <?php } else { ?>
                                 <span class="text-success">Credit card verified</span>
@@ -78,7 +83,7 @@ $join_date = $date->format('F Y');
                     </li>                 
                     <li>
                         <i class="icon-li icon-usd"></i>
-                            <?php if (empty($viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"]) == 0) { ?>
+                            <?php if ($viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null) { ?>
                                 <span class="text-error">PayPal not verified</span>
                             <?php } else { ?>
                                 <span class="text-success">PayPal verified</span>

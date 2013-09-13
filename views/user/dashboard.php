@@ -1,3 +1,8 @@
+<?php
+    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+?>
+
 <div id="dashboard" class="sheet">
     <legend>Dashboard</legend>
     <div class="tabbable">
@@ -14,7 +19,7 @@
             <div class="tab-pane active" id="lending">
                 <div class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
-                        Requests (<span id="requests-count"><?php echo count($viewmodel["LENDING"]["REQUESTS"]); ?></span>)
+                        Requests (<span id="requests-count"><?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) + count($viewmodel["LENDING"]["REQUESTS"]["PENDING"]); ?></span>)
                     </h4>        
                     <table class="table table-bordered requests-table" style="">
                         <thead>
@@ -29,8 +34,23 @@
                         <tbody>
                              <?php 
                                 $current = 0;
-                                $lender_view = 1;
-                                $transactions = $viewmodel["LENDING"]["REQUESTS"]; 
+                                $lender_view = 1; ?>
+                                <td colspan="5" class="alert alert-error">
+                                    <div style="width: 100%" class="text-center">
+                                        <strong>Open (<?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) ?>)</strong>
+                                    </div>
+                                </td>                            
+                                <?php
+                                $transactions = $viewmodel["LENDING"]["REQUESTS"]["OPEN"]; 
+                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); 
+                                ?>
+                                <td colspan="5" class="alert alert-success">
+                                    <div style="width: 100%" class="text-center">
+                                        <strong>Pending (<?php echo count($viewmodel["LENDING"]["REQUESTS"]["PENDING"]) ?>)</strong>
+                                    </div>
+                                </td>                                 
+                                <?php 
+                                $transactions = $viewmodel["LENDING"]["REQUESTS"]["PENDING"]; 
                                 require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?> 
                         </tbody>
                     </table>
@@ -105,7 +125,7 @@
             <div class="tab-pane" id="borrowing">
                 <div id="" class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
-                        Requests (<span id="requests-count"><?php echo count($viewmodel["BORROWING"]["REQUESTS"]); ?></span>)
+                        Requests (<span id="requests-count"><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) + count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]); ?></span>)
                     </h4>        
                     <table id="" class="table table-bordered requests-table" style="">
                         <thead>
@@ -120,9 +140,24 @@
                         <tbody>
                              <?php 
                                 $current = 0;
-                                $lender_view = 0;
-                                $transactions = $viewmodel["BORROWING"]["REQUESTS"]; 
-                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?> 
+                                $lender_view = 0; ?>
+                                <td colspan="5" class="alert alert-error">
+                                    <div style="width: 100%" class="text-center">
+                                        <strong>Open (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?>)</strong>
+                                    </div>
+                                </td>                            
+                                <?php
+                                $transactions = $viewmodel["BORROWING"]["REQUESTS"]["OPEN"]; 
+                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); 
+                                ?>
+                                <td colspan="5" class="alert alert-success">
+                                    <div style="width: 100%" class="text-center">
+                                        <strong>Pending (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]) ?>)</strong>
+                                    </div>
+                                </td>                                 
+                                <?php 
+                                $transactions = $viewmodel["BORROWING"]["REQUESTS"]["PENDING"]; 
+                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?>  
                         </tbody>
                     </table>
                 </div>

@@ -91,14 +91,15 @@ else: foreach($transactions as $key=>$transaction)
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3>Accept <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
                 </div>
+                
                 <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
-                  
-                        <p>Are you sure?</p>
-                  
+                    <p>Click on "Yes" to confirm.</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button class="btn btn-primary">Yes</button>
+                    <form id="accept" action="/transaction/accept/<?php echo $transaction["TRANSACTION_ID"] ?>/0" method="get">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </form>
                 </div>
             </div>                  
         </div>

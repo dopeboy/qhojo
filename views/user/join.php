@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/user/join.css">
+
 <div class="sheet " id="join" style="">
         <form class="form-submit" id="join" autocomplete="off" action="/user/join/null/1" method="post">
             <legend>Join</legend>	
@@ -41,9 +43,5 @@
         </form>    
 </div>
 
-
-
-
-<link rel="stylesheet" href="/css/user/join.css">
 <script src="/js/user/join.js"></script>
 

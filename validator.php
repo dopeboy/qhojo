@@ -59,7 +59,7 @@ abstract class Validator
 
     static function isValidName ($parameter_value,$parameter_name, $method) 
     {
-        if(preg_match('/[A-Za-z]/', $parameter_value) == 0 || strlen($parameter_value) <= 3 || strlen($parameter_value) >= 15)
+        if(preg_match('/[A-Za-z]/', $parameter_value) == 0 || strlen($parameter_value) <= 1 || strlen($parameter_value) >= 15)
             throw new InvalidNameException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
     }    
     

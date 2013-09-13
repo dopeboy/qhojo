@@ -68,5 +68,17 @@ abstract class Controller
         
         return $parameter_value;
     } 
+    
+    protected function pushReturnURL($url)
+    {
+        $_SESSION["RETURN_URL"] = $url;
+    }
+    
+    protected function popReturnURL()
+    {
+        $tmp = $_SESSION["RETURN_URL"];
+        unset($_SESSION["RETURN_URL"]);
+        return $tmp;
+    }
 }
 ?>

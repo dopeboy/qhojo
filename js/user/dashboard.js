@@ -69,5 +69,5 @@ function customResponseHandler(responseText)
         $('#' + responseText.Source).find('.current-transactions-table tr#' + responseText.TransactionID).fadeOut("slow");
         $('#cancel-' + responseText.TransactionID).modal('hide');
         $('#' + responseText.Source).find('#current-count').text($('#'  + responseText.Source).find('#current-count').text()-1);
-    }
+    }  
 } 

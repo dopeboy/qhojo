@@ -1,0 +1,24 @@
+<?php 
+$transaction = reset($viewmodel); // first element     
+?>
+
+<div class="sheet" id="accept">
+
+<?php if ($this->state == 1) { ?>
+
+    <legend>
+        Reserved - <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo $transaction["TITLE"] ?></a>
+    </legend>
+
+    <p><?php echo $_SESSION["USER"]["FIRST_NAME"] ?>, you have successfully accepted <?php echo $transaction['BORROWER_FIRST_NAME'] ?>'s request to rent your item, <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo $transaction["TITLE"] ?></a>. </p>
+    
+    <p>Your confirmation code is <strong><?php echo $transaction["RESERVATION"]["CONFIRMATION_CODE"] ?></strong>. Hang on to it as you'll need it later on. In the mean time, work with <?php echo $transaction['BORROWER_FIRST_NAME'] ?> over email to work out a time to meet together.</p>
+    <p>
+        We've also sent both of you emails with above details and more.
+    </p>
+    
+<?php } ?>
+    
+</div>
+    
+

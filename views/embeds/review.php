@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/embeds/review.css">
 
-<?php global $item_picture_path, $user_picture_path; ?>
+<?php global $item_picture_path, $user_picture_path, $user_card_subdir;?>
 <?php if (!isset($viewmodel["ITEM_REVIEWS"]) || count($viewmodel["ITEM_REVIEWS"]) == 0): ?> <i>No reviews yet</i>
 
 <?php else: foreach($viewmodel["ITEM_REVIEWS"] as $key=>$review) { ?>
@@ -36,7 +36,7 @@
      <div class="row-fluid review" style="">
         <div class="span1">
             <a href="/user/index/<?php echo $review['REVIEWER_ID']?>">
-                <img src="<?php echo $user_picture_path . $review['REVIEWER_ID'] . "/" . $review['REVIEWER_PROFILE_PICTURE'] ?>" class="img-circle">
+                <img src="<?php echo $user_picture_path . $review['REVIEWER_ID'] . $user_card_subdir . '/' . $review['REVIEWER_PROFILE_PICTURE'] ?>" class="img-circle">
             </a>
         </div>
         <div class="span11">

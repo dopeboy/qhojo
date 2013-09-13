@@ -1,4 +1,14 @@
-<?php global $item_picture_path;global $user_picture_path; global $item_thumb_subdir; ?>
+<?php 
+global $item_picture_path;
+global $user_picture_path; 
+global $item_thumb_subdir; 
+global $user_thumb_subdir;
+
+$disable_borrow = false;
+
+if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $viewmodel['ITEM']["LENDER_ID"]) || $viewmodel['ALREADY_REQUESTED'])
+    $disable_borrow = true;
+?>
 
 
 <div class="sheet">
@@ -42,14 +52,12 @@
         <div class="span3 side-panel">    
             <div class="section split action">
                 <h2 class="text-center" id="rental-rate">$<?php echo $viewmodel['ITEM']['RATE']?> / day</h2>
-                <form action="/item/request/<?php echo $viewmodel['ITEM']['ITEM_ID']?>" method="get">
-                    <button id="rentlink" class="btn btn-success btn-large btn-block <?php if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $viewmodel['ITEM']["LENDER_ID"]) || $viewmodel['ALREADY_REQUESTED']) {?>disabled<?php } ?>" type="submit" >Borrow</button>    
-                </form>                    
+                    <a href="<?php if ($disable_borrow) { echo "javascript:void(0)"; } else { echo "/item/request/" . $viewmodel['ITEM']['ITEM_ID']; }?>" id="rentlink" class="btn btn-success btn-large btn-block <?php if ($disable_borrow) { ?>disabled<?php } ?>" type="button" >Borrow</a>    
             </div>
        
             <div class="section split text-center" id="lender">
                 <a href="/user/index/<?php echo $viewmodel['ITEM']['LENDER_ID']?>">
-                    <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['ITEM']['LENDER_ID'] . "/" . $viewmodel['ITEM']['PROFILE_PICTURE_FILENAME'] ?>">
+                    <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['ITEM']['LENDER_ID'] . $user_thumb_subdir . '/' . $viewmodel['ITEM']['PROFILE_PICTURE_FILENAME'] ?>">
                 </a>
                 <h2 class="" style="">
                     <a href="/user/index/<?php echo $viewmodel['ITEM']['LENDER_ID']?>"><?php echo $viewmodel['ITEM']['LENDER_NAME']; ?></a>

@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="/css/datepicker.css">
 <link rel="stylesheet" href="/css/item/request.css">
 
+<?php
+    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+?>
+
 <div class="sheet">
     <?php if ($this->state == 0) { ?>
         <form class="form-submit" id="request" action="/item/request/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>/1" method="post">

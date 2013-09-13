@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/embeds/card.css">
 
-<?php global $item_picture_path, $user_picture_path, $item_card_subdir; ?>
+<?php global $item_picture_path, $user_picture_path, $item_card_subdir, $user_card_subdir;?>
 <?php if (!isset($viewmodel["ITEMS"]) || count($viewmodel["ITEMS"]) == 0): ?> <i>No items found</i>
 <?php else: foreach($viewmodel["ITEMS"] as $key=>$item) { ?>
 
@@ -24,7 +24,7 @@
                  </div>
                  <div class="row-fluid text-center item-info">
                      <div class="span4 item-lender">
-                          <img class="lender-picture img-circle" src="<?php echo $user_picture_path . $item['LENDER_ID'] . "/" . $item['PROFILE_PICTURE_FILENAME'] ?>">
+                          <img class="lender-picture img-circle" src="<?php echo $user_picture_path . $item['LENDER_ID'] . "/" . $user_card_subdir . '/' . $item['PROFILE_PICTURE_FILENAME'] ?>">
                      </div>
                      <div class="span8 text-left item-details" style="">
                          <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> <?php echo $item['LOCATION'] ?></div>

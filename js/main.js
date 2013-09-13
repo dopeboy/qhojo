@@ -99,8 +99,8 @@ function showResponse(responseText, statusText, xhr, $form)
 
         else   
         {
-            $('.alert-error').fadeIn("slow");
-            $('#error-message').text(responseText.Error.Message);
+            $('#error-banner').fadeIn("slow");
+            $('span#error-message').text(responseText.Error.Message);
             $form.find('button[type=submit]').removeAttr('disabled');
         }
     }

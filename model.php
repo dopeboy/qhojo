@@ -57,16 +57,33 @@ abstract class Model
         return $info;
     }        
         
-        public function sendEmail($from, $to, $replyto, $subject, $message)
+    public function sendEmail($from, $to, $replyto, $subject, $message)
+    {
+        $headers = 'From: ' . $from . "\r\n" .
+                   'Reply-To: ' . $replyto . "\r\n" .
+                   'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+                   'X-Mailer: PHP/' . phpversion();     
+
+        $message = "<html><body>" . $message . "</body></html>";
+        return mail($to, $subject, $message, $headers);            
+    }
+    
+    public function sendText($target_phone, $source_phone, $message, $method, $user_id)
+    {
+        global $TwilioAccountSid;   
+        global $TwilioAuthToken;
+        $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
+        
+        try
         {
-            $headers = 'From: ' . $from . "\r\n" .
-                       'Reply-To: ' . $replyto . "\r\n" .
-                       'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
-                       'X-Mailer: PHP/' . phpversion();     
-            
-            $message = "<html><body>" . $message . "</body></html>";
-            return mail($to, $subject, $message, $headers);            
+            $sms = $client->account->sms_messages->create($source_phone, $target_phone,$message);     
         }
+        
+        catch (Services_Twilio_RestException $e)
+        {
+            throw new TwilioSendTextMessageException($method, $user_id, $e);
+        }
+    }
  
     /** SetExpressCheckout NVP example; last modified 08MAY23.
      *

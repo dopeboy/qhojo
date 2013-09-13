@@ -16,7 +16,8 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "stagin
     $paypal_appid = "APP-80W284485P519543T";
     
     $bp_api_key = "3ec0da1cb80e11e2bb37026ba7d31e6f";
-    
+    $bp_mp_uri = '/v1/marketplaces/TEST-MP1UEXukTLr6ID7auHkkCHd6';
+        
     $borrower_number = '9493287319';
     $lender_number = '9494852584';    
 }
@@ -35,6 +36,7 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     $paypal_appid = "APP-9RX52455H6095371W";
     
     $bp_api_key = "1f2306b8be5711e2ac7e026ba7f8ec28";
+    $bp_mp_uri = '/v1/marketplaces/MPX4F8Wx05ETX8BWY4aC00U';
     
     $borrower_number = '9177466195';
     $lender_number = '3476730097';        
@@ -47,9 +49,12 @@ $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
 $item_picture_path = "/uploads/item/";
 $user_picture_path = "/uploads/user/";
+
 $item_thumb_subdir = '/thumbnail';
 $user_thumb_subdir = '/thumbnail';
+
 $item_card_subdir = '/card';
+$user_card_subdir = '/card';
 
 $results_per_page = 12;
 

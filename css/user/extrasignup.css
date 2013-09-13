@@ -1,0 +1,107 @@
+.modal, .modal.fade.in 
+{ 
+    width: 768px; 
+    margin-left: -384px; 
+}
+
+#upload-picture-btn
+{
+  background-color: hsl(280, 100%, 30%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#aa00ff", endColorstr="#660099");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#aa00ff), to(#660099));
+  background-image: -moz-linear-gradient(top, #aa00ff, #660099);
+  background-image: -ms-linear-gradient(top, #aa00ff, #660099);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #aa00ff), color-stop(100%, #660099));
+  background-image: -webkit-linear-gradient(top, #aa00ff, #660099);
+  background-image: -o-linear-gradient(top, #aa00ff, #660099);
+  background-image: linear-gradient(#aa00ff, #660099);
+  border-color: #660099 #660099 hsl(280, 100%, 25%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+button#profile-picture-submit
+{
+    width: 150px; 
+}
+
+input.paypal
+{
+    width: 300px;
+}
+
+input.phone
+{
+    width: 200px;
+}
+
+#user-signup-nav #nav-container
+{
+    width: 752px; 
+    margin: 0px auto; 
+    background-color: white    
+}
+
+#user-signup-nav .navbar-inner
+{
+    padding: 0px;
+}
+
+#user-signup-nav .navbar-inner, #user-signup-nav .nav 
+{
+    margin: 0px;
+}
+
+#uploaded-profile-picture
+{
+    border: 1px #000000 dashed; 
+    height: 450px; 
+    width: 600px; 
+    margin-bottom: 20px
+}
+
+div#add-pictures
+{
+    position: absolute;
+    z-index: 1 ;
+    margin-top: 210px; 
+    margin-left: 180px; 
+    width: 220px    
+}
+
+#phone-controls
+{
+    margin-bottom: 10px    
+}
+
+#phonenumber
+{
+    margin: 0px;
+}
+
+#phone-verify-btn
+{
+    margin-left: 20px;
+}
+
+#phone-verification-controls
+{
+    margin-bottom: 20px
+}
+
+#verificationcode
+{
+    margin: 0px
+}
+
+.hide-me
+{
+    display:none
+}
+
+.text-error.phone
+{
+    padding-left: 10px;
+}

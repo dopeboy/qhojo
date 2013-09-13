@@ -2,7 +2,8 @@
     <?php 
 
        $requested = $reserved = $exchanged = $returned = $reviewed = '0.1';
-
+        global $item_thumb_subdir; 
+        
        foreach ($transaction['HIST'] as $key=>$detail)
        {            
            if ($detail['STATE_B_ID'] == 200)

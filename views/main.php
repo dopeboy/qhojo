@@ -87,7 +87,7 @@
             </div>
 
             <div class="container">
-                <div class="alert alert-error">
+                <div id="error-banner" class="alert alert-error">
                     <strong>Error: </strong>
                     <span id="error-message"></span>
                     <button type="button" class="close" data-dismiss="alert">&times;</button>

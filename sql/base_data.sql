@@ -1,5 +1,6 @@
 insert into STATE VALUES (100,'INIT',1);
 insert into STATE VALUES (200,'REQUESTED',1);
+insert into STATE VALUES (250,'PENDING',1);
 insert into STATE VALUES (300,'RESERVED',1);
 insert into STATE VALUES (400,'REJECTED',1);
 insert into STATE VALUES (401,'WITHDRAWN',1);
@@ -16,6 +17,8 @@ insert into STATE VALUES (1100,'REVIEWED BY BORROWER',1);
 insert into STATE VALUES (1200,'REVIEWED BY LENDER',1);
 
 insert into EDGE VALUES (0,100,200,'USER REQUESTED ITEM', '%B requested %L\'s item', 1);
+insert into EDGE VALUES (19,200,250,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
+insert into EDGE VALUES (20,250,300,'BORROWER FILLED OUT EXTRA SIGNUP FIELDS', '%B filled out extra signup fields', 1);
 insert into EDGE VALUES (1,200,300,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
 insert into EDGE VALUES (2,200,400,'LENDER REJECTED REQUEST', '%L rejected %B\'s request', 1);
 insert into EDGE VALUES (18,200,401,'BORROWER WITHDREW REQUEST', '%B withdrew the request', 1);

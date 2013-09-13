@@ -1,6 +1,8 @@
+<?php global $item_thumb_subdir; ?>
+
 <div class="media">
     <a class="pull-left" href="/item/index/<?php echo $transaction['ITEM_ID']; ?>">
-        <img src="<?php echo $item_picture_path . $transaction['ITEM_ID'] . "/" . $transaction['ITEM_PICTURE_FILENAME'] ?>" class="thumbnail">
+        <img src="<?php echo $item_picture_path . $transaction['ITEM_ID'] . $item_thumb_subdir . "/" . $transaction['ITEM_PICTURE_FILENAME'] ?>" class="thumbnail">
     </a>
     <div class="media-body">
         <h4>

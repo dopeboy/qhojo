@@ -141,6 +141,9 @@ class ItemModel extends Model
         if ($row['ITEM'] == null)
             throw new RequestInactiveItemException($method, $user_id);
         
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        
         return $row;
     }  
     
@@ -173,6 +176,9 @@ class ItemModel extends Model
         $user_model = new UserModel(); 
         $row["USER"] = $user_model->getUserDetails($user_id);
         $row["ITEM"]["ITEM_ID"] = getRandomID();
+        
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
         
         return $row;
     }    

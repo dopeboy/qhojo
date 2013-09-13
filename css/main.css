@@ -187,7 +187,7 @@ textarea
     padding: 20px;
 }
 
-div.alert
+#error-banner
 {
     display: none;
     width: 50%;
@@ -206,4 +206,5 @@ div.alert-modal
     width: 75%;
     margin-top: 20px;
     margin-bottom: 10px;
+    display: none;
 }

@@ -47,7 +47,40 @@ class PictureModel extends Model
     public function uploadUserPictures($user_id)
     {
         global $user_picture_path;
-        $picture = new UploadHandler(array("upload_dir" => dirname(dirname(__FILE__)) . $user_picture_path . $user_id . '/', "upload_url" => $user_picture_path . $user_id . '/', "entity_id" => $user_id, "is_user" => 1));
+        $picture = new UploadHandler(
+                array(
+                    "upload_dir" => dirname(dirname(__FILE__)) . $user_picture_path . $user_id . '/', 
+                    "upload_url" => $user_picture_path . $user_id . '/', 
+                    "entity_id" => $user_id, 
+                    "is_user" => 1,
+                   "image_versions" => array(
+                            '' => array(
+                                'crop' => true,
+                                'max_width' => 450,
+                                'max_height' => 450,
+                                'jpeg_quality' => 80
+                            ),
+                            'card' => array(
+                                'crop' => true,
+                                'max_width' => 65,
+                                'max_height' => 65,
+                                'jpeg_quality' => 80
+                            ),
+                            'thumbnail' => array(
+                                // Uncomment the following to use a defined directory for the thumbnails
+                                // instead of a subdirectory based on the version identifier.
+                                // Make sure that this directory doesn't allow execution of files if you
+                                // don't pose any restrictions on the type of uploaded files, e.g. by
+                                // copying the .htaccess file from the files directory for Apache:
+                                //'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/thumb/',
+                                //'upload_url' => $this->get_full_url().'/thumb/',
+                                // Uncomment the following to force the max
+                                // dimensions and e.g. create square thumbnails:
+                                'crop' => true,
+                                'max_width' => 316,
+                                'max_height' => 316) 
+                        )                    
+                    ));
     }  
     
     public function deleteItemPicture($method,$item_id, $user_id)

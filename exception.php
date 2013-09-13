@@ -218,5 +218,91 @@ class ItemSubmissionIssueException extends BaseException
     }       
 }
 
+class PaypalCommunicationException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Can't talk to PayPal. Not your fault. We're looking into it.", $method, $user_id, $previous, $modal_id);
+    }       
+}
 
+class InvalidPaypalCredentialsException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Your PayPal account either does not exist or is not verified. Please try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class PhoneVerificationCodeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Unable to send text message to confirm phone number. Please wait 24 hours before trying again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class TwilioSendTextMessageException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Issue with text message service.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class PhoneVerificationInvalidCodeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The supplied verification code does not match the one sent by the system. ", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class PendingTransactionException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The transaction could not be sent to the pending state because the user is not a lender of it or the transaction is already in the pending state.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidEdgeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, $state_a, $state_b, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Invalid edge: " . $state_a . '->' . $state_b, $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidPendingTransaction extends BaseException
+{
+    public function __construct($method, $user_id = 0, $transaction_id, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("This transaction is not in the pending state. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class AddCreditCardException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Error adding your credit card to the system.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class AcceptRequestException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("There was an error with accepting this transaction.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidReservedTransaction extends BaseException
+{
+    public function __construct($method, $user_id = 0, $transaction_id, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("This transaction is not in the reserved state. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
+    }       
+}
 ?>

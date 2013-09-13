@@ -283,7 +283,7 @@ function getURLParameter(name)
 // pre-submit callback 
 function showRequest(formData, jqForm, options) 
 { 
-    $('.alert-error').hide();
+    $('#error-banner').hide();
     var $pass = true;
 
     // jqForm is a jQuery object encapsulating the form element.  To access the 
@@ -337,7 +337,7 @@ function showResponse(responseText, statusText, xhr, $form)
 
         else   
         {
-            $('.alert-error').fadeIn("slow");
+            $('#error-banner').fadeIn("slow");
             $('#error-message').text(responseText.Error.Message);
             $form.find('button[type=submit]').removeAttr('disabled');
             
