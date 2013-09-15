@@ -1,4 +1,4 @@
-<?php if ($code != 0) { ?>
+<?php if ($code != 0 && User::isUserSignedIn()) { ?>
 
 <div class="alert alert-info">
     <strong>Reminder: </strong>

@@ -4,8 +4,13 @@ class User extends Controller
 {
 	protected function signin() 
 	{
-            if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0))
+            if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0 || $this->state == 100))
+            {
+                if (!empty($this->urlvalues['return']))
+                    $this->pushReturnURL ($this->urlvalues['return']);
+                                    
                 $this->returnView(null, $method);
+            }
            
             else if (($method = Method::POST) && User::userNotSignedIn($method) && $this->state == 1)
             {
@@ -197,6 +202,8 @@ class User extends Controller
         
         private function directUser($user_info)
         {
+            $url = $this->popReturnURL();
+                    
             $_SESSION["USER"]['USER_ID']  = $user_info["USER_ID"];
             $_SESSION["USER"]['FIRST_NAME']  = $user_info["FIRST_NAME"];
             $_SESSION["USER"]['NAME'] = $user_info["NAME"];
@@ -204,12 +211,17 @@ class User extends Controller
             $_SESSION["RETURN_URL"] = null;
             
             // If the user came in from another page, send them back to where they were
-            if (($url = $this->popReturnURL()) != null)
-                $this->returnView($url, Method::POST);
+            if ($url != null)
+                $this->returnView(json_encode(array("URL" => $url)), Method::POST);
 
             // Else, send them to the search page
             else
                 $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);                            
+        }
+        
+        public static function isUserSignedIn()
+        {
+            return !empty($_SESSION["USER"]["USER_ID"]);
         }
         
         public static function userSignedIn($method)

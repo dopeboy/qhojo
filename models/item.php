@@ -233,6 +233,9 @@ class ItemModel extends Model
         if ($row["ITEM"] == null)
             throw new ItemSubmissionIssueException($method,$user_id);
         
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);        
+        
         return $row;
     }
     

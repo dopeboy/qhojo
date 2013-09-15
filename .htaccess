@@ -26,6 +26,7 @@ RewriteRule ^picture/delete/?([a-zA-Z0-9]*)?/?([0-9]*)?/? index.php?controller=p
 
 # You can supply a return url to the signup and extrasignup pages
 RewriteRule ^user/extrasignup/null/0/? index.php?controller=user&action=extrasignup&id=null&state=0 [QSA]
+RewriteRule ^user/signin/null/100/? index.php?controller=user&action=signin&id=null&state=100 [QSA]
 
 # The main rule
 RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3&state=$4 [NC,L]

@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/css/user/signin.css">
-<script src="/js/user/signin.js"></script>
 
 <div class="sheet" id="signin" style="">
     <form id="form-signin" class="form-submit" action="/user/signin/null/1" method="post">
@@ -33,8 +32,13 @@
         </div>
         
     </form>    
+    
+    
+    <div id="join">
+        Not a member? Join <a href="/user/join/">here</a>
+    </div>
 </div>
 
-
+<script src="/js/user/signin.js"></script>
 
 

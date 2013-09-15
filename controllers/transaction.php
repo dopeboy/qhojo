@@ -82,12 +82,8 @@ class Transaction extends Controller
             $user_model = new UserModel();
             
             if (($status = $user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"])))
-            {
-                //$this->pushReturnURL();
                 header('Location: /user/extrasignup/null/0' . '?return=' . $_SERVER['REQUEST_URI']);
-            }
             
-            // Find the borrower ID on the current transaction
             else if (($status = $user_model->userNeedsExtraFields($this->transaction_model->getBorrowerOfRequest($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))))))
                 header('Location: /transaction/pending/' . $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty')) . '/0');
             

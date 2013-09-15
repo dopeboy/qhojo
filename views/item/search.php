@@ -8,7 +8,9 @@
     
     if ($user_id != null): 
         $title = $viewmodel["USER_FIRST_NAME"] . "'s Items"; 
-    else: 
+    elseif ($query == null && $location == null && $user_id == null):
+        $title = "All Items";
+    else:
         $title = "Search Results"; 
     
     endif;

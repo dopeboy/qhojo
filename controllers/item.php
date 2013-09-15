@@ -20,7 +20,7 @@ class Item extends Controller
         protected function index() 
 	{
             $method = Method::GET;
-            $this->returnView($this->item_model->index($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty'))),$method);
+            $this->returnView($this->item_model->index($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : null, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty'))),$method);
 	}
         
 	protected function request() 

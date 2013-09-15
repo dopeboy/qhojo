@@ -137,10 +137,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/quality.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/quality.png">
             </div>
         </div>
         <div class="span8">
@@ -153,10 +151,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/safety.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/safety.png">
             </div>
         </div>
         <div class="span8">
@@ -169,10 +165,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/cost.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/cost.png">
             </div>
         </div>
         <div class="span8">
@@ -237,10 +231,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/theft.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/theft.png">
             </div>
         </div>
         <div class="span8">
@@ -253,10 +245,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/damage.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/damage.png">
             </div>
         </div>
         <div class="span8">
@@ -269,10 +259,8 @@
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/late_policy.png">
-                </a>
+            <div class="media text-center">
+                <img src="/img/late_policy.png">
             </div>
         </div>
         <div class="span8">

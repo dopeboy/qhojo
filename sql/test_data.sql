@@ -253,8 +253,8 @@ insert into TRANSACTION VALUES
     100001
 );
 
-insert into DETAIL VALUES (126666, 0,'2013-07-13','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100001); -- put json here for confirmation code
-insert into DETAIL VALUES (126666, 1,'2013-07-12',null,100001); -- put json here for confirmation code
+insert into DETAIL VALUES (126666, 0,'2013-07-12','{"START_DATE":"08/01", "END_DATE" : "08/02", "MESSAGE" : "Hi I\d like to rent this for an upcoming gig."}',100001); -- put json here for confirmation code
+insert into DETAIL VALUES (126666, 1,'2013-07-13',null,100001); -- put json here for confirmation code
 insert into DETAIL VALUES (126666, 3,'2013-07-13',null,100000); -- json here, bp hold uri
 insert into DETAIL VALUES (126666, 7,'2013-07-24',null,100001);
 insert into DETAIL VALUES (126666, 12,'2013-07-24','{"COMMENT":"Sucked", "RATING" : 0}',100001);

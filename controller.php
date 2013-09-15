@@ -31,12 +31,26 @@ abstract class Controller
     public function executeAction() 
     {
         function exception_handler($exception) 
-        {
-            // TODO: use $demo to give a prettier error message for production. Use templated error pages
-            error_log($exception);
-            echo $exception;
+        {                
+            // If the exception is a usernotloggedin, save the return URL and redirect them to the signin page
+            if (get_class($exception) == "UserNotLoggedInException" && $exception->getMethod() == Method::GET)
+                header('Location: /user/signin/null/100?return=' . $_SERVER['REQUEST_URI']);
+            
+            else if (get_parent_class($exception) == "BaseException" && $exception->getMethod() == Method::GET)
+            {                
+                error_log($exception);
+                $viewmodel = $exception;
+                $viewloc = 'views/error.php';
+                require('views/main.php');
+            }
+            
+            else
+            {
+                error_log($exception);
+                echo $exception;
+            }
         }   
-       
+
         set_exception_handler('exception_handler'); 
 
         return $this->{$this->action}();

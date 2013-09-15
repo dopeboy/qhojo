@@ -23,6 +23,7 @@ class PictureModel extends Model
                                 'jpeg_quality' => 80
                             ),
                             'card' => array(
+                                'crop' => true,
                                 'max_width' => 300,
                                 'max_height' => 226,
                                 'jpeg_quality' => 80
@@ -37,7 +38,7 @@ class PictureModel extends Model
                                 //'upload_url' => $this->get_full_url().'/thumb/',
                                 // Uncomment the following to force the max
                                 // dimensions and e.g. create square thumbnails:
-                                //'crop' => true,
+                                'crop' => true,
                                 'max_width' => 150,
                                 'max_height' => 115) 
                         )
@@ -56,8 +57,8 @@ class PictureModel extends Model
                    "image_versions" => array(
                             '' => array(
                                 'crop' => true,
-                                'max_width' => 450,
-                                'max_height' => 450,
+                                'max_width' => 305,
+                                'max_height' => 305,
                                 'jpeg_quality' => 80
                             ),
                             'card' => array(
@@ -77,8 +78,8 @@ class PictureModel extends Model
                                 // Uncomment the following to force the max
                                 // dimensions and e.g. create square thumbnails:
                                 'crop' => true,
-                                'max_width' => 316,
-                                'max_height' => 316) 
+                                'max_width' => 200,
+                                'max_height' => 200) 
                         )                    
                     ));
     }  

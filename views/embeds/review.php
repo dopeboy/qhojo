@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/embeds/review.css">
 
-<?php global $item_picture_path, $user_picture_path, $user_card_subdir;?>
+<?php global $item_picture_path, $user_picture_path, $user_card_subdir, $stock_user_card;?>
 <?php if (!isset($viewmodel["ITEM_REVIEWS"]) || count($viewmodel["ITEM_REVIEWS"]) == 0): ?> <i>No reviews yet</i>
 
 <?php else: foreach($viewmodel["ITEM_REVIEWS"] as $key=>$review) { ?>
@@ -36,13 +36,13 @@
      <div class="row-fluid review" style="">
         <div class="span1">
             <a href="/user/index/<?php echo $review['REVIEWER_ID']?>">
-                <img src="<?php echo $user_picture_path . $review['REVIEWER_ID'] . $user_card_subdir . '/' . $review['REVIEWER_PROFILE_PICTURE'] ?>" class="img-circle">
+                <img src="<?php echo $review['REVIEWER_PROFILE_PICTURE'] == null ? $stock_user_card : $user_picture_path . $review['REVIEWER_ID'] . $user_card_subdir . '/' . $review['REVIEWER_PROFILE_PICTURE'] ?>" class="img-circle">
             </a>
         </div>
         <div class="span11">
             <div class="row-fluid review-top" style="">
                 <div class="pull-left">
-                    <i class="icon-thumbs-<?php echo $rating == 0 ? "down" : "up"?>"></i> by 
+                    <i class="icon-thumbs-<?php echo $rating == 0 ? "up" : "down"?>"></i> by 
                     <a href="/user/index/<?php echo $review['REVIEWER_ID']?>">
                         <?php echo $review['REVIEWER_NAME'] ?>
                     </a>

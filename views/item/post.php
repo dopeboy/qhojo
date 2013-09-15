@@ -1,4 +1,4 @@
-<?php global $item_picture_path;global $user_picture_path;global $user_thumb_subdir;?>
+<?php global $item_picture_path;global $user_picture_path;global $user_thumb_subdir;global $stock_user_tn;?>
 
 <link rel="stylesheet" href="/css/item/index.css">
 <link rel="stylesheet" href="/css/item/post.css">
@@ -92,7 +92,7 @@
 
                 <div class="section split text-center" id="lender">
                     <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>">
-                        <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
+                        <img id="lender-picture" class="img-circle" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
                     </a>
                     <h2 class="" style="">
                         <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>"><?php echo $viewmodel['USER']['NAME']; ?></a>

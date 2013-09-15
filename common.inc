@@ -39,10 +39,10 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     $bp_mp_uri = '/v1/marketplaces/MPX4F8Wx05ETX8BWY4aC00U';
     
     $borrower_number = '9177466195';
-    $lender_number = '3476730097';        
+    $lender_number = '3476730097';    
 }
 
-$version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
+//$version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
 
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
@@ -56,8 +56,18 @@ $user_thumb_subdir = '/thumbnail';
 $item_card_subdir = '/card';
 $user_card_subdir = '/card';
 
+$stock_user_big = '/img/stock_big.png';
+$stock_user_tn = '/img/stock_tn.png';
+$stock_user_card = '/img/stock_card.png';
+
 $results_per_page = 12;
 
+$domain = "http://" . $_SERVER['SERVER_NAME'];
+
+$email_message_footer = "-Team Qhojo<br/><a href=\"{$domain}\">{$domain}</a>";
+$do_not_reply_email = "donotreply@qhojo.com";
+$support_email = "support@qhojo.com";
+    
 function reverseGeoCode($zipcode)
 {
     $jsonurl = "http://maps.googleapis.com/maps/api/geocode/json?address=" . $zipcode . "&sensor=false";
@@ -79,6 +89,19 @@ function startsWith($haystack, $needle)
 {
     return !strncmp($haystack, $needle, strlen($needle));
 }     
+
+function sendEmail($from, $to, $replyto, $subject, $message)
+{
+    global $email_message_footer;
+    
+    $headers = 'From: ' . $from . "\r\n" .
+               'Reply-To: ' . $replyto . "\r\n" .
+               'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+               'X-Mailer: PHP/' . phpversion();     
+
+    $message = "<html><body>" . $message . "<br/><br/>" . $email_message_footer . "</body></html>";
+    return mail($to, $subject, $message, $headers);            
+}
 
 $transaction_fee_variable = 0.08;
 $transaction_fee_fixed = 0.00;

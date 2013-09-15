@@ -7,31 +7,54 @@ abstract class BaseException extends Exception
     protected $json = null;
     protected $method = null;
     protected $modal_id = null;
+    public $message = null;
     
     public function __construct($message, $method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
         $this->user_id = $user_id;
         $this->timestamp = new DateTime();
         $this->message = $message;
+        $this->method = $method;
         $this->view = $method;
         $this->modal_id = $modal_id;
-        $this->json = json_encode(array ("Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
+        $this->json = json_encode(array ("Exception" => get_class($this), "Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
         parent::__construct($message, null, $previous);
+        
+        global $demo;
+        
+        // If it's production, let's send an email to support@qhojo.com
+        if ($demo == false)
+        {
+            global $support_email;
+            $from = $to = $replyto = $support_email;
+            $subject = "EXCEPTION - " . get_class($this);
+            $message = $this->printMe();
+            
+            sendEmail($from, $to, $replyto, $subject, $message);
+        }        
     }     
+    
+    private function printMe()
+    {
+        $output = "##### START OF EXCEPTION ####";
+        $output .= "<pre>" . print_r(json_decode($this->json),true) . "</pre>";
+        $output .= "##### END OF EXCEPTION ####";        
+        return $output;        
+    }
     
     public function __toString()
     {
         if ($this->view == Method::GET)
-        {
-            $output = "##### START OF EXCEPTION ####";
-            $output .= "<pre>" . print_r(json_decode($this->json),true) . "</pre>";
-            $output .= "##### END OF EXCEPTION ####";        
-            return $output;
-        }
+            return $this->printMe();
         
         else if ($this->view == Method::POST)
             return $this->json;
-    }      
+    }
+    
+    public function getMethod()
+    {
+        return $this->method;
+    }
 }
 
 class InvalidLoginException extends BaseException

@@ -56,17 +56,6 @@ abstract class Model
 
         return $info;
     }        
-        
-    public function sendEmail($from, $to, $replyto, $subject, $message)
-    {
-        $headers = 'From: ' . $from . "\r\n" .
-                   'Reply-To: ' . $replyto . "\r\n" .
-                   'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
-                   'X-Mailer: PHP/' . phpversion();     
-
-        $message = "<html><body>" . $message . "</body></html>";
-        return mail($to, $subject, $message, $headers);            
-    }
     
     public function sendText($target_phone, $source_phone, $message, $method, $user_id)
     {

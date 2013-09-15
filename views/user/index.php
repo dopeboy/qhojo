@@ -4,12 +4,15 @@ global $item_picture_path, $user_picture_path;
 $date = new DateTime($viewmodel["USER"]["JOIN_DATE"]);
 $join_date = $date->format('F Y');
 
+global $stock_user_big;
 ?>
 
 <?php
     $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
     require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
 ?>
+
+<link rel="stylesheet" href="/css/user/index.css">
 
 <div class="sheet">
     <legend><?php echo $viewmodel["USER"]["NAME"]?></legend>
@@ -18,7 +21,7 @@ $join_date = $date->format('F Y');
         <div class="span4">
             <div class="section split" id="user-general">
                 <div class="text-center">
-                    <img id="user-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel["USER"]["USER_ID"] . "/" . $viewmodel["USER"]["PROFILE_PICTURE_FILENAME"] ?>">    
+                    <img id="user-picture" class="img-circle" src="<?php echo $viewmodel["USER"]["PROFILE_PICTURE_FILENAME"] == null ? $stock_user_big : $user_picture_path . $viewmodel["USER"]["USER_ID"] . "/" . $viewmodel["USER"]["PROFILE_PICTURE_FILENAME"] ?>">    
                 </div>
                 
                 <h4 class=""><?php echo $viewmodel["USER"]["NAME"]?></h4>
@@ -101,7 +104,7 @@ $join_date = $date->format('F Y');
                     <h4 style="">Hi! I'm <?php echo $viewmodel["USER"]["FIRST_NAME"]?></h4>
                 </div>
                 <div id="bottom" style="">
-                    <?php echo $viewmodel["USER"]["BLURB"]?>
+                    <?php echo $viewmodel["USER"]["BLURB"] == null ? "<i>No blurb yet</i>" : $viewmodel["USER"]["BLURB"]?>
                 </div>
             </div>
             <div id="reviews">
@@ -124,6 +127,3 @@ $join_date = $date->format('F Y');
         </div>
     </div>
 </div>
-
-<link rel="stylesheet" href="/css/user/index.css">
-<script src="/js/user/index.js"></script>

@@ -3,6 +3,7 @@ global $item_picture_path;
 global $user_picture_path; 
 global $item_thumb_subdir; 
 global $user_thumb_subdir;
+global $stock_user_tn;
 
 $disable_borrow = false;
 
@@ -57,7 +58,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
        
             <div class="section split text-center" id="lender">
                 <a href="/user/index/<?php echo $viewmodel['ITEM']['LENDER_ID']?>">
-                    <img id="lender-picture" class="img-circle" src="<?php echo $user_picture_path . $viewmodel['ITEM']['LENDER_ID'] . $user_thumb_subdir . '/' . $viewmodel['ITEM']['PROFILE_PICTURE_FILENAME'] ?>">
+                    <img id="lender-picture" class="img-circle" src="<?php echo $viewmodel['ITEM']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['ITEM']['LENDER_ID'] . $user_thumb_subdir . '/' . $viewmodel['ITEM']['PROFILE_PICTURE_FILENAME']; ?>">
                 </a>
                 <h2 class="" style="">
                     <a href="/user/index/<?php echo $viewmodel['ITEM']['LENDER_ID']?>"><?php echo $viewmodel['ITEM']['LENDER_NAME']; ?></a>
