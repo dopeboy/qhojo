@@ -336,4 +336,29 @@ class InvalidReportDamageException extends BaseException
         parent::__construct("Either you weren't involved in the transaction or the item has already been reported as damaged. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
     }       
 }
+
+class InvalidDamageRatingException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null) 
+    {
+        parent::__construct("An invalid damage rating was supplied. Please try again.", $method, $user_id, $previous);
+    }     
+}
+
+class HoldNotCapturedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null) 
+    {
+        parent::__construct("The hold was not captured.", $method, $user_id, $previous);
+    }     
+}
+
+class DamageReportSubmissionFailureException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Something went wrong. Your damage report didn't get submitted to the system.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 ?>

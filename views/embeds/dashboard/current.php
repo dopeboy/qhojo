@@ -107,6 +107,3 @@ else: foreach($transactions as $key=>$transaction)
  </tr>
 
 <?php } endif; ?>
-
-<link type="text/css" rel="stylesheet" href="/css/jquery.dropdown.css" />
-<script type="text/javascript" src="/js/jquery.dropdown.min.js"></script>

@@ -171,7 +171,7 @@ class TransactionModel extends Model
 
         // If we get no results, that means the review didn't submit successfully
         if ($row == null)
-            throw new ReviewSubmissionFailureException($method);       
+            throw new ReviewSubmissionFailureException($method,$user_id);       
         
         $clause = $row["LENDER_FLAG"] == 1 ? "LENDER_ID" : "BORROWER_ID";
         $db_view = $row["LENDER_FLAG"] == 1 ? "COMPLETED_BY_LENDER_VW" : "COMPLETED_BY_BORROWER_VW";
@@ -300,14 +300,14 @@ class TransactionModel extends Model
         $start_date = date("m/d", strtotime($data->{"START_DATE"}));
         $end_date = date("m/d", strtotime($data->{"END_DATE"}));
 
-        // Send email to lender
+        // Send email to lender & borrower
         $message = "Hi {$row["LENDER_FIRST_NAME"]} and {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
-        $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to rent your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}. Your guys' confirmation code is <b>{$cc}</b>.<br/><br/>";
+        $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to rent your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}.<br/><br/>";
+        $message .= "Your guys' confirmation code is <strong>{$cc}</strong>.<br/><br/>";
         $message .= "Here's what the both of you have to do next:<br/><br/>";
         $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
         $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
-        $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
-        $message .= "Questions? Contact us at <a href=\"mailto:{$support_email}\">{$support_email}</a>";
+        $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.";
         
         $subject = "{$row["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$row["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
@@ -392,8 +392,7 @@ class TransactionModel extends Model
                 $message .= "Here's what the both of you have to do next:<br/><br/>";
                 $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
                 $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
-                $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
-                $message .= "Questions? Contact us at <a href=\"mailto:{$support_email}\">{$support_email}</a>";
+                $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.";
 
                 $subject = "{$transaction["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$transaction["TRANSACTION_ID"]}";
                 sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);                    
@@ -530,19 +529,18 @@ class TransactionModel extends Model
         $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $borrower["USER_ID"]);
         
         // Send emails
-        global $do_not_reply_email,$support_email;
+        global $do_not_reply_email,$support_email, $domain;
         
         // Send email to both
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "The rental period has started. We have received {$transaction["BORROWER_FIRST_NAME"]}'s confirmation that they are OK with the item. {$transaction["LENDER_FIRST_NAME"]}, if you haven't already, you can hand your item over to {$transaction["BORROWER_FIRST_NAME"]} to start the rental period.<br/><br/>";
         $message .= "{$transaction["BORROWER_FIRST_NAME"]}, we have placed a \${$transaction["DEPOSIT"]} hold on your credit card. This hold will be released at the end of the rental period, " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/><br/>";
-        $message .= "As a reminder, your guys' confirmation code is: {$transaction["RESERVATION"]["CONFIRMATION_CODE"]}<br/><br/>";
+        $message .= "As a reminder, your guys' confirmation code is: <strong>{$transaction["RESERVATION"]["CONFIRMATION_CODE"]}</strong>.<br/><br/>";
         $message .= "Here's what you guys need to do next:<br/><br/>";
         $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, rock out with your rented gear until " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/>";
         $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/>";
-        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. Once you have, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>.<br/>";
-        $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
-        $message .= "Questions? Contact us at <a href=\"mailto:{$support_email}\">{$support_email}</a>";
+        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/>";
+        $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.";
         
         $subject = "{$transaction["TITLE"]} - EXCHANGED - Item has been exchanged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
@@ -645,12 +643,11 @@ class TransactionModel extends Model
         
         // Send email to both
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
-        $message .= "The transaction is now complete. We have recezived {$transaction["LENDER_FIRST_NAME"]}'s confirmation that they are OK with the returned item. {$transaction["BORROWER_FIRST_NAME"]}, if you haven't already, you can return the item to {$transaction["LENDER_FIRST_NAME"]}.<br/><br/>";
-        $message .= "{$transaction["BORROWER_FIRST_NAME"]}, we have released the \${$transaction["DEPOSIT"]} hold on your credit card and charged you \${$total_without_fee}<br/><br/>";
-        $message .= "{$transaction["LENDER_FIRST_NAME"]}, we have deposited \${$total_with_fee} into your PayPal account.<br/><br/>";
+        $message .= "The transaction is now complete. We have received {$transaction["LENDER_FIRST_NAME"]}'s confirmation that they are OK with the returned item. {$transaction["BORROWER_FIRST_NAME"]}, if you haven't already, you can return the item to {$transaction["LENDER_FIRST_NAME"]}.<br/><br/>";
+        $message .= "{$transaction["BORROWER_FIRST_NAME"]}, we have released the \${$transaction["DEPOSIT"]} hold on your credit card and charged you \${$total_without_fee} for the rental.<br/><br/>";
+        $message .= "{$transaction["LENDER_FIRST_NAME"]}, we have deposited \${$total_with_fee} into your PayPal account. To understand the fees assessed to this transaction, please visit our <a href=\"{$domain}/document/fees/\">fees page</a>.<br/><br/>";
         $message .= "Please review how the transaction went. Leave feedback by following the link below:<br/><br/>";
-        $message .= "<a href=\"{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0\">{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0</a><br/><br/>";
-        $message .= "Questions? Contact us at <a href=\"mailto:{$support_email}\">{$support_email}</a>";
+        $message .= "<a href=\"{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0\">{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0</a>";
         
         $subject = "{$transaction["TITLE"]} - RETURNED - Item has been returned - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
@@ -715,6 +712,65 @@ class TransactionModel extends Model
         $viewmodel["DAMAGE_OPTIONS"] =  $rows;
         
         return $viewmodel;
+    }
+    
+    // We have to figure out two things: (1) is this the lender or borrower and (2) are we coming from the exchanged or late state?
+    public function submitDamageReport($method, $user_id, $transaction_id, $damage_rating, $comments)
+    {
+        $viewmodel = $this->damaged($method, $user_id, $transaction_id);
+        $transaction = $viewmodel["TRANSACTION"];
+        
+        $state_a_id =  $transaction["FINAL_STATE_ID"];
+        $state_b_id = $transaction["LENDER_FLAG"] == 1 ? 800 : 801;
+        
+        $this->insertDetail($method, $transaction_id, $this->getEdgeID($state_a_id,$state_b_id,$method, $user_id), array("COMMENT" => $comments, "DAMAGE_ID" => $damage_rating), $user_id);          
+        
+        global $bp_api_key;
+
+        Balanced\Settings::$api_key = $bp_api_key;
+        Httpful\Bootstrap::init();
+        RESTful\Bootstrap::init();
+        Balanced\Bootstrap::init();
+        
+        // Also, capture the hold. Let's treat it non-fatal for now if the hold capture fails (ie don't throw it).
+        try
+        {
+            $hold = Balanced\Hold::get($transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"]);
+            $hold->capture();
+        }
+
+        catch (Exception $e)
+        {
+            new HoldNotCapturedException($method, $user_id, $e);
+        }        
+        
+        global $do_not_reply_email,$support_email;
+        
+        // Finally, send the email to both the lender and borrower
+        $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+        $message .= ($transaction["LENDER_FLAG"] == 1 ? $transaction["LENDER_FIRST_NAME"] : $transaction["BORROWER_FIRST_NAME"]) . " has reported item \"{$transaction["TITLE"]}\" as damaged and submitted an accompanying report detailing the damage.<br/><br/>";
+        $message .= "We have captured the hold of \${$transaction["DEPOSIT"]} on {$transaction["BORROWER_FIRST_NAME"]}'s card as a precautionary measure.<br/><br/>";
+        $message .= "Our staff will work with the both of you to determine the extent of the damage and how to best remediate it. You will be receive an email from a staff member shortly to start this process.";
+        
+        $subject = "{$transaction["TITLE"]} - REPORTED AS DAMAGED - Item has been reported as damaged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+        
+        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);           
+    }
+    
+    public function damageReportSubmitted($method, $user_id, $transaction_id)
+    {
+        $sqlParameters[":transaction_id"] =  $transaction_id;
+        $sqlParameters[":user_id"] =  $user_id;
+        
+        $preparedStatement = $this->dbh->prepare('select * from DAMAGED_VW where TRANSACTION_ID=:transaction_id and (LENDER_ID=:user_id or BORROWER_ID=:user_id)');
+        $preparedStatement->execute($sqlParameters);
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+        // If we get no results, that means the review didn't submit successfully
+        if ($rows == null)
+            throw new DamageReportSubmissionFailureException($method, $user_id);       
+        
+        return reset($this->denormalize($rows));
     }
     
     private function paypalMassPayToLender($paypal_email, $amount)

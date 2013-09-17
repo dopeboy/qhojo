@@ -86,6 +86,12 @@ abstract class Validator
         if (!is_int(intval($parameter_value)) || $parameter_value < 1 || $parameter_value > 2500)
             throw new InvalidItemHoldValueException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
     }    
+    
+    static function isValidDamageRating ($parameter_value,$parameter_name, $method) 
+    {
+        if ($parameter_value != 0 && $parameter_value != 1 && $parameter_value != 2)
+            throw new InvalidDamageRatingException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
+    }        
 }
 
 ?>

@@ -45,7 +45,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
 
                 <div class="subsection" id="reviews">
                     <h3>Reviews</h3>
-                    <?php require_once(dirname(dirname(__FILE__)) . '/embeds/review.php'); ?>            
+                    <?php $show_item = 0; require_once(dirname(dirname(__FILE__)) . '/embeds/review.php'); ?>            
                  </div> 
             </div>
         </div>

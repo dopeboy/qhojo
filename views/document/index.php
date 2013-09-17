@@ -5,88 +5,8 @@
      
     <h1 style="">Gear in New York City</h1>                             
  
-    <div class="row-fluid text-center" style="">
-
-<!--         <div class="span4" style="">
-             <div class="card left"  style="">
-                 <div class="item-image" style="background-image: url('/img/card_image2.png');">
-                     <div class="item-price">
-                         $25 
-                         <hr/>
-                         per day
-                     </div>
-                    <div class="item-title" >
-                        Canon 7D
-                    </div>                     
-                 </div>
-                 <div class="row-fluid text-center item-info">
-                     <div class="span4 item-lender">
-                          <img class="lender-picture img-circle" src="img/me.jpg">
-                     </div>
-                     <div class="span8 text-left item-details" style="">
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Brooklyn, NY</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a week</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Number of Transactions" style=""><i class="icon-check"></i> 23</div>
-                     </div>                      
-                 </div>                 
-             </div>
-         </div>
-         
-         
-         
-         <div class="span4" >
-             <div class="card middle">
-                 <div class="item-image" style="background-image: url('/img/card_image3.png');">
-                     <div class="item-price">
-                         $12 
-                         <hr/>
-                         per day
-                     </div>
-                    <div class="item-title" >
-                        Canon S95
-                    </div>                     
-                 </div>
-                 <div class="row-fluid text-center item-info">
-                     <div class="span4 item-lender">
-                          <img class="lender-picture img-circle" src="img/guido.jpg">
-                     </div>
-                     <div class="span8 text-left item-details" style="">
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Manhattan, NY</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a day</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
-                     </div>                      
-                 </div>                 
-             </div>
-         </div>
-         
-         <div class="span4" >
-             <div class="card right" style="">
-                 <div class="item-image" style="background-image: url('/img/card_image4.png');">
-                     <div class="item-price">
-                         $25 
-                         <hr/>
-                         per day
-                     </div>
-                    <div class="item-title" >
-                        Sigma 10-22mm Wideangle Lens
-                    </div>                     
-                 </div>
-                 <div class="row-fluid text-center item-info">
-                     <div class="span4 item-lender">
-                          <img class="lender-picture img-circle" src="img/sarohini.jpg">
-                     </div>
-                     <div class="span8 text-left item-details" style="">
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Manhattan, NY</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a few hours</div>
-                         <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
-                     </div>                      
-                 </div>                 
-             </div>
-         </div>-->
-         
-    
-    <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>
-                     
+    <div class="row-fluid text-center" style="">    
+        <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>             
      </div>                
 </div>
 
@@ -201,7 +121,7 @@
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a 8% commission fee.</p>
+                 <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a <a href="/document/fees">small commission fee</a>.</p>
              </div>                               
          </div>                    
     </div>

@@ -43,9 +43,15 @@
             <div class="row-fluid review-top" style="">
                 <div class="pull-left">
                     <i class="icon-thumbs-<?php echo $rating == 0 ? "up" : "down"?>"></i> by 
-                    <a href="/user/index/<?php echo $review['REVIEWER_ID']?>">
-                        <?php echo $review['REVIEWER_NAME'] ?>
-                    </a>
+                    <?php if ($review["REVIEWER_ACTIVE"] == 1) { ?><a href="/user/index/<?php echo $review['REVIEWER_ID']?>"><?php } ?>
+                    <?php echo $review['REVIEWER_NAME'] ?>
+                    <?php if ($review["REVIEWER_ACTIVE"] == 1) { ?></a><?php } ?>
+                    <?php if ($show_item == 1) { ?>
+                        for 
+                        <?php if ($review["ITEM_ACTIVE"] == 1) { ?><a href="/item/index/<?php echo $review['ITEM_ID']?>"><?php } ?>
+                        <?php echo $review['ITEM_TITLE'] ?>
+                        <?php if ($review["ITEM_ACTIVE"] == 1) { ?></a><?php } ?>    
+                    <?php } ?>
                 </div>
                 <div class="pull-right" style="">
                     <?php echo $diff_output_string; ?>

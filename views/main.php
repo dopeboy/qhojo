@@ -104,14 +104,13 @@
         <div id="footer">
             <div class="container">
                 <ul class="nav nav-pills">
-                    <li class="">
-                      <a href="#">about</a>
-                    </li>
-                    <li><a href="#">blog</a></li>
-                    <li><a href="#">legal</a></li>
-                    <li><a href="#">contact</a></li>
-                    <li class="disabled"><a href="">v0.2.2-8</a></li>
-                    <li class="disabled"><a href="#">© 2013 qhojo LLC</a></li>
+                    <li><a href="/document/about">about</a></li>
+                    <li><a href="http://qhojo.wordpress.com/">blog</a></li>
+                    <li><a href="/document/faq">faq</a></li>
+                    <li><a href="/document/contact">contact</a></li>
+                    <li><a href="/document/legal">legal</a></li>
+                    <li class="disabled"><a href="javascript:void(0);">v2.0.0</a></li>
+                    <li class="disabled"><a href="javascript:void(0);">© 2013 qhojo LLC</a></li>
               </ul>
             </div>
         </div>

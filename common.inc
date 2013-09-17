@@ -66,25 +66,13 @@ $results_per_page = 12;
 
 $domain = "http://" . $_SERVER['SERVER_NAME'];
 
-$email_message_footer = "-Team Qhojo<br/><a href=\"{$domain}\">{$domain}</a>";
-$do_not_reply_email = "donotreply@qhojo.com";
 $support_email = "support@qhojo.com";
-    
-function reverseGeoCode($zipcode)
-{
-    $jsonurl = "http://maps.googleapis.com/maps/api/geocode/json?address=" . $zipcode . "&sensor=false";
-    $json = file_get_contents($jsonurl);
-    print_r(json_decode($json,true),true);    
-}
+$email_message_footer = "-Team Qhojo<br/><a href=\"mailto:{$support_email}\">{$support_email}</a><br/><a href=\"{$domain}\">{$domain}</a>";
+$do_not_reply_email = "donotreply@qhojo.com";
 
 function getRandomID()
 {
     return rand(100000,999999);
-}
-
-function getRandomGUID()
-{
-    return uniqid();
 }
 
 function startsWith($haystack, $needle)
@@ -105,7 +93,7 @@ function sendEmail($from, $to, $replyto, $subject, $message)
     return mail($to, $subject, $message, $headers);            
 }
 
-$transaction_fee_variable = 0.08;
+$transaction_fee_variable = 0.1;
 $transaction_fee_fixed = 0.00;
 $maximum_rental_duration_days = 7;
 

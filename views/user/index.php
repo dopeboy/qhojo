@@ -111,7 +111,7 @@ global $stock_user_big;
                 <div id="reviews-from-lenders">
                     <legend id="reviews-lenders-header" style="">Reviews (<?php echo count($viewmodel["REVIEWS_OF_ME"]);?>)</legend>
                     
-                    <?php $viewmodel["ITEM_REVIEWS"] = $viewmodel["REVIEWS_OF_ME"]; ?>
+                    <?php $viewmodel["ITEM_REVIEWS"] = $viewmodel["REVIEWS_OF_ME"]; $show_item = 1; ?>
                     <?php require(dirname(dirname(__FILE__)) . '/embeds/review.php'); ?> 
                     
                 </div>  

@@ -220,3 +220,8 @@ textarea
 {
     margin: 0px;
 }
+
+#footer li.disabled a
+{
+    color: black;
+}

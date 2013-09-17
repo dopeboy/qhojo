@@ -24,7 +24,7 @@ $awaiting_review = 1;
                 <tr>
                     <th class="item">Item</th>
                     <th class="total">Total</th>
-                    <th class="user"><?php echo $lender_view == 1 ? "Lender" : "Borrower"?></th>
+                    <th class="user"><?php echo $lender_view == 0 ? "Lender" : "Borrower"?></th>
                     <th class="status">Status</th>
                 </tr>
             </thead>
@@ -92,10 +92,10 @@ $awaiting_review = 1;
     
     <?php } else if ($this->state == 2) { ?>
     <legend>
-        Review Submitted
+        Damage Report Submitted
     </legend>    
     <div>
-        Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have reviewed your recent transaction regarding item <a href="/item/index/<?php echo $transaction["ITEM_ID"] ?>"><?php echo $transaction["TITLE"] ?></a> successfully. You're all done! 
+        <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>, your damage report has been submitted successfully. Our staff will reaching out to you and <?php echo $viewmodel["BORROWER_FIRST_NAME"] ?> shortly. Please check your email for more details.
     </div>
     <?php } ?>
 </div>
