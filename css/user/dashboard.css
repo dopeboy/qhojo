@@ -81,7 +81,11 @@ input[type="radio"].reject-radio
 #dashboard .dropdown-menu
 {
     min-width: 0px;
-    width:90px    
+}
+
+.tab-content
+{
+    overflow:visible;
 }
 
 .thumbnail

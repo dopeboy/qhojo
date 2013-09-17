@@ -163,6 +163,32 @@ class ItemModel extends Model
         $transaction_model = new TransactionModel();
         $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
         $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
+        
+        // Get user info for both lender and borrower
+        $user_model = new \UserModel();
+        $requestor = $user_model->getUserDetails($requestor_id);
+        
+        $sqlParameters[":item_id"] =  $item_id;
+        $preparedStatement = $this->dbh->prepare('SELECT LENDER_ID, TITLE FROM ITEM_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $item = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
+        
+        $lender = $user_model->getUserDetails($item["LENDER_ID"]);
+        
+        global $do_not_reply_email, $domain;
+        
+        // Send email to lender
+        $email = "Hi {$lender["FIRST_NAME"]},<br/><br/>";
+        $email .= "{$requestor["FIRST_NAME"]} has requested to rent your item, {$item["TITLE"]}, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ".<br/><br/>";
+        $email .= "Here's the message {$requestor["FIRST_NAME"]} attached to the request:<br/><br/>";
+        $email .= "<blockquote>{$message}</blockquote><br/>";
+        $email .= "If you want to accept {$requestor["FIRST_NAME"]}'s request, click on the link below: <br/><br/>";
+        $email .= "<a href=\"{$domain}/transaction/accept/{$transaction_id}/0\">{$domain}/transaction/accept/{$transaction_id}/0</a><br/><br/>";
+        $email .= "Alternatively, go to your <a href=\"{$domain}/user/dashboard/\">dashboard</a> to see all your requests.";
+
+        $subject = "{$item["TITLE"]} - REQUESTED - Item has been requested - Transaction ID: {$transaction_id}";
+        
+        sendEmail($do_not_reply_email, $lender["EMAIL_ADDRESS"], null, $subject, $email);            
     }   
     
     public function requestSubmitted($method, $item_id)

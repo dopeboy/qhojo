@@ -18,7 +18,7 @@ insert into STATE VALUES (1200,'REVIEWED BY LENDER',1);
 
 insert into EDGE VALUES (0,100,200,'USER REQUESTED ITEM', '%B requested %L\'s item', 1);
 insert into EDGE VALUES (19,200,250,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
-insert into EDGE VALUES (20,250,300,'BORROWER FILLED OUT EXTRA SIGNUP FIELDS', '%B filled out extra signup fields', 1);
+insert into EDGE VALUES (20,250,300,'BORROWER FILLED OUT EXTRA SIGNUP FIELDS', '%B completed their user profile', 1);
 insert into EDGE VALUES (1,200,300,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
 insert into EDGE VALUES (2,200,400,'LENDER REJECTED REQUEST', '%L rejected %B\'s request', 1);
 insert into EDGE VALUES (18,200,401,'BORROWER WITHDREW REQUEST', '%B withdrew the request', 1);
@@ -53,3 +53,6 @@ insert into CANCEL_OPTIONS VALUES (0,'Scheduling issue with the lender/borrower'
 insert into CANCEL_OPTIONS VALUES (1,'Changed mind',1);
 insert into CANCEL_OPTIONS VALUES (2,'Other',2);
 
+insert into DAMAGE_OPTIONS VALUES (0,'Minor stratches and scruffs',0);
+insert into DAMAGE_OPTIONS VALUES (1,'Significant wear and tear',1);
+insert into DAMAGE_OPTIONS VALUES (2,'Severe damage',2);

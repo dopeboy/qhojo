@@ -23,18 +23,23 @@ else: foreach($transactions as $key=>$transaction)
         <?php require(dirname(dirname(__FILE__)) . '/dashboard/subembeds/status.php'); ?> 
      </td>
      <td>
-         <div class="text-center">
+         <div class="">
             <div class="btn-group" style="">
-                <button class="btn">Menu</button>
+                <button class="btn" data-toggle="dropdown">Menu</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" role="menu">
                    <?php if ($transaction['FINAL_STATE_ID'] == 300) { ?>
                   <li>
                       <a data-toggle="modal" tabindex="-1" href="#cancel-<?php echo $transaction['TRANSACTION_ID']; ?>">Cancel</a>
                   </li>
                   <?php } ?>
+                   <?php if ($transaction['FINAL_STATE_ID'] == 500 || $transaction['FINAL_STATE_ID'] == 650) { ?>
+                  <li>
+                      <a data-toggle="modal" tabindex="-1" href="/transaction/reportdamage/<?php echo $transaction['TRANSACTION_ID']; ?>">Report Damage</a>
+                  </li>
+                  <?php } ?>                  
                   <li>
                       <a data-toggle="modal" tabindex="-1" href="#contact-<?php echo $transaction['TRANSACTION_ID']; ?>">Contact</a>
                   </li>
@@ -73,7 +78,7 @@ else: foreach($transactions as $key=>$transaction)
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button class="btn btn-primary">Yes</button>
+                    <button class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>  
@@ -96,10 +101,12 @@ else: foreach($transactions as $key=>$transaction)
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button class="btn btn-primary">Send Message</button>
             </div>
-        </div>          
+        </div>           
          
      </td>
  </tr>
 
 <?php } endif; ?>
 
+<link type="text/css" rel="stylesheet" href="/css/jquery.dropdown.css" />
+<script type="text/javascript" src="/js/jquery.dropdown.min.js"></script>

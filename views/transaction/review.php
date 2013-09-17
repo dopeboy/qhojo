@@ -62,7 +62,7 @@ $awaiting_review = 1;
             <textarea class="required" style="width: 500px" name="comments" id="comments" placeholder="How was your interaction with the <?php echo $lender_view == 0 ? "lender" : "borrower"?>?"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-large btn-primary" rel="tooltip" title="first tooltip">Submit Feedback</button>
+        <button type="submit" class="btn btn-large btn-primary" rel="tooltip" title="">Submit Feedback</button>
     </form>
     
     <?php } else if ($this->state == 2) { ?>

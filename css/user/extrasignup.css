@@ -57,8 +57,8 @@ input.phone
 #uploaded-profile-picture
 {
     border: 1px #000000 dashed; 
-    height: 450px; 
-    width: 600px; 
+    height: 305px; 
+    width: 305px; 
     margin-bottom: 20px
 }
 
@@ -66,9 +66,9 @@ div#add-pictures
 {
     position: absolute;
     z-index: 1 ;
-    margin-top: 210px; 
-    margin-left: 180px; 
-    width: 220px    
+    margin-top: 130px; 
+    margin-left: 45px; 
+    width: 220px;
 }
 
 #phone-controls

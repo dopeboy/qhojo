@@ -208,3 +208,15 @@ div.alert-modal
     margin-bottom: 10px;
     display: none;
 }
+
+.extra-fields-banner
+{
+    border-color: #f2b668;
+    background-color: #f9bb7c;
+    color: #914b00
+}
+
+textarea
+{
+    margin: 0px;
+}

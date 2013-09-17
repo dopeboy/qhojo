@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 
-
 <!-- Bootstrap styles -->
 <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
 <!-- blueimp Gallery styles -->
@@ -9,7 +8,6 @@
 <link rel="stylesheet" href="/css/jq-fo/jquery.fileupload-ui.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
 <noscript><link rel="stylesheet" href="/css/jq-fo/jquery.fileupload-ui-noscript.css"></noscript>
-
 
 <div class="container" id="picture-uploader">
 
@@ -27,10 +25,6 @@
                     <span>Add files...</span>
                     <input type="file" name="files[]" multiple>
                 </span>
-                <button type="submit" class="btn btn-primary start">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start upload</span>
-                </button>
                 <button type="reset" class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel upload</span>

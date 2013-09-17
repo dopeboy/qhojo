@@ -96,37 +96,34 @@
     <div class="row-fluid">
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 1</h3>
+                 <h3>Search</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Search</h4>
+             <div class="bottom text-center">
                 <p>Search for the gear you want.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 2</h3>
+                 <h3>Reserve</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Reserve</h4>
+             <div class="bottom text-center">
                 <p>Select a rental duration and pickup time for your gear. Send any questions to the lender.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 3</h3>
+                 <h3>Shoot</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Shoot</h4>
+             <div class="bottom text-center">
                 <p>Meet the lender, pick up the gear, and start shooting your favorite pictures.</p>
              </div>                               
          </div>                    
@@ -148,20 +145,6 @@
             </div>
         </div>            
     </div>    
-
-    <div class="row-fluid benefit">
-        <div class="span2 offset1">
-            <div class="media text-center">
-                <img src="/img/safety.png">
-            </div>
-        </div>
-        <div class="span8">
-            <div class="media-body" style="">
-                <h4 class="media-heading">Safety</h4>
-                Rent from trusted lenders who have verified their account with Facebook and have received positive feedback from past borrowers.
-            </div>
-        </div>            
-    </div>  
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
@@ -190,37 +173,34 @@
     <div class="row-fluid">
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 1</h3>
+                 <h3>List</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Submit</h4>
+             <div class="bottom text-center">
                 <p>Specify a rental rate, a deposit value, and toss in some descriptive details. Then post it (for free!).</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 2</h3>
+                 <h3>Approve</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Choose</h4>
+             <div class="bottom text-center">
                 <p>Select, vet, and approve a rental request. The approved borrower will setup a meeting time with you to pick up the gear.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Step 3</h3>
+                 <h3>Profit</h3>
              </div>                          
              <div class="text-center middle">
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
-             <div class="bottom text-left">
-                <h4>Profit</h4>
+             <div class="bottom text-center">
                 <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a 8% commission fee.</p>
              </div>                               
          </div>                    
@@ -257,41 +237,9 @@
         </div>            
     </div>  
 
-    <div class="row-fluid benefit">
-        <div class="span2 offset1">
-            <div class="media text-center">
-                <img src="/img/late_policy.png">
-            </div>
-        </div>
-        <div class="span8">
-            <div class="media-body" style="">
-                <h4 class="media-heading">Late Policy</h4>
-                It's important to us that you get your gear back on time. If your borrower returns it late, they'll be subject to late penalties.
-            </div>
-        </div>            
-    </div>      
-
    <div class="text-center">
        <form action="/item/post" method="get">
             <button class="rentlink btn btn-large btn-primary" type="submit">Lend >></button>
        </form>
    </div>                     
 </div>            
-
-<div class="sheet">
-    <div class="row-fluid">
-        <div class="span2 offset1">
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img src="/img/seal.png">
-                </a>
-            </div>
-        </div>
-        <div class="span8">
-            <div class="media-body" style="">
-                <h4 class="media-heading">Qhojo Guarantee</h4>
-                If something goes wrong, we guarantee that your goods are repaired or replaced, plus we will provide you with a temporary replacement for the few days it can take to patch things up. Bottom line: if something happens, we'll make sure it gets fixed or replaced.
-            </div>
-        </div>      
-    </div>
-</div>

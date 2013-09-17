@@ -328,4 +328,12 @@ class InvalidReservedTransaction extends BaseException
         parent::__construct("This transaction is not in the reserved state. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
     }       
 }
+
+class InvalidReportDamageException extends BaseException
+{
+    public function __construct($method, $user_id = 0, $transaction_id, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Either you weren't involved in the transaction or the item has already been reported as damaged. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
+    }       
+}
 ?>

@@ -1,0 +1,65 @@
+table
+{
+    background-color: white;
+    width: 100%;
+    table-layout: fixed;
+}
+
+i
+{
+    margin-right: 10px;
+}
+
+.actions-list
+{
+    list-style-type: none;
+    margin-left: 0px;
+}
+
+.statuses
+{
+    margin-bottom: 10px;
+}
+
+.reportdamage-transaction-table th.item
+{
+    width: 35%;
+}
+
+.reportdamage-transaction-table th.total
+{
+    width: 5%;
+}
+
+.reportdamage-transaction-table th.user
+{
+    width: 9%;
+}
+
+.reportdamage-transaction-table th.status
+{
+    width: 51%;
+}
+
+#reportdamage .dropdown-menu
+{
+    min-width: 0px;
+    width:90px    
+}
+
+.thumbnail
+{
+    max-width: 160px;
+    max-height: 125px;
+}
+
+#rate-damage, #comment-damage, #pictures-damage
+{
+    margin-bottom: 20px;
+}
+
+.modal, .modal.fade.in 
+{ 
+    width: 768px; 
+    margin-left: -384px; 
+}

@@ -11,6 +11,9 @@ class Picture extends Controller
         
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 1))
             $viewmodel->uploadUserPictures($_SESSION["USER"]["USER_ID"]);
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 2))
+            $viewmodel->uploadDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);        
     }
     
     protected function delete()
@@ -22,6 +25,9 @@ class Picture extends Controller
         
         else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 1))
             $viewmodel->deleteUserPicture($_SESSION["USER"]["USER_ID"]);
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 2))
+            $viewmodel->deleteDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);           
     }
 //        
 //    protected function upload()

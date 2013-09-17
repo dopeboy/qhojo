@@ -41,8 +41,12 @@
 
          foreach ($transaction['HIST'] as $key=>$detail)
          {
-             $d = new DateTime($detail['ENTRY_DATE']);
-             echo "<li>" . ($key == count($transaction['HIST'])-1 ? "<strong>" : "") . $detail['SUMMARY'] . ' (<em>' . $d->format('m/d - g:i A') . '</em>)' . ($key == count($transaction['HIST'])-1 ? "</strong>" : "") . "</li>";
+             // Skip pending
+             if ($detail['STATE_A_ID'] != 250)
+             {
+                $d = new DateTime($detail['ENTRY_DATE']);
+                echo "<li>" . ($key == count($transaction['HIST'])-1 ? "<strong>" : "") . $detail['SUMMARY'] . ' (<em>' . $d->format('m/d - g:i A') . '</em>)' . ($key == count($transaction['HIST'])-1 ? "</strong>" : "") . "</li>";
+             }
          } 
 
        ?>

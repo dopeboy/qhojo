@@ -43,7 +43,42 @@ class PictureModel extends Model
                                 'max_height' => 115) 
                         )
                     ));
-    }   
+    } 
+    
+    public function uploadDamagedItemPictures($method,$transaction_id, $user_id)
+    {
+        $transaction_model = new TransactionModel();
+        $transaction_model->damaged($method, $user_id, $transaction_id);
+        
+        global $transaction_picture_path, $transaction_delete_subdir;
+        error_log(dirname(dirname(__FILE__)) . $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/');
+        $picture = new UploadHandler(
+                array(
+                        "upload_dir" => dirname(dirname(__FILE__)) . $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/', 
+                        "upload_url" => $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/',
+                        "entity_id" => $transaction_id, 
+                        "is_user" => 2,
+                        "image_versions" => array(
+                            '' => array(
+                                'max_width' => 1600,
+                                'max_height' => 1200,
+                                'jpeg_quality' => 80
+                            ),
+                            'thumbnail' => array(
+                                // Uncomment the following to use a defined directory for the thumbnails
+                                // instead of a subdirectory based on the version identifier.
+                                // Make sure that this directory doesn't allow execution of files if you
+                                // don't pose any restrictions on the type of uploaded files, e.g. by
+                                // copying the .htaccess file from the files directory for Apache:
+                                //'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/thumb/',
+                                //'upload_url' => $this->get_full_url().'/thumb/',
+                                // Uncomment the following to force the max
+                                // dimensions and e.g. create square thumbnails:
+                                'max_width' => 150,
+                                'max_height' => 115) 
+                        )
+                    ));
+    }    
     
     public function uploadUserPictures($user_id)
     {
@@ -93,6 +128,15 @@ class PictureModel extends Model
         
         global $item_picture_path;
         $picture = new UploadHandler(array("upload_dir" => dirname(dirname(__FILE__)) . $item_picture_path . $item_id . '/', "upload_url" => $item_picture_path . $item_id . '/', "entity_id" => $item_id, "is_user" => 0));
+    }    
+    
+    public function deleteDamagedItemPictures($method,$transaction_id, $user_id)
+    {
+        $transaction_model = new TransactionModel();
+        $transaction_model->damaged($method, $user_id, $transaction_id);
+        
+        global $transaction_picture_path, $transaction_delete_subdir;
+        $picture = new UploadHandler(array("upload_dir" => dirname(dirname(__FILE__)) . $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/', "upload_url" => $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/', "entity_id" => $transaction_id, "is_user" => 2));
     }        
     
     public function deleteUserPicture($user_id)

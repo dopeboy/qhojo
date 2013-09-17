@@ -109,20 +109,12 @@ global $stock_user_big;
             </div>
             <div id="reviews">
                 <div id="reviews-from-lenders">
-                    <legend id="reviews-lenders-header" style="">Reviews of <?php echo $viewmodel["USER"]["FIRST_NAME"]?> (<?php echo count($viewmodel["REVIEWS_OF_ME"]);?>)</legend>
+                    <legend id="reviews-lenders-header" style="">Reviews (<?php echo count($viewmodel["REVIEWS_OF_ME"]);?>)</legend>
                     
                     <?php $viewmodel["ITEM_REVIEWS"] = $viewmodel["REVIEWS_OF_ME"]; ?>
                     <?php require(dirname(dirname(__FILE__)) . '/embeds/review.php'); ?> 
                     
                 </div>  
-                
-                <div id="reviews-from-borrowers" style="">
-                    <legend id="reviews-borrowers-header" style="">Reviews by <?php echo $viewmodel["USER"]["FIRST_NAME"]?> (<?php echo count($viewmodel["REVIEWS_BY_ME"]);?>)</legend>
-                    
-                    <?php $viewmodel["ITEM_REVIEWS"] = $viewmodel["REVIEWS_BY_ME"]; ?>
-                    <?php require(dirname(dirname(__FILE__)) . '/embeds/review.php'); ?>       
-                    
-                </div> 
             </div>
         </div>
     </div>

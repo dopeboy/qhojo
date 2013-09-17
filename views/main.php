@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="/css/main.css">
     
         <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
         
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
         <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
@@ -49,7 +50,9 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="/" style="padding: 0px"><img src="/img/logo.gif"></a>
+                        <a class="brand" href="/" style="padding: 0px">
+                            <label style="font-family: 'Lobster', cursive; margin-top: 9px; font-size: 26px;color: white">Qhojo</label>
+                        </a>
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
                               

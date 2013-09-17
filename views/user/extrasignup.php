@@ -6,23 +6,23 @@
         <div class="navbar" >
             <div id="" class="navbar-inner" style="">
                 <ul class="nav text-center" style="">
-                    <li class="<?php if ($this->state == 100) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">Profile Picture</a></li>
-                    <li class="<?php if ($this->state == 500) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">Blurb</a></li>
-                    <li class="<?php if ($this->state == 200) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">Phone Number</a></li>
-                    <li class="<?php if ($this->state == 300) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">PayPal</a></li>              
-                    <li class="<?php if ($this->state == 400) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">Credit Card</a></li>       
+                    <li class="<?php if ($this->state == 100) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">1. Profile Picture</a></li>
+                    <li class="<?php if ($this->state == 500) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">2. Blurb</a></li>
+                    <li class="<?php if ($this->state == 200) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">3. Phone Number</a></li>
+                    <li class="<?php if ($this->state == 300) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">4. PayPal</a></li>              
+                    <li class="<?php if ($this->state == 400) { echo "active"; } ?>" style="width:150px"><a href="javascript:void(0)">5. Credit Card</a></li>       
                 </ul>
             </div>
         </div>        
     </div>
     
     <?php if ($this->state == 100) { ?>
-    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrower an item, we need you to fill out a couple more details. Please upload a profile picture of yourself below.</p>
+    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need you to fill out a couple more details. Please upload a profile picture of yourself below.</p>
     
     <form class="form-submit" id="profile-picture" action="/user/extrasignup/null/101" method="post">
         <div id="uploaded-profile-picture" class="text-center" style="">
             <div id="add-pictures" style="">
-                  <button data-toggle="modal" tabindex="-1" href="#upload-profile-picture" id="upload-picture-btn" class="btn btn-success btn-large" type="button" style="">Upload Profile Picture</button> 
+                  <button data-toggle="modal" tabindex="-1" href="#upload-profile-picture" id="upload-picture-btn" class="btn btn-success" type="button" style="">Upload Profile Picture</button> 
               </div>             
         </div>          
 
@@ -45,7 +45,7 @@
     <?php } ?>
     
     <?php if ($this->state == 500) { ?>
-    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrower an item, give us a little blurb about yourself. Please fill in the box below.</p>
+    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, give us a little blurb about yourself. Please fill in the box below.</p>
     
     <form id="blurb" class="form-submit" action="/user/extrasignup/null/501" method="post">
 	
@@ -74,7 +74,7 @@
         }
         
         ?>
-    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrower an item, we need to know how to text you the confirmation code. Please enter your phone number below.</p>
+    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need to know how to text you the confirmation code. Please enter your phone number below.</p>
     
     
     <form id="phone-verify" class="form-submit" action="/user/extrasignup/null/201" method="post">
@@ -104,7 +104,7 @@
     <?php } ?>
     
     <?php if ($this->state == 300) { ?>
-    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrower an item, we need to know how to pay you. Please enter your PayPal details below.</p>
+    <p><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need to know how to pay you. Please enter your PayPal details below.</p>
     
     <form id="paypal" class="form-submit" action="/user/extrasignup/null/301" method="post">
 	
@@ -137,7 +137,7 @@
     <?php } ?>    
     
     <?php if ($this->state == 400) { ?>
-    <p style="margin-bottom:20px"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrower an item, we need to know how to charge you. Please enter your credit card details below. We will always ask you before charging your card.</p>
+    <p style="margin-bottom:20px"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need to know how to charge you. Please enter your credit card details below. We will always ask you before charging your card.</p>
     
     <form id="credit-card" class="" action="" method="post">
 	<input type="hidden" id="bp-mp-uri" name="bp-mp-uri" value="<?php global $bp_mp_uri; echo $bp_mp_uri; ?>">
