@@ -38,12 +38,36 @@ $(document).ready(function()
         $('#largeimage').attr('src',$(this).attr('full'));
      });
 
-    $( "#contact-btn" ).click(function() 
+    $( "#contact-btn-not-signedin" ).click(function() 
     {
-        $('#contact-modal').modal('show');
+        window.location = '/user/signin/null/100?return=' + window.location.pathname;
     });
+    
+    
+    $("form#contact").data('validate_options',
+    {
+        errorElement: "span",
+        errorClass: "text-error cancel-error",
+        rules:
+        {
+        },
+        errorPlacement: function(error, element) 
+        {
+            element.parent().append(error);
+        }        
+    });  
  	
+});
 
+function customResponseHandler(responseText)  
+{ 
+    if (responseText.Action == 'CONTACT' && responseText.Status == 'SUCCESS')
+    {
+        // Fade out existing
+        $( "#mh-" + responseText.EntityID + ' h3').text('Message Sent');
+        $( "#mb-" + responseText.EntityID ).html('<p>Your message was sent successfuly.</p>');
+        $( "#mf-" + responseText.EntityID + ' .btn-primary').remove();
+    }
 
-}); 
+} 
          

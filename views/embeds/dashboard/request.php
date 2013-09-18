@@ -22,26 +22,31 @@ else: foreach($transactions as $key=>$transaction)
     </td>
     <td>
         <?php echo $transaction["REQ"]['MESSAGE']; ?>
-        <div style="margin-top: 10px">
+        <div class="message-received">
             <?php $d = new DateTime($transaction["REQ"]['RECEIVED_DATE']); echo "<em>" . ($lender_view == 1 ? "Received " : "Sent ") . $d->format('m/d g:i A') . "</em>"; ?>
         </div>
     </td>
     <td>
-
-        <div class="btn-group">
-            <button class="btn">Menu</button>
-            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" style="">
-                <?php if ($lender_view == 1) { ?>
-                    <li><a data-toggle="modal" tabindex="-1" href="#accept-<?php echo $transaction['TRANSACTION_ID']; ?>">Accept</a></li>
-                    <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Reject</a></li>
-                <?php } else { ?>
-                    <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Withdraw</a></li>
-                <?php } ?>
-            </ul>
+        <div class="btn-group">            
+                <button class="btn">Menu</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="">
+                    <?php if ($lender_view == 1 && $pending == 0) { ?>
+                        <li><a data-toggle="modal" tabindex="-1" href="#accept-<?php echo $transaction['TRANSACTION_ID']; ?>">Accept</a></li>
+                        <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Reject</a></li>
+                    <?php } 
+                    else if ($lender_view == 0 && $pending == 0) { ?>
+                        <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Withdraw</a></li>
+                    <?php } 
+                    else if ($lender_view == 0 && $pending == 1) { ?>
+                        <li><a data-toggle="modal" tabindex="-1" href="/user/extrasignup/null/0">Complete Profile</a></li>
+                    <?php } ?>       
+                        <li><a data-toggle="modal" tabindex="-1" href="#contact-modal-<?php echo $transaction['TRANSACTION_ID']; ?>">Contact</a></li>
+                </ul>
         </div>
+        
         <div id="reject-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" role="dialog"  >
             <div id="alert-error-modal-<?php echo $transaction['TRANSACTION_ID']; ?>" class="alert alert-error alert-modal" style="">
                 <strong>Error: </strong>
@@ -101,7 +106,19 @@ else: foreach($transactions as $key=>$transaction)
                     <button type="submit" class="btn btn-primary">Yes</button>
                 </form>
             </div>
-        </div>                  
+        </div>    
+        
+        <?php 
+            $receipient_full_name = $lender_view == 1 ? $transaction['BORROWER_NAME'] : $transaction['LENDER_NAME'];
+            $receipient_first_name =  $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME'];
+            $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
+            $title = "Message {$receipient_full_name} about {$transaction['TITLE']}";
+            $sender_user_id =  $_SESSION["USER"]["USER_ID"];
+            $receipient_user_id =  $lender_view == 1 ? $transaction['BORROWER_ID'] : $transaction['LENDER_ID'];
+            $entity_type = 'TRANSACTION';
+            $entity_id = $transaction['TRANSACTION_ID'];
+        ?>        
+        <?php require(dirname(dirname(__FILE__)) . '/contact.php'); ?>         
 </td>
 </tr>
 

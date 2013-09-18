@@ -142,6 +142,18 @@ CREATE TABLE DAMAGE_OPTIONS
         DISPLAY_ORDER                      INTEGER
 );
 
+drop table if exists CONTACT_MESSAGES;
+CREATE TABLE CONTACT_MESSAGES
+(
+	ID                                 INTEGER PRIMARY KEY,
+        SENDER_ID                          INTEGER,
+        RECIPIENT_ID                       INTEGER,
+        ENTITY_TYPE                        VARCHAR(80),
+        ENTITY_ID                          INTEGER,
+        MESSAGE                            TEXT,
+        DATE_SENT                          DATETIME
+);
+
 /* VIEWS                                               */
 
 CREATE OR REPLACE VIEW REJECT_OPTIONS_VW AS
@@ -545,3 +557,4 @@ INNER JOIN ITEM_PICTURE ip on i.ID=ip.ITEM_ID and ip.PRIMARY_FLAG=true
 INNER JOIN USER_VW u on i.LENDER_ID=u.USER_ID and u.ACTIVE=1
 LEFT JOIN RESPONSE_TIME_VW r on i.LENDER_ID=r.LENDER_ID
 WHERE i.ACTIVE=1;
+

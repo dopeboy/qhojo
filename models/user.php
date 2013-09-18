@@ -105,6 +105,20 @@ class UserModel extends Model
         $user['NAME'] = $firstname . ' ' . $lastname[0] . '.';
         $user['ADMIN'] = 0;
         
+        // Send an email to the new user
+        global $do_not_reply_email,$support_email,$domain;
+        
+        // Finally, send the email to both the lender and borrower
+        $message = "Hi {$firstname}!<br/><br/>";
+        $message .= "Welcome to Qhojo, your community for borrowing and renting film and video gear across New York City.<br/><br/>";
+        $message .= "To get started, we strongly encourage you to complete the rest of your user profile. It'll help you later when you borrow and lend gear from and to the community. To complete your profile, click on the link below:<br/><br/>";
+        $message .= "<a href=\"{$domain}/user/extrasignup/null/0\">{$domain}/user/extrasignup/null/0</a><br/><br/>";
+        $message .= "If you have any questions, comments or concerns, never hesitate to drop us a line at our support email address located at the bottom of this email.";
+        
+        $subject = "Welcome to Qhojo!";
+        
+        sendEmail($do_not_reply_email, $email, null, $subject, $message);                  
+        
         return $user;
     }
     
@@ -265,6 +279,100 @@ class UserModel extends Model
         $sqlParameters[":card_uri"] =  $card_uri;
         $preparedStatement = $this->dbh->prepare('UPDATE USER set BP_BUYER_URI=:buyer_uri, BP_PRIMARY_CARD_URI=:card_uri where ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);        
+    }
+                 
+    public function contact($method, $message_content, $sender_id, $receipient_id, $entity_type, $entity_id)
+    {
+        $item_title = null;
+        
+        if ($entity_type == 'ITEM')
+        {
+            // Is the receipient the owner of the Item?
+            $sqlParameters[":user_id"] =  $receipient_id;
+            $sqlParameters[":item_id"] =  $entity_id;
+            $preparedStatement = $this->dbh->prepare('SELECT ITEM_ID, TITLE FROM ITEM_VW WHERE LENDER_ID=:user_id and ITEM_ID=:item_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
+
+            if ($row == null)
+                throw new InvalidContactAttemptException($method, $sender_id,null,$entity_id);
+            
+            $item_title = $row['TITLE'];
+
+        }
+        
+        else if ($entity_type == 'TRANSACTION')
+        {
+            // Are the receipient and lender someway affiliated with the transaction
+            $sqlParameters[":receipient_id"] =  $receipient_id;
+            $sqlParameters[":sender_id"] =  $sender_id;
+            $sqlParameters[":transaction_id"] =  $entity_id;
+            $preparedStatement = $this->dbh->prepare('SELECT TITLE, TRANSACTION_ID FROM BASE_VW WHERE (LENDER_ID=:receipient_id or BORROWER_ID=:receipient_id) and (LENDER_ID=:sender_id or BORROWER_ID=:sender_id) and TRANSACTION_ID=:transaction_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);    
+            
+            if ($row == null)
+                throw new InvalidContactAttemptException($method, $sender_id,null,$entity_id); 
+            
+            $item_title = $row['TITLE'];
+        }
+        
+        else
+            throw new InvalidEntityTypeException($method, $sender_id,null,$entity_id);
+        
+        global $do_not_reply_email;
+        
+        // Fetch the receipient and sender email addresses
+        $sqlParameters =  array();
+        $sqlParameters[":receipient_id"] =  $receipient_id;
+        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:receipient_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
+        $receipient_email = $row["EMAIL_ADDRESS"];
+        $receipient_first_name = $row["FIRST_NAME"];
+        
+        $sqlParameters =  array();
+        $sqlParameters[":sender_id"] =  $sender_id;
+        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:sender_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
+        $sender_email = $row["EMAIL_ADDRESS"];
+        $sender_first_name = $row["FIRST_NAME"];
+        
+        $subject = null;
+        $message = null;
+        $message_id = getRandomID();
+        $message .= "Hi {$receipient_first_name},<br/><br/>";
+        
+        if ($entity_type == 'ITEM')
+        {
+            $subject = "{$sender_first_name} sent you a question about your item {$item_title} - Item ID: {$entity_id}";    
+            $message .= "You have received a question about your item {$item_title}:<br/><br/>";
+        }
+        
+        else if ($entity_type == 'TRANSACTION')
+        {
+            $subject = "{$sender_first_name} sent you a question about your transaction involving item {$item_title} - Transaction ID: {$entity_id}";
+            $message .= "You have received a question about your item {$item_title}:<br/><br/>";            
+        }
+        
+        $message .= "<blockquote>{$message_content}</blockquote><br/>";
+        $message .= "To reply to {$sender_first_name}, just reply to this email.";        
+        
+        sendEmail($do_not_reply_email, $receipient_email, $sender_email, $subject, $message);
+        
+        // Save in the db
+        $sqlParameters =  array();
+        $sqlParameters[":id"] =  $message_id;
+        $sqlParameters[":sender_id"] =  $sender_id;
+        $sqlParameters[":receipient_id"] =  $receipient_id;
+        $sqlParameters[":entity_type"] =  $entity_type;
+        $sqlParameters[":entity_id"] =  $entity_id;
+        $sqlParameters[":message"] =  $message_content;
+        $sqlParameters[":date_sent"] =  date("Y-m-d H:i:s");
+        
+        $preparedStatement = $this->dbh->prepare('INSERT INTO CONTACT_MESSAGES (ID,SENDER_ID,RECIPIENT_ID,ENTITY_TYPE,ENTITY_ID,MESSAGE,DATE_SENT) VALUES (:id, :sender_id, :receipient_id, :entity_type, :entity_id, :message, :date_sent)');
+        $preparedStatement->execute($sqlParameters);             
     }
     
     private function comparePasswords($password_from_login, $password_from_db)

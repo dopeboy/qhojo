@@ -25,12 +25,12 @@ $(document).ready(function()
     }).on('changeDate', function(ev) 
     {
         
-      if (ev.date.valueOf() > checkout.date.valueOf()) {
+      if (ev.date.valueOf() >= checkout.date.valueOf()) {
         var newDate = new Date(ev.date)
         newDate.setDate(newDate.getDate() + 1);
         checkout.setValue(newDate);
-        updateTotal();
       }
+       updateTotal();
       checkin.hide();
       $('#date-end')[0].focus();
     }).data('datepicker');

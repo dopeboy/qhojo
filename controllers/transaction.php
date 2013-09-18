@@ -44,17 +44,15 @@ class Transaction extends Controller
         }
     }
     
-    // 0 = Cancel by borrower, 1 = cancel by lender
     protected function cancel()
     {
-        if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 0 || $this->state == 1))
+        if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
         {
-            $this->transaction_model->cancelRequest
+            $this->transaction_model->cancelReservation
             (
                 $method, 
                 $_SESSION["USER"]["USER_ID"], 
                 $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty')),
-                $this->validateParameter($this->state,"Source",$method,array('Validator::isNotNullAndNotEmpty')),
                 $this->validateParameter($this->postvalues['cancel-option'],"Cancel Option",$method,array('Validator::isNotNullAndNotEmpty')),
                 $this->validateParameter($this->postvalues['reason'],"Cancel Reason",$method,array())                               
             );

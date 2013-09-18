@@ -221,29 +221,47 @@ class TransactionModel extends Model
              throw new RejectRequestException($method, $user_id, null, $transaction_id);    
     }    
     
-    // $source = 0 means borrower, else lender
-    public function cancelRequest($method, $user_id, $transaction_id, $source, $cancel_option, $cancel_reason)
+    public function cancelReservation($method, $user_id, $transaction_id, $cancel_option, $cancel_reason)
     {
         // Is user a borrower on this transaction
         $sqlParameters[":transaction_id"] =  $transaction_id;
         $sqlParameters[":user_id"] =  $user_id;            
-        $clause = $source == 0 ? "BORROWER" : "LENDER";
 
-        $preparedStatement = $this->dbh->prepare('select 1 from RESERVED_AND_EXCHANGED_AND_LATE_VW where TRANSACTION_ID=:transaction_id and ' . $clause . '_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('select *, 1 as LENDER_FLAG from RESERVED_AND_EXCHANGED_AND_LATE_VW where TRANSACTION_ID=:transaction_id and LENDER_ID=:user_id UNION ' . 
+                                                  'select *, 0 as LENDER_FLAG from RESERVED_AND_EXCHANGED_AND_LATE_VW where TRANSACTION_ID=:transaction_id and BORROWER_ID=:user_id');
         $preparedStatement->execute($sqlParameters);
-        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);            
         
-        if ($row == null)
-            throw new CancelRequestException($method, $user_id, null, $transaction_id);            
+        if ($rows == null)
+            throw new CancelRequestException($method, $user_id, null, $transaction_id);
+        
+        $transaction = reset($this->denormalize($rows));
+        
+        // Check if current time is more than start_date + 24 hrs
+        $start_date = new DateTime($transaction["REQ"]["START_DATE"]);
+        $now = new DateTime();
+        $diff = $start_date->diff($now);
+
+        if ($diff->d == 0)
+            throw new CancelRequestLateException($method, $user_id, null, $transaction_id);
 
         // 300 -> 601
-        if ($source == 0)
+        if ($transaction['LENDER_FLAG'] == 0)
             $this->insertDetail($method, $transaction_id, $this->getEdgeID(300,601,$method, $user_id), array("CANCEL_ID" => $cancel_option, "REASON" => $cancel_reason), $user_id);      
         // 300 -> 600
-        else if ($source == 1)
+        else if ($transaction['LENDER_FLAG'] == 1)
             $this->insertDetail($method, $transaction_id, $this->getEdgeID(300,600,$method, $user_id), array("CANCEL_ID" => $cancel_option, "REASON" => $cancel_reason), $user_id); 
         else
-             throw new CancelRequestException($method, $user_id, null, $transaction_id);          
+             throw new CancelRequestException($method, $user_id, null, $transaction_id);
+        
+        
+        global $do_not_reply_email;           
+
+        // Send email to lender
+        $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+        $message .= "The reservation for item {$transaction["TITLE"]} has been cancelled by " . ($transaction['LENDER_FLAG'] == 0 ? $transaction["BORROWER_FIRST_NAME"] : $transaction["LENDER_FIRST_NAME"])  . ". Please do not proceed to meet and exchange the item.";
+        $subject = "{$transaction["TITLE"]} - CANCELLED - Item reservation has been cancelled - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);            
     }
     
     public function getBorrowerOfRequest($method, $user_id, $transaction_id)
@@ -293,7 +311,7 @@ class TransactionModel extends Model
         // 200 -> 300
         $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,300,$method, $user_id), array("CONFIRMATION_CODE" => $cc), $user_id);          
         
-        global $do_not_reply_email, $domain, $borrower_number, $support_email;
+        global $do_not_reply_email, $domain, $borrower_number;
         
         $data = json_decode($row['DATA']); 
         
@@ -307,10 +325,11 @@ class TransactionModel extends Model
         $message .= "Here's what the both of you have to do next:<br/><br/>";
         $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
         $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
-        $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.";
+        $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+        $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
         
         $subject = "{$row["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$row["TRANSACTION_ID"]}";
-        sendEmail($do_not_reply_email, $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
+        sendEmail($do_not_reply_email, $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], $subject, $message);        
     }
     
     public function pending($method, $user_id, $transaction_id)
@@ -381,7 +400,7 @@ class TransactionModel extends Model
                 $cc = getRandomID();
                 $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,300,$method, $user_id), array("CONFIRMATION_CODE" => $cc), $user_id);
                 
-                global $do_not_reply_email, $domain, $borrower_number, $support_email;
+                global $do_not_reply_email, $domain, $borrower_number;
 
                 $start_date = date("m/d", strtotime($transaction["REQ"]["START_DATE"]));
                 $end_date = date("m/d", strtotime($transaction["REQ"]["END_DATE"]));                
@@ -392,10 +411,11 @@ class TransactionModel extends Model
                 $message .= "Here's what the both of you have to do next:<br/><br/>";
                 $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
                 $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
-                $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.";
+                $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+                $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
 
                 $subject = "{$transaction["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$transaction["TRANSACTION_ID"]}";
-                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);                    
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                    
             }               
         }     
     }    
@@ -529,7 +549,7 @@ class TransactionModel extends Model
         $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $borrower["USER_ID"]);
         
         // Send emails
-        global $do_not_reply_email,$support_email, $domain;
+        global $do_not_reply_email, $domain;
         
         // Send email to both
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
@@ -544,7 +564,7 @@ class TransactionModel extends Model
         
         $subject = "{$transaction["TITLE"]} - EXCHANGED - Item has been exchanged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
-        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
+        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);        
     }    
     
     public function lenderConfirm($method, $confirmation_code, $phone_number) 
@@ -639,7 +659,7 @@ class TransactionModel extends Model
         $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $transaction["LENDER_ID"]);      
         
       // Send emails
-        global $do_not_reply_email,$support_email, $domain;
+        global $do_not_reply_email, $domain;
         
         // Send email to both
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
@@ -651,7 +671,7 @@ class TransactionModel extends Model
         
         $subject = "{$transaction["TITLE"]} - RETURNED - Item has been returned - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
-        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
+        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);        
     }    
     
     public function insertDetail($method, $transaction_id, $edge_id, $data, $user_id)
@@ -754,7 +774,7 @@ class TransactionModel extends Model
         
         $subject = "{$transaction["TITLE"]} - REPORTED AS DAMAGED - Item has been reported as damaged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
-        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);           
+        sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);           
     }
     
     public function damageReportSubmitted($method, $user_id, $transaction_id)

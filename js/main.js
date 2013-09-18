@@ -65,7 +65,7 @@ $(document).ready(function()
 // pre-submit callback 
 function showRequest(formData, jqForm, options) 
 { 
-    $('.alert-error').hide();
+    $('#error-banner').hide();
     var $pass = true;
 
     // jqForm is a jQuery object encapsulating the form element.  To access the 

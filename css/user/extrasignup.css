@@ -22,11 +22,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-button#profile-picture-submit
-{
-    width: 150px; 
-}
-
 input.paypal
 {
     width: 300px;
@@ -104,4 +99,26 @@ div#add-pictures
 .text-error.phone
 {
     padding-left: 10px;
+}
+
+#user-signup-nav li
+{
+    width:150px;
+}
+
+textarea#blurb
+{
+    width:400px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.intro-text
+{
+    margin-bottom: 20px;
+}
+
+#email, #csc
+{
+    margin-bottom: 20px;
 }

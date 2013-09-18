@@ -41,7 +41,7 @@ else: foreach($transactions as $key=>$transaction)
                   </li>
                   <?php } ?>                  
                   <li>
-                      <a data-toggle="modal" tabindex="-1" href="#contact-<?php echo $transaction['TRANSACTION_ID']; ?>">Contact</a>
+                      <a data-toggle="modal" tabindex="-1" href="#contact-modal-<?php echo $transaction['TRANSACTION_ID']; ?>">Contact</a>
                   </li>
                 </ul>
             </div>
@@ -57,7 +57,7 @@ else: foreach($transactions as $key=>$transaction)
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Cancel <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] . '\'s' : "your" ?> request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
             </div>
-            <form class="form-submit" id="cancel-<?php echo $lender_view == 1 ? 'lender' : 'borrower' ?>" action="/transaction/cancel/<?php echo $transaction['TRANSACTION_ID']; ?>/<?php echo $lender_view; ?>" method="post">
+            <form class="form-submit" id="cancel-<?php echo $lender_view == 1 ? 'lender' : 'borrower' ?>" action="/transaction/cancel/<?php echo $transaction['TRANSACTION_ID']; ?>/0" method="post">
                 <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
                    
                     <?php if ($lender_view == 1) { ?>
@@ -82,26 +82,18 @@ else: foreach($transactions as $key=>$transaction)
                 </div>
             </form>
         </div>  
-         
-        <div id="contact-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">Message <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?> - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
-            </div>
-            <div class="modal-body text-left" style="">
-                <p>
-                Hey <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>,
-                </p>
-                <div>
-                    <textarea rows="3" placeholder="Put your message here." style=""></textarea>
-                    <p>-<?php echo $lender_view == 1 ? $transaction['LENDER_FIRST_NAME'] : $transaction['BORROWER_FIRST_NAME']; ?></p>            
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button class="btn btn-primary">Send Message</button>
-            </div>
-        </div>           
+                  
+        <?php 
+            $receipient_full_name = $lender_view == 1 ? $transaction['BORROWER_NAME'] : $transaction['LENDER_NAME'];
+            $receipient_first_name =  $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME'];
+            $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
+            $title = "Message {$receipient_full_name} about {$transaction['TITLE']}";
+            $sender_user_id =  $_SESSION["USER"]["USER_ID"];
+            $receipient_user_id =  $lender_view == 1 ? $transaction['BORROWER_ID'] : $transaction['LENDER_ID'];
+            $entity_type = 'TRANSACTION';
+            $entity_id = $transaction['TRANSACTION_ID'];
+        ?>         
+        <?php require(dirname(dirname(__FILE__)) . '/contact.php'); ?>           
          
      </td>
  </tr>

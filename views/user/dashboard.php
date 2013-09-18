@@ -3,6 +3,8 @@
     require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
 ?>
 
+<link rel="stylesheet" href="/css/user/dashboard.css">
+
 <div id="dashboard" class="sheet">
     <legend>Dashboard</legend>
     <div class="tabbable">
@@ -34,7 +36,8 @@
                         <tbody>
                              <?php 
                                 $current = 0;
-                                $lender_view = 1; ?>
+                                $lender_view = 1; 
+                                $pending = 0; ?>
                                 <td colspan="5" class="alert alert-error">
                                     <div style="width: 100%" class="text-center">
                                         <strong>Open (<?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) ?>)</strong>
@@ -51,6 +54,7 @@
                                 </td>                                 
                                 <?php 
                                 $transactions = $viewmodel["LENDING"]["REQUESTS"]["PENDING"]; 
+                                $pending = 1;
                                 require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?> 
                         </tbody>
                     </table>
@@ -140,7 +144,8 @@
                         <tbody>
                              <?php 
                                 $current = 0;
-                                $lender_view = 0; ?>
+                                $lender_view = 0; 
+                                $pending = 0;?>
                                 <td colspan="5" class="alert alert-error">
                                     <div style="width: 100%" class="text-center">
                                         <strong>Open (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?>)</strong>
@@ -157,6 +162,7 @@
                                 </td>                                 
                                 <?php 
                                 $transactions = $viewmodel["BORROWING"]["REQUESTS"]["PENDING"]; 
+                                $pending = 1;
                                 require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?>  
                         </tbody>
                     </table>
@@ -231,5 +237,4 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="/css/user/dashboard.css">
 <script src="/js/user/dashboard.js"></script>

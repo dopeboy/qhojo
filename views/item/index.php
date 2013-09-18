@@ -6,11 +6,16 @@ global $user_thumb_subdir;
 global $stock_user_tn;
 
 $disable_borrow = false;
+$disable_contact = false;
 
 if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $viewmodel['ITEM']["LENDER_ID"]) || $viewmodel['ALREADY_REQUESTED'])
     $disable_borrow = true;
+
+if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $viewmodel['ITEM']["LENDER_ID"]))
+    $disable_contact = true;
 ?>
 
+<link rel="stylesheet" href="/css/item/index.css">
 
 <div class="sheet">
     <legend><?php echo $viewmodel['ITEM']['TITLE']?></legend>
@@ -63,32 +68,26 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                 <h2 class="" style="">
                     <a href="/user/index/<?php echo $viewmodel['ITEM']['LENDER_ID']?>"><?php echo $viewmodel['ITEM']['LENDER_NAME']; ?></a>
                 </h2>
-                
-                <button id="contact-btn" class="btn btn-primary btn-large btn-block" type="button" >Contact</button> 
+                    
                 <?php 
                     $receipient_full_name = $viewmodel['ITEM']['LENDER_NAME'];
-                    $receipient_first_name = $viewmodel['ITEM']['LENDER_FIRST_NAME'];        
+                    $receipient_first_name = $viewmodel['ITEM']['LENDER_FIRST_NAME'];
+                    $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
+                    $title = "Message {$receipient_full_name} about {$viewmodel['ITEM']['TITLE']}";
+                    $sender_user_id =  $_SESSION["USER"]["USER_ID"];
+                    $receipient_user_id =  $viewmodel['ITEM']['LENDER_ID'];
+                    $entity_type = 'ITEM';
+                    $entity_id = $viewmodel['ITEM']['ITEM_ID'];
                 ?>
                 
-                <div id="contact-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">Message <?php echo $receipient_full_name; ?></h3>
-                    </div>
-                    <div class="modal-body text-left" style="">
-                        <p>
-                        Hey <?php echo $receipient_first_name; ?>,
-                        </p>
-                        <div>
-                            <textarea rows="3" placeholder="Put your question here." style=""></textarea>
-                            <p><?php echo !empty($this->userid) ? "-FILL IN" : "-FILL IN" ?></p>            
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button class="btn btn-primary">Send Message</button>
-                    </div>
-                </div>                
+                <?php if (!empty($_SESSION["USER"]["USER_ID"])):  ?>
+                    <button id="contact-btn" data-toggle="modal" href="<?php if ($disable_contact) { echo "javascript:void(0)"; } else { ?>#contact-modal-<?php echo $entity_id;} ?>" class="btn btn-primary btn-large btn-block <?php if ($disable_contact) {echo "disabled";} ?>" type="button" >Contact</button> 
+                <?php else:  ?>
+                    <button id="contact-btn-not-signedin" href="" class="btn btn-primary btn-large btn-block" type="button" >Contact</button> 
+                <?php endif; ?>
+                
+                <?php require(dirname(dirname(__FILE__)) . '/embeds/contact.php'); ?> 
+                    
             </div>
             
             <div class="section split map">
@@ -102,109 +101,6 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
 <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
 </script>   
-    
 
-<!--
-<div class="sheet">
-    <legend>Canon 7D</legend>
-    <div class="row-fluid">
-        <div class="span9">
-            <div class="row-fluid visuals">
-                <div class="span3 text-center section preview">
-                     <img class="thumbnail" src="/img/7d_small.png">
-                     <img class="thumbnail" src="/img/7d_small2.png" >
-                </div>
-
-                <div class="span9 text-center item-picture">
-                    <img src="/img/7d_big.png">
-                </div>       
-            </div>
-  
-            <div class="details">
-                <div class="subsection description">
-                    <h3>Description</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.                 
-                    </p>
-                </div>
-
-                <div class="hold-policy subsection">
-                    <h3>Hold Policy</h3>
-                    <p>
-                        A $200 hold will be placed on your credit card at the start of the rental period.
-                    </p>
-                 </div>                      
-
-                <div class="reviews subsection">
-                    <h3>Reviews</h3>
-
-                     <div class="row-fluid review" style="">
-                        <div class="span1">
-                            <img src="/img/guido.jpg" class="img-circle">
-                        </div>
-                        <div class="span11">
-                            <div class="row-fluid review-top" style="">
-                                <div class="pull-left">
-                                    <i class="icon-thumbs-up"></i> by <a href="#">Guido L.</a>
-                                </div>
-                                <div class="pull-right" style="">
-                                    3 days ago
-                                </div>                            
-                            </div>
-
-                            <div style="">
-                                I liked this camera. Manish is a great guy.
-                            </div>                        
-                        </div>
-                    </div>
-
-                    <div class="row-fluid review">
-                        <div class="span1">
-                            <img src="/img/sarohini.jpg" class="img-circle">
-                        </div>
-                        <div class="span11">
-                            <div class="row-fluid review-top" style="">
-                                <div class="pull-left">
-                                    <i class="icon-thumbs-down"></i> by <a href="#">Sarohini C.</a>
-                                </div>
-                                <div class="pull-right" style="">
-                                    7 days ago
-                                </div>                            
-                            </div>
-
-                            <div>
-                               Not good experience. Manish smells.
-                            </div>                        
-                        </div>                        
-                    </div>
-
-                 </div> 
-
-            </div>
-        </div>
-        
-        <div class="span3 side-panel">    
-            <div class="section split action">
-                <h2 class="text-center rental-rate">$25 / day</h2>
-                <form action="/item/request/" method="get">
-                    <button class="rentlink btn btn-success btn-large btn-block" type="submit" >Borrow</button>    
-                </form>                    
-            </div>
-       
-            <div class="section split lender text-center">
-                <a href="/user/index/"><img src="/img/me_big.png" class="img-circle lender-picture" style=""></a>
-                <h2 class="" style="padding: 10px 0px;"><a href="/user/index/">Manish S.</a></h2>
-                 <button class="rentlink btn btn-primary btn-large btn-block" type="button" >Contact</button>    
-            </div>
-            
-            <div class="section split map">
-                <img src="/img/google_map.png">
-            </div>            
-        </div>
-    </div>
-</div>
--->
-
-<link rel="stylesheet" href="/css/item/index.css">
 <script src="/js/item/index.js"></script>
 

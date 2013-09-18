@@ -50,8 +50,8 @@
             Request Submitted
         </legend>    
         <div>
-            Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have requested <a href="/item/index/<?php echo $viewmodel["ITEM_ID"] ?>"><?php echo $viewmodel["TITLE"] ?></a> successfully. 
-            We'll notify you as soon as the lender, <a href="/user/index/<?php echo $viewmodel["LENDER_ID"] ?>"><?php echo $viewmodel["LENDER_FIRST_NAME"] ?></a>, has responded to your request.
+            Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have requested <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. 
+            We'll notify you as soon as the lender, <a href="/user/index/<?php echo $viewmodel["ITEM"]["LENDER_ID"] ?>"><?php echo $viewmodel["ITEM"]["LENDER_FIRST_NAME"] ?></a>, has responded to your request.
         </div>        
     <?php } ?>
 </div>

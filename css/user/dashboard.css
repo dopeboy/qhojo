@@ -104,3 +104,13 @@ a.show-hide-history
 {
     margin-left: 20px;
 }
+
+.message-received
+{
+    margin-top: 10px;
+}
+
+textarea#contact
+{
+    margin-bottom: 10px;
+}

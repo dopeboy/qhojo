@@ -116,7 +116,7 @@ class ItemModel extends Model
         $sqlParameters = array();
         $sqlParameters[":item_id"] =  $item_id;
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:user_id LIMIT 1 UNION SELECT 1 FROM PENDING_VW where ITEM_ID=:item_id and BORROWER_ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row['ALREADY_REQUESTED']= ($preparedStatement->fetch(PDO::FETCH_ASSOC)  != null);
         
@@ -128,7 +128,7 @@ class ItemModel extends Model
         // Has user already requested item?
         $sqlParameters[":item_id"] =  $item_id;
         $sqlParameters[":borrower_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:borrower_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:borrower_id LIMIT 1 UNION SELECT 1 FROM PENDING_VW where ITEM_ID=:item_id and BORROWER_ID=:borrower_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
         
@@ -191,10 +191,13 @@ class ItemModel extends Model
         sendEmail($do_not_reply_email, $lender["EMAIL_ADDRESS"], null, $subject, $email);            
     }   
     
-    public function requestSubmitted($method, $item_id)
+    public function requestSubmitted($method, $item_id, $user_id)
     {   
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        
         $row['ITEM'] =  $this->getItem($item_id);     
-        return $row['ITEM'];
+        return $row;
     }
     
     public function post($method, $user_id)

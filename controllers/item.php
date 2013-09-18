@@ -44,7 +44,7 @@ class Item extends Controller
             }
             
             else if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 2)
-                $this->returnView($this->item_model->requestSubmitted($method, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method); 
+                $this->returnView($this->item_model->requestSubmitted($method, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty')), $_SESSION["USER"]["USER_ID"]), $method); 
         } 
         
         protected function post()

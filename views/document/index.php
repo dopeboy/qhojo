@@ -121,7 +121,7 @@
                  <img src="img/shaq.jpg" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                 <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a <a href="/document/fees">small commission fee</a>.</p>
+                 <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a <a href="/document/fees">small commission</a>.</p>
              </div>                               
          </div>                    
     </div>

@@ -51,7 +51,18 @@ $(document).ready(function()
         {
             element.parent().append(error);
         }        
-    });        
+    });   
+    
+    $("form#contact").data('validate_options',
+    {
+        errorElement: "p",
+        errorClass: "text-error",
+        rules:
+        {
+        }
+         
+    });  
+ 	    
 });
 
 function customResponseHandler(responseText)  
@@ -70,4 +81,12 @@ function customResponseHandler(responseText)
         $('#cancel-' + responseText.TransactionID).modal('hide');
         $('#' + responseText.Source).find('#current-count').text($('#'  + responseText.Source).find('#current-count').text()-1);
     }  
+    
+    else if (responseText.Action == 'CONTACT' && responseText.Status == 'SUCCESS')
+    {
+        // Fade out existing
+        $( "#mh-" + responseText.EntityID + ' h3').text('Message Sent');
+        $( "#mb-" + responseText.EntityID + '.modal-body').html('<p>Your message was sent successfuly.</p>');
+        $( "#mf-" + responseText.EntityID + ' .btn-primary').remove();
+    }    
 } 

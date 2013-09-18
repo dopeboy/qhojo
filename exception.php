@@ -205,7 +205,7 @@ class CancelRequestException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
-        parent::__construct("The request has already been cancelled. Please cancel out of this window.", $method, $user_id, $previous, $modal_id);
+        parent::__construct("The reservation has already been cancelled. Please cancel out of this window.", $method, $user_id, $previous, $modal_id);
     }       
 }
 
@@ -358,6 +358,30 @@ class DamageReportSubmissionFailureException extends BaseException
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
         parent::__construct("Something went wrong. Your damage report didn't get submitted to the system.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidContactAttemptException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("You are not involved with the item/transaction.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidEntityTypeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Invalid entity type supplied.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class CancelRequestLateException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("You cannot cancel a reservation within 24 hours of the start time.", $method, $user_id, $previous, $modal_id);
     }       
 }
 
