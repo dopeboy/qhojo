@@ -155,7 +155,7 @@ class ItemModel extends Model
         
         $start = new DateTime($start_date); 
         $end = new DateTime($end_date); 
-        $end->setTime(21, 00);
+        $end->setTime(23, 59);
         
         $formatted_end_date = $end->format('Y-m-d H:i:s');
         

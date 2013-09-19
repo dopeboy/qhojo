@@ -508,12 +508,15 @@ class TransactionModel extends Model
         
         foreach ($transactions as $t)
         {
+            error_log("%%%%%%" . $t["RESERVATION"]["CONFIRMATION_CODE"]);
             if ($t["RESERVATION"]["CONFIRMATION_CODE"] == $confirmation_code)
             {       
                 $transaction = $t;
                 break;
             }
         }
+        
+       
         
         if ($transaction == null)
         {
