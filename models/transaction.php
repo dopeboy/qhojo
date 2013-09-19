@@ -659,7 +659,7 @@ class TransactionModel extends Model
             }
         }
         
-        if ($transaction == null || $transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"])
+        if ($transaction == null || $transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"] == null)
         {
             $error_msg = "Error: Invalid confirmation code or missing payment details.";        
             $this->sendText($phone_number, $lender_number, $error_msg, $method, null);              

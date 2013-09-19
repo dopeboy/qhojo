@@ -54,6 +54,6 @@ insert into CANCEL_OPTIONS VALUES (0,'Scheduling issue with the lender/borrower'
 insert into CANCEL_OPTIONS VALUES (1,'Changed mind',1);
 insert into CANCEL_OPTIONS VALUES (2,'Other',2);
 
-insert into DAMAGE_OPTIONS VALUES (0,'Minor stratches and scruffs',0);
-insert into DAMAGE_OPTIONS VALUES (1,'Significant wear and tear',1);
-insert into DAMAGE_OPTIONS VALUES (2,'Severe damage',2);
+insert into DAMAGE_OPTIONS VALUES (0,'Significant cosmetic damage',0);
+insert into DAMAGE_OPTIONS VALUES (1,'Functionality is significantly impaired',1);
+insert into DAMAGE_OPTIONS VALUES (2,'Item is no longer functional',2);
