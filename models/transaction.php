@@ -470,21 +470,24 @@ class TransactionModel extends Model
         return $transactions;
     }
     
-    // For exceptions, because these are text msg initiated, we're just going to make them and not throw them.
-    // In the case of an error here:
-    //  send text msg to borrower saying Error - <error msg> + transaction cancelled
-    //  send text msg to lender saying Error - <error msg> + transaction cancelled
-    //  send emails to both
-    // move 
+    /// Note that we're just going to make the exceptions here, not throw them. 
     public function borrowerConfirm($method, $confirmation_code, $phone_number) 
     {
+        global $lender_number;
+        global $borrower_number;
+        
         $sqlParameters[":phone_number"] =  $phone_number;
         $preparedStatement = $this->dbh->prepare('select * from USER_VW where PHONE_NUMBER=:phone_number LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $borrower = $preparedStatement->fetch(PDO::FETCH_ASSOC);
         
-        if ($borrower == null)
-            throw new Invalid123(); // No user with that phone number
+        if ($borrower == null || $borrower["BP_BUYER_URI"] == null || $borrower["BP_PRIMARY_CARD_URI"] == null)
+        {
+            $error_msg = "Error: You do not have an active transaction or your payment details are missing.";        
+            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);   
+            new InvalidPhoneNumberException($method); // No user with that phone number or invalid payment details
+            exit();
+        }
         
         $sqlParameters = array();
         $sqlParameters[":borrower_id"] =  $borrower["USER_ID"];
@@ -493,7 +496,12 @@ class TransactionModel extends Model
         $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
         if ($rows == null)
-            throw new Invalid234(null, null, null); // Reservation doesn't exist
+        {
+            $error_msg = "Error: You do not have an active reservation.";        
+            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
+            new InvalidReservationException($method, null, null); // Reservation doesn't exist
+            exit();
+        }
         
         $transactions = $this->denormalize($rows);
         $transaction = null;
@@ -508,13 +516,15 @@ class TransactionModel extends Model
         }
         
         if ($transaction == null)
-            throw new Invalid3(null, null, null); // Reservation doesn't exist
-
-        if ($borrower["BP_BUYER_URI"] == null || $borrower["BP_PRIMARY_CARD_URI"] == null)
-            throw new Invalid4(null,null,null); // Borrower missing payment details
+        {
+            $error_msg = "Error: Invalid confirmation code.";        
+            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
+            new InvalidConfirmationCodeException(null, null, null); // Reservation doesn't exist or invalid code
+            exit();
+        }
         
         global $bp_api_key;
-
+        
         Balanced\Settings::$api_key = $bp_api_key;
         Httpful\Bootstrap::init();
         RESTful\Bootstrap::init();
@@ -529,22 +539,56 @@ class TransactionModel extends Model
 
         catch (Exception $e)
         {
-            throw new Invalid5(); // Hold error
+            $error_msg = "Error: The hold could not be made on the borrower's credit card. Do not exchange the item. The transaction is now cancelled. Please check your email inbox.";
+            $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,625,$method, $borrower["USER_ID"]), array("MESSAGE" => $e->getMessage()), $borrower["USER_ID"]);            
+            $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $error_msg, $method, $borrower["USER_ID"]);
+            $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $error_msg, $method, $borrower["USER_ID"]);
+            
+            global $do_not_reply_email;
+            
+            // Send an email too
+            $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+            $message .= "We attempted to place a credit card hold on the borrower's card for the item value, \${$transaction["DEPOSIT"]}. This failed. Reasons could include a cancelled card or an insufficient credit limit. <br/><br/>";
+            $message .= "As a result, we have cancelled the transaction. The lender should not exchange the item with the borrower.<br/><br/>";
+            $message .= "We recommend the borrower to investigate the aforementioned possible causes for this error and try again with a new transaction.<br/><br/>";
+            $message .= "We apologize for any inconvenience.";
+            
+            $subject = "{$transaction["TITLE"]} - CANCELLED - Transaction has been cancelled - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+            sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                        
+            
+            new CreditCardHoldFailedException($method, $borrower["USER_ID"], $e); 
+            exit();
         }
 
         if ($hold->uri == null)
         {
-            throw new Invalid6(); // Hold Error
+            $error_msg = "Error: The hold could not be made on the borrower's credit card. Do not exchange the item. The transaction is now cancelled. Please check your email inbox.";
+            $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,625,$method, $borrower["USER_ID"]), array("MESSAGE" => $e->getMessage()), $borrower["USER_ID"]);            
+            $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $error_msg, $method, $borrower["USER_ID"]);
+            $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $error_msg, $method, $borrower["USER_ID"]);
+            
+            global $do_not_reply_email;
+            
+            // Send an email too
+            $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+            $message .= "We attempted to place a credit card hold on the borrower's card for the item value, \${$transaction["DEPOSIT"]}. This failed. Reasons could include a cancelled card or an insufficient credit limit. <br/><br/>";
+            $message .= "As a result, we have cancelled the transaction. The lender should not exchange the item with the borrower.<br/><br/>";
+            $message .= "We recommend the borrower to investigate the aforementioned possible causes for this error and try again with a new transaction.<br/><br/>";
+            $message .= "We apologize for any inconvenience.";
+            
+            $subject = "{$transaction["TITLE"]} - CANCELLED - Transaction has been cancelled - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+            sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                        
+            
+            new CreditCardHoldFailedException($method, $borrower["USER_ID"]); 
+            exit();
         }
-        
+ 
+        // Home free now
         $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,500,$method, $borrower["USER_ID"]), array("BORROWER_BP_HOLD_URI" => $hold->uri), $borrower["USER_ID"]);            
 
         $message = "Hey " . $transaction["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $transaction["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".";
         $message2 = "Thanks " . $transaction["BORROWER_FIRST_NAME"] . ". The rental duration has now started. We've placed a hold of \${$transaction["DEPOSIT"]} on your credit card. The item must be returned to " . $transaction["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".";
 
-        global $lender_number;
-        global $borrower_number;
-        
         $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $borrower["USER_ID"]);
         $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $borrower["USER_ID"]);
         
@@ -560,7 +604,8 @@ class TransactionModel extends Model
         $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, rock out with your rented gear until " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/>";
         $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/>";
         $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/>";
-        $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.";
+        $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+        $message .= "Please note that if the item is not returned by the due date, the borrower will be charged the rental rate for each day the item is late.";
         
         $subject = "{$transaction["TITLE"]} - EXCHANGED - Item has been exchanged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
@@ -569,16 +614,21 @@ class TransactionModel extends Model
     
     public function lenderConfirm($method, $confirmation_code, $phone_number) 
     {
-        error_log("cc:" . $confirmation_code);
-        error_log("ph:" . $phone_number);
-
+        global $lender_number;
+        global $borrower_number;
+        
         $sqlParameters[":phone_number"] =  $phone_number;
         $preparedStatement = $this->dbh->prepare('select * from USER_VW where PHONE_NUMBER=:phone_number LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $lender = $preparedStatement->fetch(PDO::FETCH_ASSOC);
         
         if ($lender == null)
-            throw new Invalid123();
+        {
+            $error_msg = "Error: You do not have an active transaction.";        
+            $this->sendText($phone_number, $lender_number, $error_msg, $method, null);   
+            new InvalidPhoneNumberException($method); // No user with that phone number or invalid payment details
+            exit();
+        }
         
         $sqlParameters = array();
         $sqlParameters[":lender_id"] =  $lender["USER_ID"];
@@ -587,7 +637,12 @@ class TransactionModel extends Model
         $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
         if ($rows == null)
-            throw new Invalid234(null, null, null);
+        {
+            $error_msg = "Error: You do not have an active reservation.";        
+            $this->sendText($phone_number, $lender_number, $error_msg, $method, null);              
+            new InvalidReservationException($method, null, null); // Reservation doesn't exist
+            exit();            
+        }
         
         $transactions = $this->denormalize($rows);
         $transaction = null;
@@ -601,8 +656,13 @@ class TransactionModel extends Model
             }
         }
         
-        if ($transaction == null)
-            throw new Invalid3(null, null, null);
+        if ($transaction == null || $transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"])
+        {
+            $error_msg = "Error: Invalid confirmation code or missing payment details.";        
+            $this->sendText($phone_number, $lender_number, $error_msg, $method, null);              
+            new InvalidConfirmationCodeException(null, null, null); // Reservation doesn't exist or invalid code
+            exit();            
+        }
         
         global $bp_api_key;
 
@@ -611,23 +671,7 @@ class TransactionModel extends Model
         RESTful\Bootstrap::init();
         Balanced\Bootstrap::init();
 
-        // Void the hold
-        try
-        {
-            $hold = Balanced\Hold::get($transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"]);
-            $hold->void();
-        }
-
-        catch (Exception $e)
-        {
-            throw new Invalid5();
-        }
-
         // Charge the borrower
-        
-        if ($transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"] == null)
-            throw new Invalid6();
-        
         global $transaction_fee_variable;
         global $transaction_fee_fixed;
         $total_without_fee = $transaction["REQ"]["TOTAL"];
@@ -642,15 +686,29 @@ class TransactionModel extends Model
 
         catch (Exception $e)
         {
+            $error_msg = "Error: We were unable to charge your credit card. Please contact us immediately.";        
+            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
+            new DebitFailedException(null, null, null); // Reservation doesn't exist or invalid code
         }
         
+        // Void the hold
+        try
+        {
+            $hold = Balanced\Hold::get($transaction["EXCHANGED"]["BORROWER_BP_HOLD_URI"]);
+            $hold->void();
+        }
+
+        // Non-fatal
+        catch (Exception $e)
+        {
+            new VoidHoldFailedException(null, null, null);
+        }
+
         // Pay the lender
         $status = $this->paypalMassPayToLender($transaction["EXCHANGED"]['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
 
         if ($status != 0)
-        {
-            error_log($status);
-        }
+            new PayPalSendFundsToLenderFailedException(null);
 
         $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(500,700,$method, $transaction["LENDER_ID"]), null,  $transaction["LENDER_ID"]);            
         
@@ -658,7 +716,7 @@ class TransactionModel extends Model
         global $borrower_number;
         $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $transaction["LENDER_ID"]);      
         
-      // Send emails
+        // Send emails
         global $do_not_reply_email, $domain;
         
         // Send email to both
@@ -805,9 +863,7 @@ class TransactionModel extends Model
         $httpParsedResponseAr = $this->PPHttpPost('MassPay', $nvpStr);
 
         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
-        {
             return 0;
-        } 
 
         else  
         {

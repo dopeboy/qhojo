@@ -385,4 +385,60 @@ class CancelRequestLateException extends BaseException
     }       
 }
 
+class CreditCardHoldFailedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The hold on the credit card could not be made.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidPhoneNumberException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("Could not find active user with phone number.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidConfirmationCodeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("An invalid confirmation code was supplied.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidReservationException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("There are no reservations under this user.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class DebitFailedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The credit card debit failed.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class VoidHoldFailedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The hold on the credit card could not be voided.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class PayPalSendFundsToLenderFailedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("We were unable to send funds to the lender.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 ?>

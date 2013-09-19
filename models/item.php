@@ -155,6 +155,9 @@ class ItemModel extends Model
         
         $start = new DateTime($start_date); 
         $end = new DateTime($end_date); 
+        $end->setTime(21, 00);
+        
+        $formatted_end_date = $end->format('Y-m-d H:i:s');
         
         global $maximum_rental_duration_days;
         if ($end->diff($start)->d > $maximum_rental_duration_days)
@@ -162,7 +165,7 @@ class ItemModel extends Model
         
         $transaction_model = new TransactionModel();
         $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
-        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $end_date, "MESSAGE" => $message), $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $formatted_end_date, "MESSAGE" => $message), $requestor_id);
         
         // Get user info for both lender and borrower
         $user_model = new \UserModel();
@@ -179,7 +182,7 @@ class ItemModel extends Model
         
         // Send email to lender
         $email = "Hi {$lender["FIRST_NAME"]},<br/><br/>";
-        $email .= "{$requestor["FIRST_NAME"]} has requested to rent your item, {$item["TITLE"]}, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ".<br/><br/>";
+        $email .= "{$requestor["FIRST_NAME"]} has requested to rent your item, {$item["TITLE"]}, from " . date("m/d g:i A", strtotime($start_date)) . " to " . date("m/d g:i A", strtotime($formatted_end_date)) . ".<br/><br/>";
         $email .= "Here's the message {$requestor["FIRST_NAME"]} attached to the request:<br/><br/>";
         $email .= "<blockquote>{$message}</blockquote><br/>";
         $email .= "If you want to accept {$requestor["FIRST_NAME"]}'s request, click on the link below: <br/><br/>";
