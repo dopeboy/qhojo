@@ -129,7 +129,8 @@ class TransactionModel extends Model
         {
             $preparedStatement = $this->dbh->prepare('select * from RETURNED_AND_NEED_LENDER_REVIEW_VW where TRANSACTION_ID=:transaction_id AND LENDER_ID=:user_id');
             $preparedStatement->execute($sqlParameters);
-            $transaction = reset($this->denormalize($preparedStatement->fetchAll(PDO::FETCH_ASSOC)));
+            $d = $this->denormalize($preparedStatement->fetchAll(PDO::FETCH_ASSOC));
+            $transaction = reset($d);
             
             // 700 -> 900
             if ($transaction["FINAL_STATE_ID"] == 700)
@@ -145,7 +146,8 @@ class TransactionModel extends Model
         {
             $preparedStatement = $this->dbh->prepare('select * from RETURNED_AND_NEED_BORROWER_REVIEW_VW where TRANSACTION_ID=:transaction_id AND BORROWER_ID=:user_id');
             $preparedStatement->execute($sqlParameters);
-            $transaction = reset($this->denormalize($preparedStatement->fetchAll(PDO::FETCH_ASSOC)));
+            $d = $this->denormalize($preparedStatement->fetchAll(PDO::FETCH_ASSOC));
+            $transaction = reset($d);
             
             // 700 -> 1100
             if ($transaction["FINAL_STATE_ID"] == 700)
@@ -235,7 +237,8 @@ class TransactionModel extends Model
         if ($rows == null)
             throw new CancelRequestException($method, $user_id, null, $transaction_id);
         
-        $transaction = reset($this->denormalize($rows));
+        $d = $this->denormalize($rows);
+        $transaction = reset($d);
         
         // Check if current time is more than start_date + 24 hrs
         $start_date = new DateTime($transaction["REQ"]["START_DATE"]);
@@ -785,7 +788,8 @@ class TransactionModel extends Model
         if ($rows == null)
             throw new InvalidReportDamageException($method, $user_id, $transaction_id);
         
-        $viewmodel["TRANSACTION"] = reset($this->denormalize($rows));
+        $d = $this->denormalize($rows);
+        $viewmodel["TRANSACTION"] = reset($d);
         
         $preparedStatement = $this->dbh->prepare('select * from DAMAGE_OPTIONS_VW');
         $preparedStatement->execute();
@@ -851,7 +855,8 @@ class TransactionModel extends Model
         if ($rows == null)
             throw new DamageReportSubmissionFailureException($method, $user_id);       
         
-        return reset($this->denormalize($rows));
+        $d = $this->denormalize($rows);
+        return reset($d);
     }
     
     private function paypalMassPayToLender($paypal_email, $amount)
