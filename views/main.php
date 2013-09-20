@@ -50,12 +50,10 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="/" style="padding: 0px">
-                            <label style="font-family: 'Lobster', cursive; margin-top: 9px; font-size: 26px;color: white">Qhojo</label>
-                        </a>
+             <!-- font-family: 'Lobster', cursive; margin-top: 9px; font-size: 26px;color: white -->
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
-                              
+                                <li class=""><a href="/" style="font-family: 'Lobster', cursive;font-size: 26px">Qhojo</a></li>
                                 <li class=""><a href="/item/search.php">Borrow</a></li>
                                 <li><a href="/item/post">Lend</a></li>
                             </ul>
@@ -75,7 +73,7 @@
                                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/index/<?php echo $_SESSION["USER"]["USER_ID"];?>">Profile</a></li>
                                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard</a></li>
                                         <li role="presentation" class="divider"></li>
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/signout">SIgn out</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/signout">Sign out</a></li>
                                     </ul>
                                 </li>
                                   
