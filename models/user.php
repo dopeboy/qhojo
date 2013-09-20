@@ -201,6 +201,19 @@ class UserModel extends Model
     
     public function sendPhoneVerificationCode($method, $user_id, $phone_number)
     {
+        $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
+        $phone_clean =  '+1' . str_replace( array_keys($arr), array_values($arr), $phone_number); 
+        
+        // Does this phone number already exist?
+        $sqlParameters[":phone_number"] =  $phone_clean;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_VW WHERE PHONE_NUMBER=:phone_number LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);         
+        
+        if ($row != null)
+            throw new PhoneNumberUsedByExistingUserException($method, $user_id);
+        
+        $sqlParameters = array();
         $sqlParameters[":user_id"] =  $user_id;
         $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_DATESTAMP FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);
@@ -216,9 +229,7 @@ class UserModel extends Model
             if ($diff->d == 0)
                 throw new PhoneVerificationCodeException($method, $user_id);                
         }
-        
-        $arr = array('(' => '', ')'=> '','-' => '',' ' => '');
-        $phone_clean =  '+1' . str_replace( array_keys($arr), array_values($arr), $phone_number);     
+           
         $verification_code = getRandomID();
         
         $sqlParameters[":phone_verification_code"] =  $verification_code;

@@ -53,7 +53,7 @@ else: foreach($transactions as $key=>$transaction)
                 <span id="error-message-modal-<?php echo $transaction['TRANSACTION_ID']; ?>"></span>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
-            <div class="modal-header">
+            <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Cancel <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] . '\'s' : "your" ?> request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
             </div>

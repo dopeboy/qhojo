@@ -511,7 +511,6 @@ class TransactionModel extends Model
         
         foreach ($transactions as $t)
         {
-            error_log("%%%%%%" . $t["RESERVATION"]["CONFIRMATION_CODE"]);
             if ($t["RESERVATION"]["CONFIRMATION_CODE"] == $confirmation_code)
             {       
                 $transaction = $t;
@@ -856,7 +855,9 @@ class TransactionModel extends Model
             throw new DamageReportSubmissionFailureException($method, $user_id);       
         
         $d = $this->denormalize($rows);
-        return reset($d);
+        $viewmodel["TRANSACTION"] = reset($d);
+        
+        return $viewmodel;
     }
     
     private function paypalMassPayToLender($paypal_email, $amount)

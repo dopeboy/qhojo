@@ -53,7 +53,7 @@ else: foreach($transactions as $key=>$transaction)
                 <span id="error-message-modal-<?php echo $transaction['TRANSACTION_ID']; ?>"></span>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
-            <div class="modal-header">
+            <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>
                     <?php if ($lender_view == 1) { ?>
@@ -92,7 +92,7 @@ else: foreach($transactions as $key=>$transaction)
         </div>     
 
         <div id="accept-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
+            <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Accept <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
             </div>

@@ -441,4 +441,12 @@ class PayPalSendFundsToLenderFailedException extends BaseException
     }       
 }
 
+class PhoneNumberUsedByExistingUserException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("This phone number is already in use by an existing user. Please use another phone number or sign in with another account.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 ?>

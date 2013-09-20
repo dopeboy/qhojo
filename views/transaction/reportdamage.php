@@ -95,7 +95,7 @@ $awaiting_review = 1;
         Damage Report Submitted
     </legend>    
     <div>
-        <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>, your damage report has been submitted successfully. Our staff will reaching out to you and <?php echo $viewmodel["BORROWER_FIRST_NAME"] ?> shortly. Please check your email for more details.
+        <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>, your damage report has been submitted successfully. Our staff will reaching out to you and <?php echo $transaction["BORROWER_FIRST_NAME"] ?> shortly. Please check your email for more details.
     </div>
     <?php } ?>
 </div>
