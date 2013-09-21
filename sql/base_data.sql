@@ -1,3 +1,6 @@
+insert into USER (ID, FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, PASSWORD, ZIPCODE, CITY, STATE, JOIN_DATE, ADMIN, ACTIVE) 
+VALUES (142543, 'Qho','Admin','support@qhojo.com','40ef41af0788a653148a6bc2849a4588ba2056058240b08a2eaada92f58bd94b79ba99aaaf394ffc913d7989988340dfa215f48b448ea119e6adf1763b649450',10002,'New York','NY','2013-09-21 13:22:01',1,1);
+
 insert into STATE VALUES (100,'INIT',1);
 insert into STATE VALUES (200,'REQUESTED',1);
 insert into STATE VALUES (250,'PENDING',1);
@@ -16,10 +19,15 @@ insert into STATE VALUES (900,'REVIEWED BY LENDER',1);
 insert into STATE VALUES (1000,'REVIEWED BY BORROWER',1);
 insert into STATE VALUES (1100,'REVIEWED BY BORROWER',1);
 insert into STATE VALUES (1200,'REVIEWED BY LENDER',1);
+insert into STATE VALUES (9000,'EXPIRED',1);
 
 insert into EDGE VALUES (0,100,200,'USER REQUESTED ITEM', '%B requested %L\'s item', 1);
 insert into EDGE VALUES (19,200,250,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
-insert into EDGE VALUES (20,250,300,'BORROWER FILLED OUT EXTRA SIGNUP FIELDS', '%B completed their user profile', 1);
+insert into EDGE VALUES (20,250,300,'BORROWER COMPLETED USER PROFILE', '%B completed their user profile', 1);
+
+insert into EDGE VALUES (21,250,9000,'BORROWER DID NOT COMPLETE USER PROFILE IN 24 HOURS', '%B did not complete their user profile', 1);
+insert into EDGE VALUES (22,300,9000,'ITEM WAS NOT EXCHANGED ON START DATE', '%B did not text confirmation on start date', 1);
+
 insert into EDGE VALUES (1,200,300,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
 insert into EDGE VALUES (2,200,400,'LENDER REJECTED REQUEST', '%L rejected %B\'s request', 1);
 insert into EDGE VALUES (18,200,401,'BORROWER WITHDREW REQUEST', '%B withdrew the request', 1);
