@@ -75,10 +75,10 @@ else: foreach($transactions as $key=>$transaction)
                     <div class="reject-options" style="">
                         <?php foreach($viewmodel["REJECT_OPTIONS"] as $key=>$option) { ?>
 
-                        <div class="radio">
+                        <label class="radio">
                             <input class="required" type="radio" name="reject-option" id="<?php echo $transaction['TRANSACTION_ID'] . '_' . $option['REJECT_OPTION_ID']; ?>" value="<?php echo $option['REJECT_OPTION_ID']; ?>" >
                             <?php echo $option['REJECT_DESCRIPTION']; ?>
-                        </div>                                        
+                        </label>                                                              
 
                         <?php } ?>
                     </div>    

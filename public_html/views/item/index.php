@@ -58,7 +58,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
         <div class="span3 side-panel">    
             <div class="section split action">
                 <h2 class="text-center" id="rental-rate">$<?php echo $viewmodel['ITEM']['RATE']?> / day</h2>
-                    <a href="<?php if ($disable_borrow) { echo "javascript:void(0)"; } else { echo "/item/request/" . $viewmodel['ITEM']['ITEM_ID']; }?>" id="rentlink" class="btn btn-success btn-large btn-block <?php if ($disable_borrow) { ?>disabled<?php } ?>" type="button" >Borrow</a>    
+                    <a href="<?php if ($disable_borrow) { echo "javascript:void(0)"; } else { echo "/transaction/request/" . $viewmodel['ITEM']['ITEM_ID']; }?>" id="rentlink" class="btn btn-success btn-large btn-block <?php if ($disable_borrow) { ?>disabled<?php } ?>" type="button" >Borrow</a>    
             </div>
        
             <div class="section split text-center" id="lender">

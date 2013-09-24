@@ -39,9 +39,6 @@
                         </div>
                         <div class="control-group">
                           <div class="controls">
-                            <label class="checkbox">
-                              <input type="checkbox"> Remember me
-                            </label>
                             <button type="submit" class="btn btn-large btn-primary">Sign in</button>
                           </div>
                         </div>

@@ -10,15 +10,18 @@
     <div class="tabbable">
         <ul class="nav nav-pills ">
             <li class="active">
+                <a href="#borrowing" data-toggle="tab">Borrowing</a>
+            </li>
+            <li>
                 <a href="#lending" data-toggle="tab">Lending</a>
             </li>
             <li>
-                <a href="#borrowing" data-toggle="tab">Borrowing</a>
-            </li>
+                <a href="#my-items" data-toggle="tab">My Items</a>
+            </li>            
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="lending">
+            <div class="tab-pane" id="lending">
                 <div class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
                         Requests (<span id="requests-count"><?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) + count($viewmodel["LENDING"]["REQUESTS"]["PENDING"]); ?></span>)
@@ -40,7 +43,7 @@
                                 $pending = 0; ?>
                                 <td colspan="5" class="alert alert-error">
                                     <div style="width: 100%" class="text-center">
-                                        <strong>Open (<?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) ?>)</strong>
+                                        <strong>Open (<span id='open-requests-count'><?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]) ?></span>)</strong>
                                     </div>
                                 </td>                            
                                 <?php
@@ -126,7 +129,7 @@
                 </div>
             </div>
             
-            <div class="tab-pane" id="borrowing">
+            <div class="tab-pane active" id="borrowing">
                 <div id="" class="dashboard-section requests" style="">
                     <h4 class="section-header" style="">
                         Requests (<span id="requests-count"><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) + count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]); ?></span>)
@@ -148,7 +151,7 @@
                                 $pending = 0;?>
                                 <td colspan="5" class="alert alert-error">
                                     <div style="width: 100%" class="text-center">
-                                        <strong>Open (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?>)</strong>
+                                        <strong>Open (<span id='open-requests-count'><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?></span>)</strong>
                                     </div>
                                 </td>                            
                                 <?php
@@ -232,6 +235,56 @@
                         </tbody>
                     </table>       
                 </div>
+            </div>
+            
+          
+            <div class="tab-pane" id="my-items">
+                <div id="active-items" class="dashboard-section" style="">
+                    <h4 class="section-header">
+                        Active (<span id="active-count"><?php echo count($viewmodel["MY_ITEMS"]["ACTIVE"]); ?></span>)
+                    </h4>        
+                    <table id="" class="table table-bordered active-items-table">
+                        <thead>
+                            <tr>
+                                <th class="item">Item</th>
+                                <th class="location">Location</th>
+                                <th class="response-time">Your Response Time</th>
+                                <th class="views">Views</th>
+                                <th class="action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php 
+                            $active = 1;                                
+                            $items = $viewmodel["MY_ITEMS"]["ACTIVE"]; 
+                            require(dirname(dirname(__FILE__)) . '/embeds/dashboard/myitems.php'); ?>   
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="inactive-items" class="dashboard-section" style="">
+                    <h4 class="section-header">
+                        Inactive (<span id="inactive-count"><?php echo count($viewmodel["MY_ITEMS"]["INACTIVE"]); ?></span>)
+                    </h4>        
+                    <table id="" class="table table-bordered inactive-items-table">
+                        <thead>
+                            <tr>
+                                <th class="item">Item</th>
+                                <th class="location">Location</th>
+                                <th class="response-time">Your Response Time</th>
+                                <th class="views">Views</th>
+                                <th class="action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php 
+                            $active = 0;                                
+                            $items = $viewmodel["MY_ITEMS"]["INACTIVE"]; 
+                            require(dirname(dirname(__FILE__)) . '/embeds/dashboard/myitems.php'); ?>   
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
     </div>

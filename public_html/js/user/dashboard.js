@@ -85,6 +85,7 @@ function customResponseHandler(responseText)
         $('#' + responseText.Source).find('.requests-table tr#' + responseText.TransactionID).fadeOut("slow");
         $('#reject-' + responseText.TransactionID).modal('hide');
         $('#' + responseText.Source).find('#requests-count').text($('#' + responseText.Source).find('#requests-count').text()-1);
+        $('#' + responseText.Source).find('#open-requests-count').text($('#' + responseText.Source).find('#open-requests-count').text()-1);
     }
     
     else if (responseText.Action == 'CANCEL')
@@ -101,4 +102,32 @@ function customResponseHandler(responseText)
         $( "#mb-" + responseText.EntityID + '.modal-body').html('<p>Your message was sent successfuly.</p>');
         $( "#mf-" + responseText.EntityID + ' .btn-primary').remove();
     }    
+    
+    else if (responseText.Action == 'DEACTIVATE' && responseText.Status == 'SUCCESS')
+    {
+        $('#deactivate-' + responseText.ItemID).modal('hide');
+        
+        $('.dashboard-section#inactive-items').find('tr#no-items').remove();
+        $('.dashboard-section#active-items').find('tr#' + responseText.ItemID).appendTo($('.dashboard-section#inactive-items').find('table.inactive-items-table'));
+        
+        if ($('table.active-items-table tr').length == 1)
+            $('table.active-items-table').append('<tr id=\'no-items\'><td colspan="5"><i>No items</i></td></tr>');
+        
+        $('.dashboard-section#active-items').find('#active-count').text(parseInt($('.dashboard-section#active-items').find('#active-count').text())-1);
+        $('.dashboard-section#inactive-items').find('#inactive-count').text(parseInt($('.dashboard-section#inactive-items').find('#inactive-count').text())+1);
+    }     
+    
+    else if (responseText.Action == 'ACTIVATE' && responseText.Status == 'SUCCESS')
+    {
+        $('#activate-' + responseText.ItemID).modal('hide');
+        
+        $('.dashboard-section#active-items').find('tr#no-items').remove();
+        $('.dashboard-section#inactive-items').find('tr#' + responseText.ItemID).appendTo($('.dashboard-section#active-items').find('table.active-items-table'));
+        
+        if ($('table.inactive-items-table tr').length == 1)
+            $('table.inactive-items-table').append('<tr id=\'no-items\'><td colspan="5"><i>No items</i></td></tr>');
+        
+        $('.dashboard-section#active-items').find('#active-count').text(parseInt($('.dashboard-section#active-items').find('#active-count').text())+1);
+        $('.dashboard-section#inactive-items').find('#inactive-count').text(parseInt($('.dashboard-section#inactive-items').find('#inactive-count').text())-1);
+    }          
 } 

@@ -67,10 +67,12 @@ else: foreach($transactions as $key=>$transaction)
                     
                     <div class="cancel-options" style="">
                         <?php foreach($viewmodel["CANCEL_OPTIONS"] as $key=>$option) { ?>
-                        <div class="radio">
+                        
+                        <label class="radio">
                             <input class="required" type="radio" name="cancel-option" id="<?php echo $transaction['TRANSACTION_ID'] . '_' . $option['CANCEL_OPTION_ID']; ?>" value="<?php echo $option['CANCEL_OPTION_ID']; ?>" >
                             <?php echo $option['CANCEL_DESCRIPTION']; ?>
-                        </div>                                        
+                        </label>
+                                                   
                         <?php } ?>
                     </div>
                     <textarea id="txtarea-<?php echo $transaction['TRANSACTION_ID']; ?>" name="reason" rows="3" placeholder="Optional: Fill out a message here to specify more detail." style=""></textarea>                          

@@ -1,7 +1,6 @@
-<script src="/js/bootstrap-datepicker.js"></script>
-<script src="/js/item/request.js"></script>
+
 <link rel="stylesheet" href="/css/datepicker.css">
-<link rel="stylesheet" href="/css/item/request.css">
+<link rel="stylesheet" href="/css/transaction/request.css">
 
 <?php
     $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
@@ -10,7 +9,7 @@
 
 <div class="sheet">
     <?php if ($this->state == 0) { ?>
-        <form class="form-submit" id="request" action="/item/request/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>/1" method="post">
+        <form class="form-submit" id="request" action="/transaction/request/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>/1" method="post">
             <legend>Rental Request - <a href="/item/index/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>"><?php echo $viewmodel['ITEM']['TITLE'] ?> </a></legend>
             <div class="section">
                 <h3>Rental Duration</h3>
@@ -57,4 +56,5 @@
 </div>
 
 
-
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/transaction/request.js"></script>

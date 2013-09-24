@@ -52,10 +52,10 @@ $awaiting_review = 1;
         <h3>Rate the damage</h3>
         <div id="rate-damage" style="">
             <?php foreach($viewmodel["DAMAGE_OPTIONS"] as $key=>$option) { ?>
-            <div class="radio">
+            <label class="radio">
                 <input class="required" type="radio" name="damage-option" id="<?php echo $transaction['TRANSACTION_ID'] . '_' . $option['DAMAGE_OPTION_ID']; ?>" value="<?php echo $option['DAMAGE_OPTION_ID']; ?>" >
-                <?php echo $option['DAMAGE_DESCRIPTION']; ?>
-            </div>                                        
+            <?php echo $option['DAMAGE_DESCRIPTION']; ?>
+            </label>
             <?php } ?>   
         </div>
 

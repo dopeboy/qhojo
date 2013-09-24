@@ -8,6 +8,7 @@ abstract class BaseException extends Exception
     protected $method = null;
     protected $modal_id = null;
     public $message = null;
+    protected $severity = Severity::WARNING;
     
     public function __construct($message, $method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
@@ -17,13 +18,13 @@ abstract class BaseException extends Exception
         $this->method = $method;
         $this->view = $method;
         $this->modal_id = $modal_id;
-        $this->json = json_encode(array ("Exception" => get_class($this), "RequestURI" => $_SERVER["REQUEST_URI"], "Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
+        $this->json = json_encode(array ("Exception" => get_class($this), "Severity" => $this->severity, "RequestURI" => $_SERVER["REQUEST_URI"], "Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
         parent::__construct($message, null, $previous);
         
         global $demo;
         
-        // If it's production, let's send an email to support@qhojo.com
-        if ($demo == false)
+        // If it's production and it's a severe exception, send it to us
+        if ($demo == false && $this->severity == Severity::SEVERE)
         {
             global $support_email;
             $from = $to = $replyto = $support_email;
@@ -133,6 +134,7 @@ class DatabaseException extends BaseException
 {
     public function __construct($message, $method, $user_id = 0, Exception $previous = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct($message, $method, $user_id, $previous);
     }       
 }
@@ -237,6 +239,7 @@ class ItemSubmissionIssueException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Something went wrong. Your item didn't get posted successfully. Try again.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -245,6 +248,7 @@ class PaypalCommunicationException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Can't talk to PayPal. Not your fault. We're looking into it.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -269,6 +273,7 @@ class TwilioSendTextMessageException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Issue with text message service.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -293,6 +298,7 @@ class InvalidEdgeException extends BaseException
 {
     public function __construct($method, $user_id = 0, $state_a, $state_b, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Invalid edge: " . $state_a . '->' . $state_b, $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -349,6 +355,7 @@ class HoldNotCapturedException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("The hold was not captured.", $method, $user_id, $previous);
     }     
 }
@@ -357,6 +364,7 @@ class DamageReportSubmissionFailureException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Something went wrong. Your damage report didn't get submitted to the system.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -365,6 +373,7 @@ class InvalidContactAttemptException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("You are not involved with the item/transaction.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -397,6 +406,7 @@ class InvalidPhoneNumberException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Could not find active user with phone number.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -405,6 +415,7 @@ class InvalidConfirmationCodeException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("An invalid confirmation code was supplied.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -413,6 +424,7 @@ class InvalidReservationException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("There are no reservations under this user.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -421,6 +433,7 @@ class DebitFailedException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("The credit card debit failed.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -429,6 +442,7 @@ class VoidHoldFailedException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("The hold on the credit card could not be voided.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -437,6 +451,7 @@ class PayPalSendFundsToLenderFailedException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("We were unable to send funds to the lender.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -453,6 +468,7 @@ class UserIsNotAdminException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("You have to be an admin to perform this action.", $method, $user_id, $previous, $modal_id);
     }       
 }

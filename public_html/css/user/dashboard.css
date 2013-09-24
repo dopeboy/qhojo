@@ -114,3 +114,28 @@ textarea#contact
 {
     margin-bottom: 10px;
 }
+
+.active-items-table th.item, .inactive-items-table th.item
+{
+    width: 45%;
+}
+
+.active-items-table th.location, .inactive-items-table th.location
+{
+    width: 15%;
+}
+
+.active-items-table th.response-time, .inactive-items-table th.response-time
+{
+    width: 15%;
+}
+
+.active-items-table th.views, .inactive-items-table th.views
+{
+    width: 15%;
+}
+
+.active-items-table th.action, .inactive-items-table th.action
+{
+    width: 10%;
+}

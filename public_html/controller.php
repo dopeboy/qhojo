@@ -43,11 +43,22 @@ abstract class Controller
                 $viewloc = 'views/error.php';
                 require('views/main.php');
             }
-            
-            else
+           
+            else if (get_parent_class($exception) == "BaseException" && $exception->getMethod() == Method::POST)
             {
                 error_log($exception);
                 echo $exception;
+            }
+            
+            else
+            {
+                $e = new DatabaseException("Database error.", Method::GET, null, $exception);
+                error_log($exception);
+                error_log($e);
+                
+                $viewmodel = $e;
+                $viewloc = 'views/error.php';
+                require('views/main.php');               
             }
         }   
 

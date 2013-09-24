@@ -7,4 +7,10 @@ abstract class Method
     const NAKED = 3;
 }
 
+abstract class Severity
+{
+    const SEVERE = 1;
+    const WARNING = 2;
+}
+
 ?>

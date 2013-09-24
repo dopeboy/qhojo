@@ -82,6 +82,90 @@ class TransactionModel extends Model
         return $this->denormalize($preparedStatement->fetchAll(PDO::FETCH_ASSOC));               
     }    
     
+    public function request($method, $user_id, $item_id)
+    {
+        $item_model = new ItemModel();
+        
+        // Has user already requested item?
+        $sqlParameters[":item_id"] =  $item_id;
+        $sqlParameters[":borrower_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW where ITEM_ID=:item_id AND BORROWER_ID=:borrower_id LIMIT 1 UNION SELECT 1 FROM PENDING_VW where ITEM_ID=:item_id and BORROWER_ID=:borrower_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+        
+        if ($row != null)
+            throw new UserHasAlreadyRequestedItemException($method, $user_id);
+            
+        // Is the item active?
+        $row['ITEM'] =  $item_model->getItem($item_id);
+        
+        if ($row['ITEM'] == null)
+            throw new RequestInactiveItemException($method, $user_id);
+        
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        
+        return $row;
+    }  
+    
+    // 100 -> 200
+    public function submitRequest($method, $item_id, $requestor_id, $start_date, $end_date, $message)
+    {
+        // Call this for validation purposes
+        $this->request($method, $requestor_id, $item_id);
+        
+        $start = new DateTime($start_date); 
+        $end = new DateTime($end_date); 
+        $end->setTime(23, 59);
+        
+        $formatted_end_date = $end->format('Y-m-d H:i:s');
+        
+        global $maximum_rental_duration_days;
+        if ($end->diff($start)->d > $maximum_rental_duration_days)
+            throw new RentalDurationExceedsLimitException($maximum_rental_duration_days, $method, $requestor_id);
+        
+        $transaction_model = new TransactionModel();
+        $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $formatted_end_date, "MESSAGE" => $message), $requestor_id);
+        
+        // Get user info for both lender and borrower
+        $user_model = new \UserModel();
+        $requestor = $user_model->getUserDetails($requestor_id);
+        
+        $sqlParameters[":item_id"] =  $item_id;
+        $preparedStatement = $this->dbh->prepare('SELECT LENDER_ID, TITLE FROM ITEM_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $item = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
+        
+        $lender = $user_model->getUserDetails($item["LENDER_ID"]);
+        
+        global $do_not_reply_email, $domain;
+        
+        // Send email to lender
+        $email = "Hi {$lender["FIRST_NAME"]},<br/><br/>";
+        $email .= "{$requestor["FIRST_NAME"]} has requested to rent your item, {$item["TITLE"]}, from " . date("m/d g:i A", strtotime($start_date)) . " to " . date("m/d g:i A", strtotime($formatted_end_date)) . ".<br/><br/>";
+        $email .= "Here's the message {$requestor["FIRST_NAME"]} attached to the request:<br/><br/>";
+        $email .= "<blockquote>{$message}</blockquote><br/>";
+        $email .= "If you want to accept {$requestor["FIRST_NAME"]}'s request, click on the link below: <br/><br/>";
+        $email .= "<a href=\"{$domain}/transaction/accept/{$transaction_id}/0\">{$domain}/transaction/accept/{$transaction_id}/0</a><br/><br/>";
+        $email .= "Alternatively, go to your <a href=\"{$domain}/user/dashboard/\">dashboard</a> to see all your requests.";
+
+        $subject = "{$item["TITLE"]} - REQUESTED - Item has been requested - Transaction ID: {$transaction_id}";
+        
+        sendEmail($do_not_reply_email, $lender["EMAIL_ADDRESS"], null, $subject, $email);            
+    }   
+    
+    public function requestSubmitted($method, $item_id, $user_id)
+    {   
+        $item_model = new ItemModel();
+        
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        
+        $row['ITEM'] =  $item_model->getItem($item_id);     
+        return $row;
+    }    
+    
     public function review($method, $user_id, $transaction_id)
     {   
         $sqlParameters[":transaction_id"] =  $transaction_id;

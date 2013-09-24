@@ -57,6 +57,10 @@ class UserModel extends Model
         $user_model = new UserModel();
         $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
         
+        $item_model = new ItemModel();
+        $row["MY_ITEMS"]["ACTIVE"] = $item_model->getMyActiveItems($user_id);
+        $row["MY_ITEMS"]["INACTIVE"] = $item_model->getMyInactiveItems($user_id);               
+        
         return $row;        
     }
 
