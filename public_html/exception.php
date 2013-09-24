@@ -17,7 +17,7 @@ abstract class BaseException extends Exception
         $this->method = $method;
         $this->view = $method;
         $this->modal_id = $modal_id;
-        $this->json = json_encode(array ("Exception" => get_class($this), "Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
+        $this->json = json_encode(array ("Exception" => get_class($this), "RequestURI" => $_SERVER["REQUEST_URI"], "Error" => array("Message" => $this->message, "File" => $this->getFile(), "Line" => $this->getLine(), "User ID" => $this->user_id, "ModalID" => $this->modal_id, "Timestamp" => $this->timestamp)),JSON_PRETTY_PRINT);        
         parent::__construct($message, null, $previous);
         
         global $demo;
@@ -457,5 +457,20 @@ class UserIsNotAdminException extends BaseException
     }       
 }
 
+class InvalidInvitationCodeException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("You entered an invalid invitation code. Please try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvitationCodeExpiredException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The invitation code you entered has expired.", $method, $user_id, $previous, $modal_id);
+    }       
+}
 
 ?>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -26,14 +27,8 @@
         <script src="/js/jquery.form.js"></script> 
         
         <script src="/js/main.js"></script>
-
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src='//www.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
-        <script src="/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        
+        
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -54,13 +49,17 @@
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
                                 <li class=""><a href="/" style="font-family: 'Lobster', cursive;font-size: 26px">Qhojo</a></li>
-                                <li class=""><a href="/item/search.php">Borrow</a></li>
-                                <li><a href="/item/post">Lend</a></li>
+                                <?php if (User::isUserSignedIn()) { ?>
+                                    <li class=""><a href="/item/search.php">Borrow</a></li>
+                                    <li><a href="/item/post">Lend</a></li>
+                                <?php } ?>
                             </ul>
                             <ul class="nav pull-right">
-                                <li><a class="hiwlink" href="/#borrow">How to Borrow</a></li>
-                                <li><a class="hiwlink" href="/#lend">How to Lend</a></li>
-                                <?php if (!empty($_SESSION["USER"]["USER_ID"])) { ?>
+                                <?php if (User::isUserSignedIn()) { ?>
+                                    <li><a class="hiwlink" href="/#borrow">How to Borrow</a></li>
+                                    <li><a class="hiwlink" href="/#lend">How to Lend</a></li>
+                                <?php } ?>
+                                <?php if (User::isUserSignedIn()) { ?>
                                 <li class="dropdown">
 
                                     <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
@@ -104,14 +103,26 @@
                 <ul class="nav nav-pills">
                     <li><a href="/document/about">about</a></li>
                     <li><a href="http://qhojo.wordpress.com/">blog</a></li>
-                    <li><a href="/document/faq">faq</a></li>
-                    <li><a href="/document/contact">contact</a></li>
-                    <li><a href="/document/legal">legal</a></li>
+                    <?php if (User::isUserSignedIn()) { ?>
+                        <li><a href="/document/faq">faq</a></li>
+                        <li><a href="/document/contact">contact</a></li>
+                        <li><a href="/document/legal">legal</a></li>
+                    <?php } ?>
                     <li class="disabled"><a href="javascript:void(0);">v2.0.0</a></li>
-                    <li class="disabled"><a href="javascript:void(0);">© 2013 qhojo LLC</a></li>
+                    <li class="disabled"><a href="javascript:void(0);">© 2013 Qhojo LLC</a></li>
               </ul>
             </div>
         </div>
 
     </body>
+
+    <script>
+        var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src='//www.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+    <script src="/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+        
 </html>

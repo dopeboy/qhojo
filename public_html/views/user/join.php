@@ -40,6 +40,9 @@
                 <button type="submit" class="btn btn-large btn-primary" rel="tooltip" title="">Create My Account</button>
             </div>
         </div>
+        
+        <input type="hidden" class="" placeholder="" id="invite-id" name="invite-id" value="<?php echo $this->id; ?>"> 
+        
     </form>    
 </div>
 

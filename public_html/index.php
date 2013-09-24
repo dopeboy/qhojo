@@ -25,6 +25,7 @@
     require("models/document.php");
     require("models/transaction.php");
     require("models/picture.php");
+    require("models/invite.php");
 
     // require the controller classes
     require("controllers/user.php");
@@ -32,6 +33,7 @@
     require("controllers/document.php");
     require("controllers/transaction.php");
     require("controllers/picture.php");
+    require("controllers/invite.php");
     
     // exception classes
     require("exception.php");

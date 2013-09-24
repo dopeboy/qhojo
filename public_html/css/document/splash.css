@@ -1,0 +1,115 @@
+body 
+{ 
+  background: url(/img/bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+html,
+body 
+{
+    height: 100%;
+    
+}
+
+form
+{
+    margin: 0px;
+}
+
+.sheet
+{
+    padding: 40px;
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    background-color: whitesmoke;
+    margin-left: auto;
+    width: 250px;
+}
+
+.control-group .controls
+{
+    margin-left: 0px;
+}
+
+input[type="text"], input[type="password"] 
+{
+    font-size: 16px;
+    height: auto;
+    padding: 7px 9px;
+}
+
+.sheet#sign-in
+{
+    margin-top: 100px;
+}
+
+.sheet#invite
+{
+    margin-top: 40px;
+}
+
+.control-group:last-child
+{
+    margin-bottom: 0px;
+}
+.nav-pills >li >a 
+{
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.nav-pills > li > a:hover 
+{
+    background-color: transparent;
+    color:#FFFFFF;
+}
+
+.nav-pills .disabled > a 
+{
+    background-color: transparent;
+    color:#FFFFFF;
+}
+
+.nav-pills > li.not-disabled > a:hover
+{
+    color: #08c;
+}
+
+#wrap 
+{
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer 
+{
+  height: 60px;
+}
+
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) 
+{
+  #footer 
+  {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+#request-code
+{
+    margin-top: 20px;
+}

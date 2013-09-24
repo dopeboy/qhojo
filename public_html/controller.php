@@ -63,6 +63,12 @@ abstract class Controller
             $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; // This view makes use of $viewmodel
             require('views/main.php');
         }
+        
+        else if ($method == Method::NAKED)
+        {
+            $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; // This view makes use of $viewmodel
+            require($viewloc);
+        }
             
         else if ($method == Method::POST)
             echo $viewmodel;
@@ -90,6 +96,9 @@ abstract class Controller
     
     protected function popReturnURL()
     {
+        if (empty($_SESSION["RETURN_URL"]))
+            return null;
+        
         $tmp = $_SESSION["RETURN_URL"];
         unset($_SESSION["RETURN_URL"]);
         return $tmp;

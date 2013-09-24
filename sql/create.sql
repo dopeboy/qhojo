@@ -154,7 +154,45 @@ CREATE TABLE CONTACT_MESSAGES
         DATE_SENT                          DATETIME
 );
 
+drop table if exists INVITE;
+CREATE TABLE INVITE
+(
+	ID                                 VARCHAR(80) PRIMARY KEY, /* alphanumeric */
+        CODE                               VARCHAR(80),
+        COUNT                              INTEGER,
+        CREATED_BY_USER_ID                 INTEGER,
+        DATE_CREATED                       DATETIME,
+        ACTIVE                             INTEGER
+);
+
+ALTER TABLE INVITE ADD INDEX ID (ID);
+ALTER TABLE INVITE ADD INDEX CODE (CODE);
+
+drop table if exists INVITE_REQUEST;
+CREATE TABLE INVITE_REQUEST
+(
+	ID                                  INTEGER PRIMARY KEY,
+        FIRST_NAME                          VARCHAR(80),
+        LAST_NAME                           VARCHAR(80),
+        EMAIL_ADDRESS                       VARCHAR(80),
+        DATE_CREATED                        DATETIME
+);
+
+
+/*  insert into INVITE VALUES (md5(rand()),'222',9,1,null,1); */
+
 /* VIEWS                                               */
+
+CREATE OR REPLACE VIEW INVITE_VW AS
+SELECT
+ID as "INVITE_ID",
+CODE as "INVITE_CODE",
+COUNT,
+CREATED_BY_USER_ID,
+DATE_CREATED
+FROM INVITE
+WHERE ACTIVE = 1;
+
 
 CREATE OR REPLACE VIEW REJECT_OPTIONS_VW AS
 SELECT
