@@ -44,7 +44,7 @@ input[type="text"], input[type="password"]
 
 .sheet#sign-in
 {
-    margin-top: 100px;
+    margin-top: 80px;
 }
 
 .sheet#invite
@@ -106,7 +106,13 @@ input[type="text"], input[type="password"]
     margin-right: -20px;
     padding-left: 20px;
     padding-right: 20px;
+
   }
+}
+
+#footer
+{
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #request-code
