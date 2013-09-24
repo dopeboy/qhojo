@@ -77,7 +77,7 @@
                                 </li>
                                   
                                 <?php } else { ?>
-                                    <li><a href="/user/join">Join</a></li>
+                                    <li><a href="/invite/submit">Join</a></li>
                                     <li><a href="/user/signin">Sign in</a></li>
                                 <?php } ?>
                             </ul>
