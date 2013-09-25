@@ -72,7 +72,7 @@ $(document).ready(function()
 
     $(".share.twitter").click(function() 
     {
-        popupwindow("http://twitter.com/share?text=" + $(this).attr('text'), 'Share on Twitter', 500, 500);
+        popupwindow("http://twitter.com/share?url=/&text=" + $(this).attr('text'), 'Share on Twitter', 500, 500);
     });
  	    
 });
