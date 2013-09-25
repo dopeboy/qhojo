@@ -67,9 +67,9 @@ $(document).ready(function()
     {
       var left = (screen.width/2)-(w/2);
       var top = (screen.height/2)-(h/2);
-      var window = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-      window.focus();
-      return window;
+      var aa = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+      aa.focus();
+      return aa;
     } 
 
     $(".share.twitter").click(function() 
