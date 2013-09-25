@@ -32,6 +32,12 @@ class Loader
 	//establish the requested controller as an object
 	public function createController() 
 	{
+            if (!class_exists($this->controller))
+            {
+                new InvalidPageException(Method::GET, null);
+                header('Location: /document/pagenotfound'); 
+            }
+                
             return new $this->controller($this->action,$this->urlvalues, $this->postvalues, $this->filevalues, $this->id, $this->userid, $this->state, $this->admin);
 	}
 }

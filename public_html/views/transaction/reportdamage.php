@@ -1,3 +1,5 @@
+<title>Qhojo - Damage Report</title>
+
 <?php 
                               
 global $item_picture_path, $user_picture_path; 

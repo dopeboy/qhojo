@@ -1,3 +1,4 @@
+<title>Qhojo - Submit Borrow Request</title>
 
 <link rel="stylesheet" href="/css/datepicker.css">
 <link rel="stylesheet" href="/css/transaction/request.css">
@@ -10,9 +11,9 @@
 <div class="sheet">
     <?php if ($this->state == 0) { ?>
         <form class="form-submit" id="request" action="/transaction/request/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>/1" method="post">
-            <legend>Rental Request - <a href="/item/index/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>"><?php echo $viewmodel['ITEM']['TITLE'] ?> </a></legend>
+            <legend>Borrow Request - <a href="/item/index/<?php echo $viewmodel['ITEM']['ITEM_ID'] ?>"><?php echo $viewmodel['ITEM']['TITLE'] ?> </a></legend>
             <div class="section">
-                <h3>Rental Duration</h3>
+                <h3>Borrow Duration</h3>
                     <div class="controls controls-row">
                         <input class="span2" id="date-start" name="date-start" type="text" placeholder="Pick a Start Date" data-date="12-02-2012" data-date-format="mm/dd/yyyy">
                         <input class="span2" id="date-end" name="date-end" type="text" placeholder="Pick an End Date" data-date="12-02-2012" data-date-format="mm/dd/yyyy" style="">

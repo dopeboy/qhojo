@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="/css/user/extrasignup.css">
+<title>Qhojo - Complete User Profile</title>
+
+<link rel="stylesheet" href="/css/user/completeprofile.css">
 
 <div class="sheet" id="user-signup-nav" style="">
     <div class="" id="nav-container" style="">
@@ -18,7 +20,7 @@
     <?php if ($this->state == 100) { ?>
     <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need you to fill out a couple more details. Please upload a profile picture of yourself below.</p>
     
-    <form class="form-submit" id="profile-picture" action="/user/extrasignup/null/101" method="post">
+    <form class="form-submit" id="profile-picture" action="/user/completeprofile/null/101" method="post">
         <div id="uploaded-profile-picture" class="text-center" style="">
             <div id="add-pictures" style="">
                   <button data-toggle="modal" tabindex="-1" href="#upload-profile-picture" id="upload-picture-btn" class="btn btn-success" type="button" style="">Upload Profile Picture</button> 
@@ -46,7 +48,7 @@
     <?php if ($this->state == 500) { ?>
     <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, give us a little blurb about yourself. Please fill in the box below.</p>
     
-    <form id="blurb" class="form-submit" action="/user/extrasignup/null/501" method="post">
+    <form id="blurb" class="form-submit" action="/user/completeprofile/null/501" method="post">
 	
         <div class="control-group" style="margin-bottom: 10px">
             <div class="controls">
@@ -76,7 +78,7 @@
     <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need to know how to text you the confirmation code. Please enter your phone number below.</p>
     
     
-    <form id="phone-verify" class="form-submit" action="/user/extrasignup/null/201" method="post">
+    <form id="phone-verify" class="form-submit" action="/user/completeprofile/null/201" method="post">
         <div id="phone-controls" class="control-group" style="">
             <div class="controls">
                 <input type="text" class="phone" placeholder="Phone Number" id="phonenumber" name="phonenumber" value="<?php echo $phone; ?>" style="">
@@ -85,7 +87,7 @@
         </div>   
     </form>   
     
-    <form id="phone-verification-code" class="form-submit <?php if ($phone == null) echo "hide-me"?>" action="/user/extrasignup/null/202" method="post" style="">
+    <form id="phone-verification-code" class="form-submit <?php if ($phone == null) echo "hide-me"?>" action="/user/completeprofile/null/202" method="post" style="">
         <div id="phone-verification-controls" class="control-group" style="">
             <div class="controls">
                 <input  data-toggle="popover" data-placement="right" data-trigger="manual" data-toggle="tooltip" title="We just texted you a code. Enter it here." type="text" class="phone" placeholder="Enter Verification Code" id="verificationcode" name="verificationcode" value="" style="">
@@ -105,7 +107,7 @@
     <?php if ($this->state == 300) { ?>
     <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need to know how to pay you. Please enter your PayPal details below.</p>
     
-    <form id="paypal" class="form-submit" action="/user/extrasignup/null/301" method="post">
+    <form id="paypal" class="form-submit" action="/user/completeprofile/null/301" method="post">
 	
         <div class="control-group">
             <div class="controls">
@@ -188,5 +190,5 @@
 
 
 <script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
-<script src="/js/user/extrasignup.js"></script>
+<script src="/js/user/completeprofile.js"></script>
 <script src="/js/jquery.maskedinput.min.js" type="text/javascript"></script>

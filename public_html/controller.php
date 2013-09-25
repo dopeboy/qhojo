@@ -63,7 +63,10 @@ abstract class Controller
         }   
 
         set_exception_handler('exception_handler'); 
-
+        
+        if (!method_exists($this, $this->action))
+                throw new InvalidPageException(Method::GET, null);
+        
         return $this->{$this->action}();
     }
 
@@ -85,7 +88,7 @@ abstract class Controller
             echo $viewmodel;
     }
     
-    protected function validateParameter($parameter_value, $parameter_name, $method, $callbacks)
+    protected function validateParameter($parameter_value, $parameter_name, $method, $callbacks, $modal_id = null)
     {
         if (is_array($parameter_value))
             $parameter_value = array_map('trim', $parameter_value);
@@ -94,7 +97,7 @@ abstract class Controller
         
         foreach ($callbacks as $callback)
         {
-            call_user_func($callback,$parameter_value,$parameter_name, $method);
+            call_user_func($callback,$parameter_value,$parameter_name, $method, $modal_id);
         }
         
         return $parameter_value;

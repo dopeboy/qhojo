@@ -449,7 +449,7 @@ class TransactionModel extends Model
         $message = "Hi {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "{$row["LENDER_FIRST_NAME"]} has accepted your request to rent item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
         $message .= "Before the transaction can move forward, you must complete your user profile. You can do this by clicking on the link below:<br/><br/>";
-        $message .= "<a href=\"{$domain}/user/extrasignup/null/0\">{$domain}/user/extrasignup/null/0</a><br/><br/>";
+        $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/completeprofile</a><br/><br/>";
         $message .= "If you do not complete your user profile in the next 24 hours, this transaction will be cancelled.";
         $subject = "{$row["TITLE"]} - PENDING - Your action is needed - Transaction ID: {$row["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
@@ -595,7 +595,7 @@ class TransactionModel extends Model
         {
             $error_msg = "Error: You do not have an active reservation.";        
             $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
-            new InvalidReservationException($method, null, null); // Reservation doesn't exist
+            new InvalidReservationException($method, $borrower["USER_ID"], null); // Reservation doesn't exist
             exit();
         }
         
@@ -611,14 +611,26 @@ class TransactionModel extends Model
             }
         }
         
-       
-        
         if ($transaction == null)
         {
             $error_msg = "Error: Invalid confirmation code.";        
             $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
-            new InvalidConfirmationCodeException(null, null, null); // Reservation doesn't exist or invalid code
+            new InvalidConfirmationCodeException(null, $borrower["USER_ID"], null); // Reservation doesn't exist or invalid code
             exit();
+        }
+        
+        // Check if the text is being sent on the start date of the transaction. Note that we'll disable this check
+        // in non-production environments
+        $start_date = new DateTime($transaction["REQ"]["START_DATE"]);
+        $now = new DateTime();
+        global $demo;
+
+        if ($now->format('Y-m-d') != $start_date->format('Y-m-d') && $demo == false)
+        {
+            $error_msg = "Error: This reservation has not started yet. Please wait until: " . $start_date->format('m/Y');        
+            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
+            new ReservationHasNotStartedException(null, $borrower["USER_ID"], $transaction["TRANSACTION_ID"], null);
+            exit();            
         }
         
         global $bp_api_key;
@@ -977,7 +989,7 @@ class TransactionModel extends Model
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "The request for item {$transaction["TITLE"]} by {$transaction["BORROWER_FIRST_NAME"]} has expired because {$transaction["BORROWER_FIRST_NAME"]} did not complete their user profile within the 24 hour notice.<br/><br/>";
                 $message .= "{$transaction["BORROWER_FIRST_NAME"]}, if you wish to borrow this item, please complete your user profile and re-request the item. As a reminder, you can complete your user profile by following the link below:<br/><br/>";
-                $message .= "<a href=\"{$domain}/user/extrasignup/null/0\">{$domain}/user/extrasignup/null/0</a>";
+                $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a>";
                 
                 $subject = "{$transaction["TITLE"]} - EXPIRED - Item request has expired - Transaction ID: {$transaction["TRANSACTION_ID"]}";
 

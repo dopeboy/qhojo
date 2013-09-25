@@ -1,3 +1,5 @@
+<title>Qhojo - Contact</title>
+
 <?php global $support_email; ?>
 
 <div class="sheet" id="contact">

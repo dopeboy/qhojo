@@ -20,8 +20,8 @@ RewriteRule ^item/search/? index.php?controller=item&action=search&id=&state= [Q
 # Deleting Pictures
 RewriteRule ^picture/delete/?([a-zA-Z0-9]*)?/?([0-9]*)?/? index.php?controller=picture&action=delete&id=$1&state=$2 [QSA]
 
-# You can supply a return url to the signup and extrasignup pages
-RewriteRule ^user/extrasignup/null/0/? index.php?controller=user&action=extrasignup&id=null&state=0 [QSA]
+# You can supply a return url to the signup and completeprofile pages
+RewriteRule ^user/completeprofile/?([a-zA-Z0-9]*)?/?([0-9]*)?/? index.php?controller=user&action=completeprofile&id=null&state=$2 [QSA]
 RewriteRule ^user/signin/null/100/? index.php?controller=user&action=signin&id=null&state=100 [QSA]
 
 # The main rule

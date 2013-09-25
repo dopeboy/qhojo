@@ -5,7 +5,8 @@ class Item extends Controller
     protected function search() 
     {
         $method = Method::GET;
-
+        User::userSignedIn($method);
+        
         $this->returnView($this->item_model->search
         (
             $method,                    
@@ -20,6 +21,7 @@ class Item extends Controller
     protected function index() 
     {
         $method = Method::GET;
+        User::userSignedIn($method);
         $this->returnView($this->item_model->index($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : null, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty'))),$method);
     } 
 

@@ -194,7 +194,7 @@ $(document).ready(function()
                                 $.ajax(
                                 {
                                     type: "POST",
-                                    url: '/user/extrasignup/null/401',
+                                    url: '/user/completeprofile/null/401',
                                     data: {"card-uri" : response.data.uri},
                                     success: function(responseText) 
                                     {

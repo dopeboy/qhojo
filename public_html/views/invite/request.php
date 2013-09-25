@@ -1,3 +1,5 @@
+<title>Qhojo - Request Invite</title>
+
 <link rel="stylesheet" href="/css/invite/request.css">
 
 <?php if ($this->state == 0 || $this->state == null) { ?>

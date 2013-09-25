@@ -108,9 +108,9 @@ class InvalidEmailException extends BaseException
 
 class RequiredParameterMissingException extends BaseException
 {
-    public function __construct($parameter_name, $method, $user_id = 0, Exception $previous = null) 
+    public function __construct($parameter_name, $method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
-        parent::__construct("The following parameter was not specified or empty: " . $parameter_name, $method, $user_id, $previous);
+        parent::__construct("The following parameter was not specified or empty: " . $parameter_name, $method, $user_id, $previous, $modal_id);
     }     
 }
 
@@ -382,6 +382,7 @@ class InvalidEntityTypeException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("Invalid entity type supplied.", $method, $user_id, $previous, $modal_id);
     }       
 }
@@ -398,7 +399,17 @@ class CreditCardHoldFailedException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
+        $this->severity = Severity::SEVERE;
         parent::__construct("The hold on the credit card could not be made.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class ReservationHasNotStartedException extends BaseException
+{
+    public function __construct($method, $user_id = 0, $transaction_id, Exception $previous = null, $modal_id = null) 
+    {
+        $this->severity = Severity::SEVERE;
+        parent::__construct("This reservation has not started yet. Transaction ID: " . $transaction_id, $method, $user_id, $previous, $modal_id);
     }       
 }
 
@@ -488,5 +499,23 @@ class InvitationCodeExpiredException extends BaseException
         parent::__construct("The invitation code you entered has expired.", $method, $user_id, $previous, $modal_id);
     }       
 }
+
+class UserDoesNotExistException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("This user does not exist.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class InvalidPageException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        $this->severity = Severity::SEVERE;
+        parent::__construct("This page does not exist.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 
 ?>

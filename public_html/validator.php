@@ -2,13 +2,13 @@
 
 abstract class Validator
 {
-    static function isNotNullAndNotEmpty ($parameter_value,$parameter_name, $method) 
+    static function isNotNullAndNotEmpty ($parameter_value,$parameter_name, $method, $modal_id) 
     {
         if (is_array($parameter_value) && count($parameter_value) == 0)
-            throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);    
+            throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0, null, $modal_id);    
             
         else if ($parameter_value == null || $parameter_value == '') 
-            throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);    
+            throw new RequiredParameterMissingException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0, null,$modal_id);       
     }
 
     static function isValidZipcode ($parameter_value,$parameter_name, $method) 

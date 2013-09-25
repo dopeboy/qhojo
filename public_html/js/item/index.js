@@ -1,7 +1,5 @@
 $(document).ready(function() 
-{ 
-    $( document ).tooltip();
-     
+{      
     var mapOptions = 
     {
         zoom: 11,
@@ -28,7 +26,7 @@ $(document).ready(function()
 
         else 
         {
-            alert("Geocode was not successful for the following reason: " + status);
+            console.log("Geocode was not successful for the following reason: " + status);
         }
     });
       

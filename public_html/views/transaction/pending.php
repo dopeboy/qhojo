@@ -1,3 +1,5 @@
+<title>Qhojo - Pending Request</title>
+
 <?php 
 $transaction = reset($viewmodel); // first element     
 ?>

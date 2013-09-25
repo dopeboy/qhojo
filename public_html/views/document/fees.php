@@ -1,3 +1,5 @@
+<title>Qhojo - Contact</title>
+
 <?php 
 global $transaction_fee_variable;
 ?>

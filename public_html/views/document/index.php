@@ -1,6 +1,8 @@
 <script src="/js/document/index.js"></script>
 <link rel="stylesheet" href="/css/document/index.css">
 
+<title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
+
 <div class="sheet headliner">
      
     <h1 style="">Gear in New York City</h1>                             

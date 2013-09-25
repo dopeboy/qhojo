@@ -1,3 +1,5 @@
+<title>Qhojo - Item</title>
+
 <?php 
 global $item_picture_path;
 global $user_picture_path; 

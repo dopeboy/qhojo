@@ -1,3 +1,5 @@
+<title>Qhojo - Search</title>
+
 <?php
     global $results_per_page;
     $current_page = !empty($this->urlvalues['page']) ? $this->urlvalues['page'] : 1; 

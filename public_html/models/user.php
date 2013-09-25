@@ -3,10 +3,13 @@
 require('lib/adaptiveaccounts-sdk-php/samples/PPBootStrap.php');
 
 class UserModel extends Model 
-{
+{    
     public function index($method, $user_id)
     {
         $row["USER"] = $this->getUserDetails($user_id);
+        
+        if ($row["USER"] == null)
+            throw new UserDoesNotExistException($method, $user_id);
         
         $sqlParameters[":user_id"] =  $user_id;
         $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW WHERE LENDER_ID=:user_id');
@@ -145,7 +148,7 @@ class UserModel extends Model
         $message = "Hi {$firstname}!<br/><br/>";
         $message .= "Welcome to Qhojo, your community for borrowing and renting film and video gear across New York City.<br/><br/>";
         $message .= "To get started, we strongly encourage you to complete the rest of your user profile. It'll help you later when you borrow and lend gear from and to the community. To complete your profile, click on the link below:<br/><br/>";
-        $message .= "<a href=\"{$domain}/user/extrasignup/null/0\">{$domain}/user/extrasignup/null/0</a><br/><br/>";
+        $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a><br/><br/>";
         $message .= "If you have any questions, comments or concerns, never hesitate to drop us a line at our support email address located at the bottom of this email.";
         
         $subject = "Welcome to Qhojo!";
@@ -196,9 +199,16 @@ class UserModel extends Model
         $sqlParameters[":user_id"] =  $user_id;
         $sqlParameters[":profile_picture"] =  $profile_picture;
 
-        $preparedStatement = $this->dbh->prepare('update USER SET PROFILE_PICTURE_FILENAME=:profile_picture where ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('update USER SET PROFILE_PICTURE_FILENAME=:profile_picture where ID=:user_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
     }
+    
+    public function clearProfilePicture($method, $user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('update USER SET PROFILE_PICTURE_FILENAME=null where ID=:user_id and ACTIVE=1 LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+    }    
     
     public function submitPaypal($method, $user_id,$firstname, $lastname, $email)
     {

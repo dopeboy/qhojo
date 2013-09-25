@@ -56,3 +56,28 @@
 {
     margin-bottom: 20px;
 }
+
+.icon-pencil
+{
+    text-decoration: none;
+}
+
+.modal, .modal.fade.in 
+{ 
+    width: 768px; 
+    margin-left: -384px; 
+}
+
+#profile-picture-container
+{
+    position: relative;    
+}
+
+#upload-profile-picture-container
+{
+    position: absolute; 
+    z-index: 999;
+    width: 100%; 
+    height: 100%;
+    top: 0px;     
+}

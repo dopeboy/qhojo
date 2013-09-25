@@ -41,7 +41,7 @@ else: foreach($transactions as $key=>$transaction)
                         <li><a data-toggle="modal" tabindex="-1" href="#reject-<?php echo $transaction['TRANSACTION_ID']; ?>">Withdraw</a></li>
                     <?php } 
                     else if ($lender_view == 0 && $pending == 1) { ?>
-                        <li><a data-toggle="modal" tabindex="-1" href="/user/extrasignup/null/0">Complete Profile</a></li>
+                        <li><a data-toggle="modal" tabindex="-1" href="/user/completeprofile/null/0">Complete Profile</a></li>
                     <?php } ?>       
                         <li><a data-toggle="modal" tabindex="-1" href="#contact-modal-<?php echo $transaction['TRANSACTION_ID']; ?>">Contact</a></li>
                 </ul>

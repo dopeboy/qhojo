@@ -1,3 +1,5 @@
+<title>Qhojo - Join</title>
+
 <link rel="stylesheet" href="/css/user/join.css">
 
 <div class="sheet " id="join" style="">

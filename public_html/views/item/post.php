@@ -1,3 +1,5 @@
+<title>Qhojo - Post</title>
+
 <?php global $item_picture_path;global $user_picture_path;global $user_thumb_subdir;global $stock_user_tn;?>
 
 <link rel="stylesheet" href="/css/item/index.css">

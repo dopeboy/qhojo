@@ -1,8 +1,6 @@
 $(document).ready(function() 
 { 
     $(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
-    
-    $( document ).tooltip();
      
     var mapOptions = 
     {
@@ -32,7 +30,7 @@ $(document).ready(function()
 
             else 
             {
-                alert("Geocode was not successful for the following reason: " + status);
+                console.log("Geocode was not successful for the following reason: " + status);
             }
         });
      }

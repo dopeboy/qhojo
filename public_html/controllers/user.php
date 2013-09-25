@@ -49,9 +49,51 @@ class User extends Controller
 
     protected function index()
     {
-        $method = Method::GET;
-        $this->returnView($this->user_model->index($method, $this->validateParameter($this->id,"User ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
+        if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
+            $this->returnView($this->user_model->index($method, $this->validateParameter($this->id,"User ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 1))
+            $this->returnView($this->user_model->index($method, $this->validateParameter($this->id,"User ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
     }    
+    
+    // 100 (blurb),  200 (profile picture-upload), 250 (profile picture - clear), 300 (location)
+    protected function edit()
+    {
+        if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 100))
+        {
+            $this->user_model->submitBlurb
+            (
+                $method,
+                $_SESSION["USER"]['USER_ID'],
+                $this->validateParameter($this->postvalues['blurb'],"Blurb",$method,array('Validator::isNotNullAndNotEmpty'), 1)
+            );
+            
+            $this->returnView(json_encode(array("Action" => "SUBMIT-BLURB")), $method);  
+        }     
+        
+        else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 200))
+        {
+            $this->user_model->submitProfilePicture
+            (
+                $method,
+                $_SESSION["USER"]['USER_ID'],
+                $this->validateParameter($this->postvalues['profilepicture'],"Profile Picture",$method,array('Validator::isNotNullAndNotEmpty'))
+            );
+            
+            $this->returnView(json_encode(array("Action" => "SUBMIT-PP")), $method);  
+        }        
+        
+        else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 250))
+        {
+            $this->user_model->clearProfilePicture
+            (
+                $method,
+                $_SESSION["USER"]['USER_ID']
+            );
+            
+            $this->returnView(json_encode(array("Action" => "SUBMIT-PP")), $method);  
+        }               
+    }
 
     protected function dashboard()
     {
@@ -79,16 +121,16 @@ class User extends Controller
     }
 
     // Profile Picture (100), Blurb(500), Phone # (200), PP (300), CC (400)
-    protected function extrasignup()
+    protected function completeprofile()
     {
-        if (($method = Method::GET) && User::userSignedIn($method) && $this->state == 0)
+        if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
         {
-            if ($status = $this->user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"]))
+            if (($status = $this->user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"])))
             {
                 if (!empty($this->urlvalues['return']))
                     $this->pushReturnURL ($this->urlvalues['return']);
 
-                header('Location: /user/extrasignup/null/' . $status);
+                header('Location: /user/completeprofile/null/' . $status);
             }
 
             else
@@ -119,7 +161,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['profile-picture'],"Profile Picture",$method,array('Validator::isNotNullAndNotEmpty'))
             );
 
-            $this->returnView(json_encode(array("Action" => "SUBMIT-PROFILE-PICTURE", "URL" => "/user/extrasignup/null/0")), $method); 
+            $this->returnView(json_encode(array("Action" => "SUBMIT-PROFILE-PICTURE", "URL" => "/user/completeprofile/null/0")), $method); 
         }
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 200))
@@ -148,7 +190,7 @@ class User extends Controller
                 $this->postvalues['verificationcode'],"Verification Code",$method,array('Validator::isNotNullAndNotEmpty')
             );
 
-            $this->returnView(json_encode(array("Action" => "VERIFY-VERIFICATION-CODE", "URL" => "/user/extrasignup/null/0")), $method);     
+            $this->returnView(json_encode(array("Action" => "VERIFY-VERIFICATION-CODE", "URL" => "/user/completeprofile/null/0")), $method);     
         }             
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 300))
@@ -167,7 +209,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress'))
             );
 
-             $this->returnView(json_encode(array("Action" => "SUBMIT-PAYPAL", "URL" => "/user/extrasignup/null/0")), $method);           
+             $this->returnView(json_encode(array("Action" => "SUBMIT-PAYPAL", "URL" => "/user/completeprofile/null/0")), $method);           
         }    
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 400))
@@ -182,7 +224,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['card-uri'],"Card URI",$method,array('Validator::isNotNullAndNotEmpty'))
             );
 
-             $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/extrasignup/null/0")), $method);           
+             $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/completeprofile/null/0")), $method);           
         }
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 500))
@@ -197,7 +239,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['blurb'],"Blurb",$method,array('Validator::isNotNullAndNotEmpty'))
             );
 
-            $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/extrasignup/null/0")), $method);           
+            $this->returnView(json_encode(array("Action" => "SUBMIT-BLURB", "URL" => "/user/completeprofile/null/0")), $method);           
         }            
     }
 

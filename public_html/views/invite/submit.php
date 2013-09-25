@@ -1,3 +1,5 @@
+<title>Qhojo - Submit Invite Code</title>
+
 <link rel="stylesheet" href="/css/invite/submit.css">
 
 <div class="sheet" id="invite" style="">

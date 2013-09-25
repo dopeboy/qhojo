@@ -1,17 +1,6 @@
 <?php
 
 require "lib/twilio/Twilio.php";
-//require 'lib/rest-api-sdk-php/sample/bootstrap.php';
-//use PayPal\Api\Address;
-//use PayPal\Api\Amount;
-//use PayPal\Api\AmountDetails;
-//use PayPal\Api\CreditCard;
-//use PayPal\Api\Payer;
-//use PayPal\Api\Payment;
-//use PayPal\Api\FundingInstrument;
-//use PayPal\Api\Transaction;
-//use PayPal\Rest\ApiContext;
-//use PayPal\Auth\OAuthTokenCredential;
 
 class ItemModel extends Model 
 {

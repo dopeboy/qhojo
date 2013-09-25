@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -16,19 +15,16 @@
         <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="/css/main.css">
     
-        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+        <link href="/css/font-awesome.css" rel="stylesheet">
+        <link href='/css/lobster.css' rel='stylesheet' type='text/css'>
         
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="/js/vendor/jquery-1.10.1.min.js"></script>
         <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
         
-        <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
         <script src="/js/vendor/bootstrap.min.js"></script>
         <script src="/js/jquery.form.js"></script> 
         
         <script src="/js/main.js"></script>
-        
-        
     </head>
     <body>
         <!--[if lt IE 7]>

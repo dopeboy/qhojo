@@ -1,3 +1,5 @@
+<title>Qhojo - Dashboard</title>
+
 <?php
     $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
     require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 

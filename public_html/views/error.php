@@ -1,3 +1,5 @@
+<title>Qhojo - Oops</title>
+
 <?php global $demo; ?>
 
 <div class="sheet">

@@ -1,3 +1,5 @@
+<title>Qhojo - Accept Request</title>
+
 <?php 
 $transaction = reset($viewmodel); // first element     
 ?>

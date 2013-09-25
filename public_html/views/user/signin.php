@@ -1,3 +1,5 @@
+<title>Qhojo - Sign in</title>
+
 <link rel="stylesheet" href="/css/user/signin.css">
 
 <div class="sheet" id="signin" style="">
@@ -14,15 +16,7 @@
             <div class="controls">
                    <input type="password" class="input-block-level" placeholder="Password" id="passwd" name="password">
             </div>
-        </div>   
-        
-        <div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-        </div>         
+        </div>        
 
         <div class="control-group">
             <label class="control-label" for="input01"></label>
