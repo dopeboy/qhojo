@@ -1,7 +1,3 @@
-drop database qhojo_staging;
-create database qhojo_staging;
-use qhojo_staging;
-
 drop table if exists USER;
 CREATE TABLE USER
 (
