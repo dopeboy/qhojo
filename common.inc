@@ -42,8 +42,6 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     $lender_number = '3476730097';    
 }
 
-//$version =  shell_exec('git describe | cut -d \'-\' -f 1-2');
-
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
@@ -70,6 +68,10 @@ $support_email = "support@qhojo.com";
 $email_message_footer = "-Team Qhojo<br/><a href=\"mailto:{$support_email}\">{$support_email}</a><br/><a href=\"{$domain}\">{$domain}</a>";
 $do_not_reply_email = "donotreply@qhojo.com";
 
+$transaction_fee_variable = 0.1;
+$transaction_fee_fixed = 0.00;
+$maximum_rental_duration_days = 7;
+
 function getRandomID()
 {
     return rand(100000,999999);
@@ -92,9 +94,5 @@ function sendEmail($from, $to, $replyto, $subject, $message)
     $message = "<html><body>" . $message . "<br/><br/>" . $email_message_footer . "</body></html>";
     return mail($to, $subject, $message, $headers);            
 }
-
-$transaction_fee_variable = 0.1;
-$transaction_fee_fixed = 0.00;
-$maximum_rental_duration_days = 7;
 
 ?>

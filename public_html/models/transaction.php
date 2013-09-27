@@ -833,7 +833,7 @@ class TransactionModel extends Model
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "The transaction is now complete. We have received {$transaction["LENDER_FIRST_NAME"]}'s confirmation that they are OK with the returned item. {$transaction["BORROWER_FIRST_NAME"]}, if you haven't already, you can return the item to {$transaction["LENDER_FIRST_NAME"]}.<br/><br/>";
         $message .= "{$transaction["BORROWER_FIRST_NAME"]}, we have released the \${$transaction["DEPOSIT"]} hold on your credit card and charged you \${$total_without_fee} for the rental.<br/><br/>";
-        $message .= "{$transaction["LENDER_FIRST_NAME"]}, we have deposited \${$total_with_fee} into your PayPal account. To understand the fees assessed to this transaction, please visit our <a href=\"{$domain}/document/fees/\">fees page</a>.<br/><br/>";
+        $message .= "{$transaction["LENDER_FIRST_NAME"]}, we have deposited \$" . number_format($total_with_fee,2) . " into your PayPal account. To understand the fees assessed to this transaction, please visit our <a href=\"{$domain}/document/fees/\">fees page</a>.<br/><br/>";
         $message .= "Please review how the transaction went. Leave feedback by following the link below:<br/><br/>";
         $message .= "<a href=\"{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0\">{$domain}/transaction/review/{$transaction["TRANSACTION_ID"]}/0</a>";
         

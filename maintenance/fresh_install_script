@@ -3,19 +3,19 @@ ONE TIME
 	mysql -u root -p
 	root
 
-        create user 'qhostaging'@'localhost' identified by 'Z69afsGKVPHJjsO';
+    create user 'qhostaging'@'localhost' identified by 'Z69afsGKVPHJjsO';
 	create database qhojo_staging;
 	grant SELECT, INSERT, UPDATE on qhojo_staging.* to 'qhostaging'@'localhost' IDENTIFIED BY 'Z69afsGKVPHJjsO';
 		
 	create user 'qhoprod'@'localhost' identified by 'Gk1BLp5J6u5MsQr';
 	create database qhojo_production;
-        grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
+    grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
 
  create user 'backupuser'@'localhost' identified by '3W16aba38yP2fxr';
 GRANT SELECT, SHOW VIEW ON *.* TO  'backupuser'@'localhost' IDENTIFIED BY '3W16aba38yP2fxr';
 
- create user 'restorestaging'@'localhost' identified by 'abcdefghj';
-GRANT all ON qhojo_staging.* TO  'restorestaging'@'localhost' IDENTIFIED BY 'abcdefghj';
+create user 'stagingroot'@'localhost' identified by 'zarava6ruThe';
+GRANT all ON qhojo_staging.* TO  'stagingroot'@'localhost' IDENTIFIED BY 'zarava6ruThe';
 
 
 
@@ -47,6 +47,3 @@ GET: curl -g -HAccept:text/plain http://localhost?action=GET_USER_ID\&email=joe
 POST: curl -d "param1=value1&param2=value2" http://example.com/base/
 
 tail -f /var/log/apache2/error.log
-
-ron@qhojo.com / ronrules
-brick@qhojo.com / brickrules

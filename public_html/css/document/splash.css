@@ -119,3 +119,15 @@ input[type="text"], input[type="password"]
 {
     margin-top: 20px;
 }
+
+.fb-like
+{
+    margin-top:5px;   
+    margin-left: 10px;
+}
+
+#twitter-share-button
+{
+    margin-top: 5px;
+    margin-left: 20px;
+}
