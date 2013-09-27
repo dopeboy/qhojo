@@ -1,0 +1,20 @@
+/*.table td {
+   text-align: center;   
+}*/
+.arrow-right {
+	width: 0; 
+	height: 0; 
+	border-top: 60px solid transparent;
+	border-bottom: 60px solid transparent;
+	
+	border-left: 60px solid green;
+}
+
+.arrow-left {
+	width: 0; 
+	height: 0; 
+	border-top: 60px solid transparent;
+	border-bottom: 60px solid transparent; 
+	
+	border-right:60px solid green; 
+}

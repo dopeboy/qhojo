@@ -82,3 +82,8 @@ textarea#contact
 {
     margin-bottom: 10px;
 }
+
+.btn-success.disabled, .btn-primary.disabled
+{
+    background-color: gray;
+}

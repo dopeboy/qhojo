@@ -1,6 +1,8 @@
 $(document).ready(function()
 {    
     $('[rel=tooltip]').tooltip();
+    $('input#query').popover('show');
+    
     
     if (getURLParameter('query') != 'null')
     {

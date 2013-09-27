@@ -2,6 +2,8 @@ $(document).ready(function()
 { 
     $(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
      
+     $('input#title').popover('show');
+     
     var mapOptions = 
     {
         zoom: 11,

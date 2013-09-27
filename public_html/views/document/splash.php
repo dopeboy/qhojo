@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 
-<title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
+<title>Qhojo</title>
 
 <head>
     <meta charset="utf-8">
@@ -79,25 +79,7 @@
     <div id="push"></div>
 </div>
 
-<div id="footer">
-    <div class="container">
-        <ul class="nav nav-pills">
-            <li class="not-disabled"><a href="/document/about">about</a></li>
-                <li class="not-disabled"><a href="http://qhojo.wordpress.com/">blog</a></li>
-                <li class="disabled"><a href="javascript:void(0);">v2.0.0</a></li>
-                <li class="disabled"><a href="javascript:void(0);">© 2013 Qhojo LLC</a></li>
-                <li class="disabled">
-                    <div style="" class="fb-like" data-href="https://www.facebook.com/pages/Qhojo/131352593731804" data-width="100" data-layout="button_count" data-show-faces="true" data-send="false"></div>
-                </li>
-                <li class="disabled">
-                    <div id="twitter-share-button" style="">
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://qhojo.com" data-text="I &lt;3 @qhojonyc" data-via="qhojonyc" data-dnt="true">Tweet</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>                        
-                    </div>
-                </li>            
-          </ul>    
-    </div>
-</div>
+
 
 </body>
     

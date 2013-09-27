@@ -29,7 +29,7 @@
     <form class="form-search">
         <div class="row-fluid">
             <div class="span5">
-                <input id="query" type="text" class="input-block-level" placeholder="Model, manufacturer, type, etc" name="query" style="">
+                <input id="query" type="text" class="input-block-level" placeholder="Model, manufacturer, type, etc" name="query" style=""  data-toggle="tooltip" data-original-title="Start Here" data-content="What are you looking for?" data-placement="left" data-delay='{"show":"5000", "hide":"3000"}'>
             </div>
 
             <div class="span2">

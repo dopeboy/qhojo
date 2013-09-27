@@ -45,11 +45,13 @@ input[type="text"], input[type="password"]
 .sheet#sign-in
 {
     margin-top: 80px;
+    margin-left: auto; margin-right: auto
 }
 
 .sheet#invite
 {
     margin-top: 40px;
+    margin-left: auto; margin-right: auto
 }
 
 .control-group:last-child

@@ -1,4 +1,4 @@
-<script src="/js/document/index.js"></script>
+
 <link rel="stylesheet" href="/css/document/index.css">
 
 <title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
@@ -18,10 +18,10 @@
     <div class="row-fluid">
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Search</h3>
+                 <h3>Request</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/request.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                 <p>Search for the gear you want.</p>
@@ -29,10 +29,10 @@
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Reserve</h3>
+                 <h3>Use</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/use.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                 <p>Select a rental duration and pickup time for your gear. Send any questions to the lender.</p>
@@ -40,10 +40,10 @@
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Shoot</h3>
+                 <h3>Return</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/return.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                 <p>Meet the lender, pick up the gear, and start shooting your favorite pictures.</p>
@@ -95,10 +95,10 @@
     <div class="row-fluid">
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>List</h3>
+                 <h3>Approve</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/approve.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                 <p>Specify a rental rate, a deposit value, and toss in some descriptive details. Then post it (for free!).</p>
@@ -106,10 +106,10 @@
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Approve</h3>
+                 <h3>Lend Out</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/lendout.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                 <p>Select, vet, and approve a rental request. The approved borrower will setup a meeting time with you to pick up the gear.</p>
@@ -117,10 +117,10 @@
          </div>
          <div class="span4 hiwstep">
              <div class="text-center top">
-                 <h3>Profit</h3>
+                 <h3>Get Paid</h3>
              </div>                          
              <div class="text-center middle">
-                 <img src="img/shaq.jpg" class="img-circle">
+                 <img src="/img/getpaid.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
                  <p>Once the borrower has returned the gear to you, we'll send you the money you are due minus a <a href="/document/fees">small commission</a>.</p>
@@ -165,3 +165,5 @@
        </form>
    </div>                     
 </div>            
+
+<script src="/js/document/index.js"></script>

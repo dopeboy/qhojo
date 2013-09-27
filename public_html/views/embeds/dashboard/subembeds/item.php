@@ -13,7 +13,9 @@
         </div>
         <div>
             <?php $d = new DateTime($transaction["REQ"]['START_DATE']); echo $d->format('m/d'); ?> -  <?php $d = new DateTime($transaction["REQ"]['END_DATE']); echo $d->format('m/d'); ?>             
-            
+        </div>
+        <div>
+            Confirmation Code: <strong><?php echo $transaction["RESERVATION"]["CONFIRMATION_CODE"]; ?></strong>
         </div>
         <div>
             <span class="label label-<?php 
