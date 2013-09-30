@@ -93,9 +93,7 @@
                 </div>
 
                 <div class="section split text-center" id="lender">
-                    <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>">
-                        <img id="lender-picture" style="" class="img-circle bw" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
-                    </a>
+                    <img id="lender-picture" style="" class="img-circle bw" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
                     <h2 id="name-header" style="">
                         <?php echo $viewmodel['USER']['NAME']; ?>
                     </h2>
