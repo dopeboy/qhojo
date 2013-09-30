@@ -6,7 +6,7 @@ class ItemModel extends Model
 {
     public function getThreeLatestItems($method)
     {
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW ORDER BY CREATE_DATE DESC LIMIT 3');
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_EXTENDED_VW ORDER BY CREATE_DATE DESC LIMIT 3');
         $preparedStatement->execute();
         $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
         return $rows;
@@ -60,7 +60,7 @@ class ItemModel extends Model
             $user_clause = ' LENDER_ID = :user_id';
             
             $sqlParametersUser[":user_id"] =  $user_id;
-            $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME FROM USER_VW where USER_ID=:user_id LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME FROM USER_VW where USER_ID=:user_id and ACTIVE=1 LIMIT 1');
             $preparedStatement->execute($sqlParametersUser);
             $rows["USER_FIRST_NAME"] = $preparedStatement->fetchColumn();                
         }
@@ -78,7 +78,7 @@ class ItemModel extends Model
         
         if ($rows["ITEMS_COUNT"] != 0)
         {
-            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_VW ' . $where . $query_clause . $location_clause . $user_clause . ' ORDER BY CREATE_DATE DESC LIMIT ' . $start_at . ',' . $results_per_page);
+            $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_EXTENDED_VW ' . $where . $query_clause . $location_clause . $user_clause . ' ORDER BY CREATE_DATE DESC LIMIT ' . $start_at . ',' . $results_per_page);
             $preparedStatement->execute($sqlParameters);
             $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
         }
@@ -217,6 +217,15 @@ class ItemModel extends Model
         
         // If it does exist, are we the lender on it?
         return $row["LENDER_ID"] == $user_id;
+    }
+    
+    public function getItemExtended($item_id)
+    {
+        $sqlParameters[":item_id"] =  $item_id;
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM ITEM_EXTENDED_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        
+        return $preparedStatement->fetch(PDO::FETCH_ASSOC);        
     }
     
     public function getItem($item_id)

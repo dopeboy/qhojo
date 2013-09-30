@@ -161,7 +161,7 @@ class UserModel extends Model
     public function getUserDetails($user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM USER_EXTENDED_VW WHERE USER_ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
@@ -235,7 +235,7 @@ class UserModel extends Model
     public function phoneNumber($method, $user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_DATESTAMP, PHONE_NUMBER FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_DATESTAMP, PHONE_NUMBER FROM USER_VW WHERE USER_ID=:user_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row["USER"] = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
         
@@ -249,7 +249,7 @@ class UserModel extends Model
         
         // Does this phone number already exist?
         $sqlParameters[":phone_number"] =  $phone_clean;
-        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_VW WHERE PHONE_NUMBER=:phone_number LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_VW WHERE PHONE_NUMBER=:phone_number and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);         
         
@@ -258,7 +258,7 @@ class UserModel extends Model
         
         $sqlParameters = array();
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_DATESTAMP FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_DATESTAMP FROM USER_VW WHERE USER_ID=:user_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
         
@@ -289,14 +289,14 @@ class UserModel extends Model
     public function verifyVerificationCode($method, $user_id, $verification_code)
     {
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_CODE FROM USER_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFICATION_CODE FROM USER_VW WHERE USER_ID=:user_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
         
         if ($row["PHONE_VERIFICATION_CODE"] != $verification_code)
             throw new PhoneVerificationInvalidCodeException($method, $user_id);   
         
-        $preparedStatement = $this->dbh->prepare('UPDATE USER set PHONE_VERIFIED=1 where ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('UPDATE USER set PHONE_VERIFIED=1 where ID=:user_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);        
     }    
     
@@ -361,7 +361,7 @@ class UserModel extends Model
             $sqlParameters[":receipient_id"] =  $receipient_id;
             $sqlParameters[":sender_id"] =  $sender_id;
             $sqlParameters[":transaction_id"] =  $entity_id;
-            $preparedStatement = $this->dbh->prepare('SELECT TITLE, TRANSACTION_ID FROM BASE_VW WHERE (LENDER_ID=:receipient_id or BORROWER_ID=:receipient_id) and (LENDER_ID=:sender_id or BORROWER_ID=:sender_id) and TRANSACTION_ID=:transaction_id LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('SELECT TITLE, TRANSACTION_ID FROM BASE_VW WHERE (LENDER_ID=:receipient_id or BORROWER_ID=:receipient_id) and (LENDER_ID=:sender_id or BORROWER_ID=:sender_id) and TRANSACTION_ID=:transaction_id and ACTIVE=1 LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);    
             
@@ -379,7 +379,7 @@ class UserModel extends Model
         // Fetch the receipient and sender email addresses
         $sqlParameters =  array();
         $sqlParameters[":receipient_id"] =  $receipient_id;
-        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:receipient_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:receipient_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
         $receipient_email = $row["EMAIL_ADDRESS"];
@@ -387,7 +387,7 @@ class UserModel extends Model
         
         $sqlParameters =  array();
         $sqlParameters[":sender_id"] =  $sender_id;
-        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:sender_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME, EMAIL_ADDRESS FROM USER_VW WHERE USER_ID=:sender_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
         $sender_email = $row["EMAIL_ADDRESS"];
