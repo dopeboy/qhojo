@@ -21,7 +21,7 @@
                 </a>
             </div>
 
-            <input type="text" data-placement="left" class="input-block-level editable" placeholder="Put in the name of the item here. Include the model and manufacturer." id="title" name="title" data-toggle="tooltip" data-original-title="Start Here" data-content="Put in the name of the item here.">
+            <input type="text" data-placement="right" class="input-block-level editable" placeholder="Put in the name of the item here. Include the model and manufacturer." id="title" name="title" data-toggle="tooltip" data-original-title="Start Here" data-content="Put in the name of the item here." data-trigger="focus">
 
         </legend>
         <div class="row-fluid">
@@ -89,18 +89,18 @@
                         </h2>
                     </div>
 
-                    <button id="rentlink" class="btn btn-success btn-large btn-block" type="button" style="visibility: hidden">Borrow</button>     
+                    <button id="rentlink" class="btn btn-success btn-large btn-block disabled" type="button" style="">Borrow</button>     
                 </div>
 
                 <div class="section split text-center" id="lender">
                     <a href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>">
-                        <img id="lender-picture" style="visibility: hidden" class="img-circle" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
+                        <img id="lender-picture" style="" class="img-circle bw" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
                     </a>
-                    <h2 class="" style="">
-                        <a style="visibility: hidden" href="/user/index/<?php echo $viewmodel['USER']['USER_ID']?>"><?php echo $viewmodel['USER']['NAME']; ?></a>
+                    <h2 id="name-header" style="">
+                        <?php echo $viewmodel['USER']['NAME']; ?>
                     </h2>
 
-                    <button id="contact-btn" class="btn btn-primary btn-large btn-block" type="button"  style="visibility: hidden">Contact</button>         
+                    <button id="contact-btn" class="btn btn-primary btn-large btn-block disabled" type="button"  style="">Contact</button>         
                 </div>
 
                 <div class="section split map">

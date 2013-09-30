@@ -2,7 +2,8 @@ $(document).ready(function()
 { 
     $(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
      
-     $('input#title').popover('show');
+     $('input#title').popover('toggle');
+     $('input#title').focus();
      
     var mapOptions = 
     {
@@ -50,6 +51,7 @@ $(document).ready(function()
             non_editable.find('.value').text(editable.val());
             editable.hide();
             non_editable.show();
+            $('input#title').popover('destroy');
         }
        
     });	
