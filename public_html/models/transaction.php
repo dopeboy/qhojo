@@ -440,17 +440,17 @@ class TransactionModel extends Model
         // Send email to lender
         $message = "Hi {$row["LENDER_FIRST_NAME"]},<br/><br/>";
         $message .= "You have accepted {$row["BORROWER_FIRST_NAME"]}'s request to rent your item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
-        $message .= "This transaction is currently in the <b>pending</b> state because {$row["BORROWER_FIRST_NAME"]} hasn't completed their user profile yet. If {$row["BORROWER_FIRST_NAME"]} does not complete their user profile in the next 24 hours, this transaction will be cancelled.We've notified {$row["BORROWER_FIRST_NAME"]} about this.<br/><br/>";
-        $message .= "Once {$row["BORROWER_FIRST_NAME"]} completes their user profile, we will notify you via email and move the transaction forward.";
-        $subject = "{$row["TITLE"]} - PENDING - Borrower must complete profile - Transaction ID: {$row["TRANSACTION_ID"]}";
+        $message .= "This transaction is currently in the <b>pending</b> state because {$row["BORROWER_FIRST_NAME"]} hasn't completed their payment details yet. If {$row["BORROWER_FIRST_NAME"]} does not complete their payment details in the next 24 hours, this transaction will be cancelled.We've notified {$row["BORROWER_FIRST_NAME"]} about this.<br/><br/>";
+        $message .= "Once {$row["BORROWER_FIRST_NAME"]} completes their payment details, we will notify you via email and move the transaction forward.";
+        $subject = "{$row["TITLE"]} - PENDING - Borrower must complete payment details - Transaction ID: {$row["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $row["LENDER_EMAIL_ADDRESS"], null, $subject, $message);
         
         // Send email to borrower
         $message = "Hi {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "{$row["LENDER_FIRST_NAME"]} has accepted your request to rent item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
-        $message .= "Before the transaction can move forward, you must complete your user profile. You can do this by clicking on the link below:<br/><br/>";
+        $message .= "Before the transaction can move forward, you must complete your payment details. You can do this by clicking on the link below:<br/><br/>";
         $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/completeprofile</a><br/><br/>";
-        $message .= "If you do not complete your user profile in the next 24 hours, this transaction will be cancelled.";
+        $message .= "If you do not complete your payment details in the next 24 hours, this transaction will be cancelled.";
         $subject = "{$row["TITLE"]} - PENDING - Your action is needed - Transaction ID: {$row["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
     }   
@@ -987,8 +987,8 @@ class TransactionModel extends Model
 
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
-                $message .= "The request for item {$transaction["TITLE"]} by {$transaction["BORROWER_FIRST_NAME"]} has expired because {$transaction["BORROWER_FIRST_NAME"]} did not complete their user profile within the 24 hour notice.<br/><br/>";
-                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, if you wish to borrow this item, please complete your user profile and re-request the item. As a reminder, you can complete your user profile by following the link below:<br/><br/>";
+                $message .= "The request for item {$transaction["TITLE"]} by {$transaction["BORROWER_FIRST_NAME"]} has expired because {$transaction["BORROWER_FIRST_NAME"]} did not complete their payment details within the 24 hour notice.<br/><br/>";
+                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, if you wish to borrow this item, please complete your payment details and re-request the item. As a reminder, you can complete your payment details by following the link below:<br/><br/>";
                 $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a>";
                 
                 $subject = "{$transaction["TITLE"]} - EXPIRED - Item request has expired - Transaction ID: {$transaction["TRANSACTION_ID"]}";

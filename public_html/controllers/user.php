@@ -120,7 +120,7 @@ class User extends Controller
         header('Location: /') ;           
     }
 
-    // Profile Picture (100), Blurb(500), Phone # (200), PP (300), CC (400)
+    // Phone # (200), PP (300), CC (400)
     protected function completeprofile()
     {
         if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
@@ -145,23 +145,6 @@ class User extends Controller
                 else
                     header('Location: /item/search.php');                    
             }
-        }
-
-        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 100))
-        {
-            $this->returnView(null, $method);            
-        }
-
-        else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 101))
-        {
-            $this->user_model->submitProfilePicture
-            (
-                $method,
-                $_SESSION["USER"]['USER_ID'],
-                $this->validateParameter($this->postvalues['profile-picture'],"Profile Picture",$method,array('Validator::isNotNullAndNotEmpty'))
-            );
-
-            $this->returnView(json_encode(array("Action" => "SUBMIT-PROFILE-PICTURE", "URL" => "/user/completeprofile/null/0")), $method); 
         }
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 200))
@@ -225,22 +208,7 @@ class User extends Controller
             );
 
              $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/completeprofile/null/0")), $method);           
-        }
-
-        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 500))
-            $this->returnView(null, $method);          
-
-        else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 501))
-        {
-            $this->user_model->submitBlurb
-            (
-                $method,
-                $_SESSION["USER"]['USER_ID'],
-                $this->validateParameter($this->postvalues['blurb'],"Blurb",$method,array('Validator::isNotNullAndNotEmpty'))
-            );
-
-            $this->returnView(json_encode(array("Action" => "SUBMIT-BLURB", "URL" => "/user/completeprofile/null/0")), $method);           
-        }            
+        }         
     }
 
     protected function contact()

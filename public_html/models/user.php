@@ -177,12 +177,6 @@ class UserModel extends Model
          
         if ($row == null)
             return 0;
-        
-        else if ($row["PROFILE_PICTURE_FILENAME"]  == null)
-            return 100;
-        
-        else if ($row["BLURB"]  == null)
-            return 500;        
 
         else if ($row["PHONE_VERIFIED"]  == null)
             return 200;

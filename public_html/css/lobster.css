@@ -2,5 +2,5 @@
   font-family: 'Lobster';
   font-style: normal;
   font-weight: 400;
-  src: local('Lobster'), url(http://themes.googleusercontent.com/static/fonts/lobster/v5/TSDaXhyJuDJ-NBU0popSWA.ttf) format('truetype');
+  src: local('Lobster'), url(/css/TSDaXhyJuDJ-NBU0popSWA.ttf) format('truetype');
 }

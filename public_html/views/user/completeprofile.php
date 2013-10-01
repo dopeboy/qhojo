@@ -7,64 +7,14 @@
         <div class="navbar" >
             <div id="" class="navbar-inner" style="">
                 <ul class="nav text-center" style="">
-                    <li class="<?php if ($this->state == 100) { echo "active"; } ?>" style=""><a href="javascript:void(0)">1. Profile Picture</a></li>
-                    <li class="<?php if ($this->state == 500) { echo "active"; } ?>" style=""><a href="javascript:void(0)">2. Blurb</a></li>
-                    <li class="<?php if ($this->state == 200) { echo "active"; } ?>" style=""><a href="javascript:void(0)">3. Phone Number</a></li>
-                    <li class="<?php if ($this->state == 300) { echo "active"; } ?>" style=""><a href="javascript:void(0)">4. PayPal</a></li>              
-                    <li class="<?php if ($this->state == 400) { echo "active"; } ?>" style=""><a href="javascript:void(0)">5. Credit Card</a></li>       
+                    <li class="<?php if ($this->state == 200) { echo "active"; } ?>" style=""><a href="javascript:void(0)">1. Phone Number</a></li>
+                    <li class="<?php if ($this->state == 300) { echo "active"; } ?>" style=""><a href="javascript:void(0)">2. PayPal</a></li>              
+                    <li class="<?php if ($this->state == 400) { echo "active"; } ?>" style=""><a href="javascript:void(0)">3. Credit Card</a></li>       
                 </ul>
             </div>
         </div>        
     </div>
     <legend>Complete User Profile</legend>
-    <?php if ($this->state == 100) { ?>
-    <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, we need you to fill out a couple more details. Please upload a profile picture of yourself below.</p>
-    
-    <form class="form-submit" id="profile-picture" action="/user/completeprofile/null/101" method="post">
-        <div id="uploaded-profile-picture" class="text-center" style="">
-            <div id="add-pictures" style="">
-                  <button data-toggle="modal" tabindex="-1" href="#upload-profile-picture" id="upload-picture-btn" class="btn btn-success" type="button" style="">Upload Profile Picture</button> 
-              </div>             
-        </div>          
-
-        <button id="profile-picture-submit" class="btn btn-primary btn-large  disabled" type="submit" style="" >Submit</button> 
-    </form>
-     
-    <div id="upload-profile-picture" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
-        <div class="modal-header">
-            <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Upload Profile Picture</h3>
-        </div>
-        <div class="modal-body text-left" style="">
-            <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 
-        </div>
-        <div class="modal-footer">
-            <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
-        </div>
-    </div>  
-     
-    <?php } ?>
-    
-    <?php if ($this->state == 500) { ?>
-    <p class="intro-text"><?php echo $_SESSION["USER"]["FIRST_NAME"]?>, before you lend or borrow an item, give us a little blurb about yourself. Please fill in the box below.</p>
-    
-    <form id="blurb" class="form-submit" action="/user/completeprofile/null/501" method="post">
-	
-        <div class="control-group" style="margin-bottom: 10px">
-            <div class="controls">
-                <textarea id="blurb" name="blurb" placeholder="Tell us about yourself." style=""></textarea>
-            </div>
-        </div>     
-        
-        <div class="control-group">
-            <div class="controls">
-                <button id="blurb-submit" class="btn btn-primary btn-large" type="submit" style="" >Submit</button> 
-            </div>
-        </div>           
-    
-    </form>   
-     
-    <?php } ?>
     
     <?php if ($this->state == 200) { 
         $phone = null;
