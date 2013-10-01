@@ -168,4 +168,9 @@
     
 </div>
 
+<div class="sheet">
+    <h1 class="text-center">FAQ</h1>
+    <hr>
+</div>
+
 <link rel="stylesheet" href="/css/document/howitworks.css">
