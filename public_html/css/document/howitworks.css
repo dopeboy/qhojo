@@ -1,20 +1,84 @@
-/*.table td {
-   text-align: center;   
-}*/
-.arrow-right {
-	width: 0; 
-	height: 0; 
-	border-top: 60px solid transparent;
-	border-bottom: 60px solid transparent;
-	
-	border-left: 60px solid green;
+#steps th.lender, #steps th.borrower
+{
+    width: 49%; 
+    text-align: center
 }
 
-.arrow-left {
-	width: 0; 
-	height: 0; 
-	border-top: 60px solid transparent;
-	border-bottom: 60px solid transparent; 
-	
-	border-right:60px solid green; 
+#steps th.step
+{
+    width: 2%; 
+    text-align: center
+}
+
+
+.arrow
+{
+    width: 0; 
+    height: 0; 
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    float: left
+
+}
+
+.tag.left .arrow
+{
+    border-left: 100px solid rgba(91, 192, 222, 0.5); 
+}
+
+.tag.right .arrow
+{
+    border-right: 100px solid rgba(91, 192, 222, 0.5);  
+}
+
+.tag.left .block
+{
+    text-align: left
+}
+
+.tag .block
+{
+    background-color: rgba(91, 192, 222, 0.5);
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);   
+    height: 160px; 
+    width: 370px;
+    float: left;  
+    padding: 20px;
+}
+
+.tag
+{
+    margin-top: 20px; 
+    margin-bottom: 20px;
+    display:inline-block
+}
+
+td.left-cell
+{
+    text-align: right
+}
+
+td.middle-cell
+{
+    text-align: center; 
+    vertical-align: middle
+}
+
+td.right-cell
+{
+    text-align: left;
+}
+
+hr
+{
+    border-color: #b6b6b6;
+    border-top: none;
+}
+
+.sheet
+{
+    padding-left: 0px;
+    padding-right: 0px;    
 }
