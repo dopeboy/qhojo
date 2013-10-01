@@ -1,5 +1,3 @@
-<title>Qhojo - Search</title>
-
 <?php
     global $results_per_page;
     $current_page = !empty($this->urlvalues['page']) ? $this->urlvalues['page'] : 1; 
@@ -19,9 +17,8 @@
 ?>
 
 <link rel="stylesheet" href="/css/item/search.css">
-<script src="/js/item/search.js"></script>
 
-<title>qhojo - <?php echo $title; ?></title>
+<title>Qhojo - <?php echo $title; ?></title>
 
 <?php if (empty($user_id)) { ?>
 
@@ -165,6 +162,7 @@
         
 </div>
 
-
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/item/search.js"></script>
 
 

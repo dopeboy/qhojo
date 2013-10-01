@@ -1,9 +1,19 @@
 $(document).ready(function()
 {    
     $('[rel=tooltip]').tooltip();
-
-    $('input#query').popover('toggle');
-    $('input#query').focus();    
+    $('input#query').focus();  
+    
+    if ($.cookie('seenSearch'))
+    {
+        $('input#query').popover('hidden');
+        $.cookie('seenSearch', true);    
+    }
+    
+    else 
+    {
+        $('input#query').popover('toggle');        
+        $.cookie('seenSearch', true);   
+    }
 
     // lose focus
     $('input#query').blur(function() 

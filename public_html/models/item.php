@@ -70,7 +70,6 @@ class ItemModel extends Model
             $start_at = ($page-1) * $results_per_page;
         
         // First find the total number of results. 
-        error_log('SELECT COUNT(*) FROM ITEM_VW' . $where . $query_clause . $location_clause . $user_clause);
         $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW' . $where . $query_clause . $location_clause . $user_clause);
         $preparedStatement->execute($sqlParameters);
         $rows["ITEMS_COUNT"] = $preparedStatement->fetchColumn();           

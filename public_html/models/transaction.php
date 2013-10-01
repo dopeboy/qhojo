@@ -556,7 +556,7 @@ class TransactionModel extends Model
             {
                 $data = json_decode($detail['DATA']); 
                 $transactions[$detail["TRANSACTION_ID"]]["LATE"]["LATE_COUNT"] = $data->{"LATE_COUNT"};
-                $transactions[$detail["TRANSACTION_ID"]]["LATE"]["LATE_FEE"] = $data->{"LATE_COUNT"} * $detail["RATE"];
+                $transactions[$detail["TRANSACTION_ID"]]["LATE"]["LATE_FEE"] = $data->{"LATE_COUNT"} * 2 * $detail["RATE"];
                 
                 $transactions[$detail["TRANSACTION_ID"]]["TOTAL"] +=  $transactions[$detail["TRANSACTION_ID"]]["LATE"]["LATE_FEE"];
             }                
@@ -715,7 +715,7 @@ class TransactionModel extends Model
         $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/>";
         $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/>";
         $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
-        $message .= "Please note that if the item is not returned by the due date, the borrower will be charged the rental rate for each day the item is late.";
+        $message .= "Please note that if the item is not returned by the due date, the borrower will be charged double the rental rate for each day the item is late.";
         
         $subject = "{$transaction["TITLE"]} - EXCHANGED - Item has been exchanged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         
@@ -1022,7 +1022,7 @@ class TransactionModel extends Model
             // Send email to both
             $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
             $message .= "This is a reminder that item {$transaction["TITLE"]} has not been returned by {$transaction["BORROWER_FIRST_NAME"]} to {$transaction["LENDER_FIRST_NAME"]}. This item is now <b>{$new_late_count} day(s)</b> late.<br/><br/>";
-            $message .= "{$transaction["BORROWER_FIRST_NAME"]}, you will be charged the full rental rate for each day the item is not returned.";
+            $message .= "{$transaction["BORROWER_FIRST_NAME"]}, you will be charged double the rental rate for each day the item is not returned.";
 
             $subject = "{$transaction["TITLE"]} - LATE - Late notice - Transaction ID: {$transaction["TRANSACTION_ID"]}";
 
@@ -1053,7 +1053,7 @@ class TransactionModel extends Model
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "The item was not returned on the specified due date of " . date("m/d g:i A", strtotime($end_date)) . ". It is now considered <b>late</b>. <br/><br/>";
-                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, you will be charged the full rental rate for each day the item is not returned. Please return the item as soon as possible.";
+                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, you will be charged double the rental rate for each day the item is not returned. Please return the item as soon as possible.";
 
                 $subject = "{$transaction["TITLE"]} - LATE - Item is late - Transaction ID: {$transaction["TRANSACTION_ID"]}";
 
