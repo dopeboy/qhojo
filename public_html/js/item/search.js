@@ -1,8 +1,15 @@
 $(document).ready(function()
 {    
     $('[rel=tooltip]').tooltip();
-    $('input#query').popover('show');
-    
+
+    $('input#query').popover('toggle');
+    $('input#query').focus();    
+
+    // lose focus
+    $('input#query').blur(function() 
+    {
+        $('input#query').popover('destroy');
+    });	
     
     if (getURLParameter('query') != 'null')
     {
