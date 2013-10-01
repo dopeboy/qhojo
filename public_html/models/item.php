@@ -33,15 +33,14 @@ class ItemModel extends Model
             if ($query != null)
             {
                 $sqlParameters[":query"] =  '%' . $query . '%';
-                $query_clause = ' (lower(TITLE) like lower(:query) OR lower(DESCRIPTION) like lower(:query))';
+                $query_clause = ' AND (lower(TITLE) like lower(:query) OR lower(DESCRIPTION) like lower(:query))';
             }
 
             if ($location != null)
             {
                 $sqlParameters[":location"] =  $location;
 
-                if ($query != null)
-                    $location_clause = ' AND ';
+                $location_clause = ' AND ';
 
                 if (strlen($location) == 5 && is_numeric($location))
                     $location_clause .= ' (ZIPCODE=:location)';
@@ -56,7 +55,7 @@ class ItemModel extends Model
         else if ($user_id != null)
         {
             $sqlParameters[":user_id"] =  $user_id;
-            $user_clause = ' LENDER_ID = :user_id';
+            $user_clause = ' AND LENDER_ID = :user_id';
             
             $sqlParametersUser[":user_id"] =  $user_id;
             $preparedStatement = $this->dbh->prepare('SELECT FIRST_NAME FROM USER_VW where USER_ID=:user_id and ACTIVE=1 LIMIT 1');
@@ -71,6 +70,7 @@ class ItemModel extends Model
             $start_at = ($page-1) * $results_per_page;
         
         // First find the total number of results. 
+        error_log('SELECT COUNT(*) FROM ITEM_VW' . $where . $query_clause . $location_clause . $user_clause);
         $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW' . $where . $query_clause . $location_clause . $user_clause);
         $preparedStatement->execute($sqlParameters);
         $rows["ITEMS_COUNT"] = $preparedStatement->fetchColumn();           
