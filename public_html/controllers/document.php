@@ -42,12 +42,14 @@ class Document extends Controller
     protected function about()
     {
         $method = Method::GET;
+        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }         
     
     protected function howitworks()
     {
         $method = Method::GET;
+        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }    
     
