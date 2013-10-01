@@ -132,7 +132,7 @@
                         <div class="block">
                             <h3>Return Item</h3>
                             <p>
-                                After you are done using the item, schedule a time and place with the lender to return the item on the due date. Don't be late or else you'll be subject to our late policy.
+                                After you are done using the item, schedule a time and place with the lender to return the item on the due date. Don't be late or else you'll be subject to our <a href='#'>late policy</a>.
                             </p>      
                         </div>
                     </div>
