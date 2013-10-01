@@ -133,7 +133,7 @@ class TransactionModel extends Model
         $requestor = $user_model->getUserDetails($requestor_id);
         
         $sqlParameters[":item_id"] =  $item_id;
-        $preparedStatement = $this->dbh->prepare('SELECT LENDER_ID, TITLE FROM ITEM_VW where ITEM_ID=:item_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT LENDER_ID, TITLE FROM ITEM_VW where ITEM_ID=:item_id and ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $item = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
         

@@ -12,7 +12,7 @@ class UserModel extends Model
             throw new UserDoesNotExistException($method, $user_id);
         
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ITEM_VW WHERE LENDER_ID=:user_id');
+        $preparedStatement = $this->dbh->prepare('SELECT COUNT(*) FROM ACTIVE_ITEMS_VW WHERE LENDER_ID=:user_id');
         $preparedStatement->execute($sqlParameters);
         $row["NUM_ITEMS_POSTED"] = $preparedStatement->fetchColumn();
         
@@ -344,7 +344,7 @@ class UserModel extends Model
             // Is the receipient the owner of the Item?
             $sqlParameters[":user_id"] =  $receipient_id;
             $sqlParameters[":item_id"] =  $entity_id;
-            $preparedStatement = $this->dbh->prepare('SELECT ITEM_ID, TITLE FROM ITEM_VW WHERE LENDER_ID=:user_id and ITEM_ID=:item_id LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('SELECT ITEM_ID, TITLE FROM ITEM_VW WHERE LENDER_ID=:user_id and ITEM_ID=:item_id and ACTIVE=1 LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);        
 
