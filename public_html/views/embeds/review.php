@@ -8,6 +8,7 @@
     <?php $now = new DateTime();$ref = new DateTime($review['REVIEW_DATE']); $diff = $now->diff($ref); 
     
         $diff_days = $diff->d;
+        $diff_hours = $diff->h;
         $diff_months = $diff->m;
         $diff_years = $diff->y;
         $diff_weeks = 0;
@@ -28,8 +29,11 @@
         else if ($diff_days > 0)
             $diff_output_string = $diff_days . ' day' . ($diff_days > 1 ? 's' : '') . ' ago';        
         
+        else if ($diff_hours > 0 )
+            $diff_output_string = $diff_hours . ' hour' . ($diff_hours > 1 ? 's' : '') . ' ago';        
+        
         else
-            $diff_output_string = '1 hour ago';   
+            $diff_output_string = 'couple minutes ago';   
     
     ?>
 
