@@ -24,7 +24,7 @@
                  <img src="/img/request.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Search for the gear you want.</p>
+                <p>Search for the gear you want and request to borrow it.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -35,7 +35,7 @@
                  <img src="/img/use.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Select a rental duration and pickup time for your gear. Send any questions to the lender.</p>
+                <p>Schedule a time and place to pick up the item from the lender. And then rock out with it.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -46,9 +46,15 @@
                  <img src="/img/return.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Meet the lender, pick up the gear, and start shooting your favorite pictures.</p>
+                <p>Return the gear to the lender.</p>
              </div>                               
          </div>                    
+    </div>
+    
+    <div class='row-fluid' style='margin-top: 20px;'>
+        <div class='span12 text-center'>
+            <h2>See our <a href='/document/howitworks'>how-it-works guide</a> for more.</h2>
+        </div>
     </div>
 
     <hr class="mini">
@@ -77,7 +83,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Cost</h4>
-                Save money by renting gear at cheaper rates than what existing rental stores have to offer.
+                Save money by borrowing gear at cheaper rates than what existing rental stores have to offer.
             </div>
         </div>            
     </div>      
@@ -101,7 +107,7 @@
                  <img src="/img/approve.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Specify a rental rate, a deposit value, and toss in some descriptive details. Then post it (for free!).</p>
+                <p>Select, vet, and approve a borrow request. </p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -112,7 +118,7 @@
                  <img src="/img/lendout.gif" class="img-circle">
              </div>      
              <div class="bottom text-center">
-                <p>Select, vet, and approve a rental request. The approved borrower will setup a meeting time with you to pick up the gear.</p>
+                <p>The approved borrower will setup a meeting time with you to pick up your gear.</p>
              </div>                               
          </div>
          <div class="span4 hiwstep">
@@ -128,6 +134,12 @@
          </div>                    
     </div>
 
+    <div class='row-fluid' style='margin-top: 20px;'>
+        <div class='span12 text-center'>
+            <h2>See our <a href='/document/howitworks'>how-it-works guide</a> for more.</h2>
+        </div>
+    </div>
+    
     <hr class="mini">
     <h1 class="text-center subheader">Protection</h1>
 
@@ -140,7 +152,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Theft</h4>
-                If your borrower doesn't return the gear, you will be compensated for the full value of the item subject to Qhojo's insurance policy.
+                If your borrower doesn't return the gear, you will be compensated for the full value of the item as per our <a href="#">damage policy</a>.
             </div>
         </div>            
     </div>    
@@ -154,7 +166,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Damage</h4>
-                If your gear is damaged, we'll supply you with a replacement and get the gear repaired for you subject to Qhojo's insurance policy.
+                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear as per our <a href="#">damage policy</a>.
             </div>
         </div>            
     </div>  

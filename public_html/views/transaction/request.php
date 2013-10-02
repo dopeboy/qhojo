@@ -32,7 +32,7 @@
             <div class="section">
                 <h3>Security Hold</h3>
                 <div class="" >  
-                    There will be a $<?php echo $viewmodel['ITEM']['DEPOSIT'] ?> hold placed on your credit card for the rental duration. 
+                    There will be a $<?php echo $viewmodel['ITEM']['DEPOSIT'] ?> hold placed on your credit card for the borrow duration. 
                 </div>        
             </div>
 

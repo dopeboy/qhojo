@@ -143,7 +143,7 @@ class TransactionModel extends Model
         
         // Send email to lender
         $email = "Hi {$lender["FIRST_NAME"]},<br/><br/>";
-        $email .= "{$requestor["FIRST_NAME"]} has requested to rent your item, {$item["TITLE"]}, from " . date("m/d g:i A", strtotime($start_date)) . " to " . date("m/d g:i A", strtotime($formatted_end_date)) . ".<br/><br/>";
+        $email .= "{$requestor["FIRST_NAME"]} has requested to borrow your item, {$item["TITLE"]}, from " . date("m/d g:i A", strtotime($start_date)) . " to " . date("m/d g:i A", strtotime($formatted_end_date)) . ".<br/><br/>";
         $email .= "Here's the message {$requestor["FIRST_NAME"]} attached to the request:<br/><br/>";
         $email .= "<blockquote>{$message}</blockquote><br/>";
         $email .= "If you want to accept {$requestor["FIRST_NAME"]}'s request, click on the link below: <br/><br/>";
@@ -407,7 +407,7 @@ class TransactionModel extends Model
 
         // Send email to lender & borrower
         $message = "Hi {$row["LENDER_FIRST_NAME"]} and {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
-        $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to rent your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}.<br/><br/>";
+        $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}.<br/><br/>";
         $message .= "Your guys' confirmation code is <strong>{$cc}</strong>.<br/><br/>";
         $message .= "Here's what the both of you have to do next:<br/><br/>";
         $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
@@ -439,7 +439,7 @@ class TransactionModel extends Model
         
         // Send email to lender
         $message = "Hi {$row["LENDER_FIRST_NAME"]},<br/><br/>";
-        $message .= "You have accepted {$row["BORROWER_FIRST_NAME"]}'s request to rent your item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
+        $message .= "You have accepted {$row["BORROWER_FIRST_NAME"]}'s request to borrow your item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
         $message .= "This transaction is currently in the <b>pending</b> state because {$row["BORROWER_FIRST_NAME"]} hasn't completed their payment details yet. If {$row["BORROWER_FIRST_NAME"]} does not complete their payment details in the next 24 hours, this transaction will be cancelled.We've notified {$row["BORROWER_FIRST_NAME"]} about this.<br/><br/>";
         $message .= "Once {$row["BORROWER_FIRST_NAME"]} completes their payment details, we will notify you via email and move the transaction forward.";
         $subject = "{$row["TITLE"]} - PENDING - Borrower must complete payment details - Transaction ID: {$row["TRANSACTION_ID"]}";
@@ -447,7 +447,7 @@ class TransactionModel extends Model
         
         // Send email to borrower
         $message = "Hi {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
-        $message .= "{$row["LENDER_FIRST_NAME"]} has accepted your request to rent item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
+        $message .= "{$row["LENDER_FIRST_NAME"]} has accepted your request to borrow item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
         $message .= "Before the transaction can move forward, you must complete your payment details. You can do this by clicking on the link below:<br/><br/>";
         $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/completeprofile</a><br/><br/>";
         $message .= "If you do not complete your payment details in the next 24 hours, this transaction will be cancelled.";
@@ -494,7 +494,7 @@ class TransactionModel extends Model
 
                 // Send email to lender
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
-                $message .= "The transaction is ready to move forward. {$transaction["LENDER_FIRST_NAME"]}, you have accepted {$transaction["BORROWER_FIRST_NAME"]}'s request to rent your item, <a href=\"{$domain}/item/index/{$transaction["ITEM_ID"]}\">{$transaction["TITLE"]}</a>, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ". Your guys' confirmation code is <b>{$cc}</b>.<br/><br/>";
+                $message .= "The transaction is ready to move forward. {$transaction["LENDER_FIRST_NAME"]}, you have accepted {$transaction["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$transaction["ITEM_ID"]}\">{$transaction["TITLE"]}</a>, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ". Your guys' confirmation code is <b>{$cc}</b>.<br/><br/>";
                 $message .= "Here's what the both of you have to do next:<br/><br/>";
                 $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
                 $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";

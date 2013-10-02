@@ -1,3 +1,12 @@
+<?php 
+
+global $lender_number, $borrower_number;
+
+$formatted_lender_number =  substr($lender_number, 0, 3) . '-' . substr($lender_number, 3,3) . '-' . substr($lender_number, 6,4);
+$formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($borrower_number, 3,3) . '-' . substr($borrower_number, 6,4);
+
+?>
+
 <title>Qhojo - How it works / FAQ</title>
 
 <div class="sheet">
@@ -93,7 +102,7 @@
                         <div class="block">
                             <h3>Pick Up</h3>
                             <p>
-                                Schedule a time and place with the lender to pick up the item. Once you meet them, verify that the item is in the same condition as listed on Qhojo. Then, text your confirmation code to the following number: <a href="tel:<?php global $borrower_number; echo $borrower_number; ?>"><?php global $borrower_number; echo $borrower_number; ?></a>. We'll place a hold on your credit card for the hold amount.
+                                Schedule a time and place with the lender to pick up the item. Once you meet them, verify that the item is in the same condition as listed on Qhojo. Then, text your confirmation code to our number: <a href="tel:<?php echo $borrower_number; ?>"><?php echo $formatted_borrower_number; ?></a>. We'll place a hold on your credit card for the hold amount.
                             </p>      
                         </div>
                     </div>
@@ -148,11 +157,11 @@
                         <div class="block" style="">
                             <h3>Verify Item</h3>
                             <p>
-                                Inspect the item to make sure it is OK. Then, text your confirmation code to the following number: <a href="tel:<?php global $lender_number; echo $lender_number; ?>"><?php global $lender_number; echo $lender_number; ?></a>. We'll send you the money you are owed minus a <a href="/document/fees">small transaction fee</a> to your PayPal account. 
+                                Inspect the item to make sure it is OK. Then, text your confirmation code to our number: <a href="tel:<?php echo $lender_number;?>"><?php echo $formatted_lender_number; ?></a>. We'll send you the money you are owed minus a <a href="/document/fees">small transaction fee</a> to your PayPal account. 
                             </p>   
                             
                             <p>
-                                In the event that there is damage, do not send the text message and instead, <a href='#'>submit a damage report</a>.
+                                In the event that there is damage, do not send the text message. Instead, <a href='#'>submit a damage report</a>.
                             </p>
                         </div>
                         <div class="arrow" style=""></div>
@@ -178,7 +187,7 @@
                         <div class="block">
                             <h3>Return Item</h3>
                             <p>
-                                Once you receive a text message from us confirming that the lender is OK with the returned item, return the item to the lender. We will also release the hold on your credit card and charge you for the borrow duration.
+                                Once you receive a text message from us confirming that the lender is OK with the returned item, return the item to them. We will also release the hold on your credit card and charge you for the borrow duration.
                             </p>
                         </div>
                     </div>
@@ -194,6 +203,37 @@
 <div class="sheet">
     <h1 class="text-center">FAQ</h1>
     <hr>
+    <div style='padding-left: 40px'>
+        <div class='row-fluid'>
+            <div class='span12'>
+           
+                <h4>What is Qhojo?</h4>
+                <p>
+                    Qhojo (pronounced co-joe) is a peer-to-peer platform for borrowing and lending photo and video gear.
+                </p>
+                
+                <h4>What can I borrow or lend out on Qhojo?</h4>
+                <p>
+                    Camera bodies, lenses, flashes, lighting equipment are some examples of the kinds of items you can find on Qhojo. 
+                </p>
+                
+                <h4>I want to lend something but I'm afraid someone might steal it.</h4>
+                <p>
+                    When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. If the borrower runs off with the item, the credit card hold is captured and the funds are transferred to you.
+                </p>  
+                
+                <h4>I want to lend something but I'm afraid someone might damage it.</h4>
+                <p>
+                    When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. 
+                </p>                    
+                
+                <p>
+                    If the item has been seriously damaged, the lender and borrower can submit a damage report through the dashboard. We will work with the both of you to resolve the situation. If we determine the item needs repair, those costs will come out of the hold issued on the borrower's credit card.
+                </p>
+               
+            </div>
+        </div>
+    </div>
 </div>
 
 <link rel="stylesheet" href="/css/document/howitworks.css">

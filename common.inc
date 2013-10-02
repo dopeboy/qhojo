@@ -20,6 +20,7 @@ if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "stagin
         
     $borrower_number = '9493287319';
     $lender_number = '9494852584';    
+    $domain = "http://" . $_SERVER['SERVER_NAME'];
 }
 
 else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
@@ -40,6 +41,7 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     
     $borrower_number = '9177466195';
     $lender_number = '3476730097';    
+    $domain = "https://" . $_SERVER['SERVER_NAME'];
 }
 
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
@@ -61,8 +63,6 @@ $stock_user_tn = '/img/stock_tn.png';
 $stock_user_card = '/img/stock_card.png';
 
 $results_per_page = 12;
-
-$domain = "http://" . $_SERVER['SERVER_NAME'];
 
 $support_email = "support@qhojo.com";
 $email_message_footer = "-Team Qhojo<br/><a href=\"mailto:{$support_email}\">{$support_email}</a><br/><a href=\"{$domain}\">{$domain}</a>";
