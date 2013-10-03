@@ -41,7 +41,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-             <!-- font-family: 'Lobster', cursive; margin-top: 9px; font-size: 26px;color: white -->
+             
                         <div class="nav-collapse collapse custom">
                             <ul class="nav">
                                 <li class=""><a href="/" style="font-family: 'Lobster', cursive;font-size: 26px">Qhojo</a></li>

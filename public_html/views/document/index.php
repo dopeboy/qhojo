@@ -51,7 +51,7 @@
          </div>                    
     </div>
     
-    <div class='row-fluid' style='margin-top: 20px;'>
+    <div class='row-fluid hiw-link' style=''>
         <div class='span12 text-center'>
             <h2>See our <a href='/document/howitworks'>how-it-works guide</a> for more.</h2>
         </div>
@@ -134,7 +134,7 @@
          </div>                    
     </div>
 
-    <div class='row-fluid' style='margin-top: 20px;'>
+    <div class='row-fluid hiw-link' style=''>
         <div class='span12 text-center'>
             <h2>See our <a href='/document/howitworks'>how-it-works guide</a> for more.</h2>
         </div>
@@ -152,7 +152,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Theft</h4>
-                If your borrower doesn't return the gear, you will be compensated for the full value of the item as per our <a href="#">damage policy</a>.
+                If your borrower doesn't return the gear, you will be compensated for the full value of the item as per our <a href="/document/howitworks/#damage">damage policy</a>.
             </div>
         </div>            
     </div>    
@@ -166,7 +166,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Damage</h4>
-                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear as per our <a href="#">damage policy</a>.
+                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear as per our <a href="/document/howitworks/#damage">damage policy</a>.
             </div>
         </div>            
     </div>  

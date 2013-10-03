@@ -46,7 +46,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                 <div class="subsection" id="hold-policy">
                     <h3>Hold Policy</h3>
                     <p>
-                        A $<?php echo $viewmodel['ITEM']['DEPOSIT']?> hold will be placed on the borrower's credit card at the start of the rental period.
+                        A $<?php echo $viewmodel['ITEM']['DEPOSIT']?> hold will be placed on the borrower's credit card at the start of the borrow period.
                     </p>
                  </div>                      
 

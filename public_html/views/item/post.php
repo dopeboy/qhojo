@@ -59,16 +59,11 @@
 
                         A $<input type="text" class="input-block-level editable positive-integer" placeholder="Enter item amount" id="hold" name="hold" style=""><span id="hold-policy" class="non-editable value"></span>  
 
-                        hold will be placed on the borrower's credit card at the start of the rental period.
+                        hold will be placed on the borrower's credit card at the start of the borrow period.
                         <a href="javascript:void(0);">
                             <i class="icon-pencil icon-2x" id="hold" style=""></i>
                         </a>  
                     </div>                      
-
-                    <div class="subsection" id="reviews">
-                        <h3>Reviews</h3>
-                        <i>No reviews yet</i>
-                     </div> 
                 </div>
             </div>
 

@@ -82,3 +82,13 @@ hr
     padding-left: 0px;
     padding-right: 0px;    
 }
+
+#faq-content h4
+{
+    margin-bottom: 10px
+}
+
+.question
+{
+    margin-bottom: 40px;
+}
