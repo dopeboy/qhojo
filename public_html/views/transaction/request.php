@@ -50,8 +50,10 @@
             Request Submitted
         </legend>    
         <div>
-            Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have requested <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. 
-            We'll notify you as soon as the lender, <a href="/user/index/<?php echo $viewmodel["ITEM"]["LENDER_ID"] ?>"><?php echo $viewmodel["ITEM"]["LENDER_FIRST_NAME"] ?></a>, has responded to your request.
+            <p>Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have requested <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. 
+            We'll notify you as soon as the lender, <a href="/user/index/<?php echo $viewmodel["ITEM"]["LENDER_ID"] ?>"><?php echo $viewmodel["ITEM"]["LENDER_FIRST_NAME"] ?></a>, has responded to your request.</p>
+            
+            <p>Go to your <a href='/user/dashboard'>dashboard</a> to track your request.</p>
         </div>        
     <?php } ?>
 </div>

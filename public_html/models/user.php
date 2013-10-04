@@ -167,11 +167,11 @@ class UserModel extends Model
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
     }
     
-    // Profile Picture (100), Blurb(500), Phone # (200), PP (300), CC (400)
+    // Phone # (200), PP (300), CC (400)
     public function userNeedsExtraFields($user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;
-        $preparedStatement = $this->dbh->prepare('SELECT PROFILE_PICTURE_FILENAME,BLURB,PHONE_VERIFIED,PAYPAL_EMAIL_ADDRESS,BP_PRIMARY_CARD_URI FROM USER_VW WHERE USER_ID=:user_id and (PROFILE_PICTURE_FILENAME is null || BLURB is null || PHONE_VERIFIED is null || PAYPAL_EMAIL_ADDRESS is null || BP_PRIMARY_CARD_URI is null) LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT PHONE_VERIFIED,PAYPAL_EMAIL_ADDRESS,BP_PRIMARY_CARD_URI FROM USER_VW WHERE USER_ID=:user_id and (PHONE_VERIFIED is null || PAYPAL_EMAIL_ADDRESS is null || BP_PRIMARY_CARD_URI is null) LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
          

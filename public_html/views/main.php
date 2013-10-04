@@ -53,6 +53,10 @@
                             </ul>
                             <ul class="nav pull-right">
                                 <?php if (User::isUserSignedIn()) { ?>
+                                
+                                <li>
+                                    <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard</a>
+                                </li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
                                       <?php echo $_SESSION["USER"]["NAME"];?>
@@ -61,7 +65,6 @@
                                     
                                     <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
                                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/index/<?php echo $_SESSION["USER"]["USER_ID"];?>">Profile</a></li>
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard</a></li>
                                         <li role="presentation" class="divider"></li>
                                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/signout">Sign out</a></li>
                                     </ul>

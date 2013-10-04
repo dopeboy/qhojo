@@ -134,7 +134,9 @@
         Item Listed
     </legend>    
     <div>
-        Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have submitted your item <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. You're all done! 
+        <p>Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have submitted your item <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. </p>
+        <p>Go to your <a href='/user/dashboard'>dashboard</a> to track your item.</p>
+        
     </div>
     <?php } ?>
     

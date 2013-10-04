@@ -16,6 +16,8 @@ $transaction = reset($viewmodel); // first element
     
     <p>Your confirmation code is <strong><?php echo $transaction["RESERVATION"]["CONFIRMATION_CODE"] ?></strong>. Hang on to it as you'll need it later on. Please check your email for further instructions.</p>
     
+    <p>You can also go to your <a href='/user/dashboard'>dashboard</a> to track your transaction.</p>
+    
 <?php } ?>
     
 </div>

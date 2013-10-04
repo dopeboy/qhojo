@@ -10,15 +10,15 @@
 <div id="dashboard" class="sheet">
     <legend>Dashboard</legend>
     <div class="tabbable">
-        <ul class="nav nav-pills ">
+        <ul class="nav nav-tabs ">
             <li class="active">
-                <a href="#borrowing" data-toggle="tab">Borrowing</a>
+                <a href="#borrowing" data-toggle="tab"><h3>Borrowing</h3></a>
             </li>
             <li>
-                <a href="#lending" data-toggle="tab">Lending</a>
+                <a href="#lending" data-toggle="tab"><h3>Lending</h3></a>
             </li>
             <li>
-                <a href="#my-items" data-toggle="tab">My Items</a>
+                <a href="#my-items" data-toggle="tab"><h3>My Items</h3></a>
             </li>            
         </ul>
 

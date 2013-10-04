@@ -92,3 +92,9 @@ hr
 {
     margin-bottom: 40px;
 }
+
+.floatingHeader {
+  position: fixed;
+  top: 10;
+  visibility: hidden;
+}

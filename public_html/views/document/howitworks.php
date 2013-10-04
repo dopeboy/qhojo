@@ -12,9 +12,11 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
 <div id='hiw' class="sheet">
     <h1 class="text-center">How it works</h1>
     <hr>
-    <table id="steps" class="table table-striped">
-        <thead >
-            <tr  >
+    <table id="steps" class="table table-striped persist-area">
+        
+
+        <thead id='header'>
+            <tr  class='persist-header'>
                 <th style="" class="lender">
                 <h2>Lender</h2>
                 </th>
@@ -27,8 +29,11 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
             </tr>
         </thead>
         
+        
+        
+        
         <tbody>
-            <tr style='height: 10px'>
+            <tr style='height: 0px'>
                 
             </tr>
             <tr style="" class="">
@@ -100,7 +105,7 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
                     <div class="tag right">
                         <div class="arrow"></div>
                         <div class="block">
-                            <h3>Pick Up</h3>
+                            <h3>Verify Item</h3>
                             <p>
                                 Schedule a time and place with the lender to pick up the item. Once you meet them, verify that the item is in the same condition as listed on Qhojo. Then, text your confirmation code to our number: <a href="tel:<?php echo $borrower_number; ?>"><?php echo $formatted_borrower_number; ?></a>. We'll place a hold on your credit card for the hold amount.
                             </p>      
@@ -258,3 +263,45 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
 </div>
 
 <link rel="stylesheet" href="/css/document/howitworks.css">
+
+<!--<script>
+    function UpdateTableHeaders() {
+       $(".persist-area").each(function() {
+       
+           var el             = $(this),
+               offset         = el.offset(),
+               scrollTop      = $(window).scrollTop(),
+               floatingHeader = $(".floatingHeader", this)
+          
+           if ((scrollTop > offset.top) && (scrollTop < offset.top + el.height())) {
+               floatingHeader.css({
+                "visibility": "visible"
+               });
+           } else {
+               floatingHeader.css({
+                "visibility": "hidden"
+               });      
+           };
+       });
+    }
+    
+    // DOM Ready      
+    $(function() {
+    
+       var clonedHeaderRow;
+    
+       $(".persist-area").each(function() {
+           clonedHeaderRow = $(".persist-header", this);
+           clonedHeaderRow
+             .before(clonedHeaderRow.clone())
+             .css("width", clonedHeaderRow.width())
+             .addClass("floatingHeader");
+             
+       });
+       
+       $(window)
+        .scroll(UpdateTableHeaders)
+        .trigger("scroll");
+       
+    });
+  </script>-->
