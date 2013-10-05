@@ -5,7 +5,7 @@
 
 <div class="sheet headliner">
      
-    <h1 style="">Gear in New York City</h1>                             
+    <h1 style="">Gears in New York City</h1>                             
  
     <div class="row-fluid text-center" style="">    
         <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>             
