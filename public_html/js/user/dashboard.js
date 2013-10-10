@@ -1,5 +1,27 @@
 $(document).ready(function()
 {
+    if (location.hash)
+    {
+        setTimeout(function() {
+        if (location.hash) {
+          window.scrollTo(0, 0);
+        }
+      }, 1);
+   
+          $('.nav-tabs a[href="#' + window.location.hash.split('#')[1] + '"]').tab('show');
+     
+        if (window.location.hash.split('#').length == 3)
+          {      
+            $(document.body).animate(
+            {
+                'scrollTop':   $('tr#' + window.location.hash.split('#')[2]).offset().top - $('.navbar-fixed-top').height() - 10
+            }, 
+            'slow');                 
+        }
+
+
+    }
+    
     $('.collapse').on('hide', function () 
     {
         var $transaction_id = $(this).attr('tid');
@@ -76,6 +98,8 @@ $(document).ready(function()
     {
         popupwindow("http://twitter.com/share?url=/&text=" + $(this).attr('text'), 'Share on Twitter', 500, 500);
     });
+    
+    $('.next-step .why').tooltip();
  	    
 });
 

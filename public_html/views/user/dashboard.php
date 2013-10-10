@@ -75,7 +75,7 @@
                                 <th class="item">Item</th>
                                 <th class="total">Total</th>
                                 <th class="user">Borrower</th>
-                                <th class="status">Status</th>
+                                <th class="status">Next Step</th>
                                 <th class="action">Action</th>
                             </tr>
                         </thead>
@@ -183,7 +183,7 @@
                                 <th class="item">Item</th>
                                 <th class="total">Total</th>
                                 <th class="user">Lender</th>
-                                <th class="status">Status</th>
+                                <th class="status">Next Step</th>
                                 <th class="action">Action</th>
                             </tr>
                         </thead>

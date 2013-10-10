@@ -18,6 +18,8 @@
         <link href="/css/font-awesome.css" rel="stylesheet">
         <link href='/css/lobster.css' rel='stylesheet' type='text/css'>
         
+        <link href="/css/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
+        
         <script src="/js/vendor/jquery-1.10.1.min.js"></script>
         <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
         
@@ -55,7 +57,7 @@
                                 <?php if (User::isUserSignedIn()) { ?>
                                 
                                 <li>
-                                    <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard</a>
+                                    <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard (<?php echo count($notifications); ?>)</a>
                                 </li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
@@ -120,6 +122,46 @@
 
     </body>
 
+    <script type="text/javascript" src="/js/jquery.pnotify.min.js"></script>
+    
+    <!-- Let's do notifications here-->
+    <script type="text/javascript">
+   
+        
+        <?php
+        
+        foreach ($notifications as $notification)
+        {
+        ?>
+          setTimeout(
+            function(){
+                $.pnotify({
+                        title: '<?php echo $notification["NOTIFICATION_TITLE"]; ?>',
+                        text: '<?php echo $notification["NOTIFICATION_TEXT"]; ?><input type="hidden" class="bubble" href="<?php echo $notification["NOTIFICATION_LINK"]; ?>"/></span>',
+                        type: '<?php echo $notification["NOTIFICATION_TYPE_DESC"]; ?>',
+                        sticker: false,
+                        history: false,
+                        hide: true, 
+                        delay: 50000
+
+                });
+                
+            },1500); // purposely delay because facebook + GA JS is slow
+            
+            
+            
+        <?php 
+        }
+        
+        ?>
+
+        $('body').on('click', '.ui-pnotify-text', function() 
+        {
+            window.location=$(this).find('input.bubble').attr('href');
+        });
+
+    </script>
+    
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -144,6 +186,5 @@
     }(document, 'script', 'facebook-jssdk'));</script>    
 
     <script src="/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-
         
 </html>

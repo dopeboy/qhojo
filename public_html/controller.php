@@ -75,12 +75,15 @@ abstract class Controller
         if ($method == Method::GET)
         {
             $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; // This view makes use of $viewmodel
+            
+            $user = new \UserModel();
+            $notifications = $user->getMyNotifications($_SESSION["USER"]["USER_ID"]);
             require('views/main.php');
         }
         
         else if ($method == Method::NAKED)
         {
-            $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; // This view makes use of $viewmodel
+            $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; 
             require($viewloc);
         }
             

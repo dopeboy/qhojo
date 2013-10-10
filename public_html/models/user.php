@@ -24,7 +24,7 @@ class UserModel extends Model
         $preparedStatement->execute($sqlParameters);        
         $row["REVIEWS_OF_ME"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);        
         
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $this->userNeedsExtraFields($user_id);
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $this->checkIfUserNeedsExtraFields($user_id);
         
         return $row;
     }
@@ -58,7 +58,7 @@ class UserModel extends Model
         $row["WITHDRAW_OPTIONS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);                  
         
         $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
         
         $item_model = new ItemModel();
         $row["MY_ITEMS"]["ACTIVE"] = $item_model->getMyActiveItems($user_id);
@@ -147,8 +147,6 @@ class UserModel extends Model
         // Finally, send the email to both the lender and borrower
         $message = "Hi {$firstname}!<br/><br/>";
         $message .= "Welcome to Qhojo, your community for borrowing and renting film and video gear across New York City.<br/><br/>";
-        $message .= "To get started, we strongly encourage you to complete the rest of your user profile. It'll help you later when you borrow and lend gear from and to the community. To complete your profile, click on the link below:<br/><br/>";
-        $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a><br/><br/>";
         $message .= "If you have any questions, comments or concerns, never hesitate to drop us a line at our support email address located at the bottom of this email.";
         
         $subject = "Welcome to Qhojo!";
@@ -166,6 +164,26 @@ class UserModel extends Model
         
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
     }
+    
+    // This is used by the reminder. It is only for borrows who have made a request but haven't filled out their payment details.
+    public function checkIfUserNeedsExtraFields($user_id)
+    {
+        // Does the user has an open request?
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM REQUESTED_VW WHERE USER_ID=:user_id LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);           
+        
+        if ($row == null)
+            return false;
+        
+        // Check if the user has missing fields
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_VW WHERE USER_ID=:user_id and (PHONE_VERIFIED is null || PAYPAL_EMAIL_ADDRESS is null || BP_PRIMARY_CARD_URI is null) LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);  
+        
+        return $row != null;
+    }    
     
     // Phone # (200), PP (300), CC (400)
     public function userNeedsExtraFields($user_id)
@@ -422,6 +440,20 @@ class UserModel extends Model
         $preparedStatement = $this->dbh->prepare('INSERT INTO CONTACT_MESSAGES (ID,SENDER_ID,RECIPIENT_ID,ENTITY_TYPE,ENTITY_ID,MESSAGE,DATE_SENT) VALUES (:id, :sender_id, :receipient_id, :entity_type, :entity_id, :message, :date_sent)');
         $preparedStatement->execute($sqlParameters);             
     }
+    
+    public function getMyNotifications($user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        
+        $preparedStatement = $this->dbh->prepare('SELECT * FROM NOTIFICATION_VW where RECEIPIENT_USER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $preparedStatement = $this->dbh->prepare('UPDATE NOTIFICATION SET UNREAD=0 where RECEIPIENT_USER_ID=:user_id');
+        $preparedStatement->execute($sqlParameters);
+        
+        return $rows;
+    }    
     
     private function comparePasswords($password_from_login, $password_from_db)
     {

@@ -102,9 +102,6 @@ class TransactionModel extends Model
         if ($row['ITEM'] == null)
             throw new RequestInactiveItemException($method, $user_id);
         
-        $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
-        
         return $row;
     }  
     
@@ -145,14 +142,15 @@ class TransactionModel extends Model
         $email = "Hi {$lender["FIRST_NAME"]},<br/><br/>";
         $email .= "{$requestor["FIRST_NAME"]} has requested to borrow your item, {$item["TITLE"]}, from " . date("m/d g:i A", strtotime($start_date)) . " to " . date("m/d g:i A", strtotime($formatted_end_date)) . ".<br/><br/>";
         $email .= "Here's the message {$requestor["FIRST_NAME"]} attached to the request:<br/><br/>";
-        $email .= "<blockquote>{$message}</blockquote><br/>";
-        $email .= "If you want to accept {$requestor["FIRST_NAME"]}'s request, click on the link below: <br/><br/>";
-        $email .= "<a href=\"{$domain}/transaction/accept/{$transaction_id}/0\">{$domain}/transaction/accept/{$transaction_id}/0</a><br/><br/>";
-        $email .= "Alternatively, go to your <a href=\"{$domain}/user/dashboard/\">dashboard</a> to see all your requests.";
+        $email .= "<blockquote>{$message}</blockquote><br/><br/>";
+        $email .= "Go to your <a href=\"{$domain}/user/dashboard/\">dashboard</a> to accept this request.";
 
         $subject = "{$item["TITLE"]} - REQUESTED - Item has been requested - Transaction ID: {$transaction_id}";
         
-        sendEmail($do_not_reply_email, $lender["EMAIL_ADDRESS"], null, $subject, $email);            
+        sendEmail($do_not_reply_email, $lender["EMAIL_ADDRESS"], null, $subject, $email);     
+        
+        // Insert notification
+        $this->insertNotification($requestor_id, $item["LENDER_ID"], $transaction_id, 0, $method);
     }   
     
     public function requestSubmitted($method, $item_id, $user_id)
@@ -160,7 +158,7 @@ class TransactionModel extends Model
         $item_model = new ItemModel();
         
         $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
         
         $row['ITEM'] =  $item_model->getItem($item_id);     
         return $row;
@@ -290,7 +288,7 @@ class TransactionModel extends Model
         $sqlParameters[":user_id"] =  $user_id;
         $clause = $source == 0 ? "BORROWER" : "LENDER";
         
-        $preparedStatement = $this->dbh->prepare('select 1 from REQUESTED_VW where TRANSACTION_ID=:transaction_id and ' . $clause . '_ID=:user_id LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('select BORROWER_ID from REQUESTED_VW where TRANSACTION_ID=:transaction_id and ' . $clause . '_ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -305,6 +303,10 @@ class TransactionModel extends Model
             $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,400,$method, $user_id), array("REJECT_ID" => $reject_option, "REASON" => $reject_reason), $user_id);
         else
              throw new RejectRequestException($method, $user_id, null, $transaction_id);    
+        
+        // Only insert notification when rejection of request by lender
+        if ($source == 1)
+            $this->insertNotification($user_id, $row["BORROWER_ID"], $transaction_id, 1, $method);        
     }    
     
     public function cancelReservation($method, $user_id, $transaction_id, $cancel_option, $cancel_reason)
@@ -349,6 +351,8 @@ class TransactionModel extends Model
         $message .= "The reservation for item {$transaction["TITLE"]} has been cancelled by " . ($transaction['LENDER_FLAG'] == 0 ? $transaction["BORROWER_FIRST_NAME"] : $transaction["LENDER_FIRST_NAME"])  . ". Please do not proceed to meet and exchange the item.";
         $subject = "{$transaction["TITLE"]} - CANCELLED - Item reservation has been cancelled - Transaction ID: {$transaction["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);            
+        
+        return $transaction['LENDER_FLAG'];
     }
     
     public function getBorrowerOfRequest($method, $user_id, $transaction_id)
@@ -410,13 +414,17 @@ class TransactionModel extends Model
         $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}.<br/><br/>";
         $message .= "Your guys' confirmation code is <strong>{$cc}</strong>.<br/><br/>";
         $message .= "Here's what the both of you have to do next:<br/><br/>";
-        $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
-        $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
+        $message .= "<blockquote>";
+        $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/><br/>";
+        $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/><br/>";
         $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+        $message .= "</blockquote>";
         $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
         
         $subject = "{$row["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$row["TRANSACTION_ID"]}";
         sendEmail($do_not_reply_email, $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], $row["LENDER_EMAIL_ADDRESS"] . ',' . $row["BORROWER_EMAIL_ADDRESS"], $subject, $message);        
+        
+        $this->insertNotification($user_id, $row["BORROWER_ID"], $transaction_id, 2, $method);          
     }
     
     public function pending($method, $user_id, $transaction_id)
@@ -449,10 +457,12 @@ class TransactionModel extends Model
         $message = "Hi {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "{$row["LENDER_FIRST_NAME"]} has accepted your request to borrow item: <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a><br/><br/>";
         $message .= "Before the transaction can move forward, you must complete your payment details. You can do this by clicking on the link below:<br/><br/>";
-        $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/completeprofile</a><br/><br/>";
+        $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a><br/><br/>";
         $message .= "If you do not complete your payment details in the next 24 hours, this transaction will be cancelled.";
         $subject = "{$row["TITLE"]} - PENDING - Your action is needed - Transaction ID: {$row["TRANSACTION_ID"]}";
-        sendEmail($do_not_reply_email, $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);        
+        sendEmail($do_not_reply_email, $row["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);     
+        
+        $this->insertNotification($user_id, $row["BORROWER_ID"], $row["TRANSACTION_ID"], 3, $method); 
     }   
     
     // Note this is for the lender only
@@ -492,19 +502,26 @@ class TransactionModel extends Model
                 $start_date = date("m/d", strtotime($transaction["REQ"]["START_DATE"]));
                 $end_date = date("m/d", strtotime($transaction["REQ"]["END_DATE"]));                
 
-                // Send email to lender
+                // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "The transaction is ready to move forward. {$transaction["LENDER_FIRST_NAME"]}, you have accepted {$transaction["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$transaction["ITEM_ID"]}\">{$transaction["TITLE"]}</a>, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ". Your guys' confirmation code is <b>{$cc}</b>.<br/><br/>";
                 $message .= "Here's what the both of you have to do next:<br/><br/>";
-                $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/>";
-                $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/>";
+                $message .= "<blockquote>";
+                $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/><br/>";
+                $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/><br/>";
                 $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+                $message .= "</blockquote>";
                 $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
 
                 $subject = "{$transaction["TITLE"]} - RESERVED - Item has been reserved - Transaction ID: {$transaction["TRANSACTION_ID"]}";
-                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                    
-            }               
-        }     
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);  
+                $this->insertNotification($user_id, $transaction["LENDER_ID"], $transaction["TRANSACTION_ID"], 2, $method);   
+            }
+            
+            return true;
+        }
+        
+        return false;
     }    
     
     private function denormalize($details)
@@ -711,10 +728,12 @@ class TransactionModel extends Model
         $message .= "{$transaction["BORROWER_FIRST_NAME"]}, we have placed a \${$transaction["DEPOSIT"]} hold on your credit card. This hold will be released at the end of the rental period, " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/><br/>";
         $message .= "As a reminder, your guys' confirmation code is: <strong>{$transaction["RESERVATION"]["CONFIRMATION_CODE"]}</strong>.<br/><br/>";
         $message .= "Here's what you guys need to do next:<br/><br/>";
-        $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, rock out with your rented gear until " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/>";
-        $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/>";
-        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/>";
+        $message .= "<blockquote>";
+        $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, rock out with your rented gear until " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/><br/>";
+        $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/><br/>";
+        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/><br/>";
         $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+        $message .= "</blockquote>";
         $message .= "Please note that if the item is not returned by the due date, the borrower will be charged double the rental rate for each day the item is late.";
         
         $subject = "{$transaction["TITLE"]} - EXCHANGED - Item has been exchanged - Transaction ID: {$transaction["TRANSACTION_ID"]}";
@@ -980,10 +999,10 @@ class TransactionModel extends Model
             $entry_date->add(new DateInterval('P1D'));  // add 24 hours
             $now = new DateTime();
             
-            // 250 -> 9000
+            // 250 -> 850
             if ($entry_date < $now)
             {       
-                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,9000,$method, $user_id), null, $user_id);
+                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,850,$method, $user_id), null, $user_id);
 
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
@@ -1078,7 +1097,7 @@ class TransactionModel extends Model
             
             if ($now > $start_date)
             {
-                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,9000,$method, $user_id), null, $user_id);
+                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,850,$method, $user_id), null, $user_id);
                 
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";

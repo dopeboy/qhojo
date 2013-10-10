@@ -88,7 +88,7 @@ function sendEmail($from, $to, $replyto, $subject, $message)
     
     $headers = 'From: ' . $from . "\r\n" .
                'Reply-To: ' . $replyto . "\r\n" .
-               'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+               'Content-Type: text/html; charset=UTF-8' . "\r\n" .
                'X-Mailer: PHP/' . phpversion();     
 
     $message = "<html><body>" . $message . "<br/><br/>" . $email_message_footer . "</body></html>";

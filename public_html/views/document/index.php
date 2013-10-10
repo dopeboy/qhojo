@@ -3,15 +3,6 @@
 
 <title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
 
-<div class="sheet headliner">
-     
-    <h1 style="">Gear in New York City</h1>                             
- 
-    <div class="row-fluid text-center" style="">    
-        <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>             
-     </div>                
-</div>
-
 <div class="sheet" id="borrow">
     <h1 class="text-center">How to Borrow</h1>
     <hr>

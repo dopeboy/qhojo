@@ -95,3 +95,13 @@ img.bw {
 {
     color: gray;
 }
+
+.section#lender
+{
+    opacity: 0.2;
+}
+
+#rentlink
+{
+    opacity: 0.1
+}

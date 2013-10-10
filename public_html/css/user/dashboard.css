@@ -139,3 +139,28 @@ textarea#contact
 {
     width: 10%;
 }
+
+table.next-step tr.entry .left
+{
+    width: 11%; vertical-align: middle; border-left:none
+}
+
+table.next-step tr.entry .right
+{
+    width: 89%; border-bottom: none
+}
+
+table.next-step tr.explanation .left
+{
+    border-left:none; border-top: none
+}
+
+table.next-step tr.explanation .right
+{
+    border-top: none;border-left:none;
+}
+
+.icon-exclamation-sign.red
+{
+    color: red
+}

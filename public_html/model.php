@@ -73,6 +73,23 @@ abstract class Model
             throw new TwilioSendTextMessageException($method, $user_id, $e);
         }
     }
+    
+    public function insertNotification($sender_user_id, $receipient_user_id, $transaction_id, $notification_type_id, $method)
+    {
+        $notification_id = getRandomID();
+        
+        $sqlParameters[":notification_id"] =  $notification_id;
+        $sqlParameters[":sender_user_id"] =  $sender_user_id;
+        $sqlParameters[":receipient_user_id"] =  $receipient_user_id;
+        $sqlParameters[":transaction_id"] =  $transaction_id;
+        $sqlParameters[":notification_type_id"] =  $notification_type_id;
+        $sqlParameters[":unread"] =  1;
+        $sqlParameters[":date"] =  date("Y-m-d H:i:s");
+        
+        $preparedStatement = $this->dbh->prepare('INSERT INTO NOTIFICATION (ID, SENDER_USER_ID, RECEIPIENT_USER_ID, TRANSACTION_ID, TYPE_ID, UNREAD, DATE) VALUES (:notification_id, :sender_user_id, :receipient_user_id, :transaction_id, :notification_type_id, :unread, :date)');
+        try { $preparedStatement->execute($sqlParameters); } 
+        catch (PDOException $e) { throw new DatabaseException($e->getMessage(), $method, $sender_user_id, $e); } 
+    }
  
     /** SetExpressCheckout NVP example; last modified 08MAY23.
      *

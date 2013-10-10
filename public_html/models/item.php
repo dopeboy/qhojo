@@ -142,7 +142,7 @@ class ItemModel extends Model
         $row["ITEM"]["ITEM_ID"] = getRandomID();
         
         $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
         
         return $row;
     }    
@@ -198,7 +198,7 @@ class ItemModel extends Model
             throw new ItemSubmissionIssueException($method,$user_id);
         
         $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->userNeedsExtraFields($user_id);        
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);        
         
         return $row;
     }

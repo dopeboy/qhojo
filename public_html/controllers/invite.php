@@ -4,10 +4,10 @@ class Invite extends Controller
 {    
     protected function submit()
     {
-        if (($method = Method::GET) && ($this->state == null || $this->state == 0 || $this->state == 100))
+        if (($method = Method::GET) && ($this->state == null || $this->state == 0 || $this->state == 100) && User::userNotSignedIn($method) )
               $this->returnView(null, $method);
         
-        else if (($method = Method::POST) && $this->state==1)
+        else if (($method = Method::POST) && $this->state==1 && User::userNotSignedIn($method) )
         {
             $invite_model = new InviteModel();
             
@@ -21,12 +21,13 @@ class Invite extends Controller
         }   
     }      
     
+    
     protected function request()
     {
-        if (($method = Method::GET) && ($this->state == null || $this->state == 0 || $this->state == 100))
+        if (($method = Method::GET) && ($this->state == null || $this->state == 0 || $this->state == 100) && User::userNotSignedIn($method) )
               $this->returnView(null, $method);
         
-        else if (($method = Method::POST) && $this->state==1)
+        else if (($method = Method::POST) && $this->state==1 && User::userNotSignedIn($method) )
         {
             $invite_model = new InviteModel();
             
@@ -41,7 +42,7 @@ class Invite extends Controller
             $this->returnView(json_encode(array("URL" => "/invite/request/null/2")), $method);
         }   
         
-        else if (($method = Method::GET) && ($this->state == 2))
+        else if (($method = Method::GET) && ($this->state == 2) && User::userNotSignedIn($method) )
               $this->returnView(null, $method);        
     }     
 }

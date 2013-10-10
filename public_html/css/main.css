@@ -236,3 +236,5 @@ textarea
     margin-top: -14px;
     margin-left: 7px;
 }
+
+.ui-pnotify-text { cursor: pointer  !important;}

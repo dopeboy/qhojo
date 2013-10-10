@@ -10,8 +10,12 @@ global $stock_user_big;
 ?>
 
 <?php
-    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
-    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+
+    if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"])
+    {
+        $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+        require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+    }
 ?>
 
 <link rel="stylesheet" href="/css/user/index.css">
@@ -84,16 +88,24 @@ global $stock_user_big;
             </div>
             
             <div class="section split" id="user-verifications">
-                <h4>Verifications</h4>
+                <h4>Verifications <?php if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($viewmodel["USER"]["PHONE_VERIFIED"] == null || $viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null || $viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null)) { ?><a href='/user/completeprofile/null/0' class="btn btn-mini btn-primary pull-right" type="button" style=''>Complete Profile</a><?php }?></h4> 
                   <ul class="icons-ul" style="">
                     <li>
                           <i class="icon-li icon-phone"></i>
                             <?php if ($viewmodel["USER"]["PHONE_VERIFIED"] == null) { ?>
-                                <span class="text-error">Phone not verified</span>
+                                <span class="text-error">Phone not verified</span> 
                             <?php } else { ?>
                                 <span class="text-success">Phone verified</span>
                             <?php } ?>
                     </li>
+                    <li>
+                        <i class="icon-li icon-usd"></i>
+                            <?php if ($viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null) { ?>
+                                <span class="text-error">PayPal not verified</span>
+                            <?php } else { ?>
+                                <span class="text-success">PayPal verified</span> 
+                            <?php } ?>                         
+                    </li>                       
                     <li>
                         <i class="icon-li icon-credit-card"></i> 
                             <?php if ($viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null) { ?>
@@ -102,14 +114,6 @@ global $stock_user_big;
                                 <span class="text-success">Credit card verified</span>
                             <?php } ?>                            
                     </li>                 
-                    <li>
-                        <i class="icon-li icon-usd"></i>
-                            <?php if ($viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null) { ?>
-                                <span class="text-error">PayPal not verified</span>
-                            <?php } else { ?>
-                                <span class="text-success">PayPal verified</span>
-                            <?php } ?>                         
-                    </li>   
                 </ul>
             </div>
             

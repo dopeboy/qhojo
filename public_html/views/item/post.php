@@ -131,11 +131,12 @@
     
     <?php } else if ($this->state == 2) { ?>
     <legend>
-        Item Listed
+        Item Posted
     </legend>    
     <div>
-        <p>Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have submitted your item <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. </p>
-        <p>Go to your <a href='/user/dashboard'>dashboard</a> to track your item.</p>
+        <p>Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have posted your item successfully. </p>
+        <p>To view your item, <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>">click here</a>.</p>
+        <p>To track your item in your dashboard, <a href="/user/dashboard#my-items#<?php echo $viewmodel["ITEM"]["ITEM_ID"]?>">click here</a>.</p>
         
     </div>
     <?php } ?>

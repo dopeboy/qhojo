@@ -126,24 +126,16 @@ class User extends Controller
         if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
         {
             if (($status = $this->user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"])))
-            {
-                if (!empty($this->urlvalues['return']))
-                    $this->pushReturnURL ($this->urlvalues['return']);
-
-                header('Location: /user/completeprofile/null/' . $status);
+            {                header('Location: /user/completeprofile/null/' . $status);
             }
 
             else
             {
                 // At this point, all fields are in. So if the user has any transactions that are in the
                 // pending state, switch them over to reserved
-                $this->transaction_model->movePendingToReserved($method, $_SESSION["USER"]["USER_ID"]);
+                $pending = $this->transaction_model->movePendingToReserved($method, $_SESSION["USER"]["USER_ID"]);
 
-                if (($url = $this->popReturnURL()) != null)
-                    header('Location: ' . $url);                    
-
-                else
-                    header('Location: /item/search.php');                    
+                header('Location: /user/profilecompleted/null/' . ($pending == false ? '0' : '1'));                    
             }
         }
 
@@ -192,7 +184,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['email'],"email",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress'))
             );
 
-             $this->returnView(json_encode(array("Action" => "SUBMIT-PAYPAL", "URL" => "/user/completeprofile/null/0")), $method);           
+            $this->returnView(json_encode(array("Action" => "SUBMIT-PAYPAL", "URL" => "/user/completeprofile/null/0")), $method);           
         }    
 
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 400))
@@ -207,8 +199,14 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['card-uri'],"Card URI",$method,array('Validator::isNotNullAndNotEmpty'))
             );
 
-             $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/completeprofile/null/0")), $method);           
+            $this->returnView(json_encode(array("Action" => "SUBMIT-CC", "URL" => "/user/completeprofile/null/0")), $method);           
         }         
+    }
+    
+    protected function profilecompleted()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 0 || $this->state == 1))
+            $this->returnView(null, $method);                    
     }
 
     protected function contact()

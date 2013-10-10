@@ -72,6 +72,7 @@ class Transaction extends Controller
     {
         if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
         {
+            $lender = 
             $this->transaction_model->cancelReservation
             (
                 $method, 
@@ -81,7 +82,7 @@ class Transaction extends Controller
                 $this->validateParameter($this->postvalues['reason'],"Cancel Reason",$method,array())                               
             );
             
-            $this->returnView(json_encode(array("TransactionID" => $this->id, "Action" => "CANCEL", "Source" => $this->state == 0 ? "borrowing" : "lending")), $method); 
+            $this->returnView(json_encode(array("TransactionID" => $this->id, "Action" => "CANCEL", "Source" => $lender == 0 ? "borrowing" : "lending")), $method); 
         }        
     } 
     
@@ -104,7 +105,7 @@ class Transaction extends Controller
             $user_model = new UserModel();
             
             if (($status = $user_model->userNeedsExtraFields($_SESSION["USER"]["USER_ID"])))
-                header('Location: /user/completeprofile' . '?return=' . $_SERVER['REQUEST_URI']);
+                header('Location: /user/completeprofile');
             
             else if (($status = $user_model->userNeedsExtraFields($this->transaction_model->getBorrowerOfRequest($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))))))
                 header('Location: /transaction/pending/' . $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty')) . '/0');

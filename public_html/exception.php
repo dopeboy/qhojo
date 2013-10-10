@@ -223,7 +223,7 @@ class InvalidItemHoldValueException extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
     {
-        parent::__construct("An invalid item hold value was supplied. Please try again.", $method, $user_id, $previous, $modal_id);
+        parent::__construct("The maximum hold value allowed is $2500. Please try again.", $method, $user_id, $previous, $modal_id);
     }       
 }
 

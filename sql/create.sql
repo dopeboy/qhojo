@@ -152,6 +152,28 @@ CREATE TABLE INVITE_REQUEST
         DATE_CREATED                        DATETIME
 );
 
+drop table if exists NOTIFICATION;
+CREATE TABLE NOTIFICATION
+(
+	ID                                  INTEGER PRIMARY KEY,
+        SENDER_USER_ID                      INTEGER,
+        RECEIPIENT_USER_ID                  INTEGER,
+        TRANSACTION_ID                      INTEGER,
+        TYPE_ID                             INTEGER,
+        UNREAD                              INTEGER,
+        DATE                                DATETIME
+);
 
-/*  insert into INVITE VALUES (md5(rand()),'222',9,1,null,1); */
+drop table if exists NOTIFICATION_TYPE;
+CREATE TABLE NOTIFICATION_TYPE
+(
+	ID                                  INTEGER PRIMARY KEY,
+        DESCRIPTION                         VARCHAR(80),
+        TITLE                               VARCHAR(80),
+        TEXT_PATTERN                        VARCHAR(160),
+        LINK                                VARCHAR(80),
+        ACTIVE                              INTEGER
+);
+
+insert into INVITE VALUES (md5(rand()),'333',99,1,null,1);
 

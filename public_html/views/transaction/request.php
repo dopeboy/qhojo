@@ -4,8 +4,11 @@
 <link rel="stylesheet" href="/css/transaction/request.css">
 
 <?php
-    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
-    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+    if ($this->state == 2) 
+    { 
+        $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+        require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+    }
 ?>
 
 <div class="sheet">
@@ -52,8 +55,11 @@
         <div>
             <p>Thanks <?php echo $_SESSION["USER"]["FIRST_NAME"] ?>! You have requested <a href="/item/index/<?php echo $viewmodel["ITEM"]["ITEM_ID"] ?>"><?php echo $viewmodel["ITEM"]["TITLE"] ?></a> successfully. 
             We'll notify you as soon as the lender, <a href="/user/index/<?php echo $viewmodel["ITEM"]["LENDER_ID"] ?>"><?php echo $viewmodel["ITEM"]["LENDER_FIRST_NAME"] ?></a>, has responded to your request.</p>
-            
-            <p>Go to your <a href='/user/dashboard'>dashboard</a> to track your request.</p>
+            <?php if ($code == true): ?>
+            <p>We noticed you haven't filled out your payment details. To increase the chances of your request getting accepted, please fill them out by clicking the banner at the top of this page.</p>
+            <?php else:  ?>
+                <p>To track your request on your dashboard, <a href='/user/dashboard#borrowing'>click here</a>.</p>
+            <?php endif; ?>
         </div>        
     <?php } ?>
 </div>

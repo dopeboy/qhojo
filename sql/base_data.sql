@@ -19,14 +19,14 @@ insert into STATE VALUES (900,'REVIEWED BY LENDER',1);
 insert into STATE VALUES (1000,'REVIEWED BY BORROWER',1);
 insert into STATE VALUES (1100,'REVIEWED BY BORROWER',1);
 insert into STATE VALUES (1200,'REVIEWED BY LENDER',1);
-insert into STATE VALUES (9000,'EXPIRED',1);
+insert into STATE VALUES (850,'EXPIRED',1);
 
 insert into EDGE VALUES (0,100,200,'USER REQUESTED ITEM', '%B requested %L\'s item', 1);
 insert into EDGE VALUES (19,200,250,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
 insert into EDGE VALUES (20,250,300,'BORROWER COMPLETED USER PROFILE', '%B completed their user profile', 1);
 
-insert into EDGE VALUES (21,250,9000,'BORROWER DID NOT COMPLETE USER PROFILE IN 24 HOURS', '%B did not complete their user profile', 1);
-insert into EDGE VALUES (22,300,9000,'ITEM WAS NOT EXCHANGED ON START DATE', '%B did not text confirmation on start date', 1);
+insert into EDGE VALUES (21,250,850,'BORROWER DID NOT COMPLETE USER PROFILE IN 24 HOURS', '%B did not complete their user profile', 1);
+insert into EDGE VALUES (22,300,850,'ITEM WAS NOT EXCHANGED ON START DATE', '%B did not text confirmation on start date', 1);
 
 insert into EDGE VALUES (1,200,300,'LENDER ACCEPTED REQUEST', '%L accepted %B\'s request', 1);
 insert into EDGE VALUES (2,200,400,'LENDER REJECTED REQUEST', '%L rejected %B\'s request', 1);
@@ -65,3 +65,8 @@ insert into CANCEL_OPTIONS VALUES (2,'Other',2);
 insert into DAMAGE_OPTIONS VALUES (0,'Significant cosmetic damage',0);
 insert into DAMAGE_OPTIONS VALUES (1,'Functionality is significantly impaired',1);
 insert into DAMAGE_OPTIONS VALUES (2,'Item is no longer functional',2);
+
+insert into NOTIFICATION_TYPE VALUES (0, 'info',  'New Request', 'You have received a request from %U to borrow your item %I.', '/user/dashboard/#lending#%T', 1);
+insert into NOTIFICATION_TYPE VALUES (1, 'error',  'Request Rejected', 'Your request to borrow %I was rejected by %U.', '', 1);
+insert into NOTIFICATION_TYPE VALUES (2, 'success',  'Request Accepted', 'Your request to borrow %I was accepted by %U.', '/user/dashboard/#borrowing#%T', 1);
+insert into NOTIFICATION_TYPE VALUES (3, 'info',  'Pending', 'Your request to borrow %I was accepted by %U tentatively. You must complete your profile by clicking on this box.', '/user/completeprofile', 1);
