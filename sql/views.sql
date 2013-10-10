@@ -282,6 +282,7 @@ ORDER BY a.END_STATE_DATE ASC, s.TRANSACTION_ID, s.STATE_A_ID;
 
 -- --------------------------------------------------------------
 
+--Both of these views were very tempermental when joined together. Hence we are going from the tables
 CREATE OR REPLACE VIEW RESPONSE_TIME_BASE1_VW AS
 SELECT LENDER_ID, TRANSACTION_ID, ENTRY_DATE 
 FROM BASE_VW b 

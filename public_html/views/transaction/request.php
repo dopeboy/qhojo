@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/css/transaction/request.css">
 
 <?php
-    if ($this->state == 2) 
+    if ($this->state == 0 || $this->state == 2) 
     { 
         $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
         require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
