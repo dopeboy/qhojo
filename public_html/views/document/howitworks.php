@@ -253,7 +253,7 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
                 <div class='question'>
                     <h4>What is the maximum hold value I can specify when listing an item?</h4>
                     <p>
-                        The maximum hold value you can specify is $2500.
+                        As of now, the maximum hold value we allow is $2500.
                     </p>            
                 </div>
                 
@@ -263,45 +263,3 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
 </div>
 
 <link rel="stylesheet" href="/css/document/howitworks.css">
-
-<!--<script>
-    function UpdateTableHeaders() {
-       $(".persist-area").each(function() {
-       
-           var el             = $(this),
-               offset         = el.offset(),
-               scrollTop      = $(window).scrollTop(),
-               floatingHeader = $(".floatingHeader", this)
-          
-           if ((scrollTop > offset.top) && (scrollTop < offset.top + el.height())) {
-               floatingHeader.css({
-                "visibility": "visible"
-               });
-           } else {
-               floatingHeader.css({
-                "visibility": "hidden"
-               });      
-           };
-       });
-    }
-    
-    // DOM Ready      
-    $(function() {
-    
-       var clonedHeaderRow;
-    
-       $(".persist-area").each(function() {
-           clonedHeaderRow = $(".persist-header", this);
-           clonedHeaderRow
-             .before(clonedHeaderRow.clone())
-             .css("width", clonedHeaderRow.width())
-             .addClass("floatingHeader");
-             
-       });
-       
-       $(window)
-        .scroll(UpdateTableHeaders)
-        .trigger("scroll");
-       
-    });
-  </script>-->

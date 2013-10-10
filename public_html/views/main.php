@@ -129,7 +129,7 @@
    
         
         <?php
-        
+        if (User::isUserSignedIn()) {
         foreach ($notifications as $notification)
         {
         ?>
@@ -151,6 +151,7 @@
             
             
         <?php 
+        }
         }
         
         ?>

@@ -143,7 +143,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Theft</h4>
-                If your borrower doesn't return the gear, you will be compensated for the full value of the item as per our <a href="/document/howitworks/#damage">damage policy</a>.
+                If your borrower doesn't return the gear, you will be compensated for the full value of the item under our <a href="/document/howitworks/#damage">lender protection policy</a>.
             </div>
         </div>            
     </div>    
@@ -157,7 +157,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Damage</h4>
-                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear as per our <a href="/document/howitworks/#damage">damage policy</a>.
+                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear under our <a href="/document/howitworks/#damage">lender protection policy</a>.
             </div>
         </div>            
     </div>  

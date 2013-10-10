@@ -76,8 +76,12 @@ abstract class Controller
         {
             $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; // This view makes use of $viewmodel
             
-            $user = new \UserModel();
-            $notifications = $user->getMyNotifications($_SESSION["USER"]["USER_ID"]);
+            if (User::isUserSignedIn($method))
+            {
+                $user = new \UserModel();
+                $notifications = $user->getMyNotifications($_SESSION["USER"]["USER_ID"]);
+            }
+            
             require('views/main.php');
         }
         
