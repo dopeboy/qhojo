@@ -142,7 +142,7 @@
                         sticker: false,
                         history: false,
                         hide: true, 
-                        delay: 50000
+                        delay: 4000
 
                 });
                 
