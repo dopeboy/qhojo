@@ -104,7 +104,7 @@
                         <li><a href="/document/contact">contact</a></li>
                         <li><a href="/document/legal">legal</a></li>
                    
-                    <li class="disabled"><a href="javascript:void(0);">v2.0.0</a></li>
+                    <li class="disabled"><a href="javascript:void(0);">v2.1.0</a></li>
                     <li class="disabled"><a href="javascript:void(0);">© 2013 Qhojo LLC
                     <li class="disabled">
                         <div style="" class="fb-like" data-href="https://www.facebook.com/pages/Qhojo/131352593731804" data-width="250" data-layout="button_count" data-show-faces="true" data-send="false"></div>
