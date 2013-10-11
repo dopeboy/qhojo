@@ -80,6 +80,7 @@ abstract class Controller
             {
                 $user = new \UserModel();
                 $notifications = $user->getMyNotifications($_SESSION["USER"]["USER_ID"]);
+                $actionItemCount = $user->getActionItemCount($_SESSION["USER"]["USER_ID"]);
             }
             
             require('views/main.php');
@@ -88,7 +89,7 @@ abstract class Controller
         else if ($method == Method::NAKED)
         {
             $viewloc = 'views/' . strtolower(get_class($this)) . '/' . $this->action . '.php'; 
-            require($viewloc);
+            require('views/naked.php');
         }
             
         else if ($method == Method::POST)

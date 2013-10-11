@@ -12,10 +12,10 @@
     <div class="tabbable">
         <ul class="nav nav-tabs ">
             <li class="active">
-                <a href="#borrowing" data-toggle="tab"><h3>Borrowing</h3></a>
+                <a href="#borrowing" data-toggle="tab"><h3>Borrowing (<span id="borrow-action-item-count"><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]); ?></span>)</h3></a>
             </li>
             <li>
-                <a href="#lending" data-toggle="tab"><h3>Lending</h3></a>
+                <a href="#lending" data-toggle="tab"><h3>Lending (<span id="lend-action-item-count"><?php echo count($viewmodel["LENDING"]["REQUESTS"]["OPEN"]); ?></span>)</h3></a>
             </li>
             <li>
                 <a href="#my-items" data-toggle="tab"><h3>My Items</h3></a>
@@ -147,28 +147,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                             <?php 
-                                $current = 0;
-                                $lender_view = 0; 
-                                $pending = 0;?>
-                                <td colspan="5" class="alert alert-error">
-                                    <div style="width: 100%" class="text-center">
-                                        <strong>Open (<span id='open-requests-count'><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?></span>)</strong>
-                                    </div>
-                                </td>                            
-                                <?php
-                                $transactions = $viewmodel["BORROWING"]["REQUESTS"]["OPEN"]; 
-                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); 
-                                ?>
-                                <td colspan="5" class="alert alert-success">
-                                    <div style="width: 100%" class="text-center">
-                                        <strong>Pending (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]) ?>)</strong>
-                                    </div>
-                                </td>                                 
-                                <?php 
-                                $transactions = $viewmodel["BORROWING"]["REQUESTS"]["PENDING"]; 
-                                $pending = 1;
-                                require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?>  
+                            <td colspan="5" class="alert alert-error">
+                                <div style="width: 100%" class="text-center">
+                                    <strong>Pending (<?php echo count($viewmodel["BORROWING"]["REQUESTS"]["PENDING"]) ?>)</strong>
+                                </div>
+                            </td>                                 
+                            <?php 
+                            $current = 0;
+                            $lender_view = 0; 
+                            $transactions = $viewmodel["BORROWING"]["REQUESTS"]["PENDING"]; 
+                            $pending = 1;
+                            require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); ?>                              
+                            <?php 
+                               $pending = 0;?>
+                               <td colspan="5" class="alert alert-success">
+                                   <div style="width: 100%" class="text-center">
+                                       <strong>Open (<span id='open-requests-count'><?php echo count($viewmodel["BORROWING"]["REQUESTS"]["OPEN"]) ?></span>)</strong>
+                                   </div>
+                               </td>                            
+                               <?php
+                               $transactions = $viewmodel["BORROWING"]["REQUESTS"]["OPEN"]; 
+                               require(dirname(dirname(__FILE__)) . '/embeds/dashboard/request.php'); 
+                               ?>
                         </tbody>
                     </table>
                 </div>

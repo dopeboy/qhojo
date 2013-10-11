@@ -1,0 +1,120 @@
+body 
+{ 
+    background: url(/img/bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+form
+{
+    margin: 0px;
+}
+
+.sheet
+{
+    padding: 40px;
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    background-color: whitesmoke;
+    margin-left: auto;
+    width: 250px;
+    margin-top: 20px;
+}
+
+.control-group .controls
+{
+    margin-left: 0px;
+}
+
+input[type="text"], input[type="password"] 
+{
+    font-size: 16px;
+    height: auto;
+    padding: 7px 9px;
+}
+
+.sheet
+{
+    margin-left: auto; margin-right: auto;
+}
+
+.control-group:last-child
+{
+    margin-bottom: 0px;
+}
+
+#request-code
+{
+    margin-top: 20px;
+}
+
+.navbar-inverse .nav>li>a
+{
+    color: whitesmoke;
+}
+
+.navbar-inverse .nav li.dropdown>.dropdown-toggle .caret
+{
+    border-top-color: whitesmoke;
+    border-bottom-color: whitesmoke;
+}
+
+.navbar-inverse .nav>li>a:hover, .navbar-inverse .nav li.dropdown>.dropdown-toggle .caret:hover
+{
+    color: #999;
+    border-top-color: #999;
+    border-bottom-color: #999;
+}
+
+.navbar-inverse .navbar-inner 
+{
+    background: #45484d; /* Old browsers */
+    background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #45484d 0%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */    
+}
+
+legend
+{
+    border-bottom-color: #b6b6b6;
+    font-size: 30px;
+    
+}
+
+legend+.control-group
+{
+    margin-top: 0px;
+}
+
+.control-group
+{
+    
+}
+
+form
+{
+    margin: 0;
+}
+
+#error-banner
+{
+    display: none;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);    
+}

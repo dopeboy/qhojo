@@ -453,7 +453,17 @@ class UserModel extends Model
         $preparedStatement->execute($sqlParameters);
         
         return $rows;
-    }    
+    }
+    
+    // Borrow pending + Lending open
+    public function getActionItemCount($user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        
+        $preparedStatement = $this->dbh->prepare('select (SELECT COUNT(*) FROM PENDING_VW WHERE STATE_B_ID=250 AND BORROWER_ID=:user_id) + (SELECT COUNT(*) FROM REQUESTED_VW WHERE STATE_B_ID=200 AND LENDER_ID=:user_id) as TOTAL;');
+        $preparedStatement->execute($sqlParameters);        
+        return $preparedStatement->fetchColumn();
+    }
     
     private function comparePasswords($password_from_login, $password_from_db)
     {

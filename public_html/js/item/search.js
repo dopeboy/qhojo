@@ -5,7 +5,7 @@ $(document).ready(function()
     
     if ($.cookie('seenSearch'))
     {
-        $('input#query').popover('hidden');
+        $('input#query').popover('hide');
         $.cookie('seenSearch', true);    
     }
     

@@ -112,6 +112,13 @@ function customResponseHandler(responseText)
         $('#reject-' + responseText.TransactionID).modal('hide');
         $('#' + responseText.Source).find('#requests-count').text($('#' + responseText.Source).find('#requests-count').text()-1);
         $('#' + responseText.Source).find('#open-requests-count').text($('#' + responseText.Source).find('#open-requests-count').text()-1);
+        
+        // Let's decrement the dashboard count if this happens
+        if (responseText.Source == "lending")
+        {
+            $('#action-item-count').text($('#action-item-count').text()-1);
+            $('#lend-action-item-count').text($('#lend-action-item-count').text()-1);
+        }
     }
     
     else if (responseText.Action == 'CANCEL')

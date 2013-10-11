@@ -2,3 +2,8 @@
 {
     max-width: 300px;
 }
+
+.sheet#invite-submitted
+{
+    width: 600px;
+}

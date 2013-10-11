@@ -57,7 +57,7 @@
                                 <?php if (User::isUserSignedIn()) { ?>
                                 
                                 <li>
-                                    <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard (<?php echo count($notifications); ?>)</a>
+                                    <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard (<span id="action-item-count"><?php echo $actionItemCount; ?></span>)</a>
                                 </li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
@@ -146,7 +146,7 @@
 
                 });
                 
-            },1500); // purposely delay because facebook + GA JS is slow
+            },0); // purposely delay because facebook + GA JS is slow
             
             
             

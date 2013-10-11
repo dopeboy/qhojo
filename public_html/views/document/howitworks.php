@@ -205,59 +205,67 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
     
 </div>
 
+<div id="lender-protection" class="sheet">
+    <h1 class="text-center">Lender Protection Policy</h1>
+    <hr>
+    <div class='row-fluid'>
+        <div id='faq-content' class='span10 offset1'>    
+            sdfsdfsdf
+        </div>
+    </div>
+</div>
+
 <div id='faq' class="sheet">
     <h1 class="text-center">FAQ</h1>
     <hr>
-    <div style='padding: 0px 40px'>
-        <div class='row-fluid'>
-            <div id='faq-content' class='span12'>
-                <div class='question'>
-                    <h4>What is Qhojo?</h4>
-                    <p>
-                        Qhojo (pronounced co-joe) is a peer-to-peer platform for borrowing and lending photo and video gear.
-                    </p>
-                </div>
-                
-                <div class='question'>
-                    <h4>What can I borrow or lend on Qhojo?</h4>
-                    <p>
-                        Camera bodies, lenses, flashes, and lighting equipment are some examples of the kinds of items you can find on Qhojo. 
-                    </p>
-                </div>
-                
-                <div class='question'>
-                    <h4>I want to lend something but I'm afraid someone might steal it.</h4>
-                    <p>
-                        When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. If the borrower runs off with the item, the credit card hold is captured and the funds are transferred to you.
-                    </p>  
-                </div>
-                
-                <div class='question' id='damage'>
-                    <h4>I want to lend something but I'm afraid someone might damage it.</h4>
-                    <p>
-                        When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. 
-                    </p>
-                    
-                    <p>
-                        If the item has been seriously damaged, the lender or borrower can submit a damage report through the dashboard. We will work with the both of you to resolve the situation. If we determine the item needs repair, those costs will come out of the hold issued on the borrower's credit card.
-                    </p>                    
-                </div>
-                
-                <div class='question' id='late'>
-                    <h4>What happens if a borrower returns the item late?</h4>
-                    <p>
-                        They will be charged double the borrow rate for each day the item is late.
-                    </p>            
-                </div>
-                
-                <div class='question'>
-                    <h4>What is the maximum hold value I can specify when listing an item?</h4>
-                    <p>
-                        As of now, the maximum hold value we allow is $2500.
-                    </p>            
-                </div>
-                
+    <div class='row-fluid'>
+        <div id='faq-content' class='span10 offset1'>
+            <div class='question'>
+                <h4>What is Qhojo?</h4>
+                <p>
+                    Qhojo (pronounced co-joe) is a peer-to-peer platform for borrowing and lending photo and video gear.
+                </p>
             </div>
+
+            <div class='question'>
+                <h4>What can I borrow or lend on Qhojo?</h4>
+                <p>
+                    Camera bodies, lenses, flashes, and lighting equipment are some examples of the kinds of items you can find on Qhojo. 
+                </p>
+            </div>
+
+            <div class='question'>
+                <h4>I want to lend something but I'm afraid someone might steal it.</h4>
+                <p>
+                    When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. If the borrower runs off with the item, the credit card hold is captured and the funds are transferred to you.
+                </p>  
+            </div>
+
+            <div class='question' id='damage'>
+                <h4>I want to lend something but I'm afraid someone might damage it.</h4>
+                <p>
+                    When you list an item on Qhojo, you get to specify the value of the item. When someone borrows your item, we issue a hold on their credit card for the value you specified. 
+                </p>
+
+                <p>
+                    If the item has been seriously damaged, the lender or borrower can submit a damage report through the dashboard. We will work with the both of you to resolve the situation. If we determine the item needs repair, those costs will come out of the hold issued on the borrower's credit card.
+                </p>                    
+            </div>
+
+            <div class='question' id='late'>
+                <h4>What happens if a borrower returns the item late?</h4>
+                <p>
+                    They will be charged double the borrow rate for each day the item is late.
+                </p>            
+            </div>
+
+            <div class='question'>
+                <h4>What is the maximum hold value I can specify when listing an item?</h4>
+                <p>
+                    As of now, the maximum hold value we allow is $2500.
+                </p>            
+            </div>
+
         </div>
     </div>
 </div>

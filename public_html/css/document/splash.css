@@ -1,135 +1,29 @@
-body 
-{ 
-  background: url(/img/bg.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-html,
-body 
+#heading 
 {
-    height: 100%;
-    
+    color: white;
+    font-size: 64px;
+    letter-spacing: -2px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    line-height: .9em;
+    margin-top: 360px;
 }
 
-form
+.btn-xlarge 
 {
-    margin: 0px;
+    padding: 18px 40px;
+    font-size: 22px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            
+
 }
 
-.sheet
-{
-    padding: 40px;
-    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
-    background-color: whitesmoke;
-    margin-left: auto;
-    width: 250px;
-}
-
-.control-group .controls
-{
-    margin-left: 0px;
-}
-
-input[type="text"], input[type="password"] 
-{
-    font-size: 16px;
-    height: auto;
-    padding: 7px 9px;
-}
-
-.sheet#sign-in
-{
-    margin-top: 80px;
-    margin-left: auto; margin-right: auto
-}
-
-.sheet#invite
+#join-button
 {
     margin-top: 40px;
-    margin-left: auto; margin-right: auto
-}
-
-.control-group:last-child
-{
-    margin-bottom: 0px;
-}
-.nav-pills >li >a 
-{
-    color: #FFFFFF;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.nav-pills > li > a:hover 
-{
-    background-color: transparent;
-    color:#FFFFFF;
-}
-
-.nav-pills .disabled > a 
-{
-    background-color: transparent;
-    color:#FFFFFF;
-}
-
-.nav-pills > li.not-disabled > a:hover
-{
-    color: #08c;
-}
-
-#wrap 
-{
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
-}
-
-/* Set the fixed height of the footer here */
-#push,
-#footer 
-{
-  height: 60px;
-}
-
-
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) 
-{
-  #footer 
-  {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-
-  }
-}
-
-#footer
-{
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-#request-code
-{
-    margin-top: 20px;
-}
-
-.fb-like
-{
-    margin-top:5px;   
-    margin-left: 10px;
-}
-
-#twitter-share-button
-{
-    margin-top: 5px;
-    margin-left: 20px;
 }

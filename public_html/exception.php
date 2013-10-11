@@ -45,7 +45,7 @@ abstract class BaseException extends Exception
     
     public function __toString()
     {
-        if ($this->view == Method::GET)
+        if ($this->view == Method::GET || $this->view == Method::NAKED)
             return $this->printMe();
         
         else if ($this->view == Method::POST)

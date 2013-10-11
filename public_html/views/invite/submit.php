@@ -18,9 +18,9 @@
             </div>
         </div>
         
-                    <div id="request-code">
-                        Don't have a code? <a href="/invite/request">Request one</a>
-                    </div>        
+        <div id="request-code">
+            Don't have a code? <a href="/invite/request">Request one</a>
+        </div>        
     </form>    
 </div>
 

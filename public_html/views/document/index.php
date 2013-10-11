@@ -4,7 +4,9 @@
 <title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
 
 <div class="sheet" id="borrow">
-    <h1 class="text-center">How to Borrow</h1>
+    
+    <h1 class="text-center" >For Borrowers</h1>
+    
     <hr>
     <div class="row-fluid">
          <div class="span4 hiwstep">
@@ -87,7 +89,7 @@
 </div>
 
 <div class="sheet" id="lend">
-    <h1 class="text-center">How to Lend</h1>
+    <h1 class="text-center">For Lenders</h1>
     <hr>
     <div class="row-fluid">
          <div class="span4 hiwstep">
@@ -132,7 +134,7 @@
     </div>
     
     <hr class="mini">
-    <h1 class="text-center subheader">Protection</h1>
+    <h1 class="text-center subheader">Lender Protection</h1>
 
     <div class="row-fluid benefit">
         <div class="span2 offset1">
@@ -143,7 +145,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Theft</h4>
-                If your borrower doesn't return the gear, you will be compensated for the full value of the item under our <a href="/document/howitworks/#damage">lender protection policy</a>.
+                If your borrower doesn't return the gear, you will be compensated for the full value of the item under our <a href="/document/howitworks/#lender-protection">lender protection policy</a>.
             </div>
         </div>            
     </div>    
@@ -157,7 +159,7 @@
         <div class="span8">
             <div class="media-body" style="">
                 <h4 class="media-heading">Damage</h4>
-                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear under our <a href="/document/howitworks/#damage">lender protection policy</a>.
+                If your gear is damaged, you will be compensated all repair costs up to the total amount of the gear under our <a href="/document/howitworks/#lender-protection">lender protection policy</a>.
             </div>
         </div>            
     </div>  

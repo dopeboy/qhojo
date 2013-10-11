@@ -9,9 +9,9 @@
     if ($user_id != null): 
         $title = $viewmodel["USER_FIRST_NAME"] . "'s Items"; 
     elseif ($query == null && $location == null && $user_id == null):
-        $title = "All Items";
+        $title = "All Items (" . $viewmodel["ITEMS_COUNT"] . ")";
     else:
-        $title = "Search Results"; 
+        $title = "Search Results (" . $viewmodel["ITEMS_COUNT"] . ")";
     
     endif;
 ?>
@@ -26,11 +26,11 @@
     <form class="form-search">
         <div class="row-fluid">
             <div class="span5">
-                <input id="query" type="text" class="input-block-level" placeholder="Model, manufacturer, type, etc" name="query" style=""  data-toggle="tooltip" data-original-title="Start Here" data-content="What are you looking for?" data-placement="bottom" data-trigger="focus">
+                <input id="query" type="text" class="input-block-level" placeholder="Model, manufacturer, type, etc" name="query" style=""  value="<?php echo $query; ?>" data-toggle="tooltip" data-original-title="Start Here" data-content="What are you looking for?" data-placement="bottom" data-trigger="focus">
             </div>
 
             <div class="span2">
-                <input id="location" type="text" class="input-block-level" placeholder="City or Zip Code" name="location" style="">
+                <input id="location" type="text" class="input-block-level" placeholder="City or Zip Code" name="location" style="" value="<?php echo $location; ?>">
             </div>
 
             <input id="page" type="hidden" class="input-block-level" name="page" value="1" style="">
@@ -48,89 +48,6 @@
 
 <div class="sheet" style="">
     <legend><?php echo $title; ?></legend>
-        
-<!--        <div class="row-fluid text-center" style="">
-        
-            <div class="span4" style="">
-                <div class="card left" style="">
-                    <div class="item-image" style="background-image: url('/img/card_image2.png');">
-                         <a href="/item/index/" class="fill-div">
-                            <div class="item-price">
-                                $25 
-                                <hr/>
-                                per day
-                            </div>
-                            <div class="item-title" >
-                               Canon 7D
-                            </div>     
-                        </a>                 
-                    </div>
-                    <div class="row-fluid text-center item-info">
-                        <div class="span4 item-lender">
-                             <img class="lender-picture img-circle" src="/img/me.jpg">
-                        </div>
-                        <div class="span8 text-left item-details" style="">
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Brooklyn, NY</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a week</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
-                        </div>                      
-                    </div> 
-                </div>
-            </div>
-
-
-            <div class="span4" >
-                <div class="card middle">
-                    <div class="item-image" style="background-image: url('/img/card_image3.png');">
-                        <div class="item-price">
-                            $12 
-                            <hr/>
-                            per day
-                        </div>
-                       <div class="item-title" >
-                           Canon S95
-                       </div>                     
-                    </div>
-                    <div class="row-fluid text-center item-info">
-                        <div class="span4 item-lender">
-                             <img class="lender-picture img-circle" src="/img/guido.jpg">
-                        </div>
-                        <div class="span8 text-left item-details" style="">
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Manhattan, NY</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a day</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
-                        </div>                      
-                    </div>                 
-                </div>
-            </div>
-
-            <div class="span4" >
-                <div class="card right" style="">
-                    <div class="item-image" style="background-image: url('/img/card_image4.png');">
-                        <div class="item-price">
-                            $25 
-                            <hr/>
-                            per day
-                        </div>
-                       <div class="item-title" >
-                           Sigma 10-22mm Wideangle Lens
-                       </div>                     
-                    </div>
-                    <div class="row-fluid text-center item-info">
-                        <div class="span4 item-lender">
-                             <img class="lender-picture img-circle" src="/img/sarohini.jpg">
-                        </div>
-                        <div class="span8 text-left item-details" style="">
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Location" style=""><i class="icon-map-marker"></i> Manhattan, NY</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Time" style=""><i class="icon-time"></i> Within a few hours</div>
-                            <div class="descriptor" rel="tooltip" data-toggle="tooltip" data-placement="right" title="Response Rate" style=""><i class="icon-comment"></i> 100%</div>
-                        </div>                      
-                    </div>                 
-                </div>
-            </div>     
-            
-        </div>
-        -->
         
     <?php require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); ?>
         

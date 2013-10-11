@@ -4,7 +4,7 @@ class User extends Controller
 {
     protected function signin() 
     {
-        if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0 || $this->state == 100 || $this->state == 200))
+        if (($method = Method::NAKED) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0 || $this->state == 100 || $this->state == 200))
         {
             if (!empty($this->urlvalues['return']))
                 $this->pushReturnURL ($this->urlvalues['return']);
@@ -27,7 +27,7 @@ class User extends Controller
 
     protected function join()
     {        
-        if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
+        if (($method = Method::NAKED) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
             $this->returnView($this->user_model->joinView($method, $this->validateParameter($this->id,"Invite ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
 
         else if (($method = Method::POST) && User::userNotSignedIn($method) && $this->state == 1)
