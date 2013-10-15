@@ -74,7 +74,7 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
                             <h3 class="media-heading">Step 4: Drop off</h3>
                             <div class='borrower-hiw'>
                                 <h5>If you're a borrower...</h5>
-                                    <p>Let the borrower inspect the item. <span class='step'>(2)</span> Once you receive a text message from us confirming that the lender is OK with the returned item, <span class='step'>(3)</span> return the item to them. We will also release the hold on your credit card and charge you for the borrow duration.</p>
+                                    <p>Let the lender inspect the item. <span class='step'>(2)</span> Once you receive a text message from us confirming that the lender is OK with the returned item, <span class='step'>(3)</span> return the item to them. We will also release the hold on your credit card and charge you for the borrow duration.</p>
                             </div>
                             
                             <div class='lender-hiw'>
