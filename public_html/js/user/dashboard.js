@@ -141,6 +141,9 @@ function customResponseHandler(responseText)
         $('#deactivate-' + responseText.ItemID).modal('hide');
         
         $('.dashboard-section#inactive-items').find('tr#no-items').remove();
+        $('.dashboard-section#active-items').find('tr#' + responseText.ItemID).find('.deactivate-link').attr('href', '#activate-' + responseText.ItemID);   
+        $('.dashboard-section#active-items').find('tr#' + responseText.ItemID).find('.deactivate-link').text('Activate');
+        $('.dashboard-section#active-items').find('tr#' + responseText.ItemID).find('.deactivate-link').removeClass('deactivate-link').toggleClass('activate-link');
         $('.dashboard-section#active-items').find('tr#' + responseText.ItemID).appendTo($('.dashboard-section#inactive-items').find('table.inactive-items-table'));
         
         if ($('table.active-items-table tr').length == 1)
@@ -155,6 +158,9 @@ function customResponseHandler(responseText)
         $('#activate-' + responseText.ItemID).modal('hide');
         
         $('.dashboard-section#active-items').find('tr#no-items').remove();
+        $('.dashboard-section#inactive-items').find('tr#' + responseText.ItemID).find('.activate-link').attr('href', '#deactivate-' + responseText.ItemID);   
+        $('.dashboard-section#inactive-items').find('tr#' + responseText.ItemID).find('.activate-link').text('Deactivate');
+        $('.dashboard-section#inactive-items').find('tr#' + responseText.ItemID).find('.activate-link').removeClass('activate-link').toggleClass('deactivate-link');
         $('.dashboard-section#inactive-items').find('tr#' + responseText.ItemID).appendTo($('.dashboard-section#active-items').find('table.active-items-table'));
         
         if ($('table.inactive-items-table tr').length == 1)

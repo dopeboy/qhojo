@@ -48,10 +48,10 @@ else: foreach($items as $key=>$item)
                 </button>
                 <ul class="dropdown-menu" style="">
                     <?php if ($active == 1) { ?>
-                        <li><a data-toggle="modal" tabindex="-1" href="#deactivate-<?php echo $item['ITEM_ID']; ?>">Deactivate</a></li>
+                        <li><a class='deactivate-link' data-toggle="modal" tabindex="-1" href="#deactivate-<?php echo $item['ITEM_ID']; ?>">Deactivate</a></li>
                     <?php } 
                     else { ?>
-                        <li><a data-toggle="modal" tabindex="-1" href="#activate-<?php echo $item['ITEM_ID']; ?>">Activate</a></li>
+                        <li><a class='activate-link' data-toggle="modal" tabindex="-1" href="#activate-<?php echo $item['ITEM_ID']; ?>">Activate</a></li>
                     <?php } ?>
                 </ul>
         </div>       
