@@ -2,7 +2,7 @@ $(document).ready(function()
 {
 
 $('.carousel').carousel({
-  interval: 75000
+  interval: 7500
 })
 
 
