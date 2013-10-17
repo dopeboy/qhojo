@@ -18,7 +18,7 @@ else: foreach($items as $key=>$item)
             </a>
             <div class="media-body">
                     <h4>
-                        <a href="/item/index/<?php echo $item['ITEM_ID']; ?>" class="media-heading"><?php echo $item['TITLE']; ?></a>
+                        <a href="/item/index/<?php echo $item['ITEM_ID']; ?>" class="media-heading"><?php echo substr($item['TITLE'],0,21); if (strlen($item['TITLE']) > 21) { echo "..."; } ?></a>
                     </h4>
                     <div>
                         $<?php echo $item['RATE']; ?> / day

@@ -390,7 +390,7 @@ class TransactionModel extends Model
         $sqlParameters[":transaction_id"] =  $transaction_id;
         $sqlParameters[":user_id"] =  $user_id;            
 
-        $preparedStatement = $this->dbh->prepare('select TRANSACTION_ID, LENDER_FIRST_NAME, LENDER_ID, LENDER_EMAIL_ADDRESS, BORROWER_FIRST_NAME, BORROWER_ID, BORROWER_EMAIL_ADDRESS, ITEM_ID, TITLE, DATA from REQUESTED_VW where TRANSACTION_ID=:transaction_id AND LENDER_ID=:user_id and STATE_B_ID=200 LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('select TRANSACTION_ID, LENDER_FIRST_NAME, LENDER_ID, LENDER_EMAIL_ADDRESS, LENDER_PHONE_NUMBER, BORROWER_FIRST_NAME, BORROWER_PHONE_NUMBER, BORROWER_ID, BORROWER_EMAIL_ADDRESS, ITEM_ID, TITLE, DATA from REQUESTED_VW where TRANSACTION_ID=:transaction_id AND LENDER_ID=:user_id and STATE_B_ID=200 LIMIT 1');
         $preparedStatement->execute($sqlParameters);
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);            
         
@@ -402,13 +402,26 @@ class TransactionModel extends Model
         // 200 -> 300
         $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,300,$method, $user_id), array("CONFIRMATION_CODE" => $cc), $user_id);          
         
-        global $do_not_reply_email, $domain, $borrower_number;
+        global $do_not_reply_email, $domain, $borrower_number, $lender_number;
+        $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($borrower_number, 3,3) . '-' . substr($borrower_number, 6,4);
         
         $data = json_decode($row['DATA']); 
         
         $start_date = date("m/d", strtotime($data->{"START_DATE"}));
         $end_date = date("m/d", strtotime($data->{"END_DATE"}));
 
+        // Send text message to lender  
+        $textMessage = "Hey {$row["LENDER_FIRST_NAME"]} it's Qhojo here. You have accepted {$row["BORROWER_FIRST_NAME"]}'s request. Meet with them on {$start_date} and wait for them to text message us.";
+        $textMessage2 = "Once they have, we will text message you when to release the item to them. Do not release the item until you have received our text.";
+        $this->sendText($row["LENDER_PHONE_NUMBER"], $lender_number, $textMessage, $method, $user_id);
+        $this->sendText($row["LENDER_PHONE_NUMBER"], $lender_number, $textMessage2, $method, $user_id);
+        
+        // Send text message to borrower
+        $textMessage = "Hey {$row["BORROWER_FIRST_NAME"]} it's Qhojo here. {$row["LENDER_FIRST_NAME"]} has accepted your request. Meet with them on {$start_date} and inspect the item.";
+        $textMessage2 = "If it is OK, then text your confirmation code ({$cc}) back to thos number.";
+        $this->sendText($row["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage, $method, $user_id);
+        $this->sendText($row["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage2, $method, $user_id);        
+        
         // Send email to lender & borrower
         $message = "Hi {$row["LENDER_FIRST_NAME"]} and {$row["BORROWER_FIRST_NAME"]},<br/><br/>";
         $message .= "The transaction is ready to move forward. {$row["LENDER_FIRST_NAME"]}, you have accepted {$row["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$row["ITEM_ID"]}\">{$row["TITLE"]}</a>, from {$start_date} to {$end_date}.<br/><br/>";
@@ -416,7 +429,7 @@ class TransactionModel extends Model
         $message .= "Here's what the both of you have to do next:<br/><br/>";
         $message .= "<blockquote>";
         $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/><br/>";
-        $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/><br/>";
+        $message .= "(2) {$row["BORROWER_FIRST_NAME"]}, when you meet {$row["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$formatted_borrower_number}</a>.<br/><br/>";
         $message .= "(3) {$row["LENDER_FIRST_NAME"]}, as soon we receive {$row["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$row["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
         $message .= "</blockquote>";
         $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
@@ -498,7 +511,8 @@ class TransactionModel extends Model
                 $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,300,$method, $user_id), array("CONFIRMATION_CODE" => $cc), $user_id);
                 
                 global $do_not_reply_email, $domain, $borrower_number;
-
+                $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($borrower_number, 3,3) . '-' . substr($borrower_number, 6,4);
+                
                 $start_date = date("m/d", strtotime($transaction["REQ"]["START_DATE"]));
                 $end_date = date("m/d", strtotime($transaction["REQ"]["END_DATE"]));                
 
@@ -508,7 +522,7 @@ class TransactionModel extends Model
                 $message .= "Here's what the both of you have to do next:<br/><br/>";
                 $message .= "<blockquote>";
                 $message .= "(1) Work out a place to meet over email (you can use this email chain since both of you are already on it).<br/><br/>";
-                $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$borrower_number}</a>.<br/><br/>";
+                $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} on {$start_date}, text the above confirmation code to this number: <a href=\"tel:{$borrower_number}\">{$formatted_borrower_number}</a>.<br/><br/>";
                 $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
                 $message .= "</blockquote>";
                 $message .= "Should either of you decide to cancel the reservation, you can only do so more than 24 hours before the rental start date. This can be done from the dashboard.";
@@ -713,7 +727,7 @@ class TransactionModel extends Model
         // Home free now
         $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,500,$method, $borrower["USER_ID"]), array("BORROWER_BP_HOLD_URI" => $hold->uri), $borrower["USER_ID"]);            
 
-        $message = "Hey " . $transaction["LENDER_FIRST_NAME"] . "! It's qhojo here. We have received " . $transaction["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".";
+        $message = "Hey " . $transaction["LENDER_FIRST_NAME"] . "! It's Qhojo here. We have received " . $transaction["BORROWER_FIRST_NAME"] . "'s confirmation. You can go ahead and hand the item over. It is due back to you by " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".";
         $message2 = "Thanks " . $transaction["BORROWER_FIRST_NAME"] . ". The rental duration has now started. We've placed a hold of \${$transaction["DEPOSIT"]} on your credit card. The item must be returned to " . $transaction["LENDER_FIRST_NAME"] . " by " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".";
 
         $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $borrower["USER_ID"]);
@@ -721,6 +735,7 @@ class TransactionModel extends Model
         
         // Send emails
         global $do_not_reply_email, $domain;
+        $formatted_lender_number =  substr($lender_number, 0, 3) . '-' . substr($lender_number, 3,3) . '-' . substr($lender_number, 6,4);
         
         // Send email to both
         $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
@@ -731,7 +746,7 @@ class TransactionModel extends Model
         $message .= "<blockquote>";
         $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, rock out with your rented gear until " . date("m/d g:i A", strtotime($transaction["REQ"]["END_DATE"])) . ".<br/><br/>";
         $message .= "(2) On " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . ", {$transaction["BORROWER_FIRST_NAME"]} go meet {$transaction["LENDER_FIRST_NAME"]} to return the item.<br/><br/>";
-        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/><br/>";
+        $message .= "(3) {$transaction["LENDER_FIRST_NAME"]}, at this meeting, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$formatted_lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/><br/>";
         $message .= "(4) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
         $message .= "</blockquote>";
         $message .= "Please note that if the item is not returned by the due date, the borrower will be charged double the rental rate for each day the item is late.";
@@ -791,7 +806,7 @@ class TransactionModel extends Model
             $this->sendText($phone_number, $lender_number, $error_msg, $method, null);              
             new InvalidConfirmationCodeException(null, null, null); // Reservation doesn't exist or invalid code
             exit();            
-        }
+        }        
         
         global $bp_api_key;
 
@@ -806,6 +821,10 @@ class TransactionModel extends Model
         $total_without_fee = $transaction["TOTAL"];
         $total_with_fee = $total_without_fee*(1-$transaction_fee_variable)-$transaction_fee_fixed;
         
+        $debit_borrower_error = false;
+        $release_hold_error = false;
+        $paypal_funds_error = false;
+        
         try
         {
             // Debit the borrower
@@ -815,8 +834,7 @@ class TransactionModel extends Model
 
         catch (Exception $e)
         {
-            $error_msg = "Error: We were unable to charge your credit card. Please contact us immediately.";        
-            $this->sendText($phone_number, $borrower_number, $error_msg, $method, null);              
+            $debit_borrower_error = true;        
             new DebitFailedException(null, null, null); // Reservation doesn't exist or invalid code
         }
         
@@ -830,6 +848,7 @@ class TransactionModel extends Model
         // Non-fatal
         catch (Exception $e)
         {
+            $release_hold_error = true;
             new VoidHoldFailedException(null, null, null);
         }
 
@@ -837,13 +856,34 @@ class TransactionModel extends Model
         $status = $this->paypalMassPayToLender($transaction["EXCHANGED"]['LENDER_PAYPAL_EMAIL_ADDRESS'],$total_with_fee);
 
         if ($status != 0)
+        {
+            $paypal_funds_error = true;
             new PayPalSendFundsToLenderFailedException(null);
+        }
 
-        $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(500,700,$method, $transaction["LENDER_ID"]), null,  $transaction["LENDER_ID"]);            
+        // Text the lender
+        $message = "Hey " . $transaction["LENDER_FIRST_NAME"] . "! It's Qhojo here. We have received your confirmation and passed it on to {$transaction["BORROWER_FIRST_NAME"]}. Once they get it, they'll return your item.";
+        $message2 = "";
+        if ($paypal_funds_error == false)
+            $message2 .= " We've also deposited \$" . number_format($total_with_fee,2) . " into your PayPal account.";
         
-        $message = "Hey " . $transaction["BORROWER_FIRST_NAME"] . "! It's qhojo here. We have received " . $transaction["LENDER_FIRST_NAME"] . "'s confirmation. Go ahead and return the item. The hold of \${$transaction["DEPOSIT"]} on your credit card has been released.";
+        global $lender_number;
+        $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $transaction["LENDER_ID"]);  
+        $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $transaction["LENDER_ID"]);  
+        
+        // Text the borrower
         global $borrower_number;
-        $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $transaction["LENDER_ID"]);      
+        
+        $message = "Hey " . $transaction["BORROWER_FIRST_NAME"] . "! It's Qhojo here. We have received " . $transaction["LENDER_FIRST_NAME"] . "'s confirmation. Go ahead and return the item.";
+        $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $transaction["LENDER_ID"]);  
+        
+        if ($release_hold_error == false)
+        {
+            $message2 = " The hold of \${$transaction["DEPOSIT"]} on your credit card has been released.";
+            $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $transaction["LENDER_ID"]);             
+        }
+        
+        $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID($transaction["FINAL_STATE_ID"],700,$method, $transaction["LENDER_ID"]), null,  $transaction["LENDER_ID"]);                
         
         // Send emails
         global $do_not_reply_email, $domain;
@@ -1110,6 +1150,16 @@ class TransactionModel extends Model
             }
         }        
     }
+    
+    public function remindStart($method, $user_id)
+    {
+    
+    }  
+    
+    public function remindEnd($method, $user_id)
+    {
+    
+    }        
     
     private function paypalMassPayToLender($paypal_email, $amount)
     {

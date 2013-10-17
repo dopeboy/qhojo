@@ -6,7 +6,7 @@
     </a>
     <div class="media-body">
         <h4>
-            <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>" class="media-heading"><?php echo $transaction['TITLE']; ?></a>
+            <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>" class="media-heading"><?php echo substr($transaction['TITLE'],0,21); if (strlen($transaction['TITLE']) > 21) { echo "..."; } ?></a>
         </h4>
         <div>
             $<?php echo $transaction['RATE']; ?> / day

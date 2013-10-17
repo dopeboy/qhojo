@@ -75,7 +75,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                     $receipient_full_name = $viewmodel['ITEM']['LENDER_NAME'];
                     $receipient_first_name = $viewmodel['ITEM']['LENDER_FIRST_NAME'];
                     $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
-                    $title = "Message {$receipient_full_name} about {$viewmodel['ITEM']['TITLE']}";
+                    $title = "Message {$receipient_full_name} about " . substr($viewmodel['ITEM']['TITLE'],0,21) . (strlen($viewmodel['ITEM']['TITLE']) > 21 ? "..." : "");
                     $sender_user_id =  $_SESSION["USER"]["USER_ID"];
                     $receipient_user_id =  $viewmodel['ITEM']['LENDER_ID'];
                     $entity_type = 'ITEM';

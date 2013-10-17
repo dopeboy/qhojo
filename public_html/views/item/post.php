@@ -21,7 +21,7 @@
                 </a>
             </div>
 
-            <input type="text" data-placement="right" class="input-block-level editable" placeholder="Put in the name of the item here. Include the model and manufacturer." id="title" name="title" data-toggle="tooltip" data-original-title="Start Here" data-content="Put in the name of the item here." data-trigger="focus">
+            <input maxlength="100" type="text" data-placement="right" class="input-block-level editable" placeholder="Put in the name of the item here. Include the model and manufacturer." id="title" name="title" data-toggle="tooltip" data-original-title="Start Here" data-content="Put in the name of the item here." data-trigger="focus">
 
         </legend>
         <div class="row-fluid">

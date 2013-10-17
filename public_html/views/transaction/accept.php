@@ -9,7 +9,7 @@ $transaction = reset($viewmodel); // first element
 <?php if ($this->state == 1) { ?>
 
     <legend>
-        Reserved - <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo $transaction["TITLE"] ?></a>
+        Reserved - <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo substr($transaction['TITLE'],0,21); if (strlen($transaction['TITLE']) > 21) { echo "..."; } ?></a>
     </legend>
 
     <p><?php echo $_SESSION["USER"]["FIRST_NAME"] ?>, you have successfully accepted <?php echo $transaction['BORROWER_FIRST_NAME'] ?>'s request to borrow your item, <a href="/item/index/<?php echo $transaction['ITEM_ID'] ?>"><?php echo $transaction["TITLE"] ?></a>. </p>

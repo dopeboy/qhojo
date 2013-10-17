@@ -57,9 +57,9 @@ else: foreach($transactions as $key=>$transaction)
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>
                     <?php if ($lender_view == 1) { ?>
-                        Reject <?php echo $transaction['BORROWER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a>
+                        Reject <?php echo $transaction['BORROWER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo substr($transaction['TITLE'],0,21); if (strlen($transaction['TITLE']) > 21) { echo "..."; } ?></a>
                     <?php } else { ?>
-                        Withdraw your request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a>
+                        Withdraw your request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo substr($transaction['TITLE'],0,21); if (strlen($transaction['TITLE']) > 21) { echo "..."; } ?></a>
                     <?php } ?>
                 </h3>
             </div>
@@ -94,7 +94,7 @@ else: foreach($transactions as $key=>$transaction)
         <div id="accept-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>Accept <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo $transaction['TITLE']; ?></a></h3>
+                <h3>Accept <?php echo $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME']; ?>'s request - <a href="/item/index/<?php echo $transaction['ITEM_ID']; ?>"><?php echo substr($transaction['TITLE'],0,21); if (strlen($transaction['TITLE']) > 21) { echo "..."; } ?></a></h3>
             </div>
 
             <div id="mb-<?php echo $transaction['TRANSACTION_ID']; ?>" class="modal-body text-left">
@@ -112,7 +112,7 @@ else: foreach($transactions as $key=>$transaction)
             $receipient_full_name = $lender_view == 1 ? $transaction['BORROWER_NAME'] : $transaction['LENDER_NAME'];
             $receipient_first_name =  $lender_view == 1 ? $transaction['BORROWER_FIRST_NAME'] : $transaction['LENDER_FIRST_NAME'];
             $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
-            $title = "Message {$receipient_full_name} about {$transaction['TITLE']}";
+            $title = "Message {$receipient_full_name} about " . substr($transaction['TITLE'],0,21) . (strlen($transaction['TITLE']) > 21 ? "..." : "");
             $sender_user_id =  $_SESSION["USER"]["USER_ID"];
             $receipient_user_id =  $lender_view == 1 ? $transaction['BORROWER_ID'] : $transaction['LENDER_ID'];
             $entity_type = 'TRANSACTION';

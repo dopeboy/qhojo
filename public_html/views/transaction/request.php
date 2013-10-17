@@ -66,4 +66,5 @@
 
 
 <script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/xdate.js"></script>
 <script src="/js/transaction/request.js"></script>

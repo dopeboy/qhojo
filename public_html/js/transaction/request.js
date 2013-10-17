@@ -5,9 +5,9 @@ $(document).ready(function()
     {
         var millisecondsInADay = 24*60*60*1000;
         
-        var d1 = new Date($('#date-start').val());
-        var d2 = new Date($('#date-end').val());
-        var numDays = (d2-d1)/millisecondsInADay;
+        var d1 = new XDate($('#date-start').val());
+        var d2 = new XDate($('#date-end').val());
+        var numDays = d1.diffDays(d2);
  
         $('#rentalDuration').text(numDays);
         $('#total').text(numDays * $('#rental-rate').text());

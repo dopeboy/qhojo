@@ -47,3 +47,16 @@ GET: curl -g -HAccept:text/plain http://localhost?action=GET_USER_ID\&email=joe
 POST: curl -d "param1=value1&param2=value2" http://example.com/base/
 
 tail -f /var/log/apache2/error.log
+
+
+// So that emails don't get flagged as spam
+vi /etc/mail/sendmail.mc
+
+Append/add/modify the lines as follows:
+MASQUERADE_AS(qhojo.com)dnl
+FEATURE(masquerade_envelope)dnl
+FEATURE(masquerade_entire_domain)dnl
+MASQUERADE_DOMAIN(qhojo.com)dnl
+
+# m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
+# /etc/init.d/sendmail restart

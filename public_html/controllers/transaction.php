@@ -238,6 +238,24 @@ class Transaction extends Controller
             $this->returnView(0,$method);
         }
     }      
+    
+    protected function remindstart()
+    {
+        if (($method = Method::POST) && User::userSignedIn($method) && User::userIsAdmin($method) && ($this->state == null || $this->state == 0))
+        {
+            $this->transaction_model->remindStart($method, $_SESSION["USER"]["USER_ID"]);
+            $this->returnView(0,$method);
+        }        
+    }
+    
+    protected function remindend()
+    {
+        if (($method = Method::POST) && User::userSignedIn($method) && User::userIsAdmin($method) && ($this->state == null || $this->state == 0))
+        {
+            $this->transaction_model->remindEnd($method, $_SESSION["USER"]["USER_ID"]);
+            $this->returnView(0,$method);
+        }        
+    }    
 }
 
 ?>

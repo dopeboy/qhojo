@@ -53,7 +53,7 @@
                     <?php if ($show_item == 1) { ?>
                         for 
                         <?php if ($review["ITEM_ACTIVE"] == 1) { ?><a href="/item/index/<?php echo $review['ITEM_ID']?>"><?php } ?>
-                        <?php echo $review['ITEM_TITLE'] ?>
+                        <?php echo substr($review['ITEM_TITLE'],0,21); if (strlen($review['ITEM_TITLE']) > 21) { echo "..."; } ?>
                         <?php if ($review["ITEM_ACTIVE"] == 1) { ?></a><?php } ?>    
                     <?php } ?>
                 </div>

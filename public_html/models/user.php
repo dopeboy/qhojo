@@ -146,8 +146,8 @@ class UserModel extends Model
         
         // Finally, send the email to both the lender and borrower
         $message = "Hi {$firstname}!<br/><br/>";
-        $message .= "Welcome to Qhojo, your community for borrowing and renting film and video gear across New York City.<br/><br/>";
-        $message .= "If you have any questions, comments or concerns, never hesitate to drop us a line at our support email address located at the bottom of this email.";
+        $message .= "Welcome to Qhojo, your community for borrowing gear from professionals around you.<br/><br/>";
+        $message .= "If you have any questions, comments or concerns, don't hesitate to drop us a line at our support email address located at the bottom of this email.";
         
         $subject = "Welcome to Qhojo!";
         
@@ -373,7 +373,7 @@ class UserModel extends Model
             $sqlParameters[":receipient_id"] =  $receipient_id;
             $sqlParameters[":sender_id"] =  $sender_id;
             $sqlParameters[":transaction_id"] =  $entity_id;
-            $preparedStatement = $this->dbh->prepare('SELECT TITLE, TRANSACTION_ID FROM BASE_VW WHERE (LENDER_ID=:receipient_id or BORROWER_ID=:receipient_id) and (LENDER_ID=:sender_id or BORROWER_ID=:sender_id) and TRANSACTION_ID=:transaction_id and ACTIVE=1 LIMIT 1');
+            $preparedStatement = $this->dbh->prepare('SELECT TITLE, TRANSACTION_ID FROM BASE_VW WHERE (LENDER_ID=:receipient_id or BORROWER_ID=:receipient_id) and TRANSACTION_ID=:transaction_id LIMIT 1');
             $preparedStatement->execute($sqlParameters);
             $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);    
             

@@ -86,12 +86,15 @@ function sendEmail($from, $to, $replyto, $subject, $message)
 {
     global $email_message_footer;
     
+    
     $headers = 'From: ' . $from . "\r\n" .
                'Reply-To: ' . $replyto . "\r\n" .
                'Content-Type: text/html; charset=UTF-8' . "\r\n" .
+                'Content-Transfer-Encoding: base64' . "\r\n" . 
                'X-Mailer: PHP/' . phpversion();     
 
     $message = "<html><body>" . $message . "<br/><br/>" . $email_message_footer . "</body></html>";
+    $message = chunk_split(base64_encode($message));
     return mail($to, $subject, $message, $headers);            
 }
 
