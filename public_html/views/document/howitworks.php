@@ -15,100 +15,49 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
     <h1 class="text-center">How it works</h1>
     <hr>
 
-            
-    <div id="myCarousel" class="carousel slide" style='margin: 0px 60px' data-interval='' data-pause="hover">
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-            <li data-target="#myCarousel" data-slide-to="3"></li>
-        </ol>
-
-        <div class='row-fluid'>
-            <div id='' class='span2'>
-                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-            </div>
-
-            <div id='' class='span8'>
-                <div class="carousel-inner" style=''>
-                    <div class="active item">
-                        <img class='text-center' src='/img/Step1.jpg'>
-                        <div style='margin-top: 20px'>
-                            <h3 class="media-heading">Step 1: Search</h3>
-                            Search for gear to borrow.
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img class='text-center' src='/img/Step2.jpg'>
-                        <div style='margin-top: 20px'>
-                            <h3 class="media-heading">Step 2: Request</h3>
-                            <div class='borrower-hiw'>
-                                <h5>If you're a borrower...</h5>
-                                <p>Once you found the gear you want, submit a request to borrow it for a specific duration.</p>
-                            </div>
-                            
-                            <div class='lender-hiw'>
-                                <h5>If you're a lender...</h5>
-                                <p>Sort through the borrow requests you have received and approve one. If you decide to change your mind later on, you can cancel your transaction up until 24 hours before the start of the borrow duration.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img class='text-center' src='/img/Step3.jpg'>
-                        <div style='margin-top: 20px'>
-                            <h3 class="media-heading">Step 3: Pick up</h3>
-                            <div class='borrower-hiw'>
-                                <h5>If you're a borrower...</h5>
-                                <p>Schedule a time and place with the lender to pick up the item. Once you meet them, verify that the item is in the same condition as listed on Qhojo. Then, <span class='step'>(1)</span> text your confirmation code to our number: <a href="tel:<?php echo $borrower_number; ?>"><?php echo $formatted_borrower_number; ?></a>. We'll place a hold on your credit card for the hold amount.</p>
-                            </div>
-                            
-                            <div class='lender-hiw'>
-                                <h5>If you're a lender...</h5>
-                                <p><span class='step'>(2)</span> You'll receive a text message from us confirming that the borrower is OK with starting the transaction. At this point, <span class='step'>(3)</span> you can hand the item over to the borrower.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img class='text-center' src='/img/Step4.jpg'>
-                        <div style='margin-top: 20px'>
-                            <h3 class="media-heading">Step 4: Drop off</h3>
-                            <div class='borrower-hiw'>
-                                <h5>If you're a borrower...</h5>
-                                    <p>Let the lender inspect the item. <span class='step'>(2)</span> Once you receive a text message from us confirming that the lender is OK with the returned item, <span class='step'>(3)</span> return the item to them. We will also release the hold on your credit card and charge you for the borrow duration.</p>
-                            </div>
-                            
-                            <div class='lender-hiw'>
-                                <h5>If you're a lender...</h5>
-                                
-                            <p>
-                                Inspect the item to make sure it is OK. Then, <span class='step'>(1)</span> text your confirmation code to our number: <a href="tel:<?php echo $lender_number;?>"><?php echo $formatted_lender_number; ?></a>. We'll send you the money you are owed minus a <a href="/document/fees">small transaction fee</a> to your PayPal account. 
-                            </p>   
-                            
-                            <p>
-                                In the event that there is damage, do not send the text message. Instead, <a href='#damage'>submit a damage report</a>.
-                            </p>                                
-                            </div>
-                        </div>
-                    </div>                    
-                </div>
-            </div>
-
-            <div id='' class='span2'>
-                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-            </div>
-            
+    <div class='row-fluid'>
+        <div class='offset1 span10'>
+                <div id="myCarousel" class="carousel slide" data-pause='hover'>
+                  <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                    <li data-target="#myCarousel" data-slide-to="3"></li>
+                  </ol>
+                  <!-- Carousel items -->
+                  <div class="carousel-inner">
+                    <div class="active item"><img src='/img/Slide1.jpg'></div>
+                    <div class="item"><img src='/img/Slide2.jpg'></div>
+                    <div class="item"><img src='/img/Slide3.jpg'></div>
+                    <div class="item"><img src='/img/Slide4.jpg'></div>
+                  </div>
+                  <!-- Carousel nav -->
+                  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                </div>  
         </div>
+    </div>
+    
 
-    </div>  
             
 </div>
 
 <div id="lender-protection" class="sheet">
     <h1 class="text-center">Lender Protection Policy</h1>
     <hr>
+    <div style='float: left'>
+        
+    </div>
+    <div style='float: left'>
+        
+    </div>
+    
     <div class='row-fluid'>
-        <div id='faq-content' class='span10 offset1'>    
-            sdfsdfsdf
+        <div class='span2 offset1'>
+            <img src='/img/blue-security-shield.svg' style='max-width: 100px'>
+        </div>
+        <div id='faq-content' class='span9' style='margin-left: 20px'>    
+            Whatever happens to the item, we've got you covered. In the event of damage or theft, we will reimburse you up to the full amount that you specified when listing the item. 
         </div>
     </div>
 </div>
@@ -163,6 +112,13 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
                     As of now, the maximum hold value we allow is $2500.
                 </p>            
             </div>
+            
+            <div class='question'>
+                <h4>What's the longest I can borrow an item for?</h4>
+                <p>
+                    You can borrow an item up to 7 days.
+                </p>            
+            </div>            
 
         </div>
     </div>

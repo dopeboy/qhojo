@@ -411,14 +411,14 @@ class TransactionModel extends Model
         $end_date = date("m/d", strtotime($data->{"END_DATE"}));
 
         // Send text message to lender  
-        $textMessage = "Hey {$row["LENDER_FIRST_NAME"]} it's Qhojo here. You have accepted {$row["BORROWER_FIRST_NAME"]}'s request. Meet with them on {$start_date} and wait for them to text message us.";
-        $textMessage2 = "Once they have, we will text message you when to release the item to them. Do not release the item until you have received our text.";
+        $textMessage = "Hey {$row["LENDER_FIRST_NAME"]}! It's Qhojo here. You have accepted {$row["BORROWER_FIRST_NAME"]}'s request. Arrange to meet with them on {$start_date}.";
+        $textMessage2 = "On {$start_date}, you will receive a text message from Qhojo. Do not release the item until you have received our confirmation text.";
         $this->sendText($row["LENDER_PHONE_NUMBER"], $lender_number, $textMessage, $method, $user_id);
         $this->sendText($row["LENDER_PHONE_NUMBER"], $lender_number, $textMessage2, $method, $user_id);
         
         // Send text message to borrower
-        $textMessage = "Hey {$row["BORROWER_FIRST_NAME"]} it's Qhojo here. {$row["LENDER_FIRST_NAME"]} has accepted your request. Meet with them on {$start_date} and inspect the item.";
-        $textMessage2 = "If it is OK, then text your confirmation code ({$cc}) back to thos number.";
+        $textMessage = "Hey {$row["BORROWER_FIRST_NAME"]}! It's Qhojo here. {$row["LENDER_FIRST_NAME"]} has accepted your request. Arrange to meet with them on {$start_date}.";
+        $textMessage2 = "On {$start_date}, inspect the item. If it is OK, then text your confirmation code ({$cc}) back to this number.";
         $this->sendText($row["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage, $method, $user_id);
         $this->sendText($row["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage2, $method, $user_id);        
         

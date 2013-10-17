@@ -31,7 +31,18 @@ hr
     margin-bottom: 15px
 }
 
-span.step
+.carousel-control 
 {
-    color: red; font-weight: bold
+ top: 52%;   
+}
+
+.carousel-control.right 
+{
+    right: 6px;
+}
+
+.carousel-control 
+{
+    
+    left: 6px;
 }
