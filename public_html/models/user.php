@@ -294,8 +294,9 @@ class UserModel extends Model
         $preparedStatement = $this->dbh->prepare('UPDATE USER set PHONE_VERIFICATION_CODE=:phone_verification_code, PHONE_VERIFICATION_DATESTAMP=:phone_verification_datestamp, PHONE_NUMBER=:phone_number where ID=:user_id LIMIT 1');
         $preparedStatement->execute($sqlParameters);        
         
+        $message = "Hey {$_SESSION["USER"]["FIRST_NAME"]}! It's Qhojo here. Here is your verification code: {$verification_code}";
         global $borrower_number;
-        $this->sendText($phone_number, $borrower_number, $verification_code, $method, $user_id);
+        $this->sendText($phone_number, $borrower_number, $message, $method, $user_id);
     }    
 
     public function verifyVerificationCode($method, $user_id, $verification_code)
