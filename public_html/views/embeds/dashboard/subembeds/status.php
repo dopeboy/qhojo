@@ -64,7 +64,7 @@
             <table class='next-step'>
                 <tr class="entry">  
                     <td class="left" style=''><i class="icon-exclamation-sign icon-2x red" style=""></i></td>
-                    <td class="right" style=''><?php echo "Meet with " . $transaction['LENDER_FIRST_NAME'] . " on " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . " and wait for them to text us. Once we have received their text, we will text you at which point you can return the item to " . $transaction['LENDER_FIRST_NAME'] . ". <strong>Do not return the item until you have received our text.</strong>" ?></td>
+                    <td class="right" style=''><?php echo "Arrange to meet with " . $transaction['LENDER_FIRST_NAME'] . " on " . date("m/d", strtotime($transaction["REQ"]["END_DATE"])) . " and wait for them to text us. Once we have received their text, we will text you at which point you can return the item to " . $transaction['LENDER_FIRST_NAME'] . ". <strong>Do not return the item until you have received our text.</strong>" ?></td>
                 </tr>
                 <tr class="explanation">
                     <td class="left" style=''></td>
@@ -85,7 +85,7 @@
             <table class='next-step'>
                 <tr class="entry">  
                     <td class="left" style=''><i class="icon-exclamation-sign icon-2x red" style=""></i></td>
-                    <td class="right" style=''><?php echo "Meet with " . $transaction['BORROWER_FIRST_NAME'] . " on " . date("m/d", strtotime($transaction["REQ"]["START_DATE"])) . " and wait for them to text message us. Once they have, we will text message you when to release the item to them. <strong>Do not release the item until you have received our text.</strong>"?></td>
+                    <td class="right" style=''><?php echo "Arrange to meet with " . $transaction['BORROWER_FIRST_NAME'] . " on " . date("m/d", strtotime($transaction["REQ"]["START_DATE"])) . " and wait for them to text message us. Once they have, we will text message you when to release the item to them. <strong>Do not release the item until you have received our text.</strong>"?></td>
                 </tr>
                 <tr class="explanation">
                     <td class="left" style=''></td>

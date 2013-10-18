@@ -99,7 +99,6 @@
                 <ul class="nav nav-pills">
                     <?php if (User::isUserSignedIn()) { ?>
                     <li><a href="/document/about">about</a></li>
-                    <li><a href="http://qhojo.wordpress.com/">blog</a></li>
                     
                         <li><a href="/document/contact">contact</a></li>
                         <li><a href="/document/legal">legal</a></li>
