@@ -1,2 +1,2 @@
 MAILTO="manish@qhojo.com"
-* */1 * * *  /home/manish/work/qhojo/cron/scripts/dev/expired.sh
+0 * * * *  /home/manish/work/qhojo/cron/scripts/dev/expired.sh
