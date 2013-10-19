@@ -159,7 +159,7 @@ class InvalidPassword extends BaseException
 {
     public function __construct($method, $user_id = 0, Exception $previous = null) 
     {
-        parent::__construct("The supplied password is invalid. Please try again.", $method, $user_id, $previous);
+        parent::__construct("Your password is too short. Please enter in a longer one.", $method, $user_id, $previous);
     }     
 }
 

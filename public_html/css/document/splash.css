@@ -7,7 +7,7 @@
     font-style: normal;
     font-weight: bold;
     line-height: .9em;
-    margin-top: 220px;
+    margin-top: 160px;
 }
 
 .btn-xlarge 
@@ -16,11 +16,9 @@
     font-size: 22px;
     line-height: normal;
     -webkit-border-radius: 8px;
-       -moz-border-radius: 8px;
-            border-radius: 8px;
-            font-weight: bold;
-            
-
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
 #join-button

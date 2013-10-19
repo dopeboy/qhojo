@@ -65,7 +65,7 @@ abstract class Validator
     
     static function isValidPassword ($parameter_value,$parameter_name, $method) 
     {
-        if(strlen($parameter_value) < 2 || strlen($parameter_value) >= 20)
+        if(strlen($parameter_value) < 3)
             throw new InvalidPassword($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
     }     
     

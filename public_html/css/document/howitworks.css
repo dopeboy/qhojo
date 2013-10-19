@@ -46,3 +46,13 @@ hr
     
     left: 6px;
 }
+
+#shield
+{
+    max-width: 100px; float: left
+}
+
+#lp-text
+{
+    margin-left: 110px; margin-top: 8px
+}

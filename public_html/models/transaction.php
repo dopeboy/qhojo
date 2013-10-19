@@ -165,7 +165,7 @@ class TransactionModel extends Model
     }    
     
     public function review($method, $user_id, $transaction_id)
-    {   
+    {
         $sqlParameters[":transaction_id"] =  $transaction_id;
         $sqlParameters[":user_id"] =  $user_id;
         
@@ -454,7 +454,7 @@ class TransactionModel extends Model
             throw new PendingTransactionException($method, $user_id);    
         
         // 200 -> 250
-        $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,250,$method, $user_id), null, $user_id);  
+        $this->insertDetail($method, $transaction_id, $this->getEdgeID(200,250,$method, $user_id), array("ACCEPT_DATE" => date("Y-m-d H:i:s")), $user_id);  
         
         global $do_not_reply_email, $domain;
         
@@ -493,7 +493,8 @@ class TransactionModel extends Model
         return $this->denormalize($rows);        
     }
     
-    // User here is a borrower. Move all pending requests to the reserved state
+    // User here is a borrower. Move all pending requests to the reserved state.
+    // NOTE: code is copied from acceptRequest(). Ideally both of the two should call a function that does this.
     public function movePendingToReserved($method, $user_id)
     {
         $sqlParameters[":user_id"] =  $user_id;           
@@ -510,12 +511,24 @@ class TransactionModel extends Model
                 $cc = getRandomID();
                 $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,300,$method, $user_id), array("CONFIRMATION_CODE" => $cc), $user_id);
                 
-                global $do_not_reply_email, $domain, $borrower_number;
+                global $do_not_reply_email, $domain, $borrower_number, $lender_number;
                 $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($borrower_number, 3,3) . '-' . substr($borrower_number, 6,4);
                 
                 $start_date = date("m/d", strtotime($transaction["REQ"]["START_DATE"]));
                 $end_date = date("m/d", strtotime($transaction["REQ"]["END_DATE"]));                
 
+                // Send text message to lender  
+                $textMessage = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. You have accepted {$transaction["BORROWER_FIRST_NAME"]}'s request. Arrange to meet with them on {$start_date}.";
+                $textMessage2 = "On {$start_date}, you will receive a text message from Qhojo. Do not release the item until you have received our confirmation text.";
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $textMessage, $method, $user_id);
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $textMessage2, $method, $user_id);
+
+                // Send text message to borrower
+                $textMessage = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. {$transaction["LENDER_FIRST_NAME"]} has accepted your request. Arrange to meet with them on {$start_date}.";
+                $textMessage2 = "On {$start_date}, inspect the item. If it is OK, then text your confirmation code ({$cc}) back to this number.";
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage, $method, $user_id);
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $textMessage2, $method, $user_id);    
+        
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "The transaction is ready to move forward. {$transaction["LENDER_FIRST_NAME"]}, you have accepted {$transaction["BORROWER_FIRST_NAME"]}'s request to borrow your item, <a href=\"{$domain}/item/index/{$transaction["ITEM_ID"]}\">{$transaction["TITLE"]}</a>, from " . date("m/d", strtotime($start_date)) . " to " . date("m/d", strtotime($end_date)) . ". Your guys' confirmation code is <b>{$cc}</b>.<br/><br/>";
@@ -540,7 +553,7 @@ class TransactionModel extends Model
     
     private function denormalize($details)
     {
-        $transactions = null;
+        $transactions = [];
         
         foreach ($details as $key=>$detail)
         {
@@ -568,6 +581,12 @@ class TransactionModel extends Model
                 $diff = $end->diff($start); 
                 $transactions[$detail["TRANSACTION_ID"]]["TOTAL"] = $diff->d * $detail["RATE"];
             }
+            
+            else if ($detail["STATE_B_ID"] == 250)
+            {
+                $data = json_decode($detail['DATA']); 
+                $transactions[$detail["TRANSACTION_ID"]]["PENDING"]["ACCEPT_DATE"] = $data->{"ACCEPT_DATE"};      
+            }   
             
             else if ($detail["STATE_B_ID"] == 300)
             {
@@ -1024,35 +1043,38 @@ class TransactionModel extends Model
         return $viewmodel;
     }
     
+    /***************************** THESE ARE TIME BASED JOBS ***************************************/
+    
     // First check if any pending transactions have not been acted upon. This means that the 24 hour notice was not followed. Expire the transaction and send email to both parties.
     public function expired($method, $user_id)
     {
-        $preparedStatement = $this->dbh->prepare('select * from PENDING_VW where STATE_B_ID=250');
+        $preparedStatement = $this->dbh->prepare('select * from PENDING_VW');
         $preparedStatement->execute();
-        $transactions = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $transactions = $this->denormalize($rows);
         
         global $domain, $do_not_reply_email;
         
         foreach ($transactions as $transaction)
         {
-            $entry_date = new DateTime($transaction["ENTRY_DATE"]);
-            $entry_date->add(new DateInterval('P1D'));  // add 24 hours
+            $accept_date = new DateTime($transaction["PENDING"]["ACCEPT_DATE"]);
+            $accept_date->add(new DateInterval('P1D'));  // add 24 hours
             $now = new DateTime();
-            
-            // 250 -> 850
-            if ($entry_date < $now)
-            {       
-                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,850,$method, $user_id), null, $user_id);
 
+            // 250 -> 850
+            if ($accept_date < $now)
+            {     
+                $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(250,850,$method, $user_id), null, $user_id);
+            
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "The request for item {$transaction["TITLE"]} by {$transaction["BORROWER_FIRST_NAME"]} has expired because {$transaction["BORROWER_FIRST_NAME"]} did not complete their payment details within the 24 hour notice.<br/><br/>";
-                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, if you wish to borrow this item, please complete your payment details and re-request the item. As a reminder, you can complete your payment details by following the link below:<br/><br/>";
+                $message .= "{$transaction["BORROWER_FIRST_NAME"]}, if you wish to borrow this item, please complete your user profile and re-request the item. As a reminder, you can complete your profile by following the link below:<br/><br/>";
                 $message .= "<a href=\"{$domain}/user/completeprofile\">{$domain}/user/completeprofile</a>";
                 
                 $subject = "{$transaction["TITLE"]} - EXPIRED - Item request has expired - Transaction ID: {$transaction["TRANSACTION_ID"]}";
 
-                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                        
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);                        
             }
         }        
     }
@@ -1060,17 +1082,17 @@ class TransactionModel extends Model
     //  we're going to find all late transactions and increment their late_count and also send a reminder email
     public function updateLateCounts($method, $user_id)
     {
-        $preparedStatement = $this->dbh->prepare('select DATA, TRANSACTION_ID from LATE_VW where STATE_B_ID=650');
-        $preparedStatement->execute();
-        $transactions = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $preparedStatement = $this->dbh->prepare('select * from LATE_VW');
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $transactions = $this->denormalize($rows);
      
-        global $do_not_reply_email;
+        global $do_not_reply_email, $lender_number, $borrower_number;
         
         foreach ($transactions as $transaction)
         {
-            $data = json_decode($transaction['DATA']); 
-            $new_late_count = $data->{"LATE_COUNT"}+1;
+            $new_late_count = $transaction["LATE"]["LATE_COUNT"]+1;
             $new_data = array("LATE_COUNT" => $new_late_count);
+            $end_date = new DateTime($transaction["REQ"]["END_DATE"]);
             
             $sqlParameters[":transaction_id"] =  $transaction["TRANSACTION_ID"];
             $sqlParameters[":data"] = json_encode($new_data);
@@ -1078,6 +1100,20 @@ class TransactionModel extends Model
             $preparedStatement = $this->dbh->prepare('UPDATE DETAIL set DATA=:data where STATE_B_ID=650 and TRANSACTION_ID=:transaction_id');
             $preparedStatement->execute($sqlParameters);
             
+            // Send text to lender
+            $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} on " . date("m/d", strtotime($end_date)) . " to receive the item.";
+            $message2 = "{$transaction["BORROWER_FIRST_NAME"]} will be charged double the rental rate for each day the item is not returned.";
+
+            $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $user_id);
+            $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $user_id);
+
+            // Send text to borrower
+            $message = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["LENDER_FIRST_NAME"]} on " . date("m/d", strtotime($end_date)) . " to return the item.";
+            $message2 = "You will be charged double the rental rate for each day the item is not returned.";
+
+            $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $user_id);
+            $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $user_id); 
+                
             // Send email to both
             $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
             $message .= "This is a reminder that item {$transaction["TITLE"]} has not been returned by {$transaction["BORROWER_FIRST_NAME"]} to {$transaction["LENDER_FIRST_NAME"]}. This item is now <b>{$new_late_count} day(s)</b> late.<br/><br/>";
@@ -1096,7 +1132,7 @@ class TransactionModel extends Model
         $preparedStatement->execute();
         $transactions = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
      
-        global $do_not_reply_email;
+        global $do_not_reply_email, $lender_number, $borrower_number;
         
         foreach ($transactions as $transaction)
         {
@@ -1108,6 +1144,20 @@ class TransactionModel extends Model
             {
                 $data = array("LATE_COUNT" => 1);
                 $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(500,650,$method, $user_id), $data, $user_id);
+                
+                // Send text to lender
+                $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} on " . date("m/d", strtotime($end_date)) . " to receive the item.";
+                $message2 = "{$transaction["BORROWER_FIRST_NAME"]} will be charged double the rental rate for each day the item is not returned.";
+
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $user_id);
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $user_id);
+                
+                // Send text to borrower
+                $message = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["LENDER_FIRST_NAME"]} on " . date("m/d", strtotime($end_date)) . " to return the item.";
+                $message2 = "You will be charged double the rental rate for each day the item is not returned.";
+
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $user_id);
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $user_id); 
                 
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
@@ -1121,13 +1171,14 @@ class TransactionModel extends Model
         }
     }
     
+    // Find all reserved transactions who's start date was yesterday but were not acted upon. Expire these. Send text msg
     public function expireOldReservations($method, $user_id)
     {
-        $preparedStatement = $this->dbh->prepare('select DATA, TRANSACTION_ID from EXCHANGED_VW where STATE_B_ID=200');
+        $preparedStatement = $this->dbh->prepare('select * from EXCHANGED_VW where STATE_B_ID=200');
         $preparedStatement->execute();
         $transactions = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
-        global $do_not_reply_email;
+        global $do_not_reply_email, $lender_number, $borrower_number;
         
         foreach ($transactions as $transaction)
         {
@@ -1139,6 +1190,20 @@ class TransactionModel extends Model
             {
                 $this->insertDetail($method, $transaction["TRANSACTION_ID"], $this->getEdgeID(300,850,$method, $user_id), null, $user_id);
                 
+                // Send text to lender
+                $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} on " . date("m/d", strtotime($start_date)) . " to lend out your item.";
+                $message2 = "We have not received {$transaction["BORROWER_FIRST_NAME"]}'s confirmation text and subsequently cancelled the transaction.";
+
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $user_id);
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $user_id);
+                
+                // Send text to borrower
+                $message = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you were scheduled to meet with {$transaction["LENDER_FIRST_NAME"]} on " . date("m/d", strtotime($start_date)) . " to pick up the item.";
+                $message2 = "We have not received your confirmation text and subsequently cancelled the transaction.";
+                
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $user_id);
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $user_id);                 
+                
                 // Send email to both
                 $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
                 $message .= "This transaction has been cancelled because the item was not exchanged on the start date of " . date("m/d", strtotime($start_date)) . "<br/><br/>";
@@ -1146,20 +1211,110 @@ class TransactionModel extends Model
 
                 $subject = "{$transaction["TITLE"]} - EXPIRED - Transaction has been expired - Transaction ID: {$transaction["TRANSACTION_ID"]}";
 
-                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                     
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], null, $subject, $message);                     
             }
         }        
     }
     
+    // Find all transactions that are scheduled to start today. 
+    // Remind both parties that the transaction is about to start and what the next steps are.
     public function remindStart($method, $user_id)
     {
-    
+        $preparedStatement = $this->dbh->prepare('select * from RESERVED_VW');
+        $preparedStatement->execute();
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $transactions = $this->denormalize($rows);
+        
+        global $do_not_reply_email, $borrower_number, $lender_number;
+        $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($borrower_number, 3,3) . '-' . substr($borrower_number, 6,4);
+        
+        foreach ($transactions as $transaction)
+        {
+            $start_date = new DateTime($transaction["REQ"]["START_DATE"]);
+            $now = new DateTime();
+            
+            if ($now == $start_date)
+            {
+                // Send text to lender
+                $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you are scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} today.";
+                $message2 = "Meet with {$transaction["BORROWER_FIRST_NAME"]} and let them inspect the item. Wait for a confirmation text from Qhojo before you let them walk away with the item.";
+
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $user_id);
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $user_id);
+                
+                // Send text to borrower
+                $message = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you are scheduled to meet with {$transaction["LENDER_FIRST_NAME"]} today.";
+                $message2 = "Meet with {$transaction["LENDER_FIRST_NAME"]} and inspect the item. If you are OK with it, text your confirmation code ({$transaction["RESERVATION"]["CONFIRMATION_CODE"]}) back to this number.";
+
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $user_id);
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $user_id);                
+        
+                // Send email to both
+                $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+                $message .= "This message is a reminder that you guys have a transaction that starts today. By now, you should have determined when and where you two will meet.<br/><br/>";
+                $message .= "Here's a reminder of what you guys have to do when you meet:<br/><br/>";
+                $message .= "<blockquote>";
+                $message .= "(1) {$transaction["BORROWER_FIRST_NAME"]}, when you meet {$transaction["LENDER_FIRST_NAME"]} today, text your confirmation code ({$transaction["RESERVATION"]["CONFIRMATION_CODE"]}) to this number: <a href=\"tel:{$borrower_number}\">{$formatted_borrower_number}</a>.<br/><br/>";
+                $message .= "(2) {$transaction["LENDER_FIRST_NAME"]}, as soon we receive {$transaction["BORROWER_FIRST_NAME"]}'s text message, we will text you a message confirming so. Only hand over your item to {$transaction["BORROWER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+                $message .= "</blockquote>";
+
+                $subject = "{$transaction["TITLE"]} - REMINDER - Transaction starts today - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                     
+            }
+        }           
     }  
     
+    // Find all transactions that are scheduled to end today. 
+    // Remind both parties that the transaction is about to end and what the next steps are.    
     public function remindEnd($method, $user_id)
     {
-    
+        $preparedStatement = $this->dbh->prepare('select * from EXCHANGED_VW');
+        $preparedStatement->execute();
+        $rows = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $transactions = $this->denormalize($rows);
+        
+        global $do_not_reply_email, $borrower_number, $lender_number, $domain;
+        $formatted_lender_number =  substr($lender_number, 0, 3) . '-' . substr($lender_number, 3,3) . '-' . substr($lender_number, 6,4);
+        
+        foreach ($transactions as $transaction)
+        {
+            $end_date = new DateTime($transaction["REQ"]["END_DATE"]);
+            $now = new DateTime();
+            
+            if ($now == $end_date)
+            {
+                // Send text to lender
+                $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you are scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} today.";
+                $message2 = "Meet with {$transaction["BORROWER_FIRST_NAME"]} and inspect the item. If you are OK with it, text your confirmation code ({$transaction["RESERVATION"]["CONFIRMATION_CODE"]}) back to this number.";
+
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message, $method, $user_id);
+                $this->sendText($transaction["LENDER_PHONE_NUMBER"], $lender_number, $message2, $method, $user_id);
+                
+                // Send text to borrower
+                $message = "Hey {$transaction["BORROWER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you are scheduled to meet with {$transaction["LENDER_FIRST_NAME"]} today.";
+                $message2 = "Meet with {$transaction["LENDER_FIRST_NAME"]} and let them inspect the item. Wait for a confirmation text from Qhojo before you let them walk away with the item.";
+
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message, $method, $user_id);
+                $this->sendText($transaction["BORROWER_PHONE_NUMBER"], $borrower_number, $message2, $method, $user_id);                
+        
+                // Send email to both
+                $message = "Hi {$transaction["LENDER_FIRST_NAME"]} and {$transaction["BORROWER_FIRST_NAME"]},<br/><br/>";
+                $message .= "This message is a reminder that you guys have a transaction that ends today.<br/><br/>";
+                $message .= "Here's a reminder of what you guys have to do when you meet:<br/><br/>";
+                $message .= "<blockquote>";
+                $message .= "(1) {$transaction["LENDER_FIRST_NAME"]}, verify that your returned item is OK. If it is, text the above confirmation code to this number: <a href=\"tel:{$lender_number}\">{$formatted_lender_number}</a>. If it is not, you can report the item as damaged by clicking <a href=\"href:{$domain}/transaction/reportdamage/{$transaction["TRANSACTION_ID"]}\">here</a> or by going into your dashboard and clicking the appropriate link in the menu next to this item.<br/><br/>";
+                $message .= "(2) {$transaction["BORROWER_FIRST_NAME"]}, you will receive a text message from us confirming that {$transaction["LENDER_FIRST_NAME"]} is OK with the returned item. Only return the item to {$transaction["LENDER_FIRST_NAME"]} once you have received this message from us.<br/><br/>";
+                $message .= "</blockquote>";
+
+                $subject = "{$transaction["TITLE"]} - REMINDER - Transaction ends today - Transaction ID: {$transaction["TRANSACTION_ID"]}";
+
+                sendEmail($do_not_reply_email, $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $transaction["LENDER_EMAIL_ADDRESS"] . ',' . $transaction["BORROWER_EMAIL_ADDRESS"], $subject, $message);                     
+            }
+        }     
     }        
+    
+    /***************************** END OF TIME BASED JOBS ***************************************/
     
     private function paypalMassPayToLender($paypal_email, $amount)
     {

@@ -78,14 +78,17 @@
                 <h4 class="media-heading">Cost</h4>
                 Save money by borrowing gear at cheaper rates than what existing rental stores have to offer.
             </div>
-        </div>            
+        </div>           
     </div>      
 
    <div class="text-center">
        <form action="/item/search.php" method="get">
             <button class="rentlink btn btn-large btn-primary" type="submit">Borrow >></button>
        </form>       
-   </div>                     
+   </div>
+    <div class='pull-right citation'>
+        <em>Icons by DryIcon</em>
+    </div>
 </div>
 
 <div class="sheet" id="lend">
@@ -168,7 +171,11 @@
        <form action="/item/post" method="get">
             <button class="rentlink btn btn-large btn-primary" type="submit">Lend >></button>
        </form>
-   </div>                     
+   </div>     
+    
+    <div class='pull-right citation'>
+        <em>Icons by DryIcon</em>
+    </div>    
 </div>            
 
 <script src="/js/document/index.js"></script>

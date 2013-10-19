@@ -45,19 +45,12 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
 <div id="lender-protection" class="sheet">
     <h1 class="text-center">Lender Protection Policy</h1>
     <hr>
-    <div style='float: left'>
-        
-    </div>
-    <div style='float: left'>
-        
-    </div>
-    
     <div class='row-fluid'>
-        <div class='span2 offset1'>
-            <img src='/img/blue-security-shield.svg' style='max-width: 100px'>
-        </div>
-        <div id='faq-content' class='span9' style='margin-left: 20px'>    
-            Whatever happens to the item, we've got you covered. In the event of damage or theft, we will reimburse you up to the full amount that you specified when listing the item. 
+        <div class='span10 offset1'>
+            <img id='shield' src='/img/blue-security-shield.svg' style=''>
+            <div id='lp-text' style=''>
+                Whatever happens to the item, we've got you covered. In the event of damage or theft, we will reimburse you up to the full amount that you specified when listing the item. 
+            </div>
         </div>
     </div>
 </div>

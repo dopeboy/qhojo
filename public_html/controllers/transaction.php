@@ -202,6 +202,8 @@ class Transaction extends Controller
             $this->returnView($this->transaction_model->damageReportSubmitted($method, $_SESSION["USER"]["USER_ID"], $this->validateParameter($this->id,"Transaction ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);        
     }
     
+    /***************************** THESE ARE TIME BASED JOBS ***************************************/
+    
     protected function expired()
     {
         if (($method = Method::POST) && User::userSignedIn($method) && User::userIsAdmin($method) && ($this->state == null || $this->state == 0))
@@ -230,7 +232,7 @@ class Transaction extends Controller
         }
     }  
     
-    protected function expireroldreservations()
+    protected function expireoldreservations()
     {
         if (($method = Method::POST) && User::userSignedIn($method) && User::userIsAdmin($method) && ($this->state == null || $this->state == 0))
         {
