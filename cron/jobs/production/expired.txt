@@ -1,0 +1,2 @@
+MAILTO="support@qhojo.com"
+* */1 * * *  /home/production/public/qhojo/cron/scripts/production/expired.sh

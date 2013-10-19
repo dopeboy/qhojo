@@ -1,0 +1,7 @@
+## DEV ##
+
+chmod +x scripts/dev/*;
+
+crontab -e
+
+copy and paste the jobs

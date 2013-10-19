@@ -1,0 +1,2 @@
+MAILTO="support@qhojo.com"
+0 0 * * *  /home/production/public/qhojo/cron/scripts/production/midnight.sh

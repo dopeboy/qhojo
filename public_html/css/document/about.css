@@ -1,0 +1,23 @@
+hr
+{
+    border-color: #b6b6b6;
+    border-top: none;
+}
+
+.sheet
+{
+    padding-left: 0px;
+    padding-right: 0px;    
+}
+
+#about-text
+{
+    padding: 0px 40px;
+        font-size: 23px;
+        line-height: 35px;
+}
+
+#team-content
+{
+    padding: 0px 40px;
+}

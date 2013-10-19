@@ -1,0 +1,2 @@
+MAILTO="manish@qhojo.com"
+0 0 * * *  /home/staging/public/qhojo/cron/scripts/staging/midnight.sh
