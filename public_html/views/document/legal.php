@@ -1012,7 +1012,7 @@ resources.</FONT></FONT></P>
 Qhojo Platform implement Google Maps/Earth mapping services,
 including Google Maps API(s). Your use of Google Maps/Earth is
 subject to Google's terms of use, located at,
-</FONT></FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3>http://www.google.com/intl/en_us/help/terms_maps.html</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3>.</FONT></FONT></P>
+</FONT></FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=3>http://www.google.com/intl/en_us/help/terms_maps.html</FONT></font><FONT FACE="Times New Roman, serif"><FONT SIZE=3>.</FONT></FONT></P>
 
 <FONT FACE="Times New Roman, serif"><FONT SIZE=3><B>Proprietary
 Rights Notices</B></FONT></FONT></P>
