@@ -105,3 +105,8 @@ img.bw {
 {
     opacity: 0.1
 }
+
+.modal-header h3
+{
+    margin-bottom:10px;
+}

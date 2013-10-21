@@ -119,7 +119,8 @@
     <div id="upload-item-pictures" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
         <div class="modal-header">
             <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Upload Item Pictures</h3>
+            <h3 id="" style="">Upload Item Pictures</h3>
+            Note: Please upload actual pictures of the item you are posting rather than stock/generic ones.
         </div>
         <div class="modal-body text-left" style="">
             <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 

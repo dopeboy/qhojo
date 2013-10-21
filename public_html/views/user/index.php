@@ -173,6 +173,7 @@ global $stock_user_big;
     <div class="modal-header">
         <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Upload Profile Picture</h3>
+        Note: Please upload your actual picture.
     </div>
     <div class="modal-body text-left" style="">
         <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 
