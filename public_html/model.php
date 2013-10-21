@@ -63,14 +63,16 @@ abstract class Model
         global $TwilioAuthToken;
         $client = new Services_Twilio($TwilioAccountSid, $TwilioAuthToken);
         
+        // For now we're going to truncate anything after 160 characters. Ideally, we should be chopping it up
+        // into 160 character blocks and sending as many messages (up to a threshold) that we need to.
         try
         {
-            $sms = $client->account->sms_messages->create($source_phone, $target_phone,$message);     
+            $sms = $client->account->sms_messages->create($source_phone, $target_phone,substr($message,0,160));     
         }
         
         catch (Services_Twilio_RestException $e)
         {
-            throw new TwilioSendTextMessageException($method, $user_id, $e);
+            new TwilioSendTextMessageException($method, $user_id, $e);
         }
     }
     

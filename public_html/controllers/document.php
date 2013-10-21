@@ -59,6 +59,12 @@ class Document extends Controller
         User::userSignedIn($method);
         $this->returnView(null, $method);        
     }       
+    
+    protected function pagenotfound()
+    {
+        $method = Method::GET;
+        $this->returnView(null, $method);        
+    }      
 }
 
 ?>
