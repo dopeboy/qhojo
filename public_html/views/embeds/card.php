@@ -18,7 +18,7 @@
                             per day
                         </div>
                         <div class="item-title" >
-                           <?php echo substr($item['TITLE'],0,26); if (strlen($item['TITLE']) > 26) { echo "..."; } ?>
+                           <?php echo substr($item['TITLE'],0,30); if (strlen($item['TITLE']) > 30) { echo "..."; } ?>
                         </div> 
                      </a>
                  </div>
