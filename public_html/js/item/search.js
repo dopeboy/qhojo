@@ -1,7 +1,6 @@
 $(document).ready(function()
 {    
-    $('[rel=tooltip]').tooltip();
-    $('input#query').focus();  
+    $('[rel=tooltip]').tooltip();  
     
     if ($.cookie('seenSearch'))
     {
@@ -19,16 +18,6 @@ $(document).ready(function()
     $('input#query').blur(function() 
     {
         $('input#query').popover('destroy');
-    });	
-    
-    if (getURLParameter('query') != 'null')
-    {
-        $('#query').val(getURLParameter('query'));
-    }
-    
-    if (getURLParameter('location') != 'null')
-    {
-        $('#location').val(getURLParameter('location'));
-    }
+    });
 
 });

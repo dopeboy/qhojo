@@ -175,5 +175,16 @@ CREATE TABLE NOTIFICATION_TYPE
         ACTIVE                              INTEGER
 );
 
+drop table if exists SEARCH_HISTORY;
+CREATE TABLE SEARCH_HISTORY
+(
+	ID                                  VARCHAR(80) PRIMARY KEY, /* alphanumeric */
+        QUERY                               TEXT,
+        LOCATION                            TEXT,
+        SEARCHED_BY_USER_ID                 INTEGER,
+        RESULTS_COUNT                       INTEGER,
+        DATE                                DATETIME
+);
+
 insert into INVITE VALUES (md5(rand()),'333',99,1,null,1);
 

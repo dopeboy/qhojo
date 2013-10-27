@@ -11,6 +11,15 @@ hr
     border-top: none;
 }
 
+body 
+{ 
+    background: url(/img/bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 /* Wrapper for page content to push down footer */
 #wrap 
 {
@@ -19,7 +28,7 @@ hr
   height: 100%;
   /* Negative indent footer by it's height */
   margin: 0 auto -60px;
-  background-color: rgba(145,196,145, .6);
+/*  background-color: rgba(145,196,145, .6);*/
 }
 
 /* Set the fixed height of the footer here */
@@ -58,7 +67,7 @@ hr
     -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.15);
     margin-bottom: 40px;
-    background-color: whitesmoke
+    background-color: white
 }
 
 .sheet h1,h2,h3, h4, h5

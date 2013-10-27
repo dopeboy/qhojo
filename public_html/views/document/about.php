@@ -19,11 +19,13 @@
                      <img src="/img/m.jpg">
                      <h3>Manish Sinha</h3>
                      <p>I like building.</p>
+                     <p><a href="mailto:manish@qhojo.com">manish@qhojo.com</a></p>
              </div>
              <div class="span6 text-center">
                  <img src="/img/g.jpg">
                  <h3>Guido Lang</h3>
                  <p>I like talking.</p>
+                 <p><a href="mailto:guido@qhojo.com">guido@qhojo.com</a></p>
              </div>            
     </div>     
 </div>

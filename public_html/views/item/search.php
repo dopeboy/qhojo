@@ -30,7 +30,7 @@
             </div>
 
             <div class="span2">
-                <input id="location" type="text" class="input-block-level" placeholder="City or Zip Code" name="location" style="" value="<?php echo $location; ?>">
+                <input id="location" type="text" class="input-block-level" placeholder="City or Zip Code" name="location" style="" value="<?php echo urldecode($location); ?>">
             </div>
 
             <input id="page" type="hidden" class="input-block-level" name="page" value="1" style="">

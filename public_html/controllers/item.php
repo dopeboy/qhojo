@@ -13,7 +13,8 @@ class Item extends Controller
             !empty($this->urlvalues['query']) ? trim($this->urlvalues['query']) : null,
             !empty($this->urlvalues['location']) ? trim($this->urlvalues['location']) : null,
             !empty($this->urlvalues['user_id']) ? trim($this->urlvalues['user_id']) : null,
-            !empty($this->urlvalues['page']) ? trim($this->urlvalues['page']) : null
+            !empty($this->urlvalues['page']) ? trim($this->urlvalues['page']) : null,
+            $_SESSION["USER"]["USER_ID"]
         ),
         $method);
     }
