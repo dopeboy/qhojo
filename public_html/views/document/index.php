@@ -87,7 +87,7 @@
        </form>       
    </div>
     <div class='pull-right citation'>
-        <em>Icons by DryIcon</em>
+        <em>Icons by DryIcons</em>
     </div>
 </div>
 
@@ -174,7 +174,7 @@
    </div>     
     
     <div class='pull-right citation'>
-        <em>Icons by DryIcon</em>
+        <em>Icons by DryIcons</em>
     </div>    
 </div>            
 
