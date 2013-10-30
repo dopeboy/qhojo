@@ -2,7 +2,7 @@
 
 db="qhojo_production";
 username="prodbackup";
-password=">vd%3M )E_u}0.,";
+password=">vd3M )E_u}0.,";
 
 export TZ=":America/New_York"
 directory="/home/production/public/backup/";
@@ -12,7 +12,7 @@ tarfile="${directory}/${db}_$(date +"%Y_%m_%d_%H%M%S").tar.gz";
 email="support@qhojo.com";
 
 #BACKUP
-mysqldump --single-transaction -u $username -p$password $db > $sqlfile
+mysqldump --single-transaction -u$username -p$password $db > $sqlfile
 
 if [[ $? -ne 0 ]] ; then
 	echo "Error code 1" | mutt -s "BACKUP FAILED - ${db} - ${timestamp}" -- $email;
