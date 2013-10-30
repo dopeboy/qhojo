@@ -22,7 +22,7 @@ fi
 # Needed because the user producing this SQL is different than the one that will use it for a restore
 sed -i '/^\/\*\!50013 DEFINER/d' $sqlfile
 
-tar -zcvf $tarfile /home/production/public/qhojo/uploads/ $sqlfile;
+tar -zcvf $tarfile /home/production/public/qhojo/public_html/uploads/ $sqlfile;
 
 if [[ $? -ne 0 ]] ; then
 	echo "Error code 2" |  mutt -s "BACKUP FAILED - ${db} - ${timestamp}" -- $email;
