@@ -87,8 +87,46 @@ global $stock_user_big;
                           
             </div>
             
+<!--            <div class="section split" id="user-verifications">
+                <h4>Social <?php if ($this->state == 1) { ?><a data-toggle="modal" href="#social-verifications" class="btn btn-mini btn-primary pull-right" type="button" style=''>&nbsp;&nbsp;Edit&nbsp;&nbsp;</a><?php }?></h4> 
+                  <ul class="icons-ul" style="">
+                    <li>
+                          <i class="icon-li icon-facebook"></i>
+                            <?php if ($viewmodel["USER"]["FACEBOOK_URL"] == null) { ?>
+                                <span class="text-error">Facebook not verified</span>                             
+                            <?php } else { ?>
+                                <span class="text-success">aaa</span>
+                            <?php } ?>
+                    </li>      
+                    <li>
+                          <i class="icon-li icon-twitter"></i>
+                            <?php if ($viewmodel["USER"]["TWITTER_HANDLE"] == null) { ?>
+                                <span class="text-error">Twitter not verified</span> 
+                            <?php } else { ?>
+                                <span class="text-success">Phone verified</span>
+                            <?php } ?>
+                    </li>     
+                    <li>
+                          <i class="icon-li icon-linkedin"></i>
+                            <?php if ($viewmodel["USER"]["LINKEDIN_URL"] == null) { ?>
+                                <span class="text-error">LinkedIn not verified</span> 
+                            <?php } else { ?>
+                                <span class="text-success">Phone verified</span>
+                            <?php } ?>
+                    </li>      
+                    <li>
+                          <i class="icon-li icon-globe"></i>
+                            <?php if ($viewmodel["USER"]["PERSONAL_WEBSITE_URL"] == null) { ?>
+                                <span class="text-error">Personal website not verified</span> 
+                            <?php } else { ?>
+                                <span class="text-success">Phone verified</span>
+                            <?php } ?>
+                    </li>                     
+                </ul>
+            </div>-->
+            
             <div class="section split" id="user-verifications">
-                <h4>Verifications <?php if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($viewmodel["USER"]["PHONE_VERIFIED"] == null || $viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null || $viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null)) { ?><a href='/user/completeprofile/null/0' class="btn btn-mini btn-primary pull-right" type="button" style=''>Complete Profile</a><?php }?></h4> 
+                <h4>Verifications <?php if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($viewmodel["USER"]["PHONE_VERIFIED"] == null || $viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null || $viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null)) { ?><a href='/user/completeprofile/null/0' class="btn btn-mini btn-primary pull-right" type="button" style=''>&nbsp;&nbsp;Edit&nbsp;&nbsp;</a><?php }?></h4> 
                   <ul class="icons-ul" style="">
                     <li>
                           <i class="icon-li icon-phone"></i>
@@ -182,6 +220,47 @@ global $stock_user_big;
         <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
     </div>
 </div>  
+
+<!--<div id="social-verifications" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+    <div class="modal-header">
+        <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Edit Social Verifications</h3> 
+    </div>
+    <div class="modal-body text-left" style="">
+        <div class="control-group">
+            <div class="controls">
+                <i class="icon-li icon-facebook icon-2x"></i> 
+                https://www.facebook.com/<input type="text" class="input" placeholder="Facebook" id="email" name="email">  
+            </div>
+        </div>   
+        
+        <div class="control-group">
+            <div class="controls">
+                <i class="icon-li icon-twitter icon-2x"></i> 
+                <input type="password" class="input" placeholder="Twitter" id="passwd" name="password">
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <div class="controls">
+                <i class="icon-li icon-linkedin icon-2x"></i> 
+                <input type="password" class="input" placeholder="LinkedIn" id="passwd" name="password">
+            </div>
+        </div>   
+        
+        <div class="control-group">
+            <div class="controls">
+                <i class="icon-li icon-globe icon-2x"></i> 
+                <input type="password" class="input" placeholder="Personal Website" id="passwd" name="password">
+            </div>
+        </div>           
+
+    </div>
+    <div class="modal-footer">
+        <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
+    </div>
+</div>  -->
+
 
 <script src="/js/user/index.js"></script>
 
