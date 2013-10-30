@@ -5,7 +5,7 @@ username="prodbackup";
 password=">vd3M )E_u}0.,";
 
 export TZ=":America/New_York"
-directory="/home/production/public/backup/";
+directory="/home/production/public/backup";
 timestamp=$(date +"%Y_%m_%d_%H%M%S");
 sqlfile="backup_${db}_$(date +"%Y_%m_%d_%H%M%S").sql";
 tarfile="${directory}/${db}_$(date +"%Y_%m_%d_%H%M%S").tar.gz";
