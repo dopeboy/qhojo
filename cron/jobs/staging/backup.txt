@@ -1,0 +1,2 @@
+MAILTO="manish@qhojo.com"
+0 * * * *  /home/staging/work/qhojo/cron/scripts/staging/backup.sh
