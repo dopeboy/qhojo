@@ -11,10 +11,10 @@ sqlfile="backup_${db}_$(date +"%Y_%m_%d_%H%M%S").sql";
 tarfile="${directory}/${db}_$(date +"%Y_%m_%d_%H%M%S").tar.gz";
 email="support@qhojo.com";
 
-#BACKUP
-mysqldump --single-transaction -u$username -p$password $db > $sqlfile
+#BACKUP (don't know why these won't take the variables defined above. Hardcoded for now)
+mysqldump --single-transaction -uprodbackup -p'>vd3M )E_u}0.,' $db > $sqlfile
 
-if [[ $? -ne 0 ]] ; then
+if [ $? -ne 0 ] ; then
 	echo "Error code 1" | mutt -s "BACKUP FAILED - ${db} - ${timestamp}" -- $email;
     exit 1;
 fi
@@ -24,7 +24,7 @@ sed -i '/^\/\*\!50013 DEFINER/d' $sqlfile
 
 tar -zcvf $tarfile /home/production/public/qhojo/public_html/uploads/ $sqlfile;
 
-if [[ $? -ne 0 ]] ; then
+if [ $? -ne 0 ] ; then
 	echo "Error code 2" |  mutt -s "BACKUP FAILED - ${db} - ${timestamp}" -- $email;
     exit 2;
 fi
