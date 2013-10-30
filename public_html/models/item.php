@@ -81,15 +81,19 @@ class ItemModel extends Model
             $rows["ITEMS"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);   
         }
         
-        // Record the query
-        $sqlParameters = array();
-        $sqlParameters[":query"] =  $query;
-        $sqlParameters[":location"] =  $location;
-        $sqlParameters[":user_id"] =  $searched_by_userid;
-        $sqlParameters[":results_count"] =  $rows["ITEMS_COUNT"];
-        $sqlParameters[":date"] =  date("Y-m-d H:i:s");
-        $preparedStatement = $this->dbh->prepare('INSERT INTO SEARCH_HISTORY (ID, QUERY, LOCATION, SEARCHED_BY_USER_ID, RESULTS_COUNT, DATE) VALUES (md5(rand()), :query, :location, :user_id, :results_count, :date)');
-        $preparedStatement->execute($sqlParameters);        
+        // Only record the search query if the query or location is non-null
+        if ($query != null || $location != null)
+        {
+            // Record the query
+            $sqlParameters = array();
+            $sqlParameters[":query"] =  $query;
+            $sqlParameters[":location"] =  $location;
+            $sqlParameters[":user_id"] =  $searched_by_userid;
+            $sqlParameters[":results_count"] =  $rows["ITEMS_COUNT"];
+            $sqlParameters[":date"] =  date("Y-m-d H:i:s");
+            $preparedStatement = $this->dbh->prepare('INSERT INTO SEARCH_HISTORY (ID, QUERY, LOCATION, SEARCHED_BY_USER_ID, RESULTS_COUNT, DATE) VALUES (md5(rand()), :query, :location, :user_id, :results_count, :date)');
+            $preparedStatement->execute($sqlParameters);        
+        }
         
         return $rows;
     }
