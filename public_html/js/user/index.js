@@ -123,6 +123,8 @@ function customResponseHandler(responseText)
         
         else
         {
+            $('span#website-url').removeClass('text-error');
+            $('span#website-url').addClass('text-success');            
             $('span#website-url').html('<a target="_blank" href="' + $('#website').val() + '">' + $('#website').val() + "</a>");        
         }
         
