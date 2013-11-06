@@ -3,12 +3,12 @@
     margin-bottom: 10px    
 }
 
-#user-general h4, #user-activity h4, #user-verifications h4
+#user-general h4, #user-activity h4, #user-verifications h4, #social-verifications h4
 {
     margin-bottom: 10px    
 }
 
-#user-general .icons-ul, #user-activity .icons-ul, #user-verifications .icons-ul
+#user-general .icons-ul, #user-activity .icons-ul, #user-verifications .icons-ul, #social-verifications .icons-ul, #social-verifications-modal-content .icons-ul
 {
     margin-left: 20px; 
     margin-bottom: 0px    
@@ -91,4 +91,15 @@
 .modal-header h3
 {
     margin-bottom:10px;
+}
+
+span.text-success a
+{
+    color: green;
+}
+
+.icons-ul.social
+{
+    margin-left: 40px; 
+    margin-bottom: 0px    
 }

@@ -517,5 +517,13 @@ class InvalidPageException extends BaseException
     }       
 }
 
+class InvalidURLException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The supplied website is not valid. Try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 
 ?>

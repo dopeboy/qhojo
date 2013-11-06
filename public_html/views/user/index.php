@@ -5,7 +5,7 @@
 global $item_picture_path, $user_picture_path;
 $date = new DateTime($viewmodel["USER"]["JOIN_DATE"]);
 $join_date = $date->format('F Y');
-
+$editable = $this->id == $_SESSION["USER"]["USER_ID"];
 global $stock_user_big;
 ?>
 
@@ -23,13 +23,6 @@ global $stock_user_big;
 <div class="sheet">
 
     <legend><?php echo $viewmodel["USER"]["NAME"];?>
-        <div class='pull-right' style='margin-top: -11px;'>
-            <?php if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($this->state == 0 || $this->state == null)) { ?>
-                <a href='/user/index/<?php echo $this->id; ?>/1' id="edit-user" class="btn btn-primary btn-large" style="" >Edit Profile</a> 
-            <?php } else if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($this->state == 1)) {  ?>
-                <a href='/user/index/<?php echo $this->id; ?>/0' id="edit-user" class="btn btn-primary btn-large" style="" >Done Editing</a>
-            <?php } ?>
-        </div>
     </legend>
     
     <div class="row-fluid">
@@ -37,7 +30,7 @@ global $stock_user_big;
             <div class="section split" id="user-general">
                 <div class="text-center" id="profile-picture-container" style="">
                     <img style id="user-picture" class="img-circle" src="<?php echo $viewmodel["USER"]["PROFILE_PICTURE_FILENAME"] == null ? $stock_user_big : $user_picture_path . $viewmodel["USER"]["USER_ID"] . "/" . $viewmodel["USER"]["PROFILE_PICTURE_FILENAME"] ?>">    
-                    <?php if ($this->state == 1) { ?>
+                    <?php if ($editable) { ?>
                     <div id="upload-profile-picture-container" style ="">
                         <a data-toggle="modal" href="#upload-profile-picture" class="pull-right"  >
                             <i class="icon-pencil icon-3x" id="pp" style=""></i>
@@ -87,46 +80,38 @@ global $stock_user_big;
                           
             </div>
             
-<!--            <div class="section split" id="user-verifications">
-                <h4>Social <?php if ($this->state == 1) { ?><a data-toggle="modal" href="#social-verifications" class="btn btn-mini btn-primary pull-right" type="button" style=''>&nbsp;&nbsp;Edit&nbsp;&nbsp;</a><?php }?></h4> 
-                  <ul class="icons-ul" style="">
-                    <li>
-                          <i class="icon-li icon-facebook"></i>
-                            <?php if ($viewmodel["USER"]["FACEBOOK_URL"] == null) { ?>
-                                <span class="text-error">Facebook not verified</span>                             
-                            <?php } else { ?>
-                                <span class="text-success">aaa</span>
-                            <?php } ?>
-                    </li>      
-                    <li>
-                          <i class="icon-li icon-twitter"></i>
-                            <?php if ($viewmodel["USER"]["TWITTER_HANDLE"] == null) { ?>
-                                <span class="text-error">Twitter not verified</span> 
-                            <?php } else { ?>
-                                <span class="text-success">Phone verified</span>
-                            <?php } ?>
-                    </li>     
+            <div class="section split" id="social-verifications">
+                <h4>Social <?php if ($editable) { ?><a data-toggle="modal" href="#social-verifications-modal" class="pull-right" style=''><i class="icon-pencil icon-2x" id="pp" style=""></i></a><?php }?></h4> 
+                  
+                <ul class="icons-ul" style="">
                     <li>
                           <i class="icon-li icon-linkedin"></i>
-                            <?php if ($viewmodel["USER"]["LINKEDIN_URL"] == null) { ?>
+                            <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
                                 <span class="text-error">LinkedIn not verified</span> 
                             <?php } else { ?>
-                                <span class="text-success">Phone verified</span>
+                                <span class="text-success">
+                                    <a target="_blank" href="<?php echo $viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"]; ?>">
+                                        LinkedIn profile
+                                    </a>
+                                </span>
                             <?php } ?>
                     </li>      
                     <li>
                           <i class="icon-li icon-globe"></i>
-                            <?php if ($viewmodel["USER"]["PERSONAL_WEBSITE_URL"] == null) { ?>
-                                <span class="text-error">Personal website not verified</span> 
+                            <?php if ($viewmodel["USER"]["PERSONAL_WEBSITE"] == null) { ?>
+                                <span id="website-url" class="text-error">No personal website</span> 
                             <?php } else { ?>
-                                <span class="text-success">Phone verified</span>
+                                <span id="website-url" class="text-success"><a target="_blank" href="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>"><?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?></a></span>
                             <?php } ?>
                     </li>                     
                 </ul>
-            </div>-->
+                
+            </div>
             
             <div class="section split" id="user-verifications">
-                <h4>Verifications <?php if ($_SESSION["USER"]["USER_ID"] == $viewmodel["USER"]["USER_ID"] && ($viewmodel["USER"]["PHONE_VERIFIED"] == null || $viewmodel["USER"]["PAYPAL_EMAIL_ADDRESS"] == null || $viewmodel["USER"]["BP_PRIMARY_CARD_URI"]== null)) { ?><a href='/user/completeprofile/null/0' class="btn btn-mini btn-primary pull-right" type="button" style=''>&nbsp;&nbsp;Edit&nbsp;&nbsp;</a><?php }?></h4> 
+                <h4>Verifications <?php if ($editable) { ?>
+                    <a href='/user/completeprofile/null/0' class="pull-right" style=''> <i class="icon-pencil icon-2x" id="pp" style=""></i></a><?php }?>
+                </h4> 
                   <ul class="icons-ul" style="">
                     <li>
                           <i class="icon-li icon-phone"></i>
@@ -165,8 +150,8 @@ global $stock_user_big;
                     <span id="blurb-content">
                         <?php echo $viewmodel["USER"]["BLURB"] == null ? "<i>No blurb yet</i>" : $viewmodel["USER"]["BLURB"]?>
                     </span>
-                    <?php if ($this->state == 1) { ?>
-                        <a data-toggle="modal" href="#edit-blurb-1">
+                    <?php if ($editable) { ?>
+                        <a data-toggle="modal" href="#edit-blurb-1" class="pull-right">
                             <i class="icon-pencil icon-2x" id="title" style=""></i>
                         </a>
                     <?php } ?>
@@ -185,7 +170,7 @@ global $stock_user_big;
     </div>
 </div>
 
-<?php if ($this->state == 1) { ?>
+<?php if ($editable) { ?>
 
 <div id="edit-blurb-1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div id="alert-error-modal-1" class="alert alert-error alert-modal" style="">
@@ -198,11 +183,11 @@ global $stock_user_big;
     </div>
     <form class="form-submit" id="blurb-1" action="/user/edit/<?php echo $this->id; ?>/100" method="post">
         <div id="mb-1" class="modal-body text-left">
-            <textarea class='required' id='edit-blurb' name="blurb" rows="3" placeholder="Tell us about yourself." style=""><?php echo $viewmodel["USER"]["BLURB"]; ?></textarea>                          
+            <textarea id='edit-blurb' name="blurb" rows="3" placeholder="Tell us about yourself." style=""><?php echo $viewmodel["USER"]["BLURB"]; ?></textarea>                          
         </div>
         <div id="mf-1" class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-primary">Save</button>
         </div>
     </form>
 </div> 
@@ -217,49 +202,54 @@ global $stock_user_big;
         <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 
     </div>
     <div class="modal-footer">
-        <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button id="done" data-dismiss="modal" class="btn btn-primary">Save</button>
     </div>
 </div>  
 
-<!--<div id="social-verifications" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+<div id="social-verifications-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+    <div id="alert-error-modal-2" class="alert alert-error alert-modal" style="">
+        <strong>Error: </strong>
+        <span id="error-message-modal-2"></span><button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    
     <div class="modal-header">
         <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Edit Social Verifications</h3> 
     </div>
-    <div class="modal-body text-left" style="">
-        <div class="control-group">
-            <div class="controls">
-                <i class="icon-li icon-facebook icon-2x"></i> 
-                https://www.facebook.com/<input type="text" class="input" placeholder="Facebook" id="email" name="email">  
-            </div>
-        </div>   
+    
+    <form class="form-submit" id="social-1" action="/user/edit/<?php echo $this->id; ?>/400" method="post">
+        <div class="modal-body text-left" style="">
+            <table>
+                <tr style="">
+                    <td style="width: 12%; padding-bottom: 1em;">
+                        <i class="icon-li icon-linkedin icon-2x"></i>
+                    </td>
+                    <td style="width: 88%; padding-bottom: 1em;">
+                        <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
+                            <a href="/user/startlinkedin/" class="btn btn-primary" style=" ">Connect</a>                        
+                        <?php } else { ?>
+                            <a href="/user/disconnectlinkedin/" class="btn btn-primary" style=" ">Disconnect</a> 
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i class="icon-li icon-globe icon-2x"></i> 
+                    </td>
+                    <td>
+                        <input type="text" class="input url" placeholder="Personal Website" id="website" name="website" style="margin-bottom: 0px; width: 300px" value="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>">
+                    </td>
+                </tr>                
+            </table>
+        </div>
         
-        <div class="control-group">
-            <div class="controls">
-                <i class="icon-li icon-twitter icon-2x"></i> 
-                <input type="password" class="input" placeholder="Twitter" id="passwd" name="password">
-            </div>
-        </div> 
-        
-        <div class="control-group">
-            <div class="controls">
-                <i class="icon-li icon-linkedin icon-2x"></i> 
-                <input type="password" class="input" placeholder="LinkedIn" id="passwd" name="password">
-            </div>
-        </div>   
-        
-        <div class="control-group">
-            <div class="controls">
-                <i class="icon-li icon-globe icon-2x"></i> 
-                <input type="password" class="input" placeholder="Personal Website" id="passwd" name="password">
-            </div>
-        </div>           
-
-    </div>
-    <div class="modal-footer">
-        <button id="done" data-dismiss="modal" class="btn btn-primary">Done</button>
-    </div>
-</div>  -->
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>  
 
 
 <script src="/js/user/index.js"></script>

@@ -44,6 +44,9 @@ else if ($_SERVER['SERVER_NAME'] == "qhojo.com")
     $domain = "https://" . $_SERVER['SERVER_NAME'];
 }
 
+$linkedInAPIKey = "s2f2hwywms37";
+$linkedInSecret = "pV5m8gFUQsVDIGAu";
+
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 

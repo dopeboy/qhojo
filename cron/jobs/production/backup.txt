@@ -1,2 +1,2 @@
 MAILTO="support@qhojo.com"
-0 */6 * * *  /home/production/public/qhojo/cron/scripts/production/backup.sh
+0 0,12 * * *  /home/production/public/qhojo/cron/scripts/production/backup.sh

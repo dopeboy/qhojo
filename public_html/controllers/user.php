@@ -56,7 +56,7 @@ class User extends Controller
             $this->returnView($this->user_model->index($method, $this->validateParameter($this->id,"User ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
     }    
     
-    // 100 (blurb),  200 (profile picture-upload), 250 (profile picture - clear), 300 (location)
+    // 100 (blurb),  200 (profile picture-upload), 250 (profile picture - clear), 300 (location), 400 (personal website)
     protected function edit()
     {
         if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 100))
@@ -65,7 +65,7 @@ class User extends Controller
             (
                 $method,
                 $_SESSION["USER"]['USER_ID'],
-                $this->validateParameter($this->postvalues['blurb'],"Blurb",$method,array('Validator::isNotNullAndNotEmpty'), 1)
+                $this->postvalues['blurb']
             );
             
             $this->returnView(json_encode(array("Action" => "SUBMIT-BLURB")), $method);  
@@ -92,7 +92,25 @@ class User extends Controller
             );
             
             $this->returnView(json_encode(array("Action" => "SUBMIT-PP")), $method);  
-        }               
+        }      
+        
+        else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 400))
+        {
+            // This is an optional parameter. So if it's non-empty, check if it is valid
+            if (trim($this->postvalues['website']) != '')
+            {
+                 $this->validateParameter($this->postvalues['website'],"Website",$method,array('Validator::isValidURL'), 2);
+            }
+            
+            $this->user_model->submitPersonalWebsite
+            (
+                $method,
+                $_SESSION["USER"]['USER_ID'],
+                trim($this->postvalues['website'])
+            );
+            
+            $this->returnView(json_encode(array("Action" => "SUBMIT-PERSONALWEBSITE")), $method);  
+        }            
     }
 
     protected function dashboard()
@@ -226,6 +244,43 @@ class User extends Controller
             $this->returnView(json_encode(array("Action" => "CONTACT", "Status" => "SUCCESS", "EntityID" => $this->postvalues['entity-id'])), $method);            
         }         
     }
+    
+    protected function startlinkedin()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method))
+        {
+            global $domain, $linkedInAPIKey;
+            $state = $this->user_model->startLinkedIn($method,$_SESSION["USER"]['USER_ID']);
+            $return_url = $domain . "/user/endlinkedin";
+            
+            header("Location: https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id={$linkedInAPIKey}&scope=r_basicprofile&state={$state}&redirect_uri={$return_url}");                       
+        }
+    }
+    
+    protected function endlinkedin()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method))
+        {
+            global $domain;
+            $return_url = $domain . "/user/endlinkedin";
+            
+            $this->user_model->endLinkedIn($method,$_SESSION["USER"]['USER_ID'], $this->validateParameter($this->urlvalues["code"],"LinkedIn Code",$method,array('Validator::isNotNullAndNotEmpty')), $this->validateParameter($this->urlvalues["state"],"LinkedIn State",$method,array('Validator::isNotNullAndNotEmpty')), $return_url);
+            
+            // Regardless of whether they allow or disallow access to LinkedIn, take them back to their profile page
+            $redirect_url = $domain . "/user/index/" . $_SESSION["USER"]['USER_ID'];
+            header("Location: {$redirect_url}");                       
+        }
+    }    
+    
+    protected function disconnectlinkedin()
+    {
+        if (($method = Method::GET) && User::userSignedIn($method))
+        {
+            $this->user_model->disconnectLinkedIn($method,$_SESSION["USER"]['USER_ID']);
+            $redirect_url = $domain . "/user/index/" . $_SESSION["USER"]['USER_ID'];
+            header("Location: {$redirect_url}");                
+        }
+    }    
 
     private function directUser($user_info)
     {

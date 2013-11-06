@@ -9,6 +9,23 @@ $(document).ready(function()
         }    
     });
     
+    // This is to add a "http://" if not supplied. 
+    $('input#website').blur(function()
+    {
+        if ($('input#website').val().trim() != '' && $('input#website').val().indexOf("http://") === -1)
+            $('input#website').val('http://' + $('input#website').val());       
+    });
+    
+    // User should be able to hit enter and have the form submit
+    $("input#website").keypress(function (e) 
+    {
+        if (e.keyCode == 13) 
+        {
+            $('input#website').blur();
+            $('form#social-1').submit();
+        }
+    });    
+    
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
@@ -86,7 +103,29 @@ function customResponseHandler(responseText)
     // A lender is rejecting a request he/she received
     if (responseText.Action == 'SUBMIT-BLURB')
     {
-        $('#blurb-content').text($('textarea#edit-blurb').val());        
+        if ($('textarea#edit-blurb').val().trim() == '')
+            $('#blurb-content').html('<i>No blurb yet</i>');    
+        
+        else
+            $('#blurb-content').text($('textarea#edit-blurb').val());   
+        
         $('#edit-blurb-1').modal('hide');
-    }        
+    }  
+    
+    else if (responseText.Action == 'SUBMIT-PERSONALWEBSITE')
+    {
+        if ($('#website').val().trim() == '')
+        {
+            $('span#website-url').html('No personal website');        
+            $('span#website-url').removeClass('text-success');
+            $('span#website-url').addClass('text-error');
+        }
+        
+        else
+        {
+            $('span#website-url').html('<a target="_blank" href="' + $('#website').val() + '">' + $('#website').val() + "</a>");        
+        }
+        
+        $('#social-verifications-modal').modal('hide');
+    }    
 }  

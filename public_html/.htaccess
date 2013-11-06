@@ -17,6 +17,9 @@ RewriteRule ^(img|css)($|/) - [L]
 # For the search page, we're not using the id and state. We're using a slew of GET parameters
 RewriteRule ^item/search/? index.php?controller=item&action=search&id=&state= [QSA]
 
+# For our LinkedIn authentication method, we take in some GET parameters
+RewriteRule ^user/endlinkedin/? index.php?controller=user&action=endlinkedin [QSA]
+
 # Deleting Pictures
 RewriteRule ^picture/delete/?([a-zA-Z0-9]*)?/?([0-9]*)?/? index.php?controller=picture&action=delete&id=$1&state=$2 [QSA]
 

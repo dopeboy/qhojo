@@ -91,6 +91,12 @@ abstract class Validator
     {
         if ($parameter_value != 0 && $parameter_value != 1 && $parameter_value != 2)
             throw new InvalidDamageRatingException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
+    }     
+    
+    static function isValidURL ($parameter_value,$parameter_name, $method, $modal_id) 
+    {
+        if(!preg_match('#http\:\/\/[aA-zZ0-9\.]+\.[aA-zZ\.]+#',$parameter_value))  
+            throw new InvalidURLException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0, null, $modal_id);
     }        
 }
 

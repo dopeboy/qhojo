@@ -21,7 +21,7 @@ CREATE TABLE USER
     BP_BUYER_URI                    VARCHAR(160),
     BP_PRIMARY_CARD_URI             VARCHAR(160),
     JOIN_DATE                       DATETIME,
-    ADMIN                            INTEGER DEFAULT 0,
+    ADMIN                           INTEGER DEFAULT 0,
     ACTIVE                          INTEGER
 );
 

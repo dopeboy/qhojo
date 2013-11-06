@@ -222,6 +222,15 @@ class UserModel extends Model
         $preparedStatement->execute($sqlParameters);
     }    
     
+    public function submitPersonalWebsite($method, $user_id, $website_url)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $sqlParameters[":website_url"] =  $website_url;
+
+        $preparedStatement = $this->dbh->prepare('update USER SET PERSONAL_WEBSITE=:website_url where ID=:user_id and ACTIVE=1 LIMIT 1');
+        $preparedStatement->execute($sqlParameters);               
+    }    
+    
     public function submitPaypal($method, $user_id,$firstname, $lastname, $email)
     {
         $this->verifyPaypalAccount($email,$firstname, $lastname, $method, $user_id);
@@ -465,6 +474,87 @@ class UserModel extends Model
         $preparedStatement->execute($sqlParameters);        
         return $preparedStatement->fetchColumn();
     }
+    
+    // Generate a unique string
+    // Save it in the database
+    public function startLinkedIn($method, $user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $sqlParameters[":linkedin_state"] =  substr(str_shuffle(MD5(microtime())), 0, 16);
+        
+        $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_STATE=:linkedin_state where ID=:user_id and ACTIVE=1 LIMIT 1');
+        $preparedStatement->execute($sqlParameters);     
+        
+        return $sqlParameters[":linkedin_state"];
+    }
+    
+    public function endLinkedIn($method, $user_id, $code, $state, $return_url)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $sqlParameters[":linkedin_state"] =  $state;
+        
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_EXTENDED_VW WHERE USER_ID=:user_id AND LINKEDIN_STATE=:linkedin_state AND ACTIVE=1 LIMIT 1');
+        $preparedStatement->execute($sqlParameters);     
+        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+
+        if ($row != null)
+        {
+            global $linkedInAPIKey, $linkedInSecret;
+            
+            $params = array('grant_type' => 'authorization_code',
+                            'client_id' => $linkedInAPIKey,
+                            'client_secret' => $linkedInSecret,
+                            'code' => $code,
+                            'redirect_uri' => $return_url,
+                            );
+
+            // Access Token request
+            $url = 'https://www.linkedin.com/uas/oauth2/accessToken?' . http_build_query($params);
+
+            $ch = curl_init();
+            curl_setopt($ch,CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);        
+            curl_close($ch);
+
+            $token = json_decode($response);
+  
+            if (property_exists($token,"access_token"))
+            {
+                $params = array('oauth2_access_token' => $token->access_token,
+                                'format' => 'json',);
+
+                // Access Token request
+                $url = 'https://api.linkedin.com/v1/people/~:(public-profile-url)?' . http_build_query($params);
+
+                $ch = curl_init();
+                curl_setopt($ch,CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($ch);        
+                curl_close($ch);              
+                
+                $result = json_decode($response);
+                error_log($response);
+                // Save to database
+                if (property_exists($result, "publicProfileUrl"))
+                {
+                    $sqlParameters = array();
+                    $sqlParameters[":user_id"] =  $user_id;
+                    $sqlParameters[":linkedin_profile_url"] =  $result->publicProfileUrl;
+
+                    $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_PUBLIC_PROFILE_URL=:linkedin_profile_url where ID=:user_id and ACTIVE=1 LIMIT 1');
+                    $preparedStatement->execute($sqlParameters);                     
+                }
+            }        
+        }
+    }
+    
+    public function disconnectLinkedIn($method, $user_id)
+    {
+        $sqlParameters[":user_id"] =  $user_id;
+        $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_PUBLIC_PROFILE_URL=null where ID=:user_id and ACTIVE=1 LIMIT 1');
+        $preparedStatement->execute($sqlParameters);
+    }    
     
     private function comparePasswords($password_from_login, $password_from_db)
     {

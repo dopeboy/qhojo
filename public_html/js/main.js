@@ -66,6 +66,8 @@ $(document).ready(function()
 function showRequest(formData, jqForm, options) 
 { 
     $('#error-banner').hide();
+    $('.alert.alert-error.alert-modal').hide(); // for modals
+    
     var $pass = true;
 
     // jqForm is a jQuery object encapsulating the form element.  To access the 
