@@ -1174,7 +1174,7 @@ class TransactionModel extends Model
     // Find all reserved transactions who's start date was yesterday but were not acted upon. Expire these. Send text msg
     public function expireOldReservations($method, $user_id)
     {
-        $preparedStatement = $this->dbh->prepare('select * from EXCHANGED_VW where STATE_B_ID=200');
+        $preparedStatement = $this->dbh->prepare('select * from RESERVED_VW where STATE_B_ID=200');
         $preparedStatement->execute();
         $transactions = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
