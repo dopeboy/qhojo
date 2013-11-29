@@ -56,7 +56,7 @@ if ($this->state == 1)
         </div>        
         
         <div class="control-group">
-            <textarea type="text" placeholder="Description" id="description" name="description"><?php echo $description;?></textarea>
+            <textarea type="text" placeholder="Description" id="description" name="description" rows='10'><?php echo $description;?></textarea>
         </div>     
         <br/>
         
