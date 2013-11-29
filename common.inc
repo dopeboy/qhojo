@@ -50,8 +50,15 @@ $linkedInSecret = "pV5m8gFUQsVDIGAu";
 $TwilioAccountSid = "ACe2a25db3d82dc0e3a375905b1cf5c682";
 $TwilioAuthToken = "c12a0aa08480a0eb7c21afdb1ce2e197";
 
+$temp_dir = "/tmp";
+
 $item_picture_path = "/uploads/item/";
+
+$product_picture_path = "/uploads/product/";
+$temp_product_picture_path = $temp_dir . $product_picture_path;
+
 $user_picture_path = "/uploads/user/";
+
 $transaction_picture_path = "/uploads/transaction/";
 $transaction_delete_subdir = "/damage";
 

@@ -115,6 +115,7 @@ class TransactionModel extends Model
         $end = new DateTime($end_date); 
         $end->setTime(23, 59);
         
+        $formatted_start_date = $start->format('Y-m-d H:i:s');
         $formatted_end_date = $end->format('Y-m-d H:i:s');
         
         global $maximum_rental_duration_days;
@@ -123,7 +124,7 @@ class TransactionModel extends Model
         
         $transaction_model = new TransactionModel();
         $transaction_id = $transaction_model->createTransaction($method, $item_id, $requestor_id);
-        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $start_date, "END_DATE" => $formatted_end_date, "MESSAGE" => $message), $requestor_id);
+        $transaction_model->insertDetail($method, $transaction_id, $transaction_model->getEdgeID(100,200, $method, $requestor_id), array("START_DATE" => $formatted_start_date, "END_DATE" => $formatted_end_date, "MESSAGE" => $message), $requestor_id);
         
         // Get user info for both lender and borrower
         $user_model = new \UserModel();

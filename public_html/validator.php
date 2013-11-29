@@ -98,6 +98,12 @@ abstract class Validator
         if(!preg_match('#http\:\/\/[aA-zZ0-9\.]+\.[aA-zZ\.]+#',$parameter_value))  
             throw new InvalidURLException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0, null, $modal_id);
     }        
+    
+    static function checkboxIsChecked ($parameter_value,$parameter_name, $method, $modal_id) 
+    {
+        if($parameter_value != "true")  
+            throw new UncheckedCheckboxException($parameter_name, $method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0, null, $modal_id);
+    }     
 }
 
 ?>

@@ -70,3 +70,39 @@ insert into NOTIFICATION_TYPE VALUES (0, 'info',  'New Request', 'You have recei
 insert into NOTIFICATION_TYPE VALUES (1, 'error',  'Request Rejected', 'Your request to borrow %I was rejected by %U.', '', 1);
 insert into NOTIFICATION_TYPE VALUES (2, 'success',  'Request Accepted', 'Your request to borrow %I was accepted by %U. Click here to view it.', '/user/dashboard/#borrowing#%T', 1);
 insert into NOTIFICATION_TYPE VALUES (3, 'info',  'Pending', 'Your request to borrow %I was tentatively accepted by %U. To finalize it, you must complete your profile by clicking on this box.', '/user/completeprofile', 1);
+
+/* 
+insert into CATEGORY (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (0,'Lens',0,0,NOW(),1);
+insert into CATEGORY (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (1,'Body',1,0,NOW(),1);
+insert into CATEGORY (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (2,'Accessory',2,0,NOW(),1);
+
+insert into BRAND (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (0,'Canon',0,0,NOW(),1);
+insert into BRAND (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (1,'Nikon',0,0,NOW(),1);
+insert into BRAND (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (2,'Kessler',0,0,NOW(),1);
+insert into BRAND (ID, NAME, DISPLAY_ORDER, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (3,'Hasselback',0,0,NOW(),1);
+
+insert into PRODUCT (ID, CATEGORY_ID, BRAND_ID, NAME, DESCRIPTION, DISPLAY_ORDER, VALUE, RATE, URL, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (0,0,0,'24-70mm F/2.8','Cool lens', 0, 100, 10, 'http://aaa.com', 0, NOW(),1);
+insert into PRODUCT_IMAGE (ID, PRODUCT_ID, FILENAME, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (0,0, 'aaa.jpg', 0,NOW(),1);
+
+insert into PRODUCT (ID, CATEGORY_ID, BRAND_ID, NAME, DESCRIPTION, DISPLAY_ORDER, VALUE, RATE, URL, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (1,1,0,'7D','Cool body', 0, 100, 10, 'http://aaa.com', 0, NOW(),1);
+
+insert into PRODUCT (ID, CATEGORY_ID, BRAND_ID, NAME, DESCRIPTION, DISPLAY_ORDER, VALUE, RATE, URL, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (2,1,0,'6D','real Cool body', 0, 100, 10, 'http://aaa.com', 0, NOW(),1);
+
+insert into PRODUCT (ID, CATEGORY_ID, BRAND_ID, NAME, DESCRIPTION, DISPLAY_ORDER, VALUE, RATE, URL, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (3,1,1,'D600','latest', 0, 100, 10, 'http://aaa.com', 0, NOW(),1);
+
+insert into PRODUCT (ID, CATEGORY_ID, BRAND_ID, NAME, DESCRIPTION, DISPLAY_ORDER, VALUE, RATE, URL, CREATED_BY_USER_ID, DATE_CREATED, ACTIVE)  
+VALUES (4,2,3,'Stealth','good quality', 0, 100, 10, 'http://aaa.com', 0, NOW(),1);
+
+*/

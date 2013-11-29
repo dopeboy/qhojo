@@ -119,7 +119,7 @@ class ItemModel extends Model
         $sqlParameters[":item_id"] =  $item_id;
         $row['ITEM'] = $this->getItem($item_id);;
 
-        $preparedStatement = $this->dbh->prepare('SELECT FILENAME FROM ITEM_PICTURE where ITEM_ID=:item_id');
+        $preparedStatement = $this->dbh->prepare('SELECT FILENAME FROM ITEM_PICTURE where ITEM_ID=:item_id ORDER BY PRIMARY_FLAG DESC');
         $preparedStatement->execute($sqlParameters);
         $row['ITEM_PICTURES'] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
         
@@ -149,11 +149,11 @@ class ItemModel extends Model
         return $row;
     }
     
-    public function post($method, $user_id)
+    // This is the page they select the product
+    public function prepost($method, $user_id)
     {   
-        $user_model = new UserModel(); 
-        $row["USER"] = $user_model->getUserDetails($user_id);
-        $row["ITEM"]["ITEM_ID"] = getRandomID();
+        $product_model = new ProductModel();
+        $row['CATEGORY'] = $product_model->getCategories($method);
         
         $user_model = new UserModel();
         $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
@@ -161,7 +161,44 @@ class ItemModel extends Model
         return $row;
     }    
     
-    public function submitPost($method, $user_id, $item_id, $title, $description, $hold, $rate, $zipcode, $files)
+    public function post($method, $user_id, $item_id, $product_id)
+    {   
+        $user_model = new UserModel();
+        $row["USER"] = $user_model->getUserDetails($user_id);
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
+        
+        // Was a product ID supplied? If so, get all the product details on
+        if ($product_id != null)
+        {
+            // Check if valid and active product
+            $product_model = new ProductModel();
+            $row["PRODUCT"] = $product_model->getActiveProductByID($method, $product_id);
+            
+            if ($row["PRODUCT"] != null)
+            {
+                $sqlParameters[":product_id"] =  $product_id;
+                $preparedStatement = $this->dbh->prepare('SELECT * FROM PRODUCT_IMAGE_VW where PRODUCT_ID=:product_id ORDER BY PRIMARY_FLAG DESC');
+                $preparedStatement->execute($sqlParameters);
+                $row["PRODUCT_IMAGE"] = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);              
+
+                // We're gonna need to copy these files over to the new item directory. Before we do that, make the directory for the pictures.
+                global $product_picture_path, $item_picture_path;
+
+                $target_dir = ltrim($item_picture_path . $item_id . "/",'/');
+                exec("mkdir {$target_dir}");
+
+                foreach ($row["PRODUCT_IMAGE"] as $product_image)
+                {
+                    $source_file = ltrim($product_picture_path . $product_image["PRODUCT_ID"] . "/*",'/');
+                    exec("cp -r {$source_file} {$target_dir}");
+                }
+            }
+        }
+        
+        return $row;
+    }       
+    
+    public function submitPost($method, $user_id, $item_id, $title, $description, $hold, $rate, $zipcode, $files, $product_id)
     {
         $location = $this->reverseGeocode($zipcode, $method);
 
@@ -175,9 +212,13 @@ class ItemModel extends Model
         $sqlParameters[":state"] =  $location['STATE'];
         $sqlParameters[":lender_id"] =  $user_id;
         $sqlParameters[":active"] =  1;
-        $sqlParameters[":create_date"] =  date("Y-m-d H:i:s");                    
-                    
-        $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,ZIPCODE,CITY,STATE,LENDER_ID, ACTIVE, CREATE_DATE) VALUES (:item_id,:title,:description,:rate,:deposit,:zipcode,:city,:state,:lender_id, :active, :create_date)');
+        $sqlParameters[":create_date"] =  date("Y-m-d H:i:s");  
+        
+        // Check if valid active product
+        $product_model = new ProductModel();
+        $sqlParameters[":product_id"] = $product_model->getActiveProductByID($method, $product_id) == null ? null : $product_id;                            
+            
+        $preparedStatement = $this->dbh->prepare('insert into ITEM (ID, TITLE,DESCRIPTION,RATE,DEPOSIT,ZIPCODE,CITY,STATE,LENDER_ID, ACTIVE, CREATE_DATE, PRODUCT_ID) VALUES (:item_id,:title,:description,:rate,:deposit,:zipcode,:city,:state,:lender_id, :active, :create_date, :product_id)');
         $preparedStatement->execute($sqlParameters);
         
         // Handle the files
@@ -263,6 +304,21 @@ class ItemModel extends Model
         $sqlParameters[":user_id"] =  $user_id;
         $preparedStatement = $this->dbh->prepare('UPDATE ITEM SET ACTIVE=1 where ID=:item_id and LENDER_ID=:user_id');
         $preparedStatement->execute($sqlParameters);            
+    }
+    
+    // This function will generate a random ID and check if it's in ITEM already. If so, generate another one. If not, return it.
+    public function getUnusedRandomID($method)
+    {
+        while(1)
+        {
+            $sqlParameters[":item_id"] =  getRandomID();
+            $preparedStatement = $this->dbh->prepare('SELECT 1 FROM ITEM where ID=:item_id LIMIT 1');
+            $preparedStatement->execute($sqlParameters);
+            $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($row == null)
+                return $sqlParameters[":item_id"];
+        }
     }
     
     private function placeholders($text, $count=0, $separator=",")

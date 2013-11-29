@@ -186,5 +186,60 @@ CREATE TABLE SEARCH_HISTORY
         DATE                                DATETIME
 );
 
+/* ------------------------------------------------------------------ */ 
+
+drop table if exists CATEGORY;
+CREATE TABLE CATEGORY
+(
+	ID                                  INTEGER PRIMARY KEY,
+        NAME                                VARCHAR(160),
+        DISPLAY_ORDER                       INTEGER,
+        CREATED_BY_USER_ID                  INTEGER,
+        DATE_CREATED                        DATETIME,
+        ACTIVE                              INTEGER
+);
+
+drop table if exists BRAND;
+CREATE TABLE BRAND
+(
+	ID                                  INTEGER PRIMARY KEY,
+        NAME                                VARCHAR(160),
+        DISPLAY_ORDER                       INTEGER,
+        CREATED_BY_USER_ID                  INTEGER,
+        DATE_CREATED                        DATETIME,
+        ACTIVE                              INTEGER
+);
+
+drop table if exists PRODUCT;
+CREATE TABLE PRODUCT
+(
+	ID                                  INTEGER PRIMARY KEY,
+        CATEGORY_ID                         INTEGER,
+        BRAND_ID                            INTEGER,
+        NAME                                VARCHAR(160),
+        DESCRIPTION                         TEXT,
+        DISPLAY_ORDER                       INTEGER,
+        VALUE                               INTEGER,
+        RATE                                INTEGER,
+        URL                                 VARCHAR(320),
+        CREATED_BY_USER_ID                  INTEGER,
+        DATE_CREATED                        DATETIME,
+        ACTIVE                              INTEGER
+);
+
+drop table if exists PRODUCT_IMAGE;
+CREATE TABLE PRODUCT_IMAGE
+(
+	ID                                  INTEGER PRIMARY KEY,
+        PRODUCT_ID                          INTEGER,
+        FILENAME                            VARCHAR(80), /* THIS DATATYPE MUST BE THE SAME AS IN ITEM_PICTURE */
+        PRIMARY_FLAG                        INTEGER,
+        CREATED_BY_USER_ID                  INTEGER,
+        DATE_CREATED                        DATETIME,
+        ACTIVE                              INTEGER
+);
+
+/* ------------------------------------------------------------------ */ 
+
 insert into INVITE VALUES (md5(rand()),'333',99,1,null,1);
 

@@ -9,24 +9,7 @@ function getURLParameter(name)
 }
 
 $(document).ready(function()
-{
-    // If we're coming from another page, disable the immediate scroll to anchor and then smooth scroll to anchor.'
-//    setTimeout(function() 
-//    {
-//        if (location.hash) 
-//        {
-//            window.scrollTo(0, 0);
-//
-//            // Are we coming from a different peage?
-//            $(document.body).animate(
-//            {
-//                'scrollTop':   $(location.hash).offset().top - $('.navbar-fixed-top').height() - 10
-//            }, 
-//            'slow');        
-//        }
-//    }, 
-//    1);
-    
+{   
     var options = 
     { 
         beforeSubmit:  showRequest,  // pre-submit callback 
@@ -55,11 +38,6 @@ $(document).ready(function()
         // always return false to prevent standard browser submit and page navigation 
         return false; 
     }); 
-
-
-     
-    
-   
 });
 
 // pre-submit callback 
@@ -104,6 +82,7 @@ function showResponse(responseText, statusText, xhr, $form)
             $('#error-banner').fadeIn("slow");
             $('span#error-message').text(responseText.Error.Message);
             $form.find('button[type=submit]').removeAttr('disabled');
+            $("html, body").animate({ scrollTop: 0 }, "slow");
         }
     }
     

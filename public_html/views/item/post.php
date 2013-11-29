@@ -1,4 +1,4 @@
-<title>Qhojo - Post</title>
+<title>Qhojo - Lend</title>
 
 <?php global $item_picture_path;global $user_picture_path;global $user_thumb_subdir;global $stock_user_tn;?>
 
@@ -8,119 +8,172 @@
 <?php
     $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
     require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+    
+    if ($this->state == 1)
+    {
+        $title = null;
+        $description = null;
+        $value = null;
+        $rate = null;
+        
+        // We got a product. Prefill away
+        if (isset($viewmodel["PRODUCT"]) && $viewmodel["PRODUCT"] != null)
+        {
+            $title = $viewmodel["PRODUCT"]["FULL_NAME"];
+            $description = $viewmodel["PRODUCT"]["DESCRIPTION"];
+            $value = $viewmodel["PRODUCT"]["VALUE"];
+            $rate = $viewmodel["PRODUCT"]["RATE"];
+        }
+    }
+?>
+
+<?php
+
+    // If we got a product passed in, let's give a head's up to the user that we've prefilled stuff in 
+    if (isset($viewmodel["PRODUCT"]) && $viewmodel["PRODUCT"] != null)
+    {
+    ?>
+
+    <div class="alert alert-info">
+        <strong>Head's up: </strong>
+        We pre-filled all the fields in the form below to save you some time. Feel free to change them if you wish.
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>    
+
+    <?php 
+    }
 ?>
 
 <div class="sheet">
-    <?php if ($this->state == 0) { ?>
-    <form class="form" id="post" action="/item/post/null/1" method="post">
+    <?php if ($this->state == 0 || $this->state == null) { ?>
+    <legend>
+        Lend Item - Step 1
+    </legend>    
+    
+    <form class="" id="choose-product" action="/item/post/null/1" method="get">
+ 
+        <div class="product-chooser">
+            <select id="category">
+                <option value="-1" disabled selected>Select a category</option>    
+                <option value="-1" disabled> </option>    
+                <?php foreach ($viewmodel['CATEGORY'] as $category)
+                {
+                ?>
+                <option name="category-id" value="<?php echo $category["CATEGORY_ID"]?>"><?php echo $category["NAME"]?></option>
+                <?php } ?>
+            </select>                    
+        </div>
+        
+        <div class="product-chooser">
+            <select id="brand" disabled>
+                <option value="-1" disabled selected>Select a brand</option>    
+                <option value="-1" disabled> </option>    
+     
+            </select>   
+        </div>
+        
+        <div class="product-chooser">
+            <select name="product-id" id="product" disabled>
+                <option value="-1" disabled selected>Select a product</option>    
+                <option value="-1" disabled> </option>    
+            </select>                    
+        </div>
+        
+        <div id="create-new">
+            Don't see your item above? <a href="/item/post/null/1">Create a new listing here</a>.
+        </div>
+        
+        <button id="submit-product" class="btn btn-primary btn-large disabled" type="submit" style="" >Next</button>
+    </form>
+    
+    
+    <?php } ?>
+    
+    <?php if ($this->state == 1) { ?>
         <legend>
-            <div class="non-editable" id="title">
-                <span id="title" class="value"></span>    
-                <a href="javascript:void(0);">
-                    <i class="icon-pencil" id="title" style=""></i>
-                </a>
-            </div>
-
-            <input maxlength="100" type="text" data-placement="right" class="input-block-level editable" placeholder="Put in the name of the item here. Include the model and manufacturer." id="title" name="title" data-toggle="tooltip" data-original-title="Start Here" data-content="Put in the name of the item here." data-trigger="focus">
-
+            Lend Item - Step 2
         </legend>
-        <div class="row-fluid">
-            <div class="span9">
-                <div class="row-fluid" id="visuals">
-                    <div class="span3 text-center section" id="item-thumbs">
+        
+        <form class="form-submit" id="post" action="/item/post/null/2" method="post">
+        
+            <div class="sub-section">
+                <h3>Item Details</h3>
 
-                    </div>
-
-                    <div class="span9 text-center" id="item-picture">
-                        <div id="add-pictures" style="">
-                            <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-success btn-large btn-block" type="button" style="">Upload Pictures</button>                                
-                        </div>                             
-                    </div>       
-                </div>
-
-                <div id="details">
-                    <div class="subsection" id="description">
-                        <h3>Description</h3>
-
-                        <textarea id="description" name="description" class="editable" placeholder="Enter in some descriptive details about the item here." style=""></textarea>
-
-                        <div class="non-editable">
-                            <p>
-                                <span id="description" class="value"></span> 
-                                <a href="javascript:void(0);">
-                                    <i class="icon-pencil icon-2x" id="description" style="margin-left: 10px"></i>
-                                </a>                            
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="subsection" id="hold-policy">
-                        <h3>Hold Policy</h3>
-
-                        A $<input type="text" class="input-block-level editable positive-integer" placeholder="Enter item amount" id="hold" name="hold" style=""><span id="hold-policy" class="non-editable value"></span>  
-
-                        hold will be placed on the borrower's credit card at the start of the borrow period.
-                        <a href="javascript:void(0);">
-                            <i class="icon-pencil icon-2x" id="hold" style=""></i>
-                        </a>  
-                    </div>                      
-                </div>
+                <table id="item-details">
+                    <colgroup>
+                       <col class="first" span="1" style="">
+                       <col class="second" span="1" style="">
+                    </colgroup>
+                    <tr>
+                        <td>Title</td>
+                        <td>
+                            <input type="text" id="title" name="title" maxlength="100" placeholder="Put in the name of the item here. Include the model and manufacturer." value="<?php echo $title;?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td>
+                            <textarea id='description' name="description" rows="6" placeholder="Enter in some descriptive details about the item here."><?php echo $description;?></textarea>                                                  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="last-row-cell">Zipcode</td>
+                        <td class="last-row-cell">
+                            <input type="text" id="location" name="location" maxlength="5" placeholder="Zipcode of item." value="<?php echo $viewmodel["USER"]["ZIPCODE"]?>">
+                        </td>
+                    </tr>                
+                </table>                
             </div>
 
-            <div class="span3 side-panel">    
-                <div class="section split action">
+            <div class="sub-section">
+                <h3>Pictures</h3>
 
+                <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-large" type="button" style="">Add/Remove Pictures</button>            
 
-                    <h2 class="rental-rate" style="">$</h2>
-                    <input type="text" class="input-block-level editable positive-integer" placeholder="Rate" id="rate" name="rate" style="">
-                    <h2  class="rental-rate" style="">&nbsp;/ day                                     
-                    </h2>
-
-                    <div class="non-editable">
-                        <h2 class="text-center" id="rental-rate" style="">$<span id="rental-rate" class="value"></span> / day
-                            <a href="javascript:void(0);">
-                                <i class="icon-pencil" id="rate" style=""></i>
-                            </a>    
-                        </h2>
-                    </div>
-
-                    <button id="rentlink" class="btn btn-success btn-large btn-block disabled" type="button" style="">Borrow</button>     
-                </div>
-
-                <div class="section split text-center" id="lender">
-                    <img id="lender-picture" style="" class="img-circle bw" src="<?php echo $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] == null ? $stock_user_tn : $user_picture_path . $viewmodel['USER']['USER_ID'] . $user_thumb_subdir . "/" . $viewmodel['USER']['PROFILE_PICTURE_FILENAME'] ?>">
-                    <h2 id="name-header" style="">
-                        <?php echo $viewmodel['USER']['NAME']; ?>
-                    </h2>
-
-                    <button id="contact-btn" class="btn btn-primary btn-large btn-block disabled" type="button"  style="">Contact</button>         
-                </div>
-
-                <div class="section split map">
-                    <input type="hidden" id="location" name="location" value="<?php echo $viewmodel['USER']['ZIPCODE']?>" style=""/>
-
-                    <div id="map" class="non-editable" style="">    
-                        <div id="map_canvas" style=""></div>    
-                        <a href="javascript:void(0);">
-                            <i class="icon-pencil icon-2x " id="zipcode" style=""></i>
-                        </a>  
-                    </div>
-
-                    <input type="text" class="input-block-level editable positive-integer" placeholder="Enter zipcode" id="zipcode" name="zipcode" value="<?php echo $viewmodel['USER']['ZIPCODE']?>" style="">
-
-                </div>            
+                <div class="" id="item-thumbs">
+                </div>                  
             </div>
-        </div>  
+            
+            <div class="sub-section">
+                <h3>Borrow details</h3>
 
-        <button id="post-submit" class="btn btn-primary btn-large btn-block" type="submit" style="" >Submit</button>     
-        <input type="hidden" id="item_id" name="item_id" value="<?php echo $viewmodel["ITEM"]["ITEM_ID"]; ?>">
+                <table id="borrow-details">
+                    <colgroup>
+                       <col class="first" span="1" style="">
+                       <col class="second" span="1" style="">
+                       <col class="third" span="1" style="">
+                    </colgroup>
+                    <tr >
+                        <td>Borrow Rate</td>
+                        <td class="font-16">
+                            $<input type="text" id="borrow-rate" name="borrow-rate" maxlength="5" value="<?php echo $rate;?>"> / day
+                        </td>
+                        <td class="">
+                            <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the daily rate members will be charged when they borrow your item."><i class="icon-question-sign"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="last-row-cell">Hold Amount</td>
+                        <td class="font-16 last-row-cell">
+                            $<input type="text" id="hold-amount" name="hold-amount" maxlength="5" value="<?php echo $value;?>">
+                        </td>
+                        <td class="last-row-cell">
+                            <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the amount of money your item is worth. In the event of damage or theft, the maximum penalty you can receive will be this amount."><i class="icon-question-sign"></i></a>
+                        </td>                    
+                    </tr>             
+                </table>                 
+            </div>
+       
+            <?php if ($viewmodel["PRODUCT"]["PRODUCT_ID"] != null) { ?>
+                <input type="hidden" name="product-id" value="<?php echo $viewmodel["PRODUCT"]["PRODUCT_ID"]; ?>">
+            <?php } ?>
+        <button id="post-submit" class="btn btn-primary btn-large" type="submit" style="" >Submit</button>     
     </form>
     
     <div id="upload-item-pictures" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
         <div class="modal-header">
             <button id="close" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="" style="">Upload Item Pictures</h3>
-            Note: Please upload actual pictures of the item you are posting rather than stock/generic ones.
         </div>
         <div class="modal-body text-left" style="">
             <?php require(dirname(dirname(__FILE__)) . '/embeds/picture_upload.php'); ?> 
@@ -130,7 +183,7 @@
         </div>
     </div>
     
-    <?php } else if ($this->state == 2) { ?>
+    <?php } else if ($this->state == 3) { ?>
     <legend>
         Item Posted
     </legend>    
@@ -143,11 +196,6 @@
     <?php } ?>
     
 </div>
-
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATBCUDSJrOMyO4sm1-r8ooIjByWnZaYeA&sensor=false">
-</script> 
-
 
 <script src="/js/item/post.js"></script>
 <script src="/js/jquery.numeric.js"></script>

@@ -2,6 +2,50 @@
 
 class PictureModel extends Model 
 {    
+    public function uploadProductPictures($method,$product_id, $user_id)
+    {
+        global $product_picture_path;        
+        $picture = new UploadHandler(
+                array(
+                        "upload_dir" => dirname(dirname(__FILE__)) . $product_picture_path . $product_id . '/', 
+                        "upload_url" => $product_picture_path . $product_id . '/', 
+                        "entity_id" => $product_id, 
+                        "is_user" => 3,
+                        "image_versions" => array(
+                            '' => array(
+                                'max_width' => 600,
+                                'max_height' => 450,
+                                'jpeg_quality' => 80
+                            ),
+                            'card' => array(
+                                'crop' => true,
+                                'max_width' => 300,
+                                'max_height' => 226,
+                                'jpeg_quality' => 80
+                            ),
+                            'thumbnail' => array(
+                                // Uncomment the following to use a defined directory for the thumbnails
+                                // instead of a subdirectory based on the version identifier.
+                                // Make sure that this directory doesn't allow execution of files if you
+                                // don't pose any restrictions on the type of uploaded files, e.g. by
+                                // copying the .htaccess file from the files directory for Apache:
+                                //'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/thumb/',
+                                //'upload_url' => $this->get_full_url().'/thumb/',
+                                // Uncomment the following to force the max
+                                // dimensions and e.g. create square thumbnails:
+                                'crop' => true,
+                                'max_width' => 150,
+                                'max_height' => 115) 
+                        )
+                    ));
+    } 
+    
+    public function deleteProductPicture($method,$product_id, $user_id)
+    {
+        global $product_picture_path;
+        $picture = new UploadHandler(array("upload_dir" => dirname(dirname(__FILE__)) . $product_picture_path . $product_id . '/', "upload_url" => $product_picture_path . $product_id . '/', "entity_id" => $product_id, "is_user" => 0));
+    }        
+    
     public function uploadItemPictures($method,$item_id, $user_id)
     {
         $item_model = new ItemModel();
@@ -51,7 +95,7 @@ class PictureModel extends Model
         $transaction_model->damaged($method, $user_id, $transaction_id);
         
         global $transaction_picture_path, $transaction_delete_subdir;
-        error_log(dirname(dirname(__FILE__)) . $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/');
+        
         $picture = new UploadHandler(
                 array(
                         "upload_dir" => dirname(dirname(__FILE__)) . $transaction_picture_path . $transaction_id . $transaction_delete_subdir . '/' . $user_id . '/', 

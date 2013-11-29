@@ -525,5 +525,20 @@ class InvalidURLException extends BaseException
     }       
 }
 
+class InvalidProductException extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The requested product does not exist", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
+class UncheckedCheckboxException extends BaseException
+{
+    public function __construct($parameter_name, $method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("The following checkbox must be checked: " . $parameter_name, $method, $user_id, $previous, $modal_id);
+    }       
+}
 
 ?>

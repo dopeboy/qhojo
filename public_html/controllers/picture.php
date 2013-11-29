@@ -7,13 +7,16 @@ class Picture extends Controller
         $viewmodel = new PictureModel();
      
         if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == null || $this->state == 0))
-            $viewmodel->uploadItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);
+            $viewmodel->uploadItemPictures($method,$_SESSION["ITEM"]["ITEM_ID"], $_SESSION["USER"]["USER_ID"]);
         
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 1))
             $viewmodel->uploadUserPictures($_SESSION["USER"]["USER_ID"]);
         
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 2))
-            $viewmodel->uploadDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);        
+            $viewmodel->uploadDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);      
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 3))
+            $viewmodel->uploadProductPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);            
     }
     
     protected function delete()
@@ -21,13 +24,16 @@ class Picture extends Controller
         $viewmodel = new PictureModel();
         
         if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == null || $this->state == 0))
-            $viewmodel->deleteItemPicture($method,$this->id, $_SESSION["USER"]["USER_ID"]);
+            $viewmodel->deleteItemPicture($method,$_SESSION["ITEM"]["ITEM_ID"], $_SESSION["USER"]["USER_ID"]);
         
         else if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 1))
             $viewmodel->deleteUserPicture($_SESSION["USER"]["USER_ID"]);
         
         else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 2))
-            $viewmodel->deleteDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);           
+            $viewmodel->deleteDamagedItemPictures($method,$this->id, $_SESSION["USER"]["USER_ID"]);     
+        
+        else if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == 3))
+            $viewmodel->deleteProductPicture($method,$this->id, $_SESSION["USER"]["USER_ID"]);           
     }
 }
 

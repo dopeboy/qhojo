@@ -165,7 +165,7 @@ class UserModel extends Model
         return $preparedStatement->fetch(PDO::FETCH_ASSOC);	            
     }
     
-    // This is used by the reminder. It is only for borrows who have made a request but haven't filled out their payment details.
+    // This is used by the reminder. It is only for borrowers who have made a request but haven't filled out their payment details.
     public function checkIfUserNeedsExtraFields($user_id)
     {
         // Does the user has an open request?

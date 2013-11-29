@@ -309,6 +309,11 @@ class User extends Controller
         return !empty($_SESSION["USER"]["USER_ID"]);
     }
     
+    public static function isUserAdmin()
+    {
+        return !empty($_SESSION["USER"]["ADMIN"]);
+    }
+    
     public static function userSignedIn($method)
     {
         if (empty($_SESSION["USER"]["USER_ID"]))
