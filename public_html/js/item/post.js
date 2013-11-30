@@ -1,5 +1,7 @@
 $(document).ready(function() 
 {
+    $(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
+    
     var urlWithoutParameters = location.protocol + '//' + location.host + location.pathname;
     var $state = urlWithoutParameters.split('/')[6];
     
@@ -127,13 +129,18 @@ $(document).ready(function()
         $('#done').click(function()
         {
             $('#item-thumbs').empty();
-
+            
             $("#upload-item-pictures").find('tr.template-download').children('td').children('p.name').children('a').each(function(i) 
             { 
                 $('#item-thumbs').append('<img class=\'thumbnail\' full=\'' +  $(this).attr('href') + '\' src=\'' + $(this).attr('tn') + '\'>');
                 $('#item-thumbs').append('<input type="hidden" name=\'file' + '[]' + '\' value=\'' + $(this).attr('download') + '\'>');
-
             });
+            
+            if ($("#upload-item-pictures").find('tr.template-download').children('td').children('p.name').children('a').length === 0)
+                $('#item-thumbs').hide();
+            else
+                $('#item-thumbs').show();
+            
         }); 
         
         $('.help').tooltip();

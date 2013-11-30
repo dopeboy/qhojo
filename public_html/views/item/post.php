@@ -97,8 +97,6 @@
         <form class="form-submit" id="post" action="/item/post/null/2" method="post">
         
             <div class="sub-section">
-                <h3>Item Details</h3>
-
                 <table id="item-details">
                     <colgroup>
                        <col class="first" span="1" style="">
@@ -117,52 +115,50 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="last-row-cell">Zipcode</td>
-                        <td class="last-row-cell">
-                            <input type="text" id="location" name="location" maxlength="5" placeholder="Zipcode of item." value="<?php echo $viewmodel["USER"]["ZIPCODE"]?>">
+                        <td >Zipcode</td>
+                        <td >
+                            <input type="text" id="location" name="location" maxlength="5" placeholder="" value="<?php echo $viewmodel["USER"]["ZIPCODE"]?>">
                         </td>
                     </tr>                
-                </table>                
-            </div>
-
-            <div class="sub-section">
-                <h3>Pictures</h3>
-
-                <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn btn-large" type="button" style="">Add/Remove Pictures</button>            
-
-                <div class="" id="item-thumbs">
-                </div>                  
-            </div>
-            
-            <div class="sub-section">
-                <h3>Borrow details</h3>
-
-                <table id="borrow-details">
-                    <colgroup>
-                       <col class="first" span="1" style="">
-                       <col class="second" span="1" style="">
-                       <col class="third" span="1" style="">
-                    </colgroup>
                     <tr >
                         <td>Borrow Rate</td>
                         <td class="font-16">
-                            $<input type="text" id="borrow-rate" name="borrow-rate" maxlength="5" value="<?php echo $rate;?>"> / day
-                        </td>
-                        <td class="">
-                            <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the daily rate members will be charged when they borrow your item."><i class="icon-question-sign"></i></a>
+                            <span class="tool-tip-container" style="">
+                                <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the daily rate members will be charged when they borrow your item." style="">
+                                    <i class="icon-question-sign"></i>
+                                </a>
+                            </span>
+                            <span class="dollar-span">$</span>
+                            <input class="positive-integer" style=" " type="text" id="borrow-rate" name="borrow-rate" maxlength="5" value="<?php echo $rate;?>"> / day
+                            
                         </td>
                     </tr>
                     <tr>
-                        <td class="last-row-cell">Hold Amount</td>
-                        <td class="font-16 last-row-cell">
-                            $<input type="text" id="hold-amount" name="hold-amount" maxlength="5" value="<?php echo $value;?>">
+                        <td>Hold Amount</td>
+                        <td class="font-16">
+                            <span class="tool-tip-container">
+                                <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the amount of money your item is worth. In the event of damage or theft, the maximum award you can receive will be this amount.">
+                                    <i class="icon-question-sign"></i>
+                                </a>
+                            </span>
+                            <span class="dollar-span">$</span>
+                            <input class="positive-integer" style="" type="text" id="hold-amount" name="hold-amount" maxlength="5" value="<?php echo $value;?>">
                         </td>
-                        <td class="last-row-cell">
-                            <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the amount of money your item is worth. In the event of damage or theft, the maximum penalty you can receive will be this amount."><i class="icon-question-sign"></i></a>
-                        </td>                    
-                    </tr>             
-                </table>                 
+                    </tr>         
+                    <tr>
+                        <td>
+                            Pictures
+                        </td>
+                        <td>    
+                            <div class="" id="item-thumbs">
+                            </div>
+
+                            <button data-toggle="modal" tabindex="-1" href="#upload-item-pictures" id="upload-picture-btn" class="btn" type="button" style="">Add/Remove Pictures</button>            
+                        </td>
+                    </tr>
+                </table>                   
             </div>
+
        
             <?php if ($viewmodel["PRODUCT"]["PRODUCT_ID"] != null) { ?>
                 <input type="hidden" name="product-id" value="<?php echo $viewmodel["PRODUCT"]["PRODUCT_ID"]; ?>">

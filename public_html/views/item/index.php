@@ -39,7 +39,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                 <div class="subsection" id="description">
                     <h3>Description</h3>
                     <p>
-                       <?php echo $viewmodel['ITEM']['DESCRIPTION'] ?> 
+                       <?php echo nl2br($viewmodel['ITEM']['DESCRIPTION']); ?> 
                     </p>
                 </div>
 
