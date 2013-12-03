@@ -126,13 +126,11 @@ a.help
 #borrow-rate
 {
     width: 75px;
-    padding-left: 16px;
 }
 
 #hold-amount
 {
     width: 75px;
-    padding-left: 16px;
 }
 
 .tool-tip-container
@@ -152,3 +150,12 @@ a.help
     position: absolute; 
 }
 
+.input-prepend 
+{
+    margin-bottom:0px;
+}
+
+ .input-prepend .add-on 
+ {
+     padding: 7px 8px;
+ }

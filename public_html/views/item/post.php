@@ -111,7 +111,7 @@
                     <tr>
                         <td>Description</td>
                         <td>
-                            <textarea id='description' name="description" rows="6" placeholder="Enter in some descriptive details about the item here."><?php echo $description;?></textarea>                                                  
+                            <textarea id='description' name="description" rows="8" placeholder="Enter in some descriptive details about the item here."><?php echo $description;?></textarea>                                                  
                         </td>
                     </tr>
                     <tr>
@@ -123,13 +123,19 @@
                     <tr >
                         <td>Borrow Rate</td>
                         <td class="font-16">
+                            
+      
                             <span class="tool-tip-container" style="">
                                 <a class="help" href="javascript: void(0)" data-toggle="tooltip" data-placement="right" title="This is the daily rate members will be charged when they borrow your item." style="">
                                     <i class="icon-question-sign"></i>
                                 </a>
                             </span>
-                            <span class="dollar-span">$</span>
-                            <input class="positive-integer" style=" " type="text" id="borrow-rate" name="borrow-rate" maxlength="5" value="<?php echo $rate;?>"> / day
+                            
+                            <div class="input-prepend  input-append">
+                                <span id="add-on" class="add-on"><i class="icon-usd"></i></span>
+                                <input class="positive-integer" style=" " type="text" id="borrow-rate" name="borrow-rate" maxlength="5" value="<?php echo $rate;?>">
+                                <span class="add-on">/ day</span>
+                            </div>
                             
                         </td>
                     </tr>
@@ -141,8 +147,10 @@
                                     <i class="icon-question-sign"></i>
                                 </a>
                             </span>
-                            <span class="dollar-span">$</span>
-                            <input class="positive-integer" style="" type="text" id="hold-amount" name="hold-amount" maxlength="5" value="<?php echo $value;?>">
+                            <div class="input-prepend  input-append">
+                                <span id="add-on" class="add-on"><i class="icon-usd"></i></span>
+                                <input class="positive-integer" style="" type="text" id="hold-amount" name="hold-amount" maxlength="5" value="<?php echo $value;?>">
+                            </div>
                         </td>
                     </tr>         
                     <tr>

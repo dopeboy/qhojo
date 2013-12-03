@@ -145,11 +145,19 @@ $(document).ready(function()
         
         $('.help').tooltip();
         $('.help').tooltip();
+     
     }
 }); 
 
+// This is for when the back button gets clicked. Reset the form
+$(window).bind("pageshow", function() 
+{
+    $('#choose-product').resetForm();
+});
+
 function customResponseHandler(responseText)  
-{ 
+{
+    
      window.location = responseText.URL;
 } 
   
