@@ -94,8 +94,7 @@ $(document).ready(function()
             });              
         }
             
-    });    
-   	    
+    });    	    
 });
 
 function customResponseHandler(responseText)  

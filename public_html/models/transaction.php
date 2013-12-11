@@ -1283,7 +1283,7 @@ class TransactionModel extends Model
             $end_date = new DateTime($transaction["REQ"]["END_DATE"]);
             $now = new DateTime();
             
-            if ($now == $end_date)
+            if ($now->format('Y-m-d') == $end_date->format('Y-m-d'))
             {
                 // Send text to lender
                 $message = "Hey {$transaction["LENDER_FIRST_NAME"]}! It's Qhojo here. Just a reminder that you are scheduled to meet with {$transaction["BORROWER_FIRST_NAME"]} today.";

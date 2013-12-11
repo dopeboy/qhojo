@@ -541,4 +541,12 @@ class UncheckedCheckboxException extends BaseException
     }       
 }
 
+class LinkedInAuthenticationFailed extends BaseException
+{
+    public function __construct($method, $user_id = 0, Exception $previous = null, $modal_id = null) 
+    {
+        parent::__construct("There was an error with authenticating your account with LinkedIn. Try again.", $method, $user_id, $previous, $modal_id);
+    }       
+}
+
 ?>

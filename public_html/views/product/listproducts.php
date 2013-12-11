@@ -37,7 +37,7 @@
                     <?php echo $product["BRAND_NAME"]; ?>  
                 </td>
                 <td>
-                    <?php echo $product["DESCRIPTION"]; ?>  
+                    <?php echo substr($product["DESCRIPTION"],0,360); ?>...  
                  </td>                 
                 <td>
                     <?php echo $product["VALUE"]; ?>  

@@ -82,30 +82,28 @@ global $stock_user_big;
             
             <div class="section split" id="social-verifications">
                 <h4>Social <?php if ($editable) { ?><a data-toggle="modal" href="#social-verifications-modal" class="pull-right" style=''><i class="icon-pencil icon-2x" id="pp" style=""></i></a><?php }?></h4> 
-                  
-                <ul class="icons-ul" style="">
+                <ul class="icons-ul" style="">                    
                     <li>
-                          <i class="icon-li icon-linkedin"></i>
-                            <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
-                                <span class="text-error">LinkedIn not verified</span> 
-                            <?php } else { ?>
-                                <span class="text-success">
-                                    <a target="_blank" href="<?php echo $viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"]; ?>">
-                                        LinkedIn profile
-                                    </a>
-                                </span>
-                            <?php } ?>
+                        <i class="icon-li icon-linkedin"></i>
+                          <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
+                              <span class="text-error">LinkedIn not verified</span> 
+                          <?php } else { ?>
+                              <span class="text-success">
+                                  <a target="_blank" href="<?php echo $viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"]; ?>">
+                                      LinkedIn profile
+                                  </a>
+                              </span>
+                          <?php } ?>
                     </li>      
                     <li>
-                          <i class="icon-li icon-globe"></i>
-                            <?php if ($viewmodel["USER"]["PERSONAL_WEBSITE"] == null) { ?>
-                                <span id="website-url" class="text-error">No personal website</span> 
-                            <?php } else { ?>
-                                <span id="website-url" class="text-success"><a target="_blank" href="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>"><?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?></a></span>
-                            <?php } ?>
+                        <i class="icon-li icon-globe"></i>
+                          <?php if ($viewmodel["USER"]["PERSONAL_WEBSITE"] == null) { ?>
+                              <span id="website-url" class="text-error">No personal website</span> 
+                          <?php } else { ?>
+                              <span id="website-url" class="text-success"><a target="_blank" href="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>"><?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?></a></span>
+                          <?php } ?>
                     </li>                     
                 </ul>
-                
             </div>
             
             <div class="section split" id="user-verifications">
@@ -220,27 +218,32 @@ global $stock_user_big;
     
     <form class="form-submit" id="social-1" action="/user/edit/<?php echo $this->id; ?>/400" method="post">
         <div class="modal-body text-left" style="">
-            <table>
-                <tr style="">
-                    <td style="width: 12%; padding-bottom: 1em;">
-                        <i class="icon-li icon-linkedin icon-2x"></i>
-                    </td>
-                    <td style="width: 88%; padding-bottom: 1em;">
-                        <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
-                            <a href="/user/startlinkedin/" class="btn btn-primary" style=" ">Connect</a>                        
-                        <?php } else { ?>
-                            <a href="/user/disconnectlinkedin/" class="btn btn-primary" style=" ">Disconnect</a> 
-                        <?php } ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <i class="icon-li icon-globe icon-2x"></i> 
-                    </td>
-                    <td>
-                        <input type="text" class="input url" placeholder="Personal Website" id="website" name="website" style="margin-bottom: 0px; width: 300px" value="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>">
-                    </td>
-                </tr>                
+            <table id='social'>
+                <colgroup>
+                    <col class="icon-col" span="1" style="">
+                    <col class="button-col" span="1" style="">
+                </colgroup>             
+                    <tr style="">
+                        <td>
+                            <i class="icon-li icon-linkedin icon-2x"></i>
+                        </td>
+                        <td>
+                            <?php if ($viewmodel["USER"]["LINKEDIN_PUBLIC_PROFILE_URL"] == null) { ?>
+                                <a href="/user/startlinkedin/" class="btn btn-primary" style=" ">Connect</a>                        
+                            <?php } else { ?>
+                                <a href="/user/disconnectlinkedin/" class="btn btn-primary" style=" ">Disconnect</a> 
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="icon-li icon-globe icon-2x"></i> 
+                        </td>
+                        <td>
+                            <input type="text" class="input url" placeholder="Personal Website" id="website" name="website" style="margin-bottom: 0px; width: 300px" value="<?php echo $viewmodel["USER"]["PERSONAL_WEBSITE"]; ?>">
+                        </td>
+                    </tr> 
+              
             </table>
         </div>
         

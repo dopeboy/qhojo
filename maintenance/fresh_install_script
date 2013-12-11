@@ -1,33 +1,39 @@
 ONE TIME
 
-	mysql -u root -p
-	root
+LOCAL
+    mysql -u root -proot
 
+    create user 'backupuser'@'localhost' identified by '3W16aba38yP2fxr';
+    GRANT SELECT, SHOW VIEW ON *.* TO  'backupuser'@'localhost' IDENTIFIED BY '3W16aba38yP2fxr';
+
+STAGING
     create user 'qhostaging'@'localhost' identified by 'Z69afsGKVPHJjsO';
-	create database qhojo_staging;
-	grant SELECT, INSERT, UPDATE on qhojo_staging.* to 'qhostaging'@'localhost' IDENTIFIED BY 'Z69afsGKVPHJjsO';
-		
-	create user 'qhoprod'@'localhost' identified by 'Gk1BLp5J6u5MsQr';
-	create database qhojo_production;
+    create database qhojo_staging;
+    grant SELECT, INSERT, UPDATE on qhojo_staging.* to 'qhostaging'@'localhost' IDENTIFIED BY 'Z69afsGKVPHJjsO';
+
+    create user 'stagingroot'@'localhost' identified by 'zarava6ruThe';
+    GRANT all ON qhojo_staging.* TO  'stagingroot'@'localhost' IDENTIFIED BY 'zarava6ruThe';
+
+PROD
+    create user 'qhoprod'@'localhost' identified by 'Gk1BLp5J6u5MsQr';
+    create database qhojo_production;
     grant SELECT, INSERT, UPDATE on qhojo_production.* to 'qhoprod'@'localhost' IDENTIFIED BY 'Gk1BLp5J6u5MsQr';
 
- create user 'backupuser'@'localhost' identified by '3W16aba38yP2fxr';
-GRANT SELECT, SHOW VIEW ON *.* TO  'backupuser'@'localhost' IDENTIFIED BY '3W16aba38yP2fxr';
-
-create user 'stagingroot'@'localhost' identified by 'zarava6ruThe';
-GRANT all ON qhojo_staging.* TO  'stagingroot'@'localhost' IDENTIFIED BY 'zarava6ruThe';
+    create user 'prodbackup'@'localhost' identified by '>vd3M )E_u}0.,';
+    create database qhojo_production;
+    grant SELECT, INSERT, UPDATE on qhojo_production.* to 'prodbackup'@'localhost' IDENTIFIED BY '>vd3M )E_u}0.,';
 
 
 
-	FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
 
-        94  sudo cp default mysite
-          95  sudo vim mysite
-                change the directory root here
-                change allowoverride to all
-          99  a2enmod rewrite
-          97  sudo a2dissite default && sudo a2ensite mysite
-          98  sudo /etc/init.d/apache2 restart
+sudo cp default mysite
+sudo vim mysite
+change the directory root here
+change allowoverride to all
+a2enmod rewrite
+sudo a2dissite default && sudo a2ensite mysite
+sudo /etc/init.d/apache2 restart
 
 enable SSL
 install mutt for backups

@@ -250,9 +250,12 @@ class User extends Controller
         if (($method = Method::GET) && User::userSignedIn($method))
         {
             global $domain, $linkedInAPIKey;
-            $state = $this->user_model->startLinkedIn($method,$_SESSION["USER"]['USER_ID']);
-            $return_url = $domain . "/user/endlinkedin";
             
+            // Generate the state and save the state in SESSION
+            $state = $this->user_model->startLinkedIn($method,$_SESSION["USER"]['USER_ID']);
+            $_SESSION["USER"]["LINKEDIN_STATE"] = $state;
+            
+            $return_url = $domain . "/user/endlinkedin";
             header("Location: https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id={$linkedInAPIKey}&scope=r_basicprofile&state={$state}&redirect_uri={$return_url}");                       
         }
     }
@@ -261,10 +264,17 @@ class User extends Controller
     {
         if (($method = Method::GET) && User::userSignedIn($method))
         {
+            // Check if the state matches ours
+            if ($_SESSION["USER"]["LINKEDIN_STATE"] != $this->validateParameter($this->urlvalues["state"],"LinkedIn State",$method,array('Validator::isNotNullAndNotEmpty')))
+                throw new LinkedInAuthenticationFailed($method, $_SESSION["USER"]['USER_ID']);
+            
+            // If so, clear it from the session
+            unset($_SESSION["USER"]["LINKEDIN_STATE"]);
+            
             global $domain;
             $return_url = $domain . "/user/endlinkedin";
             
-            $this->user_model->endLinkedIn($method,$_SESSION["USER"]['USER_ID'], $this->validateParameter($this->urlvalues["code"],"LinkedIn Code",$method,array('Validator::isNotNullAndNotEmpty')), $this->validateParameter($this->urlvalues["state"],"LinkedIn State",$method,array('Validator::isNotNullAndNotEmpty')), $return_url);
+            $this->user_model->endLinkedIn($method,$_SESSION["USER"]['USER_ID'], $this->validateParameter($this->urlvalues["code"],"LinkedIn Code",$method,array('Validator::isNotNullAndNotEmpty')), $return_url);
             
             // Regardless of whether they allow or disallow access to LinkedIn, take them back to their profile page
             $redirect_url = $domain . "/user/index/" . $_SESSION["USER"]['USER_ID'];

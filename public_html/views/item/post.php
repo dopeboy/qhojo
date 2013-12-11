@@ -115,8 +115,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td >Zipcode</td>
-                        <td >
+                        <td>Zipcode</td>
+                        <td>
                             <input type="text" id="location" name="location" maxlength="5" placeholder="" value="<?php echo $viewmodel["USER"]["ZIPCODE"]?>">
                         </td>
                     </tr>                

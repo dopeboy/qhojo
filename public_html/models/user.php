@@ -476,24 +476,16 @@ class UserModel extends Model
     }
     
     // Generate a unique string
-    // Save it in the database
     public function startLinkedIn($method, $user_id)
     {
-        $sqlParameters[":user_id"] =  $user_id;
-        $sqlParameters[":linkedin_state"] =  substr(str_shuffle(MD5(microtime())), 0, 16);
-        
-        $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_STATE=:linkedin_state where ID=:user_id and ACTIVE=1 LIMIT 1');
-        $preparedStatement->execute($sqlParameters);     
-        
-        return $sqlParameters[":linkedin_state"];
+        return substr(str_shuffle(MD5(microtime())), 0, 16);
     }
     
-    public function endLinkedIn($method, $user_id, $code, $state, $return_url)
+    public function endLinkedIn($method, $user_id, $code, $return_url)
     {
         $sqlParameters[":user_id"] =  $user_id;
-        $sqlParameters[":linkedin_state"] =  $state;
         
-        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_EXTENDED_VW WHERE USER_ID=:user_id AND LINKEDIN_STATE=:linkedin_state AND ACTIVE=1 LIMIT 1');
+        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM USER_EXTENDED_VW WHERE USER_ID=:user_id AND ACTIVE=1 LIMIT 1');
         $preparedStatement->execute($sqlParameters);     
         $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 
@@ -514,18 +506,27 @@ class UserModel extends Model
             $ch = curl_init();
             curl_setopt($ch,CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec($ch);        
+            $response = curl_exec($ch);    
+            error_log($response);
             curl_close($ch);
 
-            $token = json_decode($response);
+            $token = json_decode($response);               
   
             if (property_exists($token,"access_token"))
             {
+                $token_expire_time = null;
+                
+                if (property_exists($token,"expires_in"))
+                {
+                    $token_expire_time = new DateTime();
+                    $token_expire_time->add(new DateInterval('PT' . $token->expires_in . 'S'));                  
+                }     
+            
                 $params = array('oauth2_access_token' => $token->access_token,
                                 'format' => 'json',);
 
                 // Access Token request
-                $url = 'https://api.linkedin.com/v1/people/~:(public-profile-url)?' . http_build_query($params);
+                $url = 'https://api.linkedin.com/v1/people/~:(public-profile-url,num-connections)?' . http_build_query($params);
 
                 $ch = curl_init();
                 curl_setopt($ch,CURLOPT_URL, $url);
@@ -535,17 +536,26 @@ class UserModel extends Model
                 
                 $result = json_decode($response);
                 error_log($response);
+                
                 // Save to database
                 if (property_exists($result, "publicProfileUrl"))
                 {
                     $sqlParameters = array();
                     $sqlParameters[":user_id"] =  $user_id;
                     $sqlParameters[":linkedin_profile_url"] =  $result->publicProfileUrl;
-
-                    $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_PUBLIC_PROFILE_URL=:linkedin_profile_url where ID=:user_id and ACTIVE=1 LIMIT 1');
+                    $sqlParameters[":linkedin_num_connections"] =  $result->numConnections;
+                    $sqlParameters[":linkedin_expire"] =  $token_expire_time->format('Y-m-d H:i:s');;
+                    
+                    $preparedStatement = $this->dbh->prepare('UPDATE USER SET LINKEDIN_PUBLIC_PROFILE_URL=:linkedin_profile_url, LINKEDIN_NUM_CONNECTIONS=:linkedin_num_connections, LINKEDIN_TOKEN_EXPIRE_DATE=:linkedin_expire where ID=:user_id and ACTIVE=1 LIMIT 1');
                     $preparedStatement->execute($sqlParameters);                     
                 }
-            }        
+                
+                else
+                    throw new LinkedInAuthenticationFailed($method, $user_id);
+            }
+            
+            else
+                throw new LinkedInAuthenticationFailed($method, $user_id);            
         }
     }
     

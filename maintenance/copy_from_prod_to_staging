@@ -1,0 +1,33 @@
+#!/bin/bash 
+
+# Backup production mysql
+
+db="qhojo_production";
+username="prodbackup";
+password=">vd3M )E_u}0.,";
+
+export TZ=":America/New_York"
+timestamp=$(date +"%Y_%m_%d_%H%M%S");
+sqlfile="backup_${db}_$(date +"%Y_%m_%d_%H%M%S").sql";
+
+#BACKUP (don't know why these won't take the variables defined above. Hardcoded for now)
+mysqldump --single-transaction -uprodbackup -p'>vd3M )E_u}0.,' $db > $sqlfile
+
+sed -i '/^\/\*\!50013 DEFINER/d' $sqlfile
+
+# Copy production SQL into staging
+
+db="qhojo_staging";
+username="stagingroot";
+password="zarava6ruThe";
+
+mysql -u $username -p$password -h localhost --execute="drop database qhojo_staging"
+mysql -u $username -p$password -h localhost --execute="create database qhojo_staging"
+mysql -u $username -p$password $db < $sqlfile
+
+# Clear files
+sudo rm -rf /home/staging/public/qhojo/*
+cp -r /home/production/public/qhojo/* /home/staging/public/qhojo/
+
+# Perms
+chmod -R 777 /home/staging/public/qhojo/public_html/uploads/

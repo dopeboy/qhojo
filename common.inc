@@ -2,7 +2,7 @@
 
 $dbhost = "localhost";
 
-if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "staging.qhojo.com")
+if ($_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "dev.qhojo.com" || $_SERVER['SERVER_NAME'] == "staging.qhojo.com")
 {
     $dbname = "qhojo_staging";
     $demo = true;
