@@ -41,7 +41,7 @@ class ItemModel extends Model
                     $sqlParameters[":query{$key}"] =  '%' . $piece . '%';
                     
                     if ($key!=0)
-                        $query_clause .= " OR ";
+                        $query_clause .= " AND ";
                             
                     $query_clause .= "(lower(TITLE) like lower(:query{$key}) OR lower(DESCRIPTION) like lower(:query{$key}))";                    
                 }
