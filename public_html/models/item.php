@@ -32,8 +32,23 @@ class ItemModel extends Model
         {
             if ($query != null)
             {
-                $sqlParameters[":query"] =  '%' . $query . '%';
-                $query_clause = ' AND (lower(TITLE) like lower(:query) OR lower(DESCRIPTION) like lower(:query))';
+                $pieces = explode(" ", $query);
+                $query_clause = ' AND (';
+                
+                foreach ($pieces as $key=>$piece)
+                {
+                    
+                    $sqlParameters[":query{$key}"] =  '%' . $piece . '%';
+                    
+                    if ($key!=0)
+                        $query_clause .= " OR ";
+                            
+                    $query_clause .= "(lower(TITLE) like lower(:query{$key}) OR lower(DESCRIPTION) like lower(:query{$key}))";                    
+                }
+                
+                $query_clause .= ' )';
+                
+                //error_log($query_clause);
             }
 
             if ($location != null)
