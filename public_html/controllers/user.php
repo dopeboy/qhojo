@@ -21,7 +21,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['password'],"password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
             );
 
-            $this->directUser($user_info);
+            $this->directUser($user_info, true);
         }
     }
 
@@ -43,7 +43,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['invite-id'],"Invite ID",$method,array('Validator::isNotNullAndNotEmpty'))
             );
 
-            $this->directUser($user_info);                
+            $this->directUser($user_info, false);                
         } 
     }
 
@@ -292,7 +292,7 @@ class User extends Controller
         }
     }    
 
-    private function directUser($user_info)
+    private function directUser($user_info, $sign_in)
     {
         $url = $this->popReturnURL();
 
@@ -309,7 +309,13 @@ class User extends Controller
         // Else, send them to the search page
         else
         {
-            $this->returnView(json_encode(array("URL" => "/document/index")), Method::POST);                            
+            // If they just signed in, send them to the inventory page. 
+            if ($sign_in == true)
+                $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);
+            
+            // Else take them to the intro page
+            else
+                $this->returnView(json_encode(array("URL" => "/document/index")), Method::POST);
         }
             
     }

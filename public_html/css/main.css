@@ -247,3 +247,8 @@ textarea
 }
 
 .ui-pnotify-text { cursor: pointer  !important;}
+
+.bold-me-up
+{
+    font-weight:bold;
+}

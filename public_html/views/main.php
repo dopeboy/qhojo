@@ -48,18 +48,18 @@
                             <ul class="nav">
                                 <li class=""><a href="/" style="font-family: 'Lobster', cursive;font-size: 26px">Qhojo</a></li>
                                 <?php if (User::isUserSignedIn()) { ?>
-                                    <li class=""><a href="/item/search.php">Borrow</a></li>
-                                    <li><a href="/item/post">Lend</a></li>                                    
-                                    <li><a href="/document/howitworks">How it works</a></li>
+                                    <li class="<?php echo $this->urlvalues['controller']=="item" && $this->urlvalues['action']=="search" ? "active bold-me-up" : "";?>"><a href="/item/search.php">Borrow</a></li>
+                                    <li class="<?php echo $this->urlvalues['controller']=="item" && $this->urlvalues['action']=="post" ? "active bold-me-up" : "";?>"><a href="/item/post">Lend</a></li>                                    
+                                    <li class="<?php echo $this->urlvalues['controller']=="document" && $this->urlvalues['action']=="howitworks" ? "active bold-me-up" : "";?>"><a href="/document/howitworks">How it works</a></li>
                                 <?php } ?>
                             </ul>
                             <ul class="nav pull-right">
                                 <?php if (User::isUserSignedIn()) { ?>
                                 
-                                <li>
+                                <li class="<?php echo $this->urlvalues['controller']=="user" && $this->urlvalues['action']=="dashboard" ? "active bold-me-up" : "";?>">
                                     <a role="menuitem" tabindex="-1" href="/user/dashboard">Dashboard (<span id="action-item-count"><?php echo $actionItemCount; ?></span>)</a>
                                 </li>
-                                <li class="dropdown">
+                                <li class="dropdown <?php echo $this->urlvalues['controller']=="user" && $this->urlvalues['action']=="index" ? "active bold-me-up" : "";?>" >
                                     <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
                                       <?php echo $_SESSION["USER"]["NAME"];?>
                                       <b class="caret"></b>
