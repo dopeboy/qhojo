@@ -144,7 +144,6 @@ $(document).ready(function()
         }); 
         
         $('.help').tooltip();
-        $('.help').tooltip();
      
     }
 }); 
