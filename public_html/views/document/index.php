@@ -1,7 +1,7 @@
 
 <link rel="stylesheet" href="/css/document/index.css">
 
-<title>Qhojo - Peer-to-peer platform for borrowing and lending camera and video gear</title>
+<title>Qhojo - Borrow camera gear from professionals around you</title>
 
 <div class="sheet" id="borrow">
     
