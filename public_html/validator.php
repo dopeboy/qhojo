@@ -83,7 +83,7 @@ abstract class Validator
     
     static function isValidItemHoldValue ($parameter_value,$parameter_name, $method) 
     {
-        if (!is_int(intval($parameter_value)) || $parameter_value < 1 || $parameter_value > 2500)
+        if (!is_int(intval($parameter_value)) || $parameter_value < 1 || $parameter_value > 3500)
             throw new InvalidItemHoldValueException($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : 0);
     }    
     

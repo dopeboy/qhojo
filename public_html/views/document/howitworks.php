@@ -102,7 +102,7 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
             <div class='question'>
                 <h4>What is the maximum hold value I can specify when listing an item?</h4>
                 <p>
-                    As of now, the maximum hold value we allow is $2500.
+                    As of now, the maximum hold value we allow is $3500.
                 </p>            
             </div>
             
