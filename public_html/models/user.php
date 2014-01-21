@@ -80,29 +80,8 @@ class UserModel extends Model
         return $row;
     }
     
-    public function joinView($method, $invite_id)
+    public function join($method, $firstname, $lastname, $zipcode, $email, $password)
     {
-        $sqlParameters[":invite_id"] =  $invite_id;
-        $preparedStatement = $this->dbh->prepare('SELECT 1 FROM INVITE_VW WHERE INVITE_ID=:invite_id AND COUNT > 0 LIMIT 1');
-        $preparedStatement->execute($sqlParameters);
-        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-        
-        if ($row == null)
-            throw new InvalidInvitationCodeException($method);        
-    }
-    
-    public function join($method, $firstname, $lastname, $zipcode, $email, $password, $invite_id)
-    {
-        $sqlParameters[":invite_id"] =  $invite_id;
-        $preparedStatement = $this->dbh->prepare('SELECT COUNT FROM INVITE_VW WHERE INVITE_ID=:invite_id AND COUNT > 0 LIMIT 1');
-        $preparedStatement->execute($sqlParameters);
-        $row = $preparedStatement->fetch(PDO::FETCH_ASSOC);
-        
-        if ($row == null)
-            throw new InvalidInvitationCodeException($method);  
-        
-        $count = $row["COUNT"];
-        
         // Does this email address exist?
         $sqlParameters = array();
         $sqlParameters[":email"] =  $email;
@@ -133,13 +112,6 @@ class UserModel extends Model
         $user['FIRST_NAME'] = $firstname;
         $user['NAME'] = $firstname . ' ' . $lastname[0] . '.';
         $user['ADMIN'] = 0;
-        
-        // Decrement the count on the invite ID
-        $sqlParameters = array();
-        $sqlParameters[":count"] =  $count-1;
-        $sqlParameters[":id"] =  $invite_id;
-        $preparedStatement = $this->dbh->prepare('UPDATE INVITE SET COUNT=:count where ID=:id');
-        $preparedStatement->execute($sqlParameters);   
         
         // Send an email to the new user
         global $do_not_reply_email,$support_email,$domain;

@@ -22,7 +22,7 @@ class Loader
             $this->sessionvalues = $sessionvalues;
 
             $this->controller = !isset($this->urlvalues['controller']) || trim($this->urlvalues['controller'])==='' ?  "document" :  $this->urlvalues['controller'];
-            $this->action = !isset($this->urlvalues['action']) || trim($this->urlvalues['action'])==='' ?  "splash" :  $this->urlvalues['action'];
+            $this->action = !isset($this->urlvalues['action']) || trim($this->urlvalues['action'])==='' ?  "index" :  $this->urlvalues['action'];
             $this->id = !isset($this->urlvalues['id']) || trim($this->urlvalues['id'])==='' ?  "" :  $this->urlvalues['id'];
             $this->state = !isset($this->urlvalues['state']) || trim($this->urlvalues['state'])==='' ?  "" :  $this->urlvalues['state'];
             $this->userid = !isset($this->urlvalues['userid']) || trim($this->urlvalues['userid'])==='' ?  null :  $this->sessionvalues['userid'];     

@@ -170,8 +170,12 @@ class ItemModel extends Model
         $product_model = new ProductModel();
         $row['CATEGORY'] = $product_model->getCategories($method);
         
-        $user_model = new UserModel();
-        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
+        // If the user_id is null, that means they're not logged. In this case, don't show the banner
+        if ($user_id != null)
+        {
+            $user_model = new UserModel();
+            $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id);
+        }
         
         return $row;
     }    

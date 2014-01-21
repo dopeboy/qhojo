@@ -27,10 +27,9 @@
         
     </form>    
     
-    
-<!--    <div id="join">
+    <div id="join">
         Not a member? Join <a href="/user/join/">here</a>
-    </div>-->
+    </div>
 </div>
 
 <script src="/js/user/signin.js"></script>

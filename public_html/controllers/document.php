@@ -21,42 +21,36 @@ class Document extends Controller
     protected function index()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView($this->item_model->getThreeLatestItems($method), $method);        
     }
     
     protected function fees()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }    
     
     protected function contact()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }   
     
     protected function about()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }         
     
     protected function howitworks()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }    
     
     protected function legal()
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView(null, $method);        
     }       
     

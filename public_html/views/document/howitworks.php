@@ -38,8 +38,6 @@ $formatted_borrower_number =  substr($borrower_number, 0, 3) . '-' . substr($bor
         </div>
     </div>
     
-
-            
 </div>
 
 <div id="lender-protection" class="sheet">

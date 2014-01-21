@@ -4,7 +4,7 @@ class User extends Controller
 {
     protected function signin() 
     {
-        if (($method = Method::NAKED) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0 || $this->state == 100 || $this->state == 200))
+        if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == null || $this->state == 0 || $this->state == 100 || $this->state == 200))
         {
             if (!empty($this->urlvalues['return']))
                 $this->pushReturnURL ($this->urlvalues['return']);
@@ -27,8 +27,8 @@ class User extends Controller
 
     protected function join()
     {        
-        if (($method = Method::NAKED) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
-            $this->returnView($this->user_model->joinView($method, $this->validateParameter($this->id,"Invite ID",$method,array('Validator::isNotNullAndNotEmpty'))), $method);
+        if (($method = Method::GET) && User::userNotSignedIn($method) && ($this->state == 0 || $this->state == null))
+            $this->returnView(null, $method);
 
         else if (($method = Method::POST) && User::userNotSignedIn($method) && $this->state == 1)
         {
@@ -39,8 +39,7 @@ class User extends Controller
                 $this->validateParameter($this->postvalues['lastname'],"Last Name",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidName')),
                 $this->validateParameter($this->postvalues['zipcode'],"Zipcode",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidZipCode')),
                 $this->validateParameter($this->postvalues['email'],"Email Address",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidEmailAddress')),
-                $this->validateParameter($this->postvalues['password'],"Password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword')),
-                $this->validateParameter($this->postvalues['invite-id'],"Invite ID",$method,array('Validator::isNotNullAndNotEmpty'))
+                $this->validateParameter($this->postvalues['password'],"Password",$method,array('Validator::isNotNullAndNotEmpty','Validator::isValidPassword'))
             );
 
             $this->directUser($user_info, false);                
@@ -309,13 +308,7 @@ class User extends Controller
         // Else, send them to the search page
         else
         {
-            // If they just signed in, send them to the inventory page. 
-            if ($sign_in == true)
-                $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);
-            
-            // Else take them to the intro page
-            else
-                $this->returnView(json_encode(array("URL" => "/document/index")), Method::POST);
+            $this->returnView(json_encode(array("URL" => "/item/search")), Method::POST);
         }
             
     }

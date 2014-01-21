@@ -5,7 +5,6 @@ class Item extends Controller
     protected function search() 
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         
         $this->returnView($this->item_model->search
         (
@@ -14,7 +13,7 @@ class Item extends Controller
             !empty($this->urlvalues['location']) ? trim($this->urlvalues['location']) : null,
             !empty($this->urlvalues['user_id']) ? trim($this->urlvalues['user_id']) : null,
             !empty($this->urlvalues['page']) ? trim($this->urlvalues['page']) : null,
-            $_SESSION["USER"]["USER_ID"]
+            isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : null
         ),
         $method);
     }
@@ -22,16 +21,15 @@ class Item extends Controller
     protected function index() 
     {
         $method = Method::GET;
-        User::userSignedIn($method);
         $this->returnView($this->item_model->index($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : null, $this->validateParameter($this->id,"Item ID",$method,array('Validator::isNotNullAndNotEmpty'))),$method);
     } 
 
     protected function post()
     {
         // 0
-        if (($method = Method::GET) && User::userSignedIn($method) && ($this->state == null || $this->state == 0))
+        if (($method = Method::GET) && ($this->state == null || $this->state == 0))
         {
-            $this->returnView($this->item_model->prepost($method, $_SESSION["USER"]["USER_ID"]), $method);            
+            $this->returnView($this->item_model->prepost($method, isset($_SESSION["USER"]["USER_ID"]) ? $_SESSION["USER"]["USER_ID"] : null), $method);            
         }
         
         // 1

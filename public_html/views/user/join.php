@@ -43,8 +43,6 @@
             </div>
         </div>
         
-        <input type="hidden" class="" placeholder="" id="invite-id" name="invite-id" value="<?php echo $this->id; ?>"> 
-        
     </form>    
 </div>
 

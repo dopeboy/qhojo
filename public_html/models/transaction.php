@@ -95,7 +95,10 @@ class TransactionModel extends Model
         
         if ($row != null)
             throw new UserHasAlreadyRequestedItemException($method, $user_id);
-            
+
+        $user_model = new UserModel();
+        $row["USER"]["NEED_EXTRA_FIELDS"] = $user_model->checkIfUserNeedsExtraFields($user_id); 
+        
         // Is the item active?
         $row['ITEM'] =  $item_model->getItem($item_id);
         

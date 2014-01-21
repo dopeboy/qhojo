@@ -72,6 +72,9 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                 </h2>
                     
                 <?php 
+                
+                if (!empty($_SESSION["USER"]["USER_ID"])) 
+                {
                     $receipient_full_name = $viewmodel['ITEM']['LENDER_NAME'];
                     $receipient_first_name = $viewmodel['ITEM']['LENDER_FIRST_NAME'];
                     $sender_first_name = $_SESSION["USER"]["FIRST_NAME"];
@@ -80,6 +83,7 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                     $receipient_user_id =  $viewmodel['ITEM']['LENDER_ID'];
                     $entity_type = 'ITEM';
                     $entity_id = $viewmodel['ITEM']['ITEM_ID'];
+                }
                 ?>
                 
                 <?php if (!empty($_SESSION["USER"]["USER_ID"])):  ?>
@@ -88,7 +92,12 @@ if ((isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] ==  $vi
                     <button id="contact-btn-not-signedin" href="" class="btn btn-primary btn-large btn-block" type="button" >Contact</button> 
                 <?php endif; ?>
                 
-                <?php require(dirname(dirname(__FILE__)) . '/embeds/contact.php'); ?> 
+                <?php 
+                    if (!empty($_SESSION["USER"]["USER_ID"])) 
+                    {  
+                     require(dirname(dirname(__FILE__)) . '/embeds/contact.php'); 
+                    }
+                ?> 
                     
             </div>
             

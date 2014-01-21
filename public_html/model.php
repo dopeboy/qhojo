@@ -14,15 +14,15 @@ abstract class Model
 
             try 
             {
-                    $this->dbh = new PDO('mysql:host=' . $dbhost . ';dbname=' . $dbname, $dbuser, $dbpass);
-                    $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->dbh = new PDO('mysql:host=' . $dbhost . ';dbname=' . $dbname, $dbuser, $dbpass);
+                $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
 
             catch (PDOException $e) 
             {
-                    $this->dbh = null;
-                    print "Error!: " . $e->getMessage() . "<br/>";
-                    die();
+                $this->dbh = null;
+                print "Error!: " . $e->getMessage() . "<br/>";
+                die();
             }	
     }
         

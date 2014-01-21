@@ -6,8 +6,13 @@
 <link rel="stylesheet" href="/css/item/post.css">
 
 <?php
-    $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
-    require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+
+    // If they're logged in, do this section
+    if ( isset($_SESSION["USER"]["USER_ID"]) && $_SESSION["USER"]["USER_ID"] != null)
+    {
+        $code = $viewmodel["USER"]["NEED_EXTRA_FIELDS"];
+        require(dirname(dirname(__FILE__)) . '/embeds/extra_fields.php'); 
+    }
     
     if ($this->state == 1)
     {
@@ -168,7 +173,7 @@
             </div>
 
        
-            <?php if ($viewmodel["PRODUCT"]["PRODUCT_ID"] != null) { ?>
+            <?php if (!empty($viewmodel["PRODUCT"]["PRODUCT_ID"])) { ?>
                 <input type="hidden" name="product-id" value="<?php echo $viewmodel["PRODUCT"]["PRODUCT_ID"]; ?>">
             <?php } ?>
         <button id="post-submit" class="btn btn-primary btn-large" type="submit" style="" >Submit</button>     

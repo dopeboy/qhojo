@@ -86,9 +86,6 @@
             <button class="rentlink btn btn-large btn-primary" type="submit">Borrow >></button>
        </form>       
    </div>
-    <div class='pull-right citation'>
-        <em>Icons by DryIcons</em>
-    </div>
 </div>
 
 <div class="sheet" id="lend">
@@ -172,10 +169,7 @@
             <button class="rentlink btn btn-large btn-primary" type="submit">Lend >></button>
        </form>
    </div>     
-    
-    <div class='pull-right citation'>
-        <em>Icons by DryIcons</em>
-    </div>    
+     
 </div>            
 
 <script src="/js/document/index.js"></script>
