@@ -4,7 +4,7 @@ class Product extends Controller
 {  
     protected function getbrandsforcategory()
     {
-        if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
+        if (($method = Method::POST) && ($this->state == 0 || $this->state == null))
         {
             $rows = $this->product_model->getBrandsForCertainCategory
             (
@@ -19,7 +19,7 @@ class Product extends Controller
     
     protected function getproductsforcategoryandbrand()
     {
-        if (($method = Method::POST) && User::userSignedIn($method) && ($this->state == 0 || $this->state == null))
+        if (($method = Method::POST) && ($this->state == 0 || $this->state == null))
         {
             $rows = $this->product_model->getProductsForCertainBrandAndCategory
             (
