@@ -22,6 +22,21 @@
 
 <?php if (empty($user_id)) { ?>
 
+<div class="alert alert-info">
+    <strong>Help out: </strong>
+    Members have been searching for
+    <span id="wanted-items" class="text-center" style="">
+        <item >Canon 24-70mm F/4.0L</item>
+        <item >Canon 50mm F/1.2L</item>
+        <item >Nikon 18-300mm F/3.5</item>
+        <item >Canon 5D Mark II</item>
+        <item >Nikon D800</item>
+        <item >Nikon 17-55mm F/2.8G</item>
+    </span>. 
+    Lend it now to help the community and make some cash.
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+
 <div class="sheet">
     <form class="form-search">
         <div class="row-fluid">

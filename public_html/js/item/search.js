@@ -19,5 +19,30 @@ $(document).ready(function()
     {
         $('input#query').popover('destroy');
     });
+    
+    function InOut( elem )
+    {
+        if (elem.next()[0] == null)
+        {
+            elem.delay().fadeIn(2000);
+        }
 
+        else
+        {
+            elem.delay().fadeIn(2000).delay().fadeOut
+            (
+                1000,
+                function()
+                { 
+
+                            InOut( elem.next()); 
+                }
+            );          
+        }
+    }
+
+    $(function()
+    {
+        InOut( $('#wanted-items item:first'));
+    });
 });

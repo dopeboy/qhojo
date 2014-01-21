@@ -27,3 +27,15 @@
 {
     margin-bottom: 40px;
 }
+
+ #wanted-items
+ {
+     width:150px;
+     display: inline-block;  
+     border-bottom: 1px dotted black;
+ }
+
+ item
+ {
+     display: none;
+ }

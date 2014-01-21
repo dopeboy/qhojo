@@ -28,7 +28,7 @@
     </form>    
     
     <div id="join">
-        Not a member? Join <a href="/user/join/">here</a>
+        Not a member? <a href="/user/join/">Join here</a>
     </div>
 </div>
 
