@@ -33,7 +33,7 @@
         <item >Nikon D800</item>
         <item >Nikon 17-55mm F/2.8G</item>
     </span>. 
-    Lend it now to help the community and make some cash.
+    <a href="/item/post" style="color: indianred">Lend it now</a> to help the community and make some cash.
     <button type="button" class="close" data-dismiss="alert">&times;</button>
 </div>
 
