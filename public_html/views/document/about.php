@@ -6,7 +6,7 @@
     <h1 class="text-center">About</h1>
     <hr>
     <div id='about-text'>
-        <strong>Qhojo</strong> (pronounced <em>kō-ˈjō</em>) is a community for professionals to borrow camera gear from one another. We created Qhojo because we want to help photographers and videographers save on their rentals while also give them a way to make money with their unused gear.
+        <strong>Qhojo</strong> (pronounced <em>kō-ˈjō</em>) is a community for professionals to rent camera gear from one another. We created Qhojo because we want to help photographers and videographers save on their rentals while also give them a way to make money with their unused gear.
     </div>
 </div>
 
