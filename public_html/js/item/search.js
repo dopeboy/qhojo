@@ -29,7 +29,7 @@ $(document).ready(function()
 
         else
         {
-            elem.delay().fadeIn(2000).delay().fadeOut
+            elem.delay().fadeIn(2000).delay(2000).fadeOut
             (
                 1000,
                 function()
