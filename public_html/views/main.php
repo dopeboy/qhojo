@@ -108,7 +108,7 @@
                     </li>
                     <li class="disabled">
                         <div id="twitter-share-button" style="">
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://qhojo.com" data-text="I &lt;3 @qhojonyc" data-via="qhojonyc" data-dnt="true">Tweet</a>
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://qhojo.com" data-text="Check out @qhojonyc, a community for professionals to rent gear from one another." data-via="qhojonyc" data-dnt="true">Tweet</a>
                             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>                        
                         </div>
                     </li>
