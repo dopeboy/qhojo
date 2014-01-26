@@ -97,9 +97,8 @@
                 <ul class="nav nav-pills">
                 
                     <li><a href="/document/about">about</a></li>
-                    
-                        <li><a href="/document/contact">contact</a></li>
-                        <li><a href="/document/legal">legal</a></li>
+                    <li><a href="/document/contact">contact</a></li>
+                    <li><a href="/document/legal">legal</a></li>
                    
                     <li class="disabled"><a href="javascript:void(0);">v2.3.0</a></li>
                     <li class="disabled"><a href="javascript:void(0);">© 2013 Qhojo LLC
