@@ -80,16 +80,16 @@
             <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0) { echo "disabled";  } else if ($current_page == range($start, $end)[0]) { echo "active";} else {}?>">
                 <a href="?query=<?php echo $query;?>&user_id=<?php echo $user_id;?>&location=<?php echo $location;?>&page=<?php echo range($start, $end)[0]; ?>"><?php echo range($start, $end)[0]; ?></a>
             </li>
-            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < 2) { echo "disabled";  } else if ($current_page == range($start, $end)[1]) { echo "active";}?>">
+            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < range($start, $end)[1]) { echo "disabled";  } else if ($current_page == range($start, $end)[1]) { echo "active";}?>">
                 <a href="?query=<?php echo $query;?>&user_id=<?php echo $user_id;?>&location=<?php echo $location;?>&page=<?php echo range($start, $end)[1]; ?>"><?php echo range($start, $end)[1]; ?></a>
             </li>
-            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < 3) { echo "disabled";  } else if ($current_page == range($start, $end)[2]) { echo "active";}?>">
+            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < range($start, $end)[2]) { echo "disabled";  } else if ($current_page == range($start, $end)[2]) { echo "active";}?>">
                 <a href="?query=<?php echo $query;?>&user_id=<?php echo $user_id;?>&location=<?php echo $location;?>&page=<?php echo range($start, $end)[2]; ?>"><?php echo range($start, $end)[2]; ?></a>
             </li>
-            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < 4) { echo "disabled";  } else if ($current_page == range($start, $end)[3]) { echo "active";}?>">
+            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < range($start, $end)[3]) { echo "disabled";  } else if ($current_page == range($start, $end)[3]) { echo "active";}?>">
                 <a href="?query=<?php echo $query;?>&user_id=<?php echo $user_id;?>&location=<?php echo $location;?>&page=<?php echo range($start, $end)[3]; ?>"><?php echo range($start, $end)[3]; ?></a>
             </li>
-            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < 5) { echo "disabled";  } else if ($current_page == range($start, $end)[4]) { echo "active";}?>">
+            <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || $pages < range($start, $end)[4]) { echo "disabled";  } else if ($current_page == range($start, $end)[4]) { echo "active";}?>">
                 <a href="?query=<?php echo $query;?>&user_id=<?php echo $user_id;?>&location=<?php echo $location;?>&page=<?php echo range($start, $end)[4]; ?>"><?php echo range($start, $end)[4]; ?></a>
             </li>
             <li class="<?php if ($viewmodel["ITEMS_COUNT"] == 0 || ($current_page+1 > $pages)) { echo "disabled";  } else { echo "";}?>">
