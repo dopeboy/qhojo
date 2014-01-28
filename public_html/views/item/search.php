@@ -66,9 +66,22 @@
         
     <?php 
         require_once(dirname(dirname(__FILE__)) . '/embeds/card.php'); 
-
-        $start = (int)($current_page/6)*5 + 1;
-        $end = ((int)($current_page / 6)+1)*5;
+// 1-4 => 1-5
+// 5-8 => 5-9
+// 9-12 => 9-13        
+        
+        if ($current_page%4 == 0)
+            $start = $current_page-3;
+        else
+            $start = (int)($current_page/4)*4 +1;
+        
+        if ($current_page%4 == 0)
+            $end = $current_page+1;
+        else
+            $end = (int)($current_page/4)*4 +5;   
+        
+        
+        //$end = ((int)($current_page / 5)+1)*5;
         
     ?>
         
